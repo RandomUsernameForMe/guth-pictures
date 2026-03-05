@@ -8,6 +8,10 @@ const intlMiddleware = createMiddleware(routing);
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/admin")) {
     const isLogin = pathname === "/admin/login";
     const token = request.cookies.get(COOKIE)?.value ?? "";
@@ -26,5 +30,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(cs|en)/:path*", "/admin/:path*", "/admin"],
+  matcher: ["/", "/(cs|en)/:path*", "/admin/:path*", "/admin", "/api/admin/:path*"],
 };
