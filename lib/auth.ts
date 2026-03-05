@@ -1,20 +1,23 @@
 import { cookies } from "next/headers";
+import { COOKIE, verifyToken, signToken } from "./auth-edge";
 
-const COOKIE = "admin_auth";
+export { signToken };
 
 export async function isAuthenticated(): Promise<boolean> {
   const store = await cookies();
-  return store.get(COOKIE)?.value === "1";
+  const token = store.get(COOKIE)?.value;
+  if (!token) return false;
+  return verifyToken(token);
 }
 
-export function authCookieOptions() {
+export function authCookieConfig(token: string) {
   return {
     name: COOKIE,
-    value: "1",
+    value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax" as const,
     path: "/",
-    maxAge: 60 * 60 * 8, // 8 hodin
+    maxAge: 60 * 60 * 8,
   };
 }
