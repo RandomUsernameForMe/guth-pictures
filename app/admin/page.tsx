@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { AdminDashboard } from "@/components/AdminDashboard";
+import { ContentEditor } from "@/components/admin/ContentEditor";
 
 export default async function AdminPage() {
   if (!(await isAuthenticated())) redirect("/admin/login");
@@ -19,6 +20,7 @@ export default async function AdminPage() {
         </form>
       </div>
       <AdminDashboard photos={photos} />
+      <ContentEditor />
     </main>
   );
 }
