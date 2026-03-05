@@ -1,5 +1,8 @@
 // Klientsky bezpečné utility — žádný import cloudinary SDK
 
+export const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
+export type Category = (typeof CATEGORIES)[number];
+
 export type GalleryPhoto = {
   publicId: string;
   width: number;

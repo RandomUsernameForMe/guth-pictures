@@ -18,7 +18,13 @@
   },
   "portfolio": {
     "title": "Portfolio",
-    "subtitle": "Výběr mých prací"
+    "subtitle": "Výběr mých prací",
+    "filterAll": "Vše",
+    "categories": {
+      "portréty": "Portréty",
+      "svatby": "Svatby",
+      "larpy": "Larpy"
+    }
   },
   "sluzby": {
     "title": "Služby",

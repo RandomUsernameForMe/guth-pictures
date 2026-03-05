@@ -18,7 +18,13 @@
   },
   "portfolio": {
     "title": "Portfolio",
-    "subtitle": "A selection of my work"
+    "subtitle": "A selection of my work",
+    "filterAll": "All",
+    "categories": {
+      "portréty": "Portraits",
+      "svatby": "Weddings",
+      "larpy": "Larps"
+    }
   },
   "sluzby": {
     "title": "Services",

@@ -1,7 +1,7 @@
-import { getTranslations, getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { getGalleryPhotos } from "@/lib/cloudinary";
-import { PhotoGrid } from "@/components/PhotoGrid";
+import { PortfolioFilter } from "@/components/PortfolioFilter";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -45,7 +45,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
         <p className="mt-4 text-gray-400">{t("subtitle")}</p>
       </section>
       <section className="max-w-6xl mx-auto px-6 pb-24">
-        <PhotoGrid photos={photos} locale={locale} />
+        <PortfolioFilter photos={photos} locale={locale} />
       </section>
     </main>
   );
