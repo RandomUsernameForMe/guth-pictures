@@ -1,3 +1,13 @@
+## [2026-03-05] - Security: HMAC auth token, rate limiting, MIME validace
+
+- `lib/auth-edge.ts` (nový): Edge-compatible HMAC-SHA256 sign/verify token
+- `lib/auth.ts`: cookie hodnota "1" → podepsaný HMAC token; `authCookieConfig(token)`
+- `proxy.ts`: async middleware, ověření HMAC tokenu místo `=== "1"`
+- `app/api/admin/login/route.ts`: timing-safe compare (`crypto.timingSafeEqual`), rate limiting 5/15min přes Vercel KV, logování neúspěšných pokusů
+- `app/api/admin/upload/route.ts`: MIME validace magic bytes (JPEG/PNG/WebP/GIF), file null-check, odstraněna duplicitní Cloudinary konfigurace
+
+Vyžaduje novou env proměnnou: `AUTH_SECRET` (náhodný string, min 32 znaků)
+
 ## [2026-03-05] - UI vylepšení — typografie, spacing, interaktivita
 
 - `Nav.tsx`: logo "Guth Pictures" + hover efekt
