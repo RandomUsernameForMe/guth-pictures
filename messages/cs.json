@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "home": "Domů",
+    "portfolio": "Portfolio",
+    "sluzby": "Služby",
+    "o-mne": "O mně",
+    "kontakt": "Kontakt"
+  },
+  "meta": {
+    "home":      { "title": "Guth Pictures — Fotograf Praha", "description": "Profesionální fotograf Praha. Portréty, svatby a larpy. Reportážní styl, přirozené okamžiky." },
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, svatební fotografie a larpové akce." },
+    "sluzby":    { "title": "Služby — Guth Pictures", "description": "Fotografické služby: portréty, svatby, larpy. Praha a celá ČR." },
+    "o-mne":     { "title": "O mně — Guth Pictures", "description": "Fotograf z Prahy specializující se na portréty, svatby a larpové akce." },
+    "kontakt":   { "title": "Kontakt — Guth Pictures", "description": "Napište mi. Nezávazná konzultace zdarma." }
+  },
+  "home": {
+    "title": "Guth Pictures",
+    "subtitle": "Portréty, svatby a larpy. Praha a okolí.",
+    "cta": "Prohlédnout portfolio",
+    "ctaContact": "Napsat mi"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "subtitle": "Výběr mých prací"
+  },
+  "sluzby": {
+    "title": "Služby",
+    "subtitle": "Co pro vás mohu zachytit",
+    "portraits": {
+      "title": "Portréty",
+      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."
+    },
+    "weddings": {
+      "title": "Svatby",
+      "desc": "Celý den od příprav po večer. Reportážní styl — žádné nucené pózy, jen skutečné okamžiky."
+    },
+    "larp": {
+      "title": "Larpy a akce",
+      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa."
+    },
+    "cta": "Nezávazně napsat"
+  },
+  "o-mne": {
+    "title": "O mně",
+    "subtitle": "Jsem fotograf z Prahy.",
+    "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
+    "cta": "Pojďme se domluvit"
+  },
+  "footer": {
+    "copyright": "© {year} Guth Pictures",
+    "tagline": "Praha & okolí"
+  },
+  "kontakt": {
+    "title": "Kontakt",
+    "subtitle": "Napište mi",
+    "name": "Jméno",
+    "email": "E-mail",
+    "message": "Zpráva",
+    "send": "Odeslat",
+    "sending": "Odesílám…",
+    "success": "Zpráva odeslána. Ozvu se co nejdříve.",
+    "error": "Něco se pokazilo. Zkuste to znovu nebo napište přímo na email."
+  }
+}
