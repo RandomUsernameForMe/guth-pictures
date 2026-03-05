@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { Lightbox } from "./Lightbox";
 
 type Props = {
   photos: GalleryPhoto[];
@@ -7,6 +11,8 @@ type Props = {
 };
 
 export function PhotoGrid({ photos, locale }: Props) {
+  const [selected, setSelected] = useState<GalleryPhoto | null>(null);
+
   if (photos.length === 0) {
     return (
       <p className="text-gray-500 text-center py-24">— zatím žádné fotky —</p>
@@ -14,21 +20,34 @@ export function PhotoGrid({ photos, locale }: Props) {
   }
 
   return (
-    <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
-      {photos.map((photo) => (
-        <figure key={photo.publicId} className="mb-4 bg-zinc-900 break-inside-avoid overflow-hidden">
-          <Image
-            src={cloudinaryUrl(photo.publicId)}
-            alt={locale === "cs" ? photo.alt.cs : photo.alt.en}
-            width={photo.width}
-            height={photo.height}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            placeholder="blur"
-            blurDataURL={blurUrl(photo.publicId)}
-            className="w-full object-cover hover:opacity-90 transition-opacity"
-          />
-        </figure>
-      ))}
-    </div>
+    <>
+      <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
+        {photos.map((photo) => (
+          <figure
+            key={photo.publicId}
+            className="mb-4 bg-zinc-900 break-inside-avoid overflow-hidden cursor-pointer"
+            onClick={() => setSelected(photo)}
+          >
+            <Image
+              src={cloudinaryUrl(photo.publicId)}
+              alt={locale === "cs" ? photo.alt.cs : photo.alt.en}
+              width={photo.width}
+              height={photo.height}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              placeholder="blur"
+              blurDataURL={blurUrl(photo.publicId)}
+              className="w-full object-cover hover:opacity-90 transition-opacity"
+            />
+          </figure>
+        ))}
+      </div>
+      {selected && (
+        <Lightbox
+          photo={selected}
+          locale={locale}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </>
   );
 }

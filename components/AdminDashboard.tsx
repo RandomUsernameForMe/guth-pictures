@@ -1,35 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
 
+type FileStatus = "pending" | "uploading" | "done" | "error";
+type FileItem = { file: File; preview: string; status: FileStatus };
+
 type Props = { photos: GalleryPhoto[] };
 
 export function AdminDashboard({ photos: initial }: Props) {
   const [photos, setPhotos] = useState(initial);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
+  const [fileItems, setFileItems] = useState<FileItem[]>([]);
+  const [category, setCategory] = useState<string>(CATEGORIES[0]);
+  const [altCs, setAltCs] = useState("");
+  const [altEn, setAltEn] = useState("");
+  const [dragOver, setDragOver] = useState(false);
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
+  function addFiles(files: FileList | File[]) {
+    const items: FileItem[] = Array.from(files).map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      status: "pending",
+    }));
+    setFileItems((prev) => [...prev, ...items]);
+  }
+
+  function handleDrop(e: React.DragEvent) {
     e.preventDefault();
-    setUploading(true);
-    setUploadError("");
+    setDragOver(false);
+    if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files);
+  }
 
-    const form = e.currentTarget;
-    const data = new FormData(form);
+  async function handleUpload() {
+    if (fileItems.length === 0 || progress !== null) return;
+    const total = fileItems.length;
+    setProgress({ current: 0, total });
 
-    const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+    for (let i = 0; i < fileItems.length; i++) {
+      setFileItems((prev) =>
+        prev.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item))
+      );
 
-    if (res.ok) {
-      form.reset();
-      window.location.reload();
-    } else {
-      setUploadError("Upload selhal");
-      setUploading(false);
+      const item = fileItems[i];
+      const data = new FormData();
+      data.append("file", item.file);
+      data.append("category", category);
+      data.append("alt_cs", altCs || item.file.name.replace(/\.[^.]+$/, ""));
+      data.append("alt_en", altEn || item.file.name.replace(/\.[^.]+$/, ""));
+
+      try {
+        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+        setFileItems((prev) =>
+          prev.map((it, idx) => (idx === i ? { ...it, status: res.ok ? "done" : "error" } : it))
+        );
+      } catch {
+        setFileItems((prev) =>
+          prev.map((it, idx) => (idx === i ? { ...it, status: "error" } : it))
+        );
+      }
+
+      setProgress({ current: i + 1, total });
     }
+
+    fileItems.forEach((item) => URL.revokeObjectURL(item.preview));
+    window.location.reload();
   }
 
   async function handleDelete(publicId: string) {
@@ -48,44 +87,96 @@ export function AdminDashboard({ photos: initial }: Props) {
     <div className="space-y-12">
       {/* Upload */}
       <section>
-        <h2 className="text-lg font-semibold mb-4">Nahrát fotku</h2>
-        <form onSubmit={handleUpload} className="space-y-3 max-w-md">
-          <input
-            type="file"
-            name="file"
-            accept="image/*"
-            required
-            className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-zinc-800 file:text-white file:cursor-pointer"
-          />
-          <select
-            name="category"
-            className="w-full bg-zinc-900 border border-zinc-700 px-4 py-2 text-sm"
+        <h2 className="text-lg font-semibold mb-4">Nahrát fotky</h2>
+        <div className="space-y-3 max-w-2xl">
+          {/* Drop zone */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`border-2 border-dashed rounded px-6 py-10 text-center cursor-pointer transition-colors ${
+              dragOver ? "border-white bg-zinc-800" : "border-zinc-600 hover:border-zinc-400"
+            }`}
           >
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            name="alt_cs"
-            placeholder="Alt text (CZ)"
-            className="w-full bg-zinc-900 border border-zinc-700 px-4 py-2 text-sm focus:outline-none focus:border-white"
-          />
-          <input
-            type="text"
-            name="alt_en"
-            placeholder="Alt text (EN)"
-            className="w-full bg-zinc-900 border border-zinc-700 px-4 py-2 text-sm focus:outline-none focus:border-white"
-          />
-          {uploadError && <p className="text-red-400 text-sm">{uploadError}</p>}
-          <button
-            type="submit"
-            disabled={uploading}
-            className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
-          >
-            {uploading ? "Nahrávám…" : "Nahrát"}
-          </button>
-        </form>
+            <p className="text-sm text-gray-400">Přetáhni fotky sem nebo klikni pro výběr</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={(e) => { if (e.target.files) addFiles(e.target.files); }}
+            />
+          </div>
+
+          {/* Batch settings */}
+          <div className="flex gap-2">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm"
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              value={altCs}
+              onChange={(e) => setAltCs(e.target.value)}
+              placeholder="Alt text (CZ)"
+              className="flex-1 bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm focus:outline-none focus:border-white"
+            />
+            <input
+              type="text"
+              value={altEn}
+              onChange={(e) => setAltEn(e.target.value)}
+              placeholder="Alt text (EN)"
+              className="flex-1 bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm focus:outline-none focus:border-white"
+            />
+          </div>
+
+          {/* Thumbnail previews */}
+          {fileItems.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {fileItems.map((item, idx) => (
+                <div key={idx} className="relative w-20 h-20">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={item.preview} alt="" className="w-full h-full object-cover rounded" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {item.status === "uploading" && (
+                      <span className="text-xs bg-black/70 text-white px-1 rounded">…</span>
+                    )}
+                    {item.status === "done" && (
+                      <span className="text-green-400 text-lg bg-black/50 rounded-full w-6 h-6 flex items-center justify-center">✓</span>
+                    )}
+                    {item.status === "error" && (
+                      <span className="text-red-400 text-lg bg-black/50 rounded-full w-6 h-6 flex items-center justify-center">✗</span>
+                    )}
+                  </div>
+                  <p className="absolute bottom-0 left-0 right-0 text-xs text-white bg-black/60 truncate px-1">
+                    {item.file.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upload button + progress */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleUpload}
+              disabled={fileItems.length === 0 || progress !== null}
+              className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              {fileItems.length > 0 ? `Nahrát ${fileItems.length} ${fileItems.length === 1 ? "fotku" : fileItems.length < 5 ? "fotky" : "fotek"}` : "Nahrát"}
+            </button>
+            {progress && (
+              <span className="text-sm text-gray-400">{progress.current} / {progress.total}</span>
+            )}
+          </div>
+        </div>
       </section>
 
       {/* Photo list */}
