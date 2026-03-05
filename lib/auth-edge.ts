@@ -20,10 +20,12 @@ function base64urlEncode(buffer: ArrayBuffer): string {
   return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
 
-function base64urlDecode(str: string): Uint8Array {
+function base64urlDecode(str: string): Uint8Array<ArrayBuffer> {
   const padded = str.replace(/-/g, "+").replace(/_/g, "/");
   const binary = atob(padded + "==".slice((str.length + 2) % 4));
-  return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  const arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+  return arr;
 }
 
 export async function signToken(): Promise<string> {
