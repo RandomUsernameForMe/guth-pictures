@@ -1,3 +1,28 @@
+## [2026-03-05] - UI vylepšení — typografie, spacing, interaktivita
+
+- `Nav.tsx`: logo "Guth Pictures" + hover efekt
+- `page.tsx`: hero text-6xl/7xl, padding py-32/40, CTA px-8 py-4; o-mne border-t separator + mt-12 bio; sluzby karty hover efekt + group class
+- `ContactForm.tsx`: space-y-6, label font-medium, focus:ring, success/error styled div boxy, placeholdery
+- `messages/cs.json` + `en.json`: přidány namePlaceholder, emailPlaceholder, messagePlaceholder
+- `portfolio/page.tsx`: přepsán na getTranslations server API, intro sekce pt-32 pb-16
+- `PhotoGrid.tsx`: md:columns-3 lg:columns-4 breakpointy, gap-4, figure wrapper s bg-zinc-900
+
+## [2026-03-05] - Editace textů z adminu (Vercel KV)
+
+- `lib/content.ts`: ContentData typ, getContent(locale) s KV fallbackem na JSON defaults, setContent(locale, data)
+- `app/api/admin/content/route.ts`: GET + POST s auth checkem a revalidatePath
+- `components/admin/ContentEditor.tsx`: client komponenta, tabs CZ/EN, formulář pro Hero / O mně / Služby
+- `app/[locale]/page.tsx`: async server komponenta, editovatelné texty z getContent(), UI strings z getTranslations()
+- `app/admin/page.tsx`: přidán ContentEditor
+
+## [2026-03-05] - Zjednodušení na 2 stránky
+
+- Home page rozšířena o sekce #o-mne, #sluzby, #kontakt (single-page scroll)
+- Nav.tsx: anchor linky na home, jiná navigace na /portfolio
+- Smazány podstránky: /o-mne, /sluzby, /kontakt
+- Sitemap aktualizována (jen / a /portfolio)
+- Messages: odstraněny orphan meta záznamy pro smazané stránky
+
 ## [2026-03-05] - SEO
 
 - `generateMetadata` na všech stránkách (CZ/EN) — title, description, openGraph

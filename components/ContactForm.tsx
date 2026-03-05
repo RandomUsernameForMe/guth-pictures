@@ -31,40 +31,49 @@ export function ContactForm() {
   }
 
   if (status === "success") {
-    return <p className="text-gray-300">{t("success")}</p>;
+    return (
+      <div className="bg-green-950/30 border border-green-900/50 text-green-400 p-4">
+        {t("success")}
+      </div>
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm text-gray-400 mb-1">{t("name")}</label>
+        <label className="block text-sm text-gray-300 font-medium mb-1">{t("name")}</label>
         <input
           type="text"
           name="name"
           required
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white transition-colors"
+          placeholder={t("namePlaceholder")}
+          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors"
         />
       </div>
       <div>
-        <label className="block text-sm text-gray-400 mb-1">{t("email")}</label>
+        <label className="block text-sm text-gray-300 font-medium mb-1">{t("email")}</label>
         <input
           type="email"
           name="email"
           required
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white transition-colors"
+          placeholder={t("emailPlaceholder")}
+          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors"
         />
       </div>
       <div>
-        <label className="block text-sm text-gray-400 mb-1">{t("message")}</label>
+        <label className="block text-sm text-gray-300 font-medium mb-1">{t("message")}</label>
         <textarea
           name="message"
           required
           rows={5}
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white transition-colors resize-none"
+          placeholder={t("messagePlaceholder")}
+          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors resize-none"
         />
       </div>
       {status === "error" && (
-        <p className="text-red-400 text-sm">{t("error")}</p>
+        <div className="bg-red-950/30 border border-red-900/50 text-red-400 p-4 text-sm">
+          {t("error")}
+        </div>
       )}
       <button
         type="submit"

@@ -14,9 +14,9 @@ export function PhotoGrid({ photos, locale }: Props) {
   }
 
   return (
-    <div className="columns-1 sm:columns-2 lg:columns-3 gap-2">
+    <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
       {photos.map((photo) => (
-        <div key={photo.publicId} className="mb-2 overflow-hidden">
+        <figure key={photo.publicId} className="mb-4 bg-zinc-900 break-inside-avoid overflow-hidden">
           <Image
             src={cloudinaryUrl(photo.publicId)}
             alt={locale === "cs" ? photo.alt.cs : photo.alt.en}
@@ -27,7 +27,7 @@ export function PhotoGrid({ photos, locale }: Props) {
             blurDataURL={blurUrl(photo.publicId)}
             className="w-full object-cover hover:opacity-90 transition-opacity"
           />
-        </div>
+        </figure>
       ))}
     </div>
   );

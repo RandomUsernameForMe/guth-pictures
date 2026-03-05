@@ -8,10 +8,7 @@
   },
   "meta": {
     "home":      { "title": "Guth Pictures — Prague Photographer", "description": "Professional photographer based in Prague. Portraits, weddings and larps. Documentary style, natural moments." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Selected photographs: portraits, weddings and larp events." },
-    "sluzby":    { "title": "Services — Guth Pictures", "description": "Photography services: portraits, weddings, larps. Prague and all of Czech Republic." },
-    "o-mne":     { "title": "About — Guth Pictures", "description": "Prague-based photographer specialising in portraits, weddings and larp events." },
-    "kontakt":   { "title": "Contact — Guth Pictures", "description": "Get in touch. Free initial consultation." }
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Selected photographs: portraits, weddings and larp events." }
   },
   "home": {
     "title": "Guth Pictures",
@@ -54,8 +51,11 @@
     "title": "Contact",
     "subtitle": "Get in touch",
     "name": "Name",
+    "namePlaceholder": "Your name",
     "email": "Email",
+    "emailPlaceholder": "you@email.com",
     "message": "Message",
+    "messagePlaceholder": "Tell me about your event, date, or just say hello…",
     "send": "Send",
     "sending": "Sending…",
     "success": "Message sent. I'll get back to you as soon as possible.",

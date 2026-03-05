@@ -8,10 +8,7 @@
   },
   "meta": {
     "home":      { "title": "Guth Pictures — Fotograf Praha", "description": "Profesionální fotograf Praha. Portréty, svatby a larpy. Reportážní styl, přirozené okamžiky." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, svatební fotografie a larpové akce." },
-    "sluzby":    { "title": "Služby — Guth Pictures", "description": "Fotografické služby: portréty, svatby, larpy. Praha a celá ČR." },
-    "o-mne":     { "title": "O mně — Guth Pictures", "description": "Fotograf z Prahy specializující se na portréty, svatby a larpové akce." },
-    "kontakt":   { "title": "Kontakt — Guth Pictures", "description": "Napište mi. Nezávazná konzultace zdarma." }
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, svatební fotografie a larpové akce." }
   },
   "home": {
     "title": "Guth Pictures",
@@ -54,8 +51,11 @@
     "title": "Kontakt",
     "subtitle": "Napište mi",
     "name": "Jméno",
+    "namePlaceholder": "Vaše jméno",
     "email": "E-mail",
+    "emailPlaceholder": "vas@email.cz",
     "message": "Zpráva",
+    "messagePlaceholder": "Napište mi o své akci, termínu nebo jen pozdravte…",
     "send": "Odeslat",
     "sending": "Odesílám…",
     "success": "Zpráva odeslána. Ozvu se co nejdříve.",
