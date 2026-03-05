@@ -7,18 +7,19 @@ import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
+import { siteUrl, ogImage } from "@/lib/config";
 import "../globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://guthpictures.cz";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { template: "%s | Guth Pictures", default: "Guth Pictures" },
-  alternates: {
-    languages: { cs: "/cs", en: "/en" },
+  openGraph: {
+    siteName: "Guth Pictures",
+    images: [{ url: ogImage.url, width: ogImage.width, height: ogImage.height }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default async function LocaleLayout({

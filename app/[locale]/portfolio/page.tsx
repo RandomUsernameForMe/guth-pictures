@@ -6,7 +6,29 @@ import { PhotoGrid } from "@/components/PhotoGrid";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.portfolio" });
-  return { title: t("title"), description: t("description"), openGraph: { title: t("title"), description: t("description") } };
+  const ogAlt = locale === "cs" ? "Portfolio — Guth Pictures" : "Portfolio — Guth Pictures";
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: `/${locale}/portfolio`,
+      languages: { cs: "/cs/portfolio", en: "/en/portfolio" },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `/${locale}/portfolio`,
+      locale: locale === "cs" ? "cs_CZ" : "en_US",
+      type: "website",
+      images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: ogAlt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["/og-image.jpg"],
+    },
+  };
 }
 
 export default async function PortfolioPage({ params }: { params: Promise<{ locale: string }> }) {
