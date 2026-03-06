@@ -41,8 +41,9 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm text-gray-300 font-medium mb-1">{t("name")}</label>
+        <label htmlFor="contact-name" className="block text-sm text-gray-300 font-medium mb-1">{t("name")}</label>
         <input
+          id="contact-name"
           type="text"
           name="name"
           required
@@ -51,8 +52,9 @@ export function ContactForm() {
         />
       </div>
       <div>
-        <label className="block text-sm text-gray-300 font-medium mb-1">{t("email")}</label>
+        <label htmlFor="contact-email" className="block text-sm text-gray-300 font-medium mb-1">{t("email")}</label>
         <input
+          id="contact-email"
           type="email"
           name="email"
           required
@@ -61,8 +63,9 @@ export function ContactForm() {
         />
       </div>
       <div>
-        <label className="block text-sm text-gray-300 font-medium mb-1">{t("message")}</label>
+        <label htmlFor="contact-message" className="block text-sm text-gray-300 font-medium mb-1">{t("message")}</label>
         <textarea
+          id="contact-message"
           name="message"
           required
           rows={5}

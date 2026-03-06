@@ -18,9 +18,9 @@ describe("ContactForm", () => {
 
   it("renderuje všechna pole a tlačítko", () => {
     render(<ContactForm />);
-    expect(screen.getByPlaceholderText("namePlaceholder")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("emailPlaceholder")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("messagePlaceholder")).toBeInTheDocument();
+    expect(screen.getByLabelText("name")).toBeInTheDocument();
+    expect(screen.getByLabelText("email")).toBeInTheDocument();
+    expect(screen.getByLabelText("message")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
   });
 
@@ -29,9 +29,9 @@ describe("ContactForm", () => {
     const user = userEvent.setup();
     render(<ContactForm />);
 
-    await user.type(screen.getByPlaceholderText("namePlaceholder"), "Jan Novák");
-    await user.type(screen.getByPlaceholderText("emailPlaceholder"), "jan@test.cz");
-    await user.type(screen.getByPlaceholderText("messagePlaceholder"), "Ahoj");
+    await user.type(screen.getByLabelText("name"), "Jan Novák");
+    await user.type(screen.getByLabelText("email"), "jan@test.cz");
+    await user.type(screen.getByLabelText("message"), "Ahoj");
     await user.click(screen.getByRole("button", { name: "send" }));
 
     await waitFor(() => expect(mockFetch).toHaveBeenCalledOnce());
@@ -48,9 +48,9 @@ describe("ContactForm", () => {
     const user = userEvent.setup();
     render(<ContactForm />);
 
-    await user.type(screen.getByPlaceholderText("namePlaceholder"), "x");
-    await user.type(screen.getByPlaceholderText("emailPlaceholder"), "x@x.cz");
-    await user.type(screen.getByPlaceholderText("messagePlaceholder"), "x");
+    await user.type(screen.getByLabelText("name"), "x");
+    await user.type(screen.getByLabelText("email"), "x@x.cz");
+    await user.type(screen.getByLabelText("message"), "x");
     user.click(screen.getByRole("button", { name: "send" }));
 
     await waitFor(() => {
@@ -65,9 +65,9 @@ describe("ContactForm", () => {
     const user = userEvent.setup();
     render(<ContactForm />);
 
-    await user.type(screen.getByPlaceholderText("namePlaceholder"), "Jan");
-    await user.type(screen.getByPlaceholderText("emailPlaceholder"), "jan@test.cz");
-    await user.type(screen.getByPlaceholderText("messagePlaceholder"), "Zpráva");
+    await user.type(screen.getByLabelText("name"), "Jan");
+    await user.type(screen.getByLabelText("email"), "jan@test.cz");
+    await user.type(screen.getByLabelText("message"), "Zpráva");
     await user.click(screen.getByRole("button", { name: "send" }));
 
     await waitFor(() => expect(screen.getByText("success")).toBeInTheDocument());
@@ -79,9 +79,9 @@ describe("ContactForm", () => {
     const user = userEvent.setup();
     render(<ContactForm />);
 
-    await user.type(screen.getByPlaceholderText("namePlaceholder"), "Jan");
-    await user.type(screen.getByPlaceholderText("emailPlaceholder"), "jan@test.cz");
-    await user.type(screen.getByPlaceholderText("messagePlaceholder"), "Zpráva");
+    await user.type(screen.getByLabelText("name"), "Jan");
+    await user.type(screen.getByLabelText("email"), "jan@test.cz");
+    await user.type(screen.getByLabelText("message"), "Zpráva");
     await user.click(screen.getByRole("button", { name: "send" }));
 
     await waitFor(() => expect(screen.getByText("error")).toBeInTheDocument());
