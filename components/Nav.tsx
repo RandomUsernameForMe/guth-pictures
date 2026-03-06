@@ -1,16 +1,30 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
 export function Nav() {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isPortfolio = pathname.startsWith("/portfolio");
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-sm">
+    <header
+      className={`fixed top-0 inset-x-0 z-50 border-b transition-all duration-300 ${
+        scrolled
+          ? "bg-black/80 backdrop-blur-sm border-white/10"
+          : "bg-transparent border-transparent"
+      }`}
+    >
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="text-lg font-semibold tracking-wide hover:text-gray-300 transition-colors">
           Guth Pictures

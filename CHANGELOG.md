@@ -1,3 +1,21 @@
+## [2026-03-06] - Testy: AnimatedSection, HeroSection, PortfolioFilter, Lightbox
+
+- `__tests__/visual-components.test.tsx`: 25 testů pro nové vizuální komponenty
+- AnimatedSection (2 testy), HeroSection (4), PortfolioFilter (6), Lightbox (13)
+- Fix: Lightbox close button přidal `stopPropagation()` (event bubbloval na backdrop → double call)
+
+## [2026-03-06] - Vizuální vylepšení: animace, hero, lightbox navigace, scroll reveal
+
+- Framer Motion nainstalován
+- `AnimatedSection.tsx`: reusable scroll reveal wrapper (whileInView)
+- `HeroSection.tsx`: hero s Framer Motion animací textu, scroll indicator, připraveno na Cloudinary bg foto
+- `SelectedWork.tsx`: bento grid sekce z Cloudinary fotek (první 3–6), hover efekty, scroll reveal
+- `Nav.tsx`: průhledný na top, po scrollu bg-black/80 backdrop-blur
+- `PhotoGrid.tsx`: hover scale + overlay na každé fotce
+- `Lightbox.tsx`: navigace šipkami (klávesy + tlačítka), AnimatePresence animace
+- `PortfolioFilter.tsx`: animovaný aktivní pill přes `layoutId`
+- `app/[locale]/page.tsx`: HeroSection, SelectedWork (graceful fallback), about 2-column layout, AnimatedSection wrappery
+
 ## [2026-03-06] - Testy: auth-edge a AdminDashboard komprese
 
 - `__tests__/auth-edge.test.ts`: 11 testů pro signToken/verifyToken (roundtrip, expiraci, tampered token, chybějící secret)

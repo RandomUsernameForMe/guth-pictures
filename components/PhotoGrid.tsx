@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function PhotoGrid({ photos, locale }: Props) {
-  const [selected, setSelected] = useState<GalleryPhoto | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   if (photos.length === 0) {
     return (
@@ -22,11 +22,11 @@ export function PhotoGrid({ photos, locale }: Props) {
   return (
     <>
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
-        {photos.map((photo) => (
+        {photos.map((photo, i) => (
           <figure
             key={photo.publicId}
-            className="mb-4 bg-zinc-900 break-inside-avoid overflow-hidden cursor-pointer"
-            onClick={() => setSelected(photo)}
+            className="group mb-4 bg-zinc-900 break-inside-avoid overflow-hidden cursor-pointer relative"
+            onClick={() => setSelectedIndex(i)}
           >
             <Image
               src={cloudinaryUrl(photo.publicId)}
@@ -36,16 +36,19 @@ export function PhotoGrid({ photos, locale }: Props) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               placeholder="blur"
               blurDataURL={blurUrl(photo.publicId)}
-              className="w-full object-cover hover:opacity-90 transition-opacity"
+              className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
           </figure>
         ))}
       </div>
-      {selected && (
+      {selectedIndex !== null && (
         <Lightbox
-          photo={selected}
+          photos={photos}
+          currentIndex={selectedIndex}
           locale={locale}
-          onClose={() => setSelected(null)}
+          onClose={() => setSelectedIndex(null)}
+          onNavigate={setSelectedIndex}
         />
       )}
     </>
