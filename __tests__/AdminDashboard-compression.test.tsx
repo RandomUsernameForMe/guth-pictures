@@ -75,7 +75,7 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
     await user.upload(getFileInput(), makeFile());
     await user.click(screen.getByRole("button", { name: /nahrát/i }));
 
-    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(3)); // sig + upload + revalidate
     expect(mockFetch.mock.calls[1][0]).toContain("api.cloudinary.com");
     expect(mockFetch.mock.calls[1][0]).toContain("testcloud");
   });
@@ -88,7 +88,7 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
     await user.upload(getFileInput(), makeFile());
     await user.click(screen.getByRole("button", { name: /nahrát/i }));
 
-    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(3)); // sig + upload + revalidate
     const body = mockFetch.mock.calls[1][1].body as FormData;
     expect(body.get("signature")).toBe("abc123");
     expect(body.get("api_key")).toBe("key123");
@@ -153,7 +153,7 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
     await user.upload(getFileInput(), files);
     await user.click(screen.getByRole("button", { name: /nahrát/i }));
 
-    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(4)); // 1 sig + 3 uploads
+    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(5)); // 1 sig + 3 uploads + 1 revalidate
     expect(mockFetch.mock.calls[0][0]).toBe("/api/admin/upload-signature");
     expect(mockFetch.mock.calls[1][0]).toContain("api.cloudinary.com");
   });

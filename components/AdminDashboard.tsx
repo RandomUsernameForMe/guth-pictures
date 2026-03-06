@@ -88,6 +88,7 @@ export function AdminDashboard({ photos: initial }: Props) {
     }
 
     fileItems.forEach((item) => URL.revokeObjectURL(item.preview));
+    await fetch("/api/admin/revalidate", { method: "POST" }).catch(() => {});
     window.location.reload();
   }
 

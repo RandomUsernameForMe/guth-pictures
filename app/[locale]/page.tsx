@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
@@ -43,7 +42,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const [t, content, photos] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
-    getGalleryPhotos().catch(() => []),
+    getGalleryPhotos("portfolio").catch(() => []),
   ]);
 
   return (
@@ -63,8 +62,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
       )}
 
+      <div className="border-t border-white/10" />
       <AnimatedSection>
-        <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32 border-t border-white/10">
+        <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
             {/* Foto fotografa — placeholder */}
             <div className="aspect-[4/5] bg-zinc-900 flex items-center justify-center text-zinc-700 text-6xl font-light select-none">

@@ -1,5 +1,6 @@
 import "server-only";
 import { v2 as cloudinary } from "cloudinary";
+import { unstable_cache } from "next/cache";
 import { type GalleryPhoto } from "./cloudinary-utils";
 
 cloudinary.config({
@@ -15,7 +16,7 @@ type CloudinaryResource = {
   context?: { alt_cs?: string; alt_en?: string; category?: GalleryPhoto["category"] };
 };
 
-export async function getGalleryPhotos(folder = "portfolio"): Promise<GalleryPhoto[]> {
+async function fetchGalleryPhotos(folder: string): Promise<GalleryPhoto[]> {
   const result = await cloudinary.search
     .expression(`folder:${folder}`)
     .with_field("context")
@@ -34,5 +35,11 @@ export async function getGalleryPhotos(folder = "portfolio"): Promise<GalleryPho
     category: r.context?.category ?? "portréty",
   }));
 }
+
+export const getGalleryPhotos = unstable_cache(
+  fetchGalleryPhotos,
+  ["gallery-photos"],
+  { revalidate: 300 }
+);
 
 export { cloudinary };

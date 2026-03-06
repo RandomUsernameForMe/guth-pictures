@@ -33,10 +33,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function PortfolioPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, photos] = await Promise.all([
-    getTranslations({ locale, namespace: "portfolio" }),
-    getGalleryPhotos(),
-  ]);
+  const t = await getTranslations({ locale, namespace: "portfolio" });
+
+  let photos: Awaited<ReturnType<typeof getGalleryPhotos>> = [];
+  let fetchError = false;
+  try {
+    photos = await getGalleryPhotos("portfolio");
+  } catch {
+    fetchError = true;
+  }
 
   return (
     <main>
@@ -45,7 +50,11 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
         <p className="mt-4 text-gray-400">{t("subtitle")}</p>
       </section>
       <section className="max-w-6xl mx-auto px-6 pb-24">
-        <PortfolioFilter photos={photos} locale={locale} />
+        {fetchError ? (
+          <p className="text-gray-500 text-center py-24">Galerii se nepodařilo načíst. Zkuste to prosím znovu.</p>
+        ) : (
+          <PortfolioFilter photos={photos} locale={locale} />
+        )}
       </section>
     </main>
   );

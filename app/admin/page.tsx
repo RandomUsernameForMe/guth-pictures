@@ -7,7 +7,7 @@ import { ContentEditor } from "@/components/admin/ContentEditor";
 export default async function AdminPage() {
   if (!(await isAuthenticated())) redirect("/admin/login");
 
-  const photos = await getGalleryPhotos();
+  const photos = await getGalleryPhotos("portfolio");
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-12">

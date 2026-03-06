@@ -66,6 +66,7 @@
     "send": "Send",
     "sending": "Sending…",
     "success": "Message sent. I'll get back to you as soon as possible.",
-    "error": "Something went wrong. Please try again or send an email directly."
+    "error": "Something went wrong. Please try again or send an email directly.",
+    "notConfigured": "The contact form is not available at the moment."
   }
 }

@@ -30,6 +30,10 @@ export function ContactForm() {
     }
   }
 
+  if (!process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID) {
+    return <p className="text-gray-400">{t("notConfigured")}</p>;
+  }
+
   if (status === "success") {
     return (
       <div className="bg-green-950/30 border border-green-900/50 text-green-400 p-4">
