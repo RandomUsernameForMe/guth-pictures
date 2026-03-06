@@ -12,6 +12,7 @@
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
     "@vercel/kv": "^3.0.0",
+    "browser-image-compression": "^2.0.2",
     "cloudinary": "^2.9.0",
     "next": "16.1.6",
     "next-intl": "^4.8.3",

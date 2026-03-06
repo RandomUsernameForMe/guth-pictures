@@ -1,3 +1,19 @@
+## [2026-03-06] - Testy: auth-edge a AdminDashboard komprese
+
+- `__tests__/auth-edge.test.ts`: 11 testů pro signToken/verifyToken (roundtrip, expiraci, tampered token, chybějící secret)
+- `__tests__/AdminDashboard-compression.test.tsx`: 7 testů pro novou kompresní logiku (parametry, komprimovaný soubor na API, status přechody, chybové stavy)
+
+## [2026-03-06] - Komprese obrázků v browseru před uploadem
+
+- `browser-image-compression` instalováno
+- `AdminDashboard`: fotky > 3MB se automaticky zkomprimují před odesláním (max 3MB / 4000px)
+- Status `"compressing"` přidán do `FileStatus`, vizuální feedback v thumbnail preview
+
+## [2026-03-05] - Fix: login API route blokována intl middlewarem
+
+- `proxy.ts`: přidáno early return pro `/api` cesty (intl middleware přidával locale prefix → 404)
+- `proxy.ts`: matcher rozšířen o `/api/admin/:path*`
+
 ## [2026-03-05] - Security: HMAC auth token, rate limiting, MIME validace
 
 - `lib/auth-edge.ts` (nový): Edge-compatible HMAC-SHA256 sign/verify token

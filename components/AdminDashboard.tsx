@@ -2,11 +2,12 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import imageCompression from "browser-image-compression";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
 
-type FileStatus = "pending" | "uploading" | "done" | "error";
+type FileStatus = "pending" | "compressing" | "uploading" | "done" | "error";
 type FileItem = { file: File; preview: string; status: FileStatus };
 
 type Props = { photos: GalleryPhoto[] };
@@ -43,12 +44,22 @@ export function AdminDashboard({ photos: initial }: Props) {
 
     for (let i = 0; i < fileItems.length; i++) {
       setFileItems((prev) =>
-        prev.map((item, idx) => (idx === i ? { ...item, status: "uploading" } : item))
+        prev.map((item, idx) => (idx === i ? { ...item, status: "compressing" } : item))
       );
 
       const item = fileItems[i];
+      const compressed = await imageCompression(item.file, {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 4000,
+        useWebWorker: true,
+      });
+
+      setFileItems((prev) =>
+        prev.map((it, idx) => (idx === i ? { ...it, status: "uploading" } : it))
+      );
+
       const data = new FormData();
-      data.append("file", item.file);
+      data.append("file", compressed);
       data.append("category", category);
       data.append("alt_cs", altCs || item.file.name.replace(/\.[^.]+$/, ""));
       data.append("alt_en", altEn || item.file.name.replace(/\.[^.]+$/, ""));
@@ -145,6 +156,9 @@ export function AdminDashboard({ photos: initial }: Props) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.preview} alt="" className="w-full h-full object-cover rounded" />
                   <div className="absolute inset-0 flex items-center justify-center">
+                    {item.status === "compressing" && (
+                      <span className="text-xs bg-black/70 text-yellow-300 px-1 rounded">↓</span>
+                    )}
                     {item.status === "uploading" && (
                       <span className="text-xs bg-black/70 text-white px-1 rounded">…</span>
                     )}
