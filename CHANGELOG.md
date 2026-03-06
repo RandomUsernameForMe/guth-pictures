@@ -1,3 +1,10 @@
+## [2026-03-06] - Přímý upload fotek na Cloudinary bez komprese
+
+- Nový endpoint `/api/admin/upload-signature` generuje signed upload params
+- `AdminDashboard.tsx`: klient uploaduje přímo na `api.cloudinary.com` — bez client-side komprese, plná kvalita
+- Odstraněna závislost `browser-image-compression`
+- Testy aktualizovány (8 testů pro nový direct upload flow)
+
 ## [2026-03-06] - Testy: AnimatedSection, HeroSection, PortfolioFilter, Lightbox
 
 - `__tests__/visual-components.test.tsx`: 25 testů pro nové vizuální komponenty
