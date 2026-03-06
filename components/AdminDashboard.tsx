@@ -2,12 +2,12 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import imageCompression from "browser-image-compression";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-type FileStatus = "pending" | "compressing" | "uploading" | "done" | "error";
+type FileStatus = "pending" | "uploading" | "done" | "error";
 type FileItem = { file: File; preview: string; status: FileStatus };
 
 type Props = { photos: GalleryPhoto[] };
@@ -23,11 +23,9 @@ export function AdminDashboard({ photos: initial }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function addFiles(files: FileList | File[]) {
-    const items: FileItem[] = Array.from(files).map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      status: "pending",
-    }));
+    const items: FileItem[] = Array.from(files)
+      .filter((f) => ALLOWED_TYPES.includes(f.type))
+      .map((file) => ({ file, preview: URL.createObjectURL(file), status: "pending" }));
     setFileItems((prev) => [...prev, ...items]);
   }
 
@@ -42,30 +40,41 @@ export function AdminDashboard({ photos: initial }: Props) {
     const total = fileItems.length;
     setProgress({ current: 0, total });
 
-    for (let i = 0; i < fileItems.length; i++) {
-      setFileItems((prev) =>
-        prev.map((item, idx) => (idx === i ? { ...item, status: "compressing" } : item))
-      );
+    // Získat podpis pro celou dávku (stejné metadata)
+    const sigRes = await fetch("/api/admin/upload-signature", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ altCs, altEn, category }),
+    });
 
+    if (!sigRes.ok) {
+      setFileItems((prev) => prev.map((item) => ({ ...item, status: "error" })));
+      setProgress(null);
+      return;
+    }
+
+    const { signature, timestamp, apiKey, cloudName, folder, context } = await sigRes.json();
+
+    for (let i = 0; i < fileItems.length; i++) {
       const item = fileItems[i];
-      const compressed = await imageCompression(item.file, {
-        maxSizeMB: 3,
-        maxWidthOrHeight: 4000,
-        useWebWorker: true,
-      });
 
       setFileItems((prev) =>
         prev.map((it, idx) => (idx === i ? { ...it, status: "uploading" } : it))
       );
 
       const data = new FormData();
-      data.append("file", compressed);
-      data.append("category", category);
-      data.append("alt_cs", altCs || item.file.name.replace(/\.[^.]+$/, ""));
-      data.append("alt_en", altEn || item.file.name.replace(/\.[^.]+$/, ""));
+      data.append("file", item.file);
+      data.append("api_key", apiKey);
+      data.append("timestamp", String(timestamp));
+      data.append("signature", signature);
+      data.append("folder", folder);
+      data.append("context", context);
 
       try {
-        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          { method: "POST", body: data }
+        );
         setFileItems((prev) =>
           prev.map((it, idx) => (idx === i ? { ...it, status: res.ok ? "done" : "error" } : it))
         );
@@ -114,7 +123,7 @@ export function AdminDashboard({ photos: initial }: Props) {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               multiple
               className="hidden"
               onChange={(e) => { if (e.target.files) addFiles(e.target.files); }}
@@ -156,9 +165,6 @@ export function AdminDashboard({ photos: initial }: Props) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.preview} alt="" className="w-full h-full object-cover rounded" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    {item.status === "compressing" && (
-                      <span className="text-xs bg-black/70 text-yellow-300 px-1 rounded">↓</span>
-                    )}
                     {item.status === "uploading" && (
                       <span className="text-xs bg-black/70 text-white px-1 rounded">…</span>
                     )}
@@ -184,7 +190,9 @@ export function AdminDashboard({ photos: initial }: Props) {
               disabled={fileItems.length === 0 || progress !== null}
               className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
-              {fileItems.length > 0 ? `Nahrát ${fileItems.length} ${fileItems.length === 1 ? "fotku" : fileItems.length < 5 ? "fotky" : "fotek"}` : "Nahrát"}
+              {fileItems.length > 0
+                ? `Nahrát ${fileItems.length} ${fileItems.length === 1 ? "fotku" : fileItems.length < 5 ? "fotky" : "fotek"}`
+                : "Nahrát"}
             </button>
             {progress && (
               <span className="text-sm text-gray-400">{progress.current} / {progress.total}</span>
