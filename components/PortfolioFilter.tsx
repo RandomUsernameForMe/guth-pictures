@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { PhotoGrid } from "./PhotoGrid";
 import { CATEGORIES, type GalleryPhoto } from "@/lib/cloudinary-utils";
@@ -13,7 +14,11 @@ type Props = {
 
 export function PortfolioFilter({ photos, locale }: Props) {
   const t = useTranslations("portfolio");
-  const [active, setActive] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category");
+  const [active, setActive] = useState<string | null>(
+    CATEGORIES.includes(initialCategory as typeof CATEGORIES[number]) ? initialCategory : null
+  );
 
   const filtered = active ? photos.filter((p) => p.category === active) : photos;
 

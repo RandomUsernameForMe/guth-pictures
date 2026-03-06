@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
@@ -36,6 +37,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const services = ["portraits", "weddings", "larp"] as const;
+const serviceCategory: Record<typeof services[number], string> = {
+  portraits: "portréty",
+  weddings: "svatby",
+  larp: "larpy",
+};
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -92,10 +98,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <p className="mt-2 text-gray-400">{t("sluzby.subtitle")}</p>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {services.map((key) => (
-              <div key={key} className="group border border-white/20 p-8 hover:border-white/40 hover:bg-white/5 transition-all">
+              <Link
+                key={key}
+                href={`/portfolio?category=${serviceCategory[key]}`}
+                className="group border border-white/20 p-8 hover:border-white/40 hover:bg-white/5 transition-all block"
+              >
                 <h3 className="text-lg font-semibold group-hover:text-white">{content.sluzby[key].title}</h3>
                 <p className="mt-3 text-sm text-gray-400 leading-relaxed">{content.sluzby[key].desc}</p>
-              </div>
+                <span className="inline-block mt-4 text-xs text-gray-500 group-hover:text-gray-300 transition-colors">
+                  {t("home.cta")} →
+                </span>
+              </Link>
             ))}
           </div>
         </section>
