@@ -24,7 +24,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-end pb-20 px-6 overflow-hidden"
+      className="relative -mt-16 min-h-screen flex items-end pb-20 px-6 overflow-hidden"
     >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
