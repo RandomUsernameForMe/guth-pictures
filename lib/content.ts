@@ -15,6 +15,11 @@ export type ContentData = {
   };
 };
 
+export type SiteImages = {
+  hero: string;    // Cloudinary public ID
+  profile: string; // Cloudinary public ID
+};
+
 const defaults: Record<string, ContentData> = {
   cs: {
     home: {
@@ -87,4 +92,19 @@ export async function setContent(locale: string, data: ContentData): Promise<voi
   const kv = await getKv();
   if (!kv) throw new Error("KV not configured");
   await kv.set(`content:${locale}`, data);
+}
+
+export async function getImages(): Promise<SiteImages> {
+  const kv = await getKv();
+  if (kv) {
+    const data = await kv.get<SiteImages>("content:images");
+    if (data) return data;
+  }
+  return { hero: "", profile: "" };
+}
+
+export async function setImages(data: SiteImages): Promise<void> {
+  const kv = await getKv();
+  if (!kv) throw new Error("KV not configured");
+  await kv.set("content:images", data);
 }

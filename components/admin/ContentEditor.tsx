@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ContentData } from "@/lib/content";
+import type { ContentData, SiteImages } from "@/lib/content";
 
 type Locale = "cs" | "en";
 
@@ -22,12 +22,18 @@ export function ContentEditor() {
     en: emptyContent(),
   });
   const [status, setStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
+  const [images, setImages] = useState<SiteImages>({ hero: "", profile: "" });
+  const [imgStatus, setImgStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
 
   useEffect(() => {
     Promise.all([
       fetch("/api/admin/content?locale=cs").then((r) => r.json()),
       fetch("/api/admin/content?locale=en").then((r) => r.json()),
-    ]).then(([cs, en]) => setData({ cs, en }));
+      fetch("/api/admin/images").then((r) => r.json()),
+    ]).then(([cs, en, imgs]) => {
+      setData({ cs, en });
+      setImages(imgs);
+    });
   }, []);
 
   const current = data[locale];
@@ -55,8 +61,60 @@ export function ContentEditor() {
     }
   }
 
+  async function handleImagesSave(e: React.FormEvent) {
+    e.preventDefault();
+    setImgStatus("saving");
+    try {
+      const res = await fetch("/api/admin/images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(images),
+      });
+      setImgStatus(res.ok ? "ok" : "error");
+    } catch {
+      setImgStatus("error");
+    }
+  }
+
   return (
-    <div className="mt-12">
+    <div className="mt-12 space-y-16">
+
+      {/* Obrázky */}
+      <div>
+        <h2 className="text-xl font-semibold mb-6">Obrázky webu</h2>
+        <form onSubmit={handleImagesSave} className="space-y-4 max-w-2xl">
+          <div className="border border-white/10 p-6 space-y-4">
+            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Klíčové obrázky</h3>
+            <Field
+              label="Hero banner — Cloudinary public ID"
+              value={images.hero}
+              onChange={(v) => setImages((prev) => ({ ...prev, hero: v }))}
+            />
+            <Field
+              label="Profilová fotka — Cloudinary public ID"
+              value={images.profile}
+              onChange={(v) => setImages((prev) => ({ ...prev, profile: v }))}
+            />
+            <p className="text-xs text-gray-600">
+              Public ID najdeš v Cloudinary dashboardu nebo v URL za názvem složky, např. <code>portfolio/DSC_0001</code>
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={imgStatus === "saving"}
+              className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              {imgStatus === "saving" ? "Ukládám…" : "Uložit obrázky"}
+            </button>
+            {imgStatus === "ok" && <span className="text-green-400 text-sm">Uloženo</span>}
+            {imgStatus === "error" && <span className="text-red-400 text-sm">Chyba při ukládání</span>}
+          </div>
+        </form>
+      </div>
+
+      {/* Texty webu */}
+      <div>
       <h2 className="text-xl font-semibold mb-6">Texty webu</h2>
 
       <div className="flex gap-2 mb-6">
@@ -160,6 +218,8 @@ export function ContentEditor() {
           {status === "error" && <span className="text-red-400 text-sm">Chyba při ukládání</span>}
         </div>
       </form>
+      </div>
+
     </div>
   );
 }

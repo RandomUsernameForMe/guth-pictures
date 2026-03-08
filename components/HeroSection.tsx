@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 type Props = {
   title: string;
@@ -12,7 +14,7 @@ type Props = {
   heroPublicId?: string;
 };
 
-export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPublicId: _ }: Props) {
+export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPublicId }: Props) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -27,7 +29,20 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       className="relative -mt-16 min-h-screen flex items-end pb-20 px-6 overflow-hidden"
     >
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
+      {heroPublicId ? (
+        <Image
+          src={cloudinaryUrl(heroPublicId, "w_1920,c_fill,q_auto,f_auto")}
+          alt=""
+          fill
+          priority
+          placeholder="blur"
+          blurDataURL={blurUrl(heroPublicId)}
+          className="absolute inset-0 object-cover"
+          sizes="100vw"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
+      )}
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />

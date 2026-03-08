@@ -4,8 +4,10 @@ import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
-import { getContent } from "@/lib/content";
+import { getContent, getImages } from "@/lib/content";
 import { getGalleryPhotos } from "@/lib/cloudinary";
+import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -45,10 +47,11 @@ const serviceCategory: Record<typeof services[number], string> = {
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, photos] = await Promise.all([
+  const [t, content, photos, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
     getGalleryPhotos("portfolio").catch(() => []),
+    getImages().catch(() => ({ hero: "", profile: "" })),
   ]);
 
   return (
@@ -58,6 +61,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         subtitle={content.home.subtitle}
         ctaPortfolio={t("home.cta")}
         ctaContact={t("home.ctaContact")}
+        heroPublicId={images.hero || undefined}
       />
 
       {photos.length > 0 && (
@@ -72,10 +76,24 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
-            {/* Foto fotografa — placeholder */}
-            <div className="aspect-[4/5] bg-zinc-900 flex items-center justify-center text-zinc-700 text-6xl font-light select-none">
-              JG
-            </div>
+            {/* Profilová fotka */}
+            {images.profile ? (
+              <div className="aspect-[4/5] relative overflow-hidden">
+                <Image
+                  src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
+                  alt={content["o-mne"].title}
+                  fill
+                  placeholder="blur"
+                  blurDataURL={blurUrl(images.profile)}
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 280px"
+                />
+              </div>
+            ) : (
+              <div className="aspect-[4/5] bg-zinc-900 flex items-center justify-center text-zinc-700 text-6xl font-light select-none">
+                JG
+              </div>
+            )}
             {/* Bio */}
             <div>
               <h2 className="text-4xl font-bold">{content["o-mne"].title}</h2>
