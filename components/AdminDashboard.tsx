@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { type GalleryPhoto, CATEGORIES, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
@@ -24,6 +24,11 @@ export function AdminDashboard({ photos: initial }: Props) {
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileItemsRef = useRef<FileItem[]>([]);
+  useEffect(() => { fileItemsRef.current = fileItems; }, [fileItems]);
+  useEffect(() => {
+    return () => { fileItemsRef.current.forEach((item) => URL.revokeObjectURL(item.preview)); };
+  }, []);
 
   function addFiles(files: FileList | File[]) {
     const oversized: string[] = [];

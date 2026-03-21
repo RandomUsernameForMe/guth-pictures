@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { type GalleryPhoto, cloudinaryUrl } from "@/lib/cloudinary-utils";
@@ -15,6 +15,9 @@ type Props = {
 
 export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: Props) {
   const photo = photos[currentIndex];
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => { closeRef.current?.focus(); }, []);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -44,6 +47,7 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
       >
         {/* Close */}
         <button
+          ref={closeRef}
           className="absolute top-4 right-6 text-white text-3xl leading-none hover:text-gray-300 transition-colors z-10"
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Zavřít"

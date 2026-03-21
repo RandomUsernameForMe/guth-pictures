@@ -8,6 +8,20 @@ const intlMiddleware = createMiddleware(routing);
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname.startsWith("/api/admin") && pathname !== "/api/admin/login") {
+    const token = request.cookies.get(COOKIE)?.value ?? "";
+    let authenticated = false;
+    try {
+      authenticated = await verifyToken(token);
+    } catch {
+      authenticated = false;
+    }
+    if (!authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/api")) {
     return NextResponse.next();
   }

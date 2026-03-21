@@ -39,7 +39,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
         ) : (
           <div className="flex flex-col gap-8">
             {posts.map((post) => (
-              <BlogPostCard key={post.id} post={post} locale={locale} />
+              <BlogPostCard key={post.id} post={post} locale={locale === "en" ? "en" : "cs"} />
             ))}
           </div>
         )}

@@ -45,17 +45,25 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
-  const posts = await getBlogPosts();
-  return posts.find((p) => p.slug === slug) ?? null;
+  const kv = await getKv();
+  if (!kv) return null;
+  try {
+    const id = await kv.get<string>(`blog:slug:${slug}`);
+    if (!id) return null;
+    return await kv.get<BlogPost>(`blog:post:${id}`);
+  } catch {
+    return null;
+  }
 }
 
 export async function saveBlogPost(post: BlogPost): Promise<void> {
   const kv = await getKv();
   if (!kv) throw new Error("KV not configured");
   const score = new Date(post.publishedAt).getTime();
-  // Both writes are independent — no read-modify-write, no race condition
+  // blog:slug:<slug> → id index enables O(1) slug lookup
   await Promise.all([
     kv.set(`blog:post:${post.id}`, post),
+    kv.set(`blog:slug:${post.slug}`, post.id),
     kv.zadd("blog:index", { score, member: post.id }),
   ]);
 }
@@ -64,10 +72,11 @@ export async function saveBlogPost(post: BlogPost): Promise<void> {
 export async function deleteBlogPost(id: string): Promise<boolean> {
   const kv = await getKv();
   if (!kv) throw new Error("KV not configured");
-  const existing = await kv.get(`blog:post:${id}`);
+  const existing = await kv.get<BlogPost>(`blog:post:${id}`);
   if (!existing) return false;
   await Promise.all([
     kv.del(`blog:post:${id}`),
+    kv.del(`blog:slug:${existing.slug}`),
     kv.zrem("blog:index", id),
   ]);
   return true;

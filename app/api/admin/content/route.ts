@@ -10,6 +10,16 @@ function isAllowedLocale(l: unknown): l is AllowedLocale {
   return ALLOWED_LOCALES.includes(l as AllowedLocale);
 }
 
+function isValidContentData(d: unknown): d is ContentData {
+  if (!d || typeof d !== "object" || Array.isArray(d)) return false;
+  const o = d as Record<string, unknown>;
+  return (
+    !!o.home && typeof o.home === "object" &&
+    !!o["o-mne"] && typeof o["o-mne"] === "object" &&
+    !!o.sluzby && typeof o.sluzby === "object"
+  );
+}
+
 export async function GET(req: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -26,9 +36,13 @@ export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { locale, data } = (await req.json()) as { locale: string; data: ContentData };
+  const body = await req.json();
+  const { locale, data } = body as { locale: string; data: unknown };
   if (!isAllowedLocale(locale)) {
     return NextResponse.json({ error: "Invalid locale" }, { status: 400 });
+  }
+  if (!isValidContentData(data)) {
+    return NextResponse.json({ error: "Invalid content structure" }, { status: 400 });
   }
   await setContent(locale, data);
   revalidatePath("/cs");

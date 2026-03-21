@@ -3,14 +3,16 @@ import { Link } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 import type { BlogPost } from "@/lib/blog";
 
-type Props = { post: BlogPost; locale: string };
+type Props = { post: BlogPost; locale: "cs" | "en" };
 
 export function BlogPostCard({ post, locale }: Props) {
-  const loc = post[locale as "cs" | "en"];
-  const date = new Date(post.publishedAt).toLocaleDateString(
-    locale === "cs" ? "cs-CZ" : "en-GB",
-    { year: "numeric", month: "long", day: "numeric" }
-  );
+  const loc = post[locale];
+  const date = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString(
+        locale === "cs" ? "cs-CZ" : "en-GB",
+        { year: "numeric", month: "long", day: "numeric" }
+      )
+    : "";
 
   return (
     <article className="group border border-white/10 rounded-lg overflow-hidden hover:border-white/25 transition-colors">

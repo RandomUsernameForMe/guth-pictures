@@ -11,6 +11,10 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!UUID_RE.test(id)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
   // Single read for slug (needed for revalidation)
   const post = await getBlogPostById(id);
   const deleted = await deleteBlogPost(id);

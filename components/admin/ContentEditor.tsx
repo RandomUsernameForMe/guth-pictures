@@ -67,6 +67,7 @@ export function ContentEditor() {
         body: JSON.stringify({ locale, data: current }),
       });
       setStatus(res.ok ? "ok" : "error");
+      if (res.ok) setTimeout(() => setStatus("idle"), 3000);
     } catch {
       setStatus("error");
     }

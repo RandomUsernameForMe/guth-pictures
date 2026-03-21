@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { BlogPost } from "@/lib/blog";
 
 type Locale = "cs" | "en";
@@ -123,8 +123,9 @@ export function BlogEditor() {
     }
   }
 
-  const sorted = [...posts].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  const sorted = useMemo(
+    () => [...posts].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()),
+    [posts]
   );
 
   return (
