@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { type GalleryPhoto, CATEGORIES, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
-const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE_MB = 20;
 
 type FileStatus = "pending" | "uploading" | "done" | "error";
 type FileItem = { file: File; preview: string; status: FileStatus };
@@ -13,6 +14,7 @@ type FileItem = { file: File; preview: string; status: FileStatus };
 type Props = { photos: GalleryPhoto[] };
 
 export function AdminDashboard({ photos: initial }: Props) {
+  const router = useRouter();
   const [photos, setPhotos] = useState(initial);
   const [fileItems, setFileItems] = useState<FileItem[]>([]);
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
@@ -20,12 +22,24 @@ export function AdminDashboard({ photos: initial }: Props) {
   const [altEn, setAltEn] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function addFiles(files: FileList | File[]) {
+    const oversized: string[] = [];
     const items: FileItem[] = Array.from(files)
-      .filter((f) => ALLOWED_TYPES.includes(f.type))
+      .filter((f) => {
+        if (!ALLOWED_TYPES.includes(f.type)) return false;
+        if (f.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+          oversized.push(f.name);
+          return false;
+        }
+        return true;
+      })
       .map((file) => ({ file, preview: URL.createObjectURL(file), status: "pending" }));
+    if (oversized.length > 0) {
+      setUploadError(`Tyto soubory překračují limit ${MAX_FILE_SIZE_MB} MB: ${oversized.join(", ")}`);
+    }
     setFileItems((prev) => [...prev, ...items]);
   }
 
@@ -37,6 +51,7 @@ export function AdminDashboard({ photos: initial }: Props) {
 
   async function handleUpload() {
     if (fileItems.length === 0 || progress !== null) return;
+    setUploadError(null);
     const total = fileItems.length;
     setProgress({ current: 0, total });
 
@@ -49,6 +64,7 @@ export function AdminDashboard({ photos: initial }: Props) {
 
     if (!sigRes.ok) {
       setFileItems((prev) => prev.map((item) => ({ ...item, status: "error" })));
+      setUploadError(`Chyba při získání upload podpisu (${sigRes.status}). Zkontroluj Cloudinary credentials.`);
       setProgress(null);
       return;
     }
@@ -89,7 +105,9 @@ export function AdminDashboard({ photos: initial }: Props) {
 
     fileItems.forEach((item) => URL.revokeObjectURL(item.preview));
     await fetch("/api/admin/revalidate", { method: "POST" }).catch(() => {});
-    window.location.reload();
+    setFileItems([]);
+    setProgress(null);
+    router.refresh();
   }
 
   async function handleDelete(publicId: string) {
@@ -199,6 +217,9 @@ export function AdminDashboard({ photos: initial }: Props) {
               <span className="text-sm text-gray-400">{progress.current} / {progress.total}</span>
             )}
           </div>
+          {uploadError && (
+            <p className="text-sm text-red-400">{uploadError}</p>
+          )}
         </div>
       </section>
 

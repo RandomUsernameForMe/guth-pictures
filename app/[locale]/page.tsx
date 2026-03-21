@@ -65,13 +65,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
       {photos.length > 0 && (
-        <SelectedWork
-          photos={photos}
-          locale={locale}
-          linkLabel={t("home.selectedWorkLink")}
-        />
+        <div className="bg-black relative z-10">
+          <SelectedWork
+            photos={photos}
+            locale={locale}
+            linkLabel={t("home.selectedWorkLink")}
+          />
+        </div>
       )}
 
+      <div className="bg-black relative z-10">
       <div className="border-t border-white/10" />
       <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
@@ -81,7 +84,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <div className="aspect-[4/5] relative overflow-hidden">
                 <Image
                   src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
-                  alt={content["o-mne"].title}
+                  alt={content["o-mne"].subtitle}
                   fill
                   placeholder="blur"
                   blurDataURL={blurUrl(images.profile)}
@@ -139,6 +142,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <ContactForm />
         </section>
       </AnimatedSection>
+      </div>
     </main>
   );
 }

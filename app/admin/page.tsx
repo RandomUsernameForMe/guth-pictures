@@ -3,6 +3,7 @@ import { isAuthenticated } from "@/lib/auth";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { ContentEditor } from "@/components/admin/ContentEditor";
+import { BlogEditor } from "@/components/admin/BlogEditor";
 
 export default async function AdminPage() {
   if (!(await isAuthenticated())) redirect("/admin/login");
@@ -21,6 +22,7 @@ export default async function AdminPage() {
       </div>
       <AdminDashboard photos={photos} />
       <ContentEditor />
+      <BlogEditor />
     </main>
   );
 }

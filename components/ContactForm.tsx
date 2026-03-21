@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { contactEmail } from "@/lib/config";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -79,7 +80,14 @@ export function ContactForm() {
       </div>
       {status === "error" && (
         <div className="bg-red-950/30 border border-red-900/50 text-red-400 p-4 text-sm">
-          {t("error")}
+          {t.rich("error", {
+            email: contactEmail,
+            link: (chunks) => (
+              <a href={`mailto:${contactEmail}`} className="underline hover:text-red-300 transition-colors">
+                {chunks}
+              </a>
+            ),
+          })}
         </div>
       )}
       <button

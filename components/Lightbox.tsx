@@ -83,7 +83,7 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
           onClick={(e) => e.stopPropagation()}
         >
           <Image
-            src={cloudinaryUrl(photo.publicId, "w_1600,q_auto")}
+            src={cloudinaryUrl(photo.publicId, "w_1600,q_auto,f_auto")}
             alt={alt}
             fill
             sizes="100vw"

@@ -28,20 +28,22 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       id="hero"
       className="relative -mt-16 min-h-screen flex items-end pb-20 px-6 overflow-hidden"
     >
-      {/* Background */}
+      {/* Background — fixed, stays behind nav the whole time */}
       {heroPublicId ? (
-        <Image
-          src={cloudinaryUrl(heroPublicId, "w_1920,c_fill,q_auto,f_auto")}
-          alt=""
-          fill
-          priority
-          placeholder="blur"
-          blurDataURL={blurUrl(heroPublicId)}
-          className="absolute inset-0 object-cover"
-          sizes="100vw"
-        />
+        <div className="fixed inset-0 -z-10">
+          <Image
+            src={cloudinaryUrl(heroPublicId, "w_1920,c_fill,q_auto,f_auto")}
+            alt=""
+            fill
+            priority
+            placeholder="blur"
+            blurDataURL={blurUrl(heroPublicId)}
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
+        <div className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
       {/* Overlay */}

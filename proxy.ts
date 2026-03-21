@@ -15,7 +15,12 @@ export default async function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin")) {
     const isLogin = pathname === "/admin/login";
     const token = request.cookies.get(COOKIE)?.value ?? "";
-    const authenticated = await verifyToken(token);
+    let authenticated = false;
+    try {
+      authenticated = await verifyToken(token);
+    } catch {
+      authenticated = false;
+    }
 
     if (!authenticated && !isLogin) {
       return NextResponse.redirect(new URL("/admin/login", request.url));

@@ -2,6 +2,7 @@
   "nav": {
     "home": "Domů",
     "portfolio": "Portfolio",
+    "blog": "Blog",
     "sluzby": "Služby",
     "o-mne": "O mně",
     "kontakt": "Kontakt"
@@ -50,6 +51,15 @@
     "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
     "cta": "Pojďme se domluvit"
   },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Zápisky z fotografického světa",
+    "metaTitle": "Blog — Guth Pictures",
+    "metaDescription": "Zápisky o fotografii, technice a zážitcích z focení.",
+    "empty": "Zatím žádné příspěvky.",
+    "readMore": "Číst dál",
+    "back": "Zpět na blog"
+  },
   "footer": {
     "copyright": "© {year} Guth Pictures",
     "tagline": "Praha & okolí"
@@ -66,7 +76,7 @@
     "send": "Odeslat",
     "sending": "Odesílám…",
     "success": "Zpráva odeslána. Ozvu se co nejdříve.",
-    "error": "Něco se pokazilo. Zkuste to znovu nebo napište přímo na email.",
+    "error": "Něco se pokazilo. Zkuste to znovu nebo napište přímo na <link>{email}</link>.",
     "notConfigured": "Kontaktní formulář není momentálně dostupný."
   }
 }

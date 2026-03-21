@@ -31,7 +31,7 @@ function base64urlDecode(str: string): Uint8Array<ArrayBuffer> {
 export async function signToken(): Promise<string> {
   const secret = process.env.AUTH_SECRET;
   if (!secret) throw new Error("AUTH_SECRET is not set");
-  const payload = Date.now().toString();
+  const payload = `${Date.now()}:${crypto.randomUUID()}`;
   const key = await getHmacKey(secret);
   const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
   return `${payload}.${base64urlEncode(sig)}`;
@@ -44,7 +44,7 @@ export async function verifyToken(token: string): Promise<boolean> {
   if (dotIndex === -1) return false;
   const payload = token.slice(0, dotIndex);
   const sig = token.slice(dotIndex + 1);
-  const timestamp = parseInt(payload, 10);
+  const timestamp = parseInt(payload.split(":")[0], 10);
   if (isNaN(timestamp) || Date.now() - timestamp > TOKEN_MAX_AGE_MS) return false;
   try {
     const key = await getHmacKey(secret);

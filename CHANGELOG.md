@@ -1,3 +1,17 @@
+## [2026-03-21] - hero foto jako fixovaný background, průhledný nav na home stránce
+
+## [2026-03-21] - Blog sekce
+
+- `lib/blog.ts`: CRUD nad Vercel KV (getBlogPosts, getBlogPost, saveBlogPost, deleteBlogPost)
+- `app/[locale]/blog/page.tsx`: seznam publikovaných příspěvků
+- `app/[locale]/blog/[slug]/page.tsx`: detail příspěvku s Markdown renderingem (`react-markdown`)
+- `components/BlogPostCard.tsx`: karta příspěvku s cover obrázkem
+- `components/admin/BlogEditor.tsx`: CRUD editor v admin panelu (CS/EN, draft/publish, slug auto-gen)
+- `app/api/admin/blog/route.ts` + `[id]/route.ts`: API pro blog
+- Nav: přidán odkaz „Blog", blog stránky mají stejný nav jako portfolio
+- `app/globals.css`: přidány styly `.blog-content` pro Markdown rendering
+- Překlady: `blog.*` klíče přidány do cs.json a en.json
+
 ## [2026-03-06] - Přímý upload fotek na Cloudinary bez komprese
 
 - Nový endpoint `/api/admin/upload-signature` generuje signed upload params

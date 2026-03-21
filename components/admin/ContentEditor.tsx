@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ContentData, SiteImages } from "@/lib/content";
 
 type Locale = "cs" | "en";
@@ -16,6 +17,7 @@ const emptyContent = (): ContentData => ({
 });
 
 export function ContentEditor() {
+  const router = useRouter();
   const [locale, setLocale] = useState<Locale>("cs");
   const [data, setData] = useState<Record<Locale, ContentData>>({
     cs: emptyContent(),
@@ -26,15 +28,24 @@ export function ContentEditor() {
   const [imgStatus, setImgStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
 
   useEffect(() => {
+    async function load(url: string) {
+      const r = await fetch(url);
+      if (r.status === 401) { router.push("/admin/login"); return null; }
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    }
+
     Promise.all([
-      fetch("/api/admin/content?locale=cs").then((r) => r.json()),
-      fetch("/api/admin/content?locale=en").then((r) => r.json()),
-      fetch("/api/admin/images").then((r) => r.json()),
+      load("/api/admin/content?locale=cs"),
+      load("/api/admin/content?locale=en"),
+      load("/api/admin/images"),
     ]).then(([cs, en, imgs]) => {
-      setData({ cs, en });
-      setImages(imgs);
+      if (cs) setData({ cs, en: en ?? emptyContent() });
+      if (imgs) setImages(imgs);
+    }).catch(() => {
+      // fetch failed, state stays at empty defaults
     });
-  }, []);
+  }, [router]);
 
   const current = data[locale];
 
@@ -70,7 +81,12 @@ export function ContentEditor() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(images),
       });
-      setImgStatus(res.ok ? "ok" : "error");
+      if (res.ok) {
+        setImgStatus("ok");
+        setTimeout(() => setImgStatus("idle"), 3000);
+      } else {
+        setImgStatus("error");
+      }
     } catch {
       setImgStatus("error");
     }
@@ -244,11 +260,13 @@ function Field({
   onChange: (v: string) => void;
   textarea?: boolean;
 }) {
+  const id = useId();
   return (
     <div>
-      <label className="block text-sm text-gray-400 mb-1">{label}</label>
+      <label htmlFor={id} className="block text-sm text-gray-400 mb-1">{label}</label>
       {textarea ? (
         <textarea
+          id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={3}
@@ -256,6 +274,7 @@ function Field({
         />
       ) : (
         <input
+          id={id}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}

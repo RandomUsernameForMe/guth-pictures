@@ -82,8 +82,12 @@ async function getKv() {
 export async function getContent(locale: string): Promise<ContentData> {
   const kv = await getKv();
   if (kv) {
-    const data = await kv.get<ContentData>(`content:${locale}`);
-    if (data) return data;
+    try {
+      const data = await kv.get<ContentData>(`content:${locale}`);
+      if (data) return data;
+    } catch {
+      // KV unavailable, fall through to defaults
+    }
   }
   return defaults[locale] ?? defaults.cs;
 }
@@ -97,8 +101,12 @@ export async function setContent(locale: string, data: ContentData): Promise<voi
 export async function getImages(): Promise<SiteImages> {
   const kv = await getKv();
   if (kv) {
-    const data = await kv.get<SiteImages>("content:images");
-    if (data) return data;
+    try {
+      const data = await kv.get<SiteImages>("content:images");
+      if (data) return data;
+    } catch {
+      // KV unavailable, fall through to defaults
+    }
   }
   return { hero: "", profile: "" };
 }

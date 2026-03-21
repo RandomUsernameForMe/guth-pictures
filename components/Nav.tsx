@@ -8,28 +8,20 @@ export function Nav() {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const isPortfolio = pathname.startsWith("/portfolio");
-  const [scrolled, setScrolled] = useState(isPortfolio);
+  const isBlog = pathname.startsWith("/blog");
+  const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (isPortfolio) {
-      setScrolled(true);
-      return;
-    }
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isPortfolio]);
 
   // Zavřít menu při změně route
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  const navBg = scrolled || menuOpen
-    ? "bg-black/80 backdrop-blur-sm border-white/10"
-    : "bg-transparent border-transparent";
+  const navBg = menuOpen
+    ? "bg-black/90 backdrop-blur-sm border-white/10"
+    : isHome
+      ? "bg-gradient-to-b from-black/60 to-transparent border-transparent"
+      : "bg-black/80 backdrop-blur-sm border-white/10";
 
-  const desktopLinks = isPortfolio ? (
+  const desktopLinks = (isPortfolio || isBlog) ? (
     <>
       <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">← {t("home")}</Link></li>
       <li><Link href="/#kontakt" className="text-gray-400 hover:text-white transition-colors">{t("kontakt")}</Link></li>
@@ -39,11 +31,12 @@ export function Nav() {
       <li><a href="#o-mne" className="text-gray-400 hover:text-white transition-colors">{t("o-mne")}</a></li>
       <li><a href="#sluzby" className="text-gray-400 hover:text-white transition-colors">{t("sluzby")}</a></li>
       <li><a href="#kontakt" className="text-gray-400 hover:text-white transition-colors">{t("kontakt")}</a></li>
+      <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors">{t("blog")}</Link></li>
       <li><Link href="/portfolio" className="text-gray-400 hover:text-white transition-colors">{t("portfolio")}</Link></li>
     </>
   );
 
-  const mobileLinks = isPortfolio ? (
+  const mobileLinks = (isPortfolio || isBlog) ? (
     <>
       <li><Link href="/" className="text-gray-300 hover:text-white transition-colors text-lg">← {t("home")}</Link></li>
       <li><Link href="/#kontakt" className="text-gray-300 hover:text-white transition-colors text-lg">{t("kontakt")}</Link></li>
@@ -53,6 +46,7 @@ export function Nav() {
       <li><a href="#o-mne" onClick={() => setMenuOpen(false)} className="text-gray-300 hover:text-white transition-colors text-lg">{t("o-mne")}</a></li>
       <li><a href="#sluzby" onClick={() => setMenuOpen(false)} className="text-gray-300 hover:text-white transition-colors text-lg">{t("sluzby")}</a></li>
       <li><a href="#kontakt" onClick={() => setMenuOpen(false)} className="text-gray-300 hover:text-white transition-colors text-lg">{t("kontakt")}</a></li>
+      <li><Link href="/blog" className="text-gray-300 hover:text-white transition-colors text-lg">{t("blog")}</Link></li>
       <li><Link href="/portfolio" className="text-gray-300 hover:text-white transition-colors text-lg">{t("portfolio")}</Link></li>
     </>
   );
