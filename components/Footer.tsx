@@ -7,7 +7,7 @@ export function Footer() {
   const tNav = useTranslations("nav");
 
   return (
-    <footer className="border-t border-white/10 py-12 mt-auto">
+    <footer className="bg-black border-t border-white/10 py-12 mt-auto">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           {/* Brand + tagline */}

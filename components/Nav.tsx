@@ -19,7 +19,7 @@ export function Nav() {
   const navBg = menuOpen
     ? "bg-black/90 backdrop-blur-sm border-white/10"
     : isHome
-      ? "bg-gradient-to-b from-black/60 to-transparent border-transparent"
+      ? "bg-gradient-to-b from-black/80 via-black/30 to-transparent border-transparent"
       : "bg-black/80 backdrop-blur-sm border-white/10";
 
   const desktopLinks = (isPortfolio || isBlog) ? (
