@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
+import { ScrollVelocityStrip } from "@/components/ScrollVelocityStrip";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getContent, getImages } from "@/lib/content";
 import { getGalleryPhotos } from "@/lib/cloudinary";
@@ -78,6 +79,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {photos.length > 0 && (
         <div className="bg-black relative z-10">
+          <ScrollVelocityStrip photos={photos} />
           <SelectedWork
             photos={photos}
             locale={locale}
