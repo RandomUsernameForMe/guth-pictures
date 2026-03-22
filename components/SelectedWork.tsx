@@ -8,15 +8,17 @@ import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-util
 type Props = {
   photos: GalleryPhoto[];
   locale: string;
+  title: string;
   linkLabel: string;
 };
 
-export function SelectedWork({ photos, locale, linkLabel }: Props) {
+export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const displayed = photos.slice(0, 6);
   if (displayed.length === 0) return null;
 
   return (
     <section className="px-6 py-24 max-w-6xl mx-auto">
+      <h2 className="text-4xl font-bold mb-12">{title}</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {displayed.map((photo, i) => {
           const alt = locale === "cs" ? photo.alt.cs : photo.alt.en;

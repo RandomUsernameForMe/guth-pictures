@@ -1,3 +1,16 @@
+## [2026-03-22] - UI polish: Nav, BlogPostCard, Footer, PortfolioFilter, Lightbox
+
+- Nav: aktivní locale zvýrazněn (text-white font-medium), mobile menu s AnimatePresence animací
+- BlogPostCard: vertikální layout, date + separator linka, animated ArrowRight, hover scale na obrázku
+- Footer: přidány quick nav linky (Portfolio, Blog, Kontakt) + email odkaz, logo + tagline vlevo
+- PortfolioFilter: konzistentní border na inactive buttonech (opravena nekonzistentní třída na span)
+- Lightbox: X, ChevronLeft, ChevronRight z lucide-react místo Unicode znaků
+
+## [2026-03-22] - UI: service cards s ikonami + numbered pattern, SelectedWork header
+
+- Service cards: přidány ikony (Camera/Heart/Sword), mono číslování 001–003, flex layout s ikonou i textem
+- SelectedWork: přidán h2 nadpis "Vybraná práce" / "Selected work" (přeloženo v cs.json + en.json)
+
 ## [2026-03-21] - hero foto jako fixovaný background, průhledný nav na home stránce
 
 ## [2026-03-21] - Blog sekce

@@ -22,13 +22,15 @@ export function PortfolioFilter({ photos, locale }: Props) {
 
   const filtered = active ? photos.filter((p) => p.category === active) : photos;
 
+  const btnClass = (isActive: boolean) =>
+    `relative px-4 py-1.5 rounded-full text-sm font-medium transition-colors overflow-hidden ${
+      isActive ? "" : "border border-white/20 text-gray-400 hover:text-white hover:border-white/40"
+    }`;
+
   return (
     <div>
       <div className="flex gap-3 mb-10 flex-wrap">
-        <button
-          onClick={() => setActive(null)}
-          className="relative px-4 py-1.5 rounded-full text-sm font-medium transition-colors overflow-hidden"
-        >
+        <button onClick={() => setActive(null)} className={btnClass(active === null)}>
           {active === null && (
             <motion.span
               layoutId="active-filter"
@@ -36,16 +38,13 @@ export function PortfolioFilter({ photos, locale }: Props) {
               transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
             />
           )}
-          <span className={`relative z-10 ${active === null ? "text-black" : "text-gray-400 hover:text-white border border-white/20 hover:border-white/50 rounded-full px-0 py-0"}`}>
+          <span className={`relative z-10 ${active === null ? "text-black" : ""}`}>
             {t("filterAll")}
           </span>
         </button>
+
         {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActive(cat)}
-            className="relative px-4 py-1.5 rounded-full text-sm font-medium transition-colors overflow-hidden"
-          >
+          <button key={cat} onClick={() => setActive(cat)} className={btnClass(active === cat)}>
             {active === cat && (
               <motion.span
                 layoutId="active-filter"
@@ -53,7 +52,7 @@ export function PortfolioFilter({ photos, locale }: Props) {
                 transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
               />
             )}
-            <span className={`relative z-10 ${active === cat ? "text-black" : "text-gray-400 hover:text-white"}`}>
+            <span className={`relative z-10 ${active === cat ? "text-black" : ""}`}>
               {t(`categories.${cat}`)}
             </span>
           </button>

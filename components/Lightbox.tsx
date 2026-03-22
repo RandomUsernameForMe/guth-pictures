@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { type GalleryPhoto, cloudinaryUrl } from "@/lib/cloudinary-utils";
 
 type Props = {
@@ -48,32 +49,32 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
         {/* Close */}
         <button
           ref={closeRef}
-          className="absolute top-4 right-6 text-white text-3xl leading-none hover:text-gray-300 transition-colors z-10"
+          className="absolute top-4 right-4 p-2 text-white/70 hover:text-white transition-colors z-10"
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           aria-label="Zavřít"
         >
-          ×
+          <X size={22} strokeWidth={1.5} />
         </button>
 
         {/* Prev */}
         {currentIndex > 0 && (
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-4xl leading-none z-10 px-2"
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-white/60 hover:text-white transition-colors z-10"
             onClick={(e) => { e.stopPropagation(); onNavigate(currentIndex - 1); }}
             aria-label="Předchozí"
           >
-            ‹
+            <ChevronLeft size={32} strokeWidth={1.5} />
           </button>
         )}
 
         {/* Next */}
         {currentIndex < photos.length - 1 && (
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-4xl leading-none z-10 px-2"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white/60 hover:text-white transition-colors z-10"
             onClick={(e) => { e.stopPropagation(); onNavigate(currentIndex + 1); }}
             aria-label="Další"
           >
-            ›
+            <ChevronRight size={32} strokeWidth={1.5} />
           </button>
         )}
 

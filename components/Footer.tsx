@@ -1,13 +1,33 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { contactEmail } from "@/lib/config";
 
 export function Footer() {
   const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
 
   return (
-    <footer className="border-t border-white/10 py-8 mt-auto">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between text-sm text-gray-500">
-        <span>{t("copyright", { year: new Date().getFullYear() })}</span>
-        <span>{t("tagline")}</span>
+    <footer className="border-t border-white/10 py-12 mt-auto">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+          {/* Brand + tagline */}
+          <div>
+            <Link href="/" className="text-lg font-semibold tracking-wide hover:text-gray-300 transition-colors">
+              Guth Pictures
+            </Link>
+            <p className="mt-1 text-sm text-gray-500">{t("tagline")}</p>
+          </div>
+
+          {/* Quick nav */}
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
+            <Link href="/portfolio" className="hover:text-white transition-colors">{tNav("portfolio")}</Link>
+            <Link href="/blog" className="hover:text-white transition-colors">{tNav("blog")}</Link>
+            <a href="/#kontakt" className="hover:text-white transition-colors">{tNav("kontakt")}</a>
+            <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">{contactEmail}</a>
+          </nav>
+        </div>
+
+        <p className="mt-8 text-xs text-gray-600">{t("copyright", { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
   );

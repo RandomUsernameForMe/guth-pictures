@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function Nav() {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  const locale = useLocale();
   const isPortfolio = pathname.startsWith("/portfolio");
   const isBlog = pathname.startsWith("/blog");
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Zavřít menu při změně route
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
   const navBg = menuOpen
@@ -66,9 +67,21 @@ export function Nav() {
         <div className="flex items-center gap-4">
           {/* Language switcher */}
           <div className="flex items-center gap-2 text-sm">
-            <Link href={pathname} locale="cs" className="text-gray-400 hover:text-white transition-colors">CZ</Link>
+            <Link
+              href={pathname}
+              locale="cs"
+              className={`transition-colors ${locale === "cs" ? "text-white font-medium" : "text-gray-500 hover:text-gray-300"}`}
+            >
+              CZ
+            </Link>
             <span className="text-white/20">/</span>
-            <Link href={pathname} locale="en" className="text-gray-400 hover:text-white transition-colors">EN</Link>
+            <Link
+              href={pathname}
+              locale="en"
+              className={`transition-colors ${locale === "en" ? "text-white font-medium" : "text-gray-500 hover:text-gray-300"}`}
+            >
+              EN
+            </Link>
           </div>
 
           {/* Hamburger */}
@@ -85,14 +98,22 @@ export function Nav() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden border-t border-white/10 bg-black/95 px-6 py-6">
-          <ul className="flex flex-col gap-5">
-            {mobileLinks}
-          </ul>
-        </div>
-      )}
+      {/* Mobile menu — animated */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="md:hidden border-t border-white/10 bg-black/95 overflow-hidden"
+          >
+            <ul className="flex flex-col gap-5 px-6 py-6">
+              {mobileLinks}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

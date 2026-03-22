@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
 
 type Props = { post: BlogPost; locale: "cs" | "en" };
@@ -15,27 +16,46 @@ export function BlogPostCard({ post, locale }: Props) {
     : "";
 
   return (
-    <article className="group border border-white/10 rounded-lg overflow-hidden hover:border-white/25 transition-colors">
-      <Link href={`/blog/${post.slug}`} className="flex flex-col sm:flex-row gap-0">
+    <article className="group border border-white/10 overflow-hidden hover:border-white/25 transition-colors duration-300">
+      <Link href={`/blog/${post.slug}`} className="flex flex-col">
+        {/* Cover image */}
         {post.coverImage && (
-          <div className="relative w-full sm:w-64 h-48 sm:h-auto flex-shrink-0">
+          <div className="relative w-full h-56 overflow-hidden">
             <Image
-              src={cloudinaryUrl(post.coverImage, "w_512,h_384,c_fill")}
+              src={cloudinaryUrl(post.coverImage, "w_800,h_448,c_fill")}
               alt={loc.title}
               fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, 256px"
+              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
           </div>
         )}
-        <div className="p-6 flex flex-col gap-3">
-          <time className="text-xs text-gray-500">{date}</time>
-          <h2 className="text-xl font-semibold group-hover:text-gray-200 transition-colors leading-snug">
+
+        {/* Content */}
+        <div className="p-6 flex flex-col gap-4">
+          {/* Date + line */}
+          <div className="flex items-center gap-3">
+            <time className="text-xs text-gray-500 whitespace-nowrap">{date}</time>
+            <span className="flex-1 border-t border-white/10" />
+          </div>
+
+          <h2 className="text-xl font-semibold leading-snug group-hover:text-gray-200 transition-colors">
             {loc.title}
           </h2>
+
           {loc.excerpt && (
-            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{loc.excerpt}</p>
+            <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">{loc.excerpt}</p>
           )}
+
+          {/* Read more */}
+          <span className="flex items-center gap-2 text-xs text-gray-500 group-hover:text-gray-300 transition-colors duration-300 mt-1">
+            {locale === "cs" ? "Číst dál" : "Read more"}
+            <ArrowRight
+              size={12}
+              className="translate-x-0 group-hover:translate-x-1 transition-transform duration-300"
+            />
+          </span>
         </div>
       </Link>
     </article>

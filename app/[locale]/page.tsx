@@ -1,3 +1,4 @@
+import React from "react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ContactForm } from "@/components/ContactForm";
@@ -9,6 +10,7 @@ import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { Camera, Heart, Sword } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -44,6 +46,16 @@ const serviceCategory: Record<typeof services[number], string> = {
   weddings: "svatby",
   larp: "larpy",
 };
+const serviceIcon: Record<typeof services[number], React.ElementType> = {
+  portraits: Camera,
+  weddings: Heart,
+  larp: Sword,
+};
+const serviceNumber: Record<typeof services[number], string> = {
+  portraits: "001",
+  weddings: "002",
+  larp: "003",
+};
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -69,6 +81,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <SelectedWork
             photos={photos}
             locale={locale}
+            title={t("home.selectedWorkTitle")}
             linkLabel={t("home.selectedWorkLink")}
           />
         </div>
@@ -117,20 +130,33 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
           <p className="mt-2 text-gray-400">{t("sluzby.subtitle")}</p>
-          <div className="mt-12 grid gap-8 sm:grid-cols-3">
-            {services.map((key) => (
-              <Link
-                key={key}
-                href={`/portfolio?category=${serviceCategory[key]}`}
-                className="group border border-white/20 p-8 hover:border-white/40 hover:bg-white/5 transition-all block"
-              >
-                <h3 className="text-lg font-semibold group-hover:text-white">{content.sluzby[key].title}</h3>
-                <p className="mt-3 text-sm text-gray-400 leading-relaxed">{content.sluzby[key].desc}</p>
-                <span className="inline-block mt-4 text-xs text-gray-500 group-hover:text-gray-300 transition-colors">
-                  {t("home.cta")} →
-                </span>
-              </Link>
-            ))}
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {services.map((key) => {
+              const Icon = serviceIcon[key];
+              return (
+                <Link
+                  key={key}
+                  href={`/portfolio?category=${serviceCategory[key]}`}
+                  className="group relative border border-white/15 p-8 flex flex-col hover:border-white/35 hover:bg-white/[0.03] transition-all duration-300 block overflow-hidden"
+                >
+                  {/* number */}
+                  <span className="font-mono text-xs text-white/20 tracking-widest mb-6">
+                    {serviceNumber[key]}
+                  </span>
+                  {/* icon */}
+                  <Icon
+                    size={28}
+                    className="text-white/50 group-hover:text-white/80 transition-colors duration-300 mb-5"
+                    strokeWidth={1.5}
+                  />
+                  <h3 className="text-lg font-semibold">{content.sluzby[key].title}</h3>
+                  <p className="mt-3 text-sm text-gray-400 leading-relaxed flex-1">{content.sluzby[key].desc}</p>
+                  <span className="inline-flex items-center gap-1 mt-6 text-xs text-gray-500 group-hover:text-gray-300 transition-colors duration-300">
+                    {t("home.cta")} →
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </section>
       </AnimatedSection>
