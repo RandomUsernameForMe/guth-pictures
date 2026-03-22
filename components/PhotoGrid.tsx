@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
 import { Lightbox } from "./Lightbox";
 
 type Props = {
@@ -30,7 +30,7 @@ export function PhotoGrid({ photos, locale }: Props) {
           >
             <Image
               src={cloudinaryUrl(photo.publicId)}
-              alt={locale === "cs" ? photo.alt.cs : photo.alt.en}
+              alt={getAlt(photo, locale)}
               width={photo.width}
               height={photo.height}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

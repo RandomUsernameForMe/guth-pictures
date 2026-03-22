@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { type GalleryPhoto, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
 
 const CARD_W = 380;
 const CARD_H = 480;
@@ -24,6 +25,11 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const { scrollYProgress } = useScroll({ target: targetRef });
   const endX = -(displayed.length - 1) * (CARD_W + GAP);
   const x = useTransform(scrollYProgress, [0, 1], [0, endX]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    setActiveIndex(Math.round(v * (displayed.length - 1)));
+  });
 
   if (displayed.length === 0) return null;
 
@@ -49,7 +55,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
           {/* Cards track */}
           <motion.div className="flex gap-4 pl-6" style={{ x }}>
             {displayed.map((photo, i) => {
-              const alt = locale === "cs" ? photo.alt.cs : photo.alt.en;
+              const alt = getAlt(photo, locale);
               return (
                 <figure
                   key={photo.publicId}
@@ -81,10 +87,17 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
             })}
           </motion.div>
 
-          {/* Scroll hint */}
-          <p className="px-6 text-xs text-white/20 tracking-widest uppercase max-w-6xl mx-auto w-full">
-            ← scroll →
-          </p>
+          {/* Progress dots */}
+          <div className="px-6 max-w-6xl mx-auto w-full flex items-center gap-2">
+            {displayed.map((_, i) => (
+              <span
+                key={i}
+                className={`block h-px transition-all duration-300 ${
+                  i === activeIndex ? "w-6 bg-white" : "w-3 bg-white/25"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -98,7 +111,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         </div>
         <div className="grid grid-cols-2 gap-2">
           {displayed.slice(0, 6).map((photo) => {
-            const alt = locale === "cs" ? photo.alt.cs : photo.alt.en;
+            const alt = getAlt(photo, locale);
             return (
               <figure
                 key={photo.publicId}

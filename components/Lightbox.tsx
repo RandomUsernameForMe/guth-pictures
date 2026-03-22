@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { type GalleryPhoto, cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { type GalleryPhoto, cloudinaryUrl, getAlt } from "@/lib/cloudinary-utils";
 
 type Props = {
   photos: GalleryPhoto[];
@@ -17,6 +17,20 @@ type Props = {
 export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: Props) {
   const photo = photos[currentIndex];
   const closeRef = useRef<HTMLButtonElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 50) return;
+    if (delta < 0) onNavigate(Math.min(currentIndex + 1, photos.length - 1));
+    else onNavigate(Math.max(currentIndex - 1, 0));
+  }
 
   useEffect(() => { closeRef.current?.focus(); }, []);
 
@@ -34,7 +48,7 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
     };
   }, [onClose, onNavigate, currentIndex, photos.length]);
 
-  const alt = locale === "cs" ? photo.alt.cs : photo.alt.en;
+  const alt = getAlt(photo, locale);
 
   return (
     <AnimatePresence>
@@ -45,6 +59,8 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
         onClick={onClose}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Close */}
         <button

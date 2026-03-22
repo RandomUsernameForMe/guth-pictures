@@ -19,3 +19,7 @@ export function cloudinaryUrl(publicId: string, transformation = ""): string {
 export function blurUrl(publicId: string): string {
   return cloudinaryUrl(publicId, "e_blur:1000,q_1,f_webp,w_20");
 }
+
+export function getAlt(photo: GalleryPhoto, locale: string): string {
+  return locale === "cs" ? photo.alt.cs : photo.alt.en;
+}
