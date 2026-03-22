@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { WordReveal } from "@/components/WordReveal";
 import { getContent, getImages } from "@/lib/content";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
@@ -114,7 +115,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div>
               <h2 className="text-4xl font-bold">{content["o-mne"].title}</h2>
               <p className="mt-2 text-lg text-gray-500">{content["o-mne"].subtitle}</p>
-              <p className="mt-8 text-gray-300 text-lg leading-relaxed">{content["o-mne"].bio}</p>
+              <WordReveal text={content["o-mne"].bio} className="mt-8 text-gray-300 text-lg leading-relaxed" />
               <a
                 href="#kontakt"
                 className="inline-block mt-8 px-6 py-3 border border-white/30 text-sm hover:bg-white/5 transition-colors"
