@@ -61,6 +61,9 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
         onClick={onClose}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Prohlížeč fotografií"
       >
         {/* Close */}
         <button

@@ -1,4 +1,5 @@
 import "server-only";
+import { getKv } from "./kv";
 
 export type ServiceContent = {
   title: string;
@@ -72,12 +73,6 @@ const defaults: Record<string, ContentData> = {
     },
   },
 };
-
-async function getKv() {
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null;
-  const { kv } = await import("@vercel/kv");
-  return kv;
-}
 
 export async function getContent(locale: string): Promise<ContentData> {
   const kv = await getKv();

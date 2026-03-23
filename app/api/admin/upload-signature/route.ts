@@ -7,23 +7,43 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { altCs, altEn, category } = await request.json();
+  const secret = process.env.CLOUDINARY_API_SECRET;
+  if (!secret) {
+    console.error("[upload-signature] CLOUDINARY_API_SECRET not configured");
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
 
-  const timestamp = Math.round(Date.now() / 1000);
-  const folder = "portfolio";
-  const context = `alt_cs=${altCs ?? ""}|alt_en=${altEn ?? ""}|category=${category ?? "portréty"}`;
+  let body: { altCs?: unknown; altEn?: unknown; category?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-  const signature = cloudinary.utils.api_sign_request(
-    { folder, context, timestamp },
-    process.env.CLOUDINARY_API_SECRET!
-  );
+  const altCs = typeof body.altCs === "string" ? body.altCs : "";
+  const altEn = typeof body.altEn === "string" ? body.altEn : "";
+  const category = typeof body.category === "string" ? body.category : "portréty";
 
-  return NextResponse.json({
-    signature,
-    timestamp,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    folder,
-    context,
-  });
+  try {
+    const timestamp = Math.round(Date.now() / 1000);
+    const folder = "portfolio";
+    const context = `alt_cs=${altCs}|alt_en=${altEn}|category=${category}`;
+
+    const signature = cloudinary.utils.api_sign_request(
+      { folder, context, timestamp },
+      secret
+    );
+
+    return NextResponse.json({
+      signature,
+      timestamp,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+      cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+      folder,
+      context,
+    });
+  } catch (err) {
+    console.error("[upload-signature] Failed to generate signature:", err);
+    return NextResponse.json({ error: "Signature failed" }, { status: 500 });
+  }
 }

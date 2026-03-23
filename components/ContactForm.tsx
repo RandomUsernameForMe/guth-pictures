@@ -37,7 +37,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-green-950/30 border border-green-900/50 text-green-400 p-4">
+      <div role="alert" aria-live="polite" className="bg-green-950/30 border border-green-900/50 text-green-400 p-4">
         {t("success")}
       </div>
     );
@@ -79,7 +79,7 @@ export function ContactForm() {
         />
       </div>
       {status === "error" && (
-        <div className="bg-red-950/30 border border-red-900/50 text-red-400 p-4 text-sm">
+        <div role="alert" aria-live="polite" className="bg-red-950/30 border border-red-900/50 text-red-400 p-4 text-sm">
           {t.rich("error", {
             email: contactEmail,
             link: (chunks) => (
