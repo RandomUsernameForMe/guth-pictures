@@ -17,23 +17,13 @@ export function Nav() {
   const locale = useLocale();
   const isPortfolio = pathname.startsWith("/portfolio");
   const isBlog = pathname.startsWith("/blog");
-  const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   const navBg = menuOpen
     ? "bg-black/90 backdrop-blur-sm"
-    : isHome && !scrolled
-      ? "bg-gradient-to-b from-black/70 via-black/40 to-transparent"
-      : "bg-black/80 backdrop-blur-sm";
+    : "bg-black/50 backdrop-blur-sm";
 
   const subpageLinks: NavLink[] = [
     { href: "/", label: `← ${t("home")}` },
