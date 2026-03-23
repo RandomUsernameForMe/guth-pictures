@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "crypto";
+import { compare } from "bcryptjs";
 import { NextResponse } from "next/server";
 import { signToken, authCookieConfig } from "@/lib/auth";
 
@@ -34,11 +34,6 @@ async function checkRateLimit(ip: string): Promise<boolean> {
   }
 }
 
-function passwordsMatch(provided: string, expected: string): boolean {
-  if (provided.length !== expected.length) return false;
-  return timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
-}
-
 export async function POST(request: Request) {
   const ip =
     request.headers.get("x-real-ip") ??
@@ -52,10 +47,29 @@ export async function POST(request: Request) {
     );
   }
 
-  const { password } = await request.json();
-  const adminPassword = process.env.ADMIN_PASSWORD ?? "";
+  let body: { password?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  if (!password || !passwordsMatch(String(password), adminPassword)) {
+  const { password } = body;
+  if (typeof password !== "string" || !password) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Support both bcrypt hash (ADMIN_PASSWORD_HASH) and plaintext fallback (ADMIN_PASSWORD)
+  // Set ADMIN_PASSWORD_HASH for production — generate with:
+  //   node -e "const b=require('bcryptjs');b.hash(process.env.ADMIN_PASSWORD,12).then(console.log)"
+  const passwordHash = process.env.ADMIN_PASSWORD_HASH;
+  const passwordPlain = process.env.ADMIN_PASSWORD ?? "";
+
+  const valid = passwordHash
+    ? await compare(password, passwordHash)
+    : password === passwordPlain;
+
+  if (!valid) {
     console.error(`[auth] Failed login attempt from ${ip}`);
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
