@@ -27,6 +27,10 @@ export function PhotoGrid({ photos, locale }: Props) {
             key={photo.publicId}
             className="group mb-4 bg-zinc-900 break-inside-avoid overflow-hidden cursor-pointer relative"
             onClick={() => setSelectedIndex(i)}
+            tabIndex={0}
+            role="button"
+            aria-label={`Otevřít fotografii: ${getAlt(photo, locale)}`}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedIndex(i); } }}
           >
             <Image
               src={cloudinaryUrl(photo.publicId)}

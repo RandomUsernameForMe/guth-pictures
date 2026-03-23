@@ -32,15 +32,18 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
         <h1 className="text-2xl font-bold">Admin</h1>
+        <label htmlFor="admin-password" className="block text-sm text-gray-300 mb-1">Heslo</label>
         <input
+          id="admin-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Heslo"
           className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white"
           autoFocus
+          aria-required="true"
         />
-        {error && <p className="text-red-400 text-sm">{error}</p>}
+        {error && <p className="text-red-400 text-sm" role="alert">{error}</p>}
         <button
           type="submit"
           disabled={loading}
