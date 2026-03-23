@@ -12,22 +12,22 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           {/* Brand + tagline */}
           <div>
-            <Link href="/" className="text-lg font-semibold tracking-wide hover:text-gray-300 transition-colors">
+            <Link href="/" className="text-lg font-semibold tracking-widest uppercase text-sm hover:text-white/70 transition-colors duration-200">
               Guth Pictures
             </Link>
-            <p className="mt-1 text-sm text-gray-500">{t("tagline")}</p>
+            <p className="mt-1 text-sm text-white/40">{t("tagline")}</p>
           </div>
 
           {/* Quick nav */}
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
-            <Link href="/portfolio" className="hover:text-white transition-colors">{tNav("portfolio")}</Link>
-            <Link href="/blog" className="hover:text-white transition-colors">{tNav("blog")}</Link>
-            <a href="/#kontakt" className="hover:text-white transition-colors">{tNav("kontakt")}</a>
-            <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">{contactEmail}</a>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/40">
+            <Link href="/portfolio" className="hover:text-white/80 transition-colors duration-200">{tNav("portfolio")}</Link>
+            <Link href="/blog" className="hover:text-white/80 transition-colors duration-200">{tNav("blog")}</Link>
+            <a href="/#kontakt" className="hover:text-white/80 transition-colors duration-200">{tNav("kontakt")}</a>
+            <a href={`mailto:${contactEmail}`} className="hover:text-white/80 transition-colors duration-200">{contactEmail}</a>
           </nav>
         </div>
 
-        <p className="mt-8 text-xs text-gray-600">{t("copyright", { year: new Date().getFullYear() })}</p>
+        <p className="mt-8 text-xs text-white/25">{t("copyright", { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
   );

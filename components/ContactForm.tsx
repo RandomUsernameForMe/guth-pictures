@@ -46,36 +46,36 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="contact-name" className="block text-sm text-gray-300 font-medium mb-1">{t("name")}</label>
+        <label htmlFor="contact-name" className="block text-sm text-white/70 font-medium mb-1">{t("name")}</label>
         <input
           id="contact-name"
           type="text"
           name="name"
           required
           placeholder={t("namePlaceholder")}
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-white/30 focus:bg-white/8 transition-all duration-200 placeholder:text-white/25"
         />
       </div>
       <div>
-        <label htmlFor="contact-email" className="block text-sm text-gray-300 font-medium mb-1">{t("email")}</label>
+        <label htmlFor="contact-email" className="block text-sm text-white/70 font-medium mb-1">{t("email")}</label>
         <input
           id="contact-email"
           type="email"
           name="email"
           required
           placeholder={t("emailPlaceholder")}
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-white/30 focus:bg-white/8 transition-all duration-200 placeholder:text-white/25"
         />
       </div>
       <div>
-        <label htmlFor="contact-message" className="block text-sm text-gray-300 font-medium mb-1">{t("message")}</label>
+        <label htmlFor="contact-message" className="block text-sm text-white/70 font-medium mb-1">{t("message")}</label>
         <textarea
           id="contact-message"
           name="message"
           required
           rows={5}
           placeholder={t("messagePlaceholder")}
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-colors resize-none"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-white/30 focus:bg-white/8 transition-all duration-200 placeholder:text-white/25 resize-none"
         />
       </div>
       {status === "error" && (
@@ -93,7 +93,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="px-6 py-3 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+        className="px-6 py-3 bg-white text-black font-medium rounded-xl hover:bg-white/90 transition-colors duration-200 disabled:opacity-50"
       >
         {status === "sending" ? t("sending") : t("send")}
       </button>

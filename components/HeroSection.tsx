@@ -64,7 +64,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="mt-6 text-xl text-gray-400 max-w-xl"
+          className="mt-6 text-xl text-white/60 max-w-xl"
         >
           {subtitle}
         </motion.p>
@@ -77,13 +77,13 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         >
           <Link
             href="/portfolio"
-            className="px-8 py-4 bg-white text-black font-medium hover:bg-gray-200 transition-colors"
+            className="px-8 py-4 bg-white text-black font-medium rounded-xl hover:bg-white/90 transition-colors duration-200"
           >
             {ctaPortfolio}
           </Link>
           <a
             href="#kontakt"
-            className="px-8 py-4 border border-white hover:bg-white/5 transition-colors"
+            className="px-8 py-4 bg-white/5 border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/30 transition-all duration-200"
           >
             {ctaContact}
           </a>

@@ -16,7 +16,7 @@ export function BlogPostCard({ post, locale }: Props) {
     : "";
 
   return (
-    <article className="group border border-white/10 overflow-hidden hover:border-white/25 transition-colors duration-300">
+    <article className="group border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-colors duration-300">
       <Link href={`/blog/${post.slug}`} className="flex flex-col">
         {/* Cover image */}
         {post.coverImage && (
@@ -36,7 +36,7 @@ export function BlogPostCard({ post, locale }: Props) {
         <div className="p-6 flex flex-col gap-4">
           {/* Date + line */}
           <div className="flex items-center gap-3">
-            <time className="text-xs text-gray-500 whitespace-nowrap">{date}</time>
+            <time className="text-xs text-white/35 whitespace-nowrap">{date}</time>
             <span className="flex-1 border-t border-white/10" />
           </div>
 
@@ -45,11 +45,11 @@ export function BlogPostCard({ post, locale }: Props) {
           </h2>
 
           {loc.excerpt && (
-            <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">{loc.excerpt}</p>
+            <p className="text-white/50 text-sm leading-relaxed line-clamp-2">{loc.excerpt}</p>
           )}
 
           {/* Read more */}
-          <span className="flex items-center gap-2 text-xs text-gray-500 group-hover:text-gray-300 transition-colors duration-300 mt-1">
+          <span className="flex items-center gap-2 text-xs text-white/35 group-hover:text-white/70 transition-colors duration-300 mt-1">
             {locale === "cs" ? "Číst dál" : "Read more"}
             <ArrowRight
               size={12}

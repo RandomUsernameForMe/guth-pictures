@@ -1,3 +1,9 @@
+## [2026-03-23] - AI blog generátor (Claude Code workflow)
+
+- `scripts/post-article.ts` – CLI skript pro uložení článku do Vercel KV jako draft
+- `lib/blog-topics.ts` – 25 předpřipravených SEO témat k fotografii (svatby, portréty, Brno, tipy)
+- `tsx` přidán do devDependencies, npm script `post-article`
+
 ## [2026-03-22] - UI polish: Nav, BlogPostCard, Footer, PortfolioFilter, Lightbox
 
 - Nav: aktivní locale zvýrazněn (text-white font-medium), mobile menu s AnimatePresence animací
