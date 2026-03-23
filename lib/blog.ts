@@ -1,4 +1,5 @@
 import "server-only";
+import { getKv } from "./kv";
 
 export type BlogPost = {
   id: string;
@@ -10,12 +11,6 @@ export type BlogPost = {
   cs: { title: string; excerpt: string; content: string };
   en: { title: string; excerpt: string; content: string };
 };
-
-async function getKv() {
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null;
-  const { kv } = await import("@vercel/kv");
-  return kv;
-}
 
 // Per-post keys + sorted set index eliminates read-modify-write race conditions.
 // blog:post:<id>  → BlogPost (independent key per post)
