@@ -30,10 +30,10 @@ export function Nav() {
   }, []);
 
   const navBg = menuOpen
-    ? "bg-black/90 backdrop-blur-sm border-white/10"
+    ? "bg-black/90 backdrop-blur-sm"
     : isHome && !scrolled
-      ? "bg-gradient-to-b from-black/80 via-black/30 to-transparent border-transparent"
-      : "bg-black/80 backdrop-blur-sm border-white/10";
+      ? "bg-gradient-to-b from-black/70 via-black/40 to-transparent"
+      : "bg-black/80 backdrop-blur-sm";
 
   const subpageLinks: NavLink[] = [
     { href: "/", label: `← ${t("home")}` },
@@ -59,8 +59,8 @@ export function Nav() {
   };
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 border-b transition-all duration-300 ${navBg}`}>
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${navBg}`}>
+      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
         <Link href="/" className="text-lg font-semibold tracking-wide hover:text-gray-300 transition-colors">
           Guth Pictures
         </Link>
