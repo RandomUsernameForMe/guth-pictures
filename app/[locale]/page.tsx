@@ -11,7 +11,6 @@ import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Camera, Heart, Sword } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -46,11 +45,6 @@ const serviceCategory: Record<typeof services[number], string> = {
   portraits: "portréty",
   weddings: "svatby",
   larp: "larpy",
-};
-const serviceIcon: Record<typeof services[number], React.ElementType> = {
-  portraits: Camera,
-  weddings: Heart,
-  larp: Sword,
 };
 const serviceNumber: Record<typeof services[number], string> = {
   portraits: "001",
@@ -133,7 +127,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <p className="mt-2 text-gray-400">{t("sluzby.subtitle")}</p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {services.map((key) => {
-              const Icon = serviceIcon[key];
               return (
                 <Link
                   key={key}
@@ -144,12 +137,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <span className="font-mono text-xs text-white/20 tracking-widest mb-6">
                     {serviceNumber[key]}
                   </span>
-                  {/* icon */}
-                  <Icon
-                    size={28}
-                    className="text-white/50 group-hover:text-white/80 transition-colors duration-300 mb-5"
-                    strokeWidth={1.5}
-                  />
                   <h3 className="text-lg font-semibold">{content.sluzby[key].title}</h3>
                   <p className="mt-3 text-sm text-gray-400 leading-relaxed flex-1">{content.sluzby[key].desc}</p>
                   <span className="inline-flex items-center gap-1 mt-6 text-xs text-gray-500 group-hover:text-gray-300 transition-colors duration-300">
