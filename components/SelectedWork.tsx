@@ -1,11 +1,14 @@
 "use client";
 
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
 
 const CARD_W = 380;
 const CARD_H = 480;
+const GAP = 16;
 
 type Props = {
   photos: GalleryPhoto[];
@@ -16,13 +19,23 @@ type Props = {
 
 export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const displayed = photos.slice(0, 8);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Tracks progress as section enters and exits the viewport — no sticky/trap
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const endX = -(displayed.length - 1) * (CARD_W + GAP) * 0.6;
+  const x = useTransform(scrollYProgress, [0, 1], [80, endX]);
 
   if (displayed.length === 0) return null;
 
   return (
     <>
-      {/* ── Desktop: horizontal scroll strip ── */}
-      <section className="hidden md:block py-20 bg-black overflow-hidden">
+      {/* ── Desktop: scroll-driven parallax strip ── */}
+      <section ref={sectionRef} className="hidden md:block py-24 bg-black overflow-hidden">
         {/* Header */}
         <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-8">
           <h2 className="text-4xl font-bold">{title}</h2>
@@ -34,14 +47,14 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
           </Link>
         </div>
 
-        {/* Scrollable cards */}
-        <div className="flex gap-4 pl-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+        {/* Cards track — moves with page scroll, no trap */}
+        <motion.div className="flex gap-4 pl-6" style={{ x }}>
           {displayed.map((photo, i) => {
             const alt = getAlt(photo, locale);
             return (
               <figure
                 key={photo.publicId}
-                className="group relative flex-shrink-0 overflow-hidden bg-zinc-900 cursor-pointer snap-start"
+                className="group relative flex-shrink-0 overflow-hidden bg-zinc-900 cursor-pointer"
                 style={{ width: CARD_W, height: CARD_H }}
               >
                 <Image
@@ -66,9 +79,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
               </figure>
             );
           })}
-          {/* trailing space */}
-          <div className="flex-shrink-0 w-6" />
-        </div>
+        </motion.div>
       </section>
 
       {/* ── Mobile: 2-col grid ── */}
