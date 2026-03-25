@@ -36,12 +36,11 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         </Link>
       </div>
 
-      {/* Film strip — edge fade via CSS mask */}
-      <div
-        className="overflow-hidden"
+      {/* Film strip — contained to max-width, edge fade via CSS mask */}
+      <div className="max-w-6xl mx-auto overflow-hidden"
         style={{
-          maskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
       >
         <div

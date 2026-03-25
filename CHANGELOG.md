@@ -1,3 +1,8 @@
+## [2026-03-25] - Odstraněn frosted glass, carousel omezen na max-width
+
+- Sekce o-mne, sluzby, kontakt: `backdrop-blur-2xl bg-[var(--glass-bg)]` → solid `bg-[var(--color-bg-elevated)]`
+- SelectedWork carousel obalén do `max-w-6xl mx-auto` — nepůjde přes stránkový limit, fade na okrajích kontejneru
+
 ## [2026-03-25] - Homepage: frosted glass sekce, theme-aware hero gradient
 
 - Přidána CSS proměnná `--glass-bg` (dark: rgba(10,10,11,0.78), light: rgba(247,245,242,0.82))
