@@ -27,6 +27,8 @@
   --nav-shadow:          0 8px 32px rgba(0, 0, 0, 0.4);
   --nav-active-bg:       rgba(255, 255, 255, 0.08);
   --nav-active-border:   rgba(255, 255, 255, 0.12);
+
+  --glass-bg:            rgba(10, 10, 11, 0.78);
 }
 
 .dark {
@@ -51,6 +53,8 @@
   --nav-shadow:          0 8px 32px rgba(0, 0, 0, 0.4);
   --nav-active-bg:       rgba(255, 255, 255, 0.08);
   --nav-active-border:   rgba(255, 255, 255, 0.12);
+
+  --glass-bg:            rgba(10, 10, 11, 0.78);
 }
 
 .light {
@@ -75,6 +79,8 @@
   --nav-shadow:          0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(0, 0, 0, 0.06);
   --nav-active-bg:       rgba(0, 0, 0, 0.06);
   --nav-active-border:   rgba(0, 0, 0, 0.09);
+
+  --glass-bg:            rgba(247, 245, 242, 0.82);
 }
 
 /* ── Global theme transitions ── */

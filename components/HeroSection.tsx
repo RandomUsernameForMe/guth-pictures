@@ -46,8 +46,11 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         <div className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+      {/* Overlay — bottom gradient only, theme-aware */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-[60%] pointer-events-none"
+        style={{ background: "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)" }}
+      />
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto w-full">
@@ -55,7 +58,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9 }}
-          className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
+          className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-none text-[var(--color-text)]"
         >
           {title}
         </motion.h1>
@@ -64,7 +67,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="mt-6 text-xl text-white/60 max-w-xl"
+          className="mt-6 text-xl text-[var(--color-text-muted)] max-w-xl"
         >
           {subtitle}
         </motion.p>
@@ -77,13 +80,13 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         >
           <Link
             href="/portfolio"
-            className="px-8 py-4 bg-white text-black font-medium rounded-xl hover:bg-white/90 transition-colors duration-200"
+            className="px-8 py-4 bg-[var(--color-text)] text-[var(--color-bg)] font-medium rounded-xl hover:opacity-90 transition-opacity duration-200"
           >
             {ctaPortfolio}
           </Link>
           <a
             href="#kontakt"
-            className="px-8 py-4 bg-white/5 border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/30 transition-all duration-200"
+            className="px-8 py-4 bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--color-border)] text-[var(--color-text)] rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200"
           >
             {ctaContact}
           </a>
@@ -96,8 +99,8 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         animate={scrolled ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="animate-bounce w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center pt-2">
-          <div className="w-1 h-2 bg-white/50 rounded-full" />
+        <div className="animate-bounce w-6 h-10 border-2 border-[var(--color-text)]/30 rounded-full flex items-start justify-center pt-2">
+          <div className="w-1 h-2 bg-[var(--color-text)]/50 rounded-full" />
         </div>
       </motion.div>
     </section>

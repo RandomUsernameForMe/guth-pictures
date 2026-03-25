@@ -1,3 +1,10 @@
+## [2026-03-25] - Homepage: frosted glass sekce, theme-aware hero gradient
+
+- Přidána CSS proměnná `--glass-bg` (dark: rgba(10,10,11,0.78), light: rgba(247,245,242,0.82))
+- Hero overlay změněn z `from-black` na gradient pouze dole s `var(--color-bg)`, funguje v obou themes
+- Hero texty a buttony přepsány na `--color-text` / `--color-bg` (žádný hardcoded white)
+- Sekce o-mne, sluzby, kontakt mají `backdrop-blur-2xl bg-[var(--glass-bg)]` — frosted glass přes parallax pozadí
+
 ## [2026-03-25] - Dark/light mode: CSS variables, ThemeProvider, ThemeToggle v Navu
 
 - Přidán `next-themes` s class-based přepínáním (dark default)
