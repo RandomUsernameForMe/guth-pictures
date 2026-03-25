@@ -15,7 +15,7 @@ export function PhotoGrid({ photos, locale }: Props) {
 
   if (photos.length === 0) {
     return (
-      <p className="text-gray-500 text-center py-24">— zatím žádné fotky —</p>
+      <p className="text-[var(--color-text-muted)] text-center py-24">— zatím žádné fotky —</p>
     );
   }
 
@@ -25,7 +25,7 @@ export function PhotoGrid({ photos, locale }: Props) {
         {photos.map((photo, i) => (
           <figure
             key={photo.publicId}
-            className="group mb-4 bg-zinc-900 break-inside-avoid overflow-hidden cursor-pointer relative"
+            className="group mb-4 bg-[var(--color-surface)] break-inside-avoid overflow-hidden cursor-pointer relative"
             onClick={() => setSelectedIndex(i)}
             tabIndex={0}
             role="button"

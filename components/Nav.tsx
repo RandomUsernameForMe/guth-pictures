@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type NavLink = {
   href: string;
@@ -54,6 +55,12 @@ export function Nav() {
   const isActive = (href: string) =>
     (href === "/portfolio" && isPortfolio) || (href === "/blog" && isBlog);
 
+  const scrolledStyle = {
+    background: "var(--nav-bg-scrolled)",
+    boxShadow: "var(--nav-shadow)",
+    border: "1px solid var(--nav-border)",
+  };
+
   return (
     <>
       <motion.div
@@ -74,17 +81,21 @@ export function Nav() {
           <div
             className={`transition-all duration-500 ${
               scrolled
-                ? "rounded-2xl border border-white/10 bg-black/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                ? "rounded-2xl backdrop-blur-xl"
                 : isHome
                   ? "rounded-none border-b border-transparent bg-gradient-to-b from-black/70 via-black/20 to-transparent"
-                  : "rounded-none border-b border-white/8 bg-black/60 backdrop-blur-md"
+                  : "rounded-none backdrop-blur-md"
             }`}
+            style={scrolled ? scrolledStyle : !isHome ? {
+              background: "var(--nav-bg-subpage)",
+              borderBottom: "1px solid var(--nav-border)",
+            } : undefined}
           >
             <nav className="flex items-center justify-between px-6 h-16">
               {/* Logo */}
               <Link
                 href="/"
-                className="text-white font-semibold tracking-widest text-sm uppercase hover:text-white/70 transition-colors duration-200"
+                className="text-[var(--color-text)] font-semibold tracking-widest text-sm uppercase hover:text-[var(--color-text-muted)] transition-colors duration-200"
               >
                 Guth Pictures
               </Link>
@@ -100,14 +111,15 @@ export function Nav() {
                           href={href}
                           className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 block ${
                             active
-                              ? "text-white"
-                              : "text-white/50 hover:text-white/90"
+                              ? "text-[var(--color-text)]"
+                              : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                           }`}
                         >
                           {active && (
                             <motion.span
                               layoutId="activeDesktop"
-                              className="absolute inset-0 rounded-lg bg-white/8 border border-white/12"
+                              className="absolute inset-0 rounded-lg"
+                              style={{ background: "var(--nav-active-bg)", border: "1px solid var(--nav-active-border)" }}
                               transition={{ type: "spring", stiffness: 380, damping: 30 }}
                             />
                           )}
@@ -118,14 +130,15 @@ export function Nav() {
                           href={href}
                           className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 block ${
                             active
-                              ? "text-white"
-                              : "text-white/50 hover:text-white/90"
+                              ? "text-[var(--color-text)]"
+                              : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
                           }`}
                         >
                           {active && (
                             <motion.span
                               layoutId="activeDesktop"
-                              className="absolute inset-0 rounded-lg bg-white/8 border border-white/12"
+                              className="absolute inset-0 rounded-lg"
+                              style={{ background: "var(--nav-active-bg)", border: "1px solid var(--nav-active-border)" }}
                               transition={{ type: "spring", stiffness: 380, damping: 30 }}
                             />
                           )}
@@ -138,7 +151,7 @@ export function Nav() {
               </ul>
 
               {/* Right side */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
                 {/* Language switcher */}
                 <div className="hidden md:flex items-center gap-1 text-xs font-medium tracking-wider">
                   <Link
@@ -146,29 +159,34 @@ export function Nav() {
                     locale="cs"
                     className={`px-2 py-1 rounded transition-colors duration-200 ${
                       locale === "cs"
-                        ? "text-white"
-                        : "text-white/35 hover:text-white/70"
+                        ? "text-[var(--color-text)]"
+                        : "text-[var(--color-text-ghost)] hover:text-[var(--color-text-muted)]"
                     }`}
                   >
                     CS
                   </Link>
-                  <span className="text-white/15">/</span>
+                  <span className="text-[var(--color-text-ghost)]">/</span>
                   <Link
                     href={pathname}
                     locale="en"
                     className={`px-2 py-1 rounded transition-colors duration-200 ${
                       locale === "en"
-                        ? "text-white"
-                        : "text-white/35 hover:text-white/70"
+                        ? "text-[var(--color-text)]"
+                        : "text-[var(--color-text-ghost)] hover:text-[var(--color-text-muted)]"
                     }`}
                   >
                     EN
                   </Link>
                 </div>
 
+                {/* Theme toggle */}
+                <div className="hidden md:block">
+                  <ThemeToggle />
+                </div>
+
                 {/* Hamburger */}
                 <button
-                  className="md:hidden p-2 text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/8"
+                  className="md:hidden p-2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors rounded-lg hover:bg-[var(--nav-active-bg)]"
                   onClick={() => setMenuOpen((o) => !o)}
                   aria-label={menuOpen ? "Zavřít menu" : "Otevřít menu"}
                   aria-expanded={menuOpen}
@@ -202,16 +220,23 @@ export function Nav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 bg-black/95 backdrop-blur-xl border-l border-white/10 md:hidden flex flex-col"
+              className="fixed top-0 right-0 bottom-0 z-50 w-72 backdrop-blur-xl border-l md:hidden flex flex-col"
+              style={{
+                background: "var(--color-bg-elevated)",
+                borderColor: "var(--color-border)",
+              }}
             >
               {/* Drawer header */}
-              <div className="flex items-center justify-between px-6 h-16 border-b border-white/10">
-                <span className="text-white font-semibold tracking-widest text-sm uppercase">
+              <div
+                className="flex items-center justify-between px-6 h-16 border-b"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <span className="text-[var(--color-text)] font-semibold tracking-widest text-sm uppercase">
                   Guth Pictures
                 </span>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="p-2 text-white/60 hover:text-white transition-colors rounded-lg hover:bg-white/8"
+                  className="p-2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors rounded-lg hover:bg-[var(--nav-active-bg)]"
                   aria-label="Zavřít menu"
                 >
                   <X className="w-5 h-5" />
@@ -236,9 +261,13 @@ export function Nav() {
                             onClick={() => setMenuOpen(false)}
                             className={`block px-5 py-3.5 text-base font-medium rounded-xl transition-all duration-200 ${
                               active
-                                ? "text-white bg-white/8 border border-white/12"
-                                : "text-white/60 hover:text-white hover:bg-white/5"
+                                ? "text-[var(--color-text)]"
+                                : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--nav-active-bg)]"
                             }`}
+                            style={active ? {
+                              background: "var(--nav-active-bg)",
+                              border: "1px solid var(--nav-active-border)",
+                            } : undefined}
                           >
                             {label}
                           </a>
@@ -247,9 +276,13 @@ export function Nav() {
                             href={href}
                             className={`block px-5 py-3.5 text-base font-medium rounded-xl transition-all duration-200 ${
                               active
-                                ? "text-white bg-white/8 border border-white/12"
-                                : "text-white/60 hover:text-white hover:bg-white/5"
+                                ? "text-[var(--color-text)]"
+                                : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--nav-active-bg)]"
                             }`}
+                            style={active ? {
+                              background: "var(--nav-active-bg)",
+                              border: "1px solid var(--nav-active-border)",
+                            } : undefined}
                           >
                             {label}
                           </Link>
@@ -260,8 +293,20 @@ export function Nav() {
                 </ul>
               </nav>
 
-              {/* Language switcher */}
-              <div className="px-6 py-6 border-t border-white/10">
+              {/* Theme + Language switcher */}
+              <div
+                className="px-6 py-6 border-t space-y-4"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                {/* Theme toggle row */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[var(--color-text-muted)]">
+                    Vzhled
+                  </span>
+                  <ThemeToggle />
+                </div>
+
+                {/* Language switcher */}
                 <div className="flex items-center gap-2 text-sm font-medium tracking-wider">
                   <Link
                     href={pathname}
@@ -269,9 +314,13 @@ export function Nav() {
                     onClick={() => setMenuOpen(false)}
                     className={`flex-1 text-center py-2.5 rounded-lg transition-colors duration-200 ${
                       locale === "cs"
-                        ? "bg-white/10 text-white border border-white/15"
-                        : "text-white/40 hover:text-white/70 hover:bg-white/5"
+                        ? "text-[var(--color-text)]"
+                        : "text-[var(--color-text-ghost)] hover:text-[var(--color-text-muted)] hover:bg-[var(--nav-active-bg)]"
                     }`}
+                    style={locale === "cs" ? {
+                      background: "var(--nav-active-bg)",
+                      border: "1px solid var(--nav-active-border)",
+                    } : undefined}
                   >
                     Čeština
                   </Link>
@@ -281,9 +330,13 @@ export function Nav() {
                     onClick={() => setMenuOpen(false)}
                     className={`flex-1 text-center py-2.5 rounded-lg transition-colors duration-200 ${
                       locale === "en"
-                        ? "bg-white/10 text-white border border-white/15"
-                        : "text-white/40 hover:text-white/70 hover:bg-white/5"
+                        ? "text-[var(--color-text)]"
+                        : "text-[var(--color-text-ghost)] hover:text-[var(--color-text-muted)] hover:bg-[var(--nav-active-bg)]"
                     }`}
+                    style={locale === "en" ? {
+                      background: "var(--nav-active-bg)",
+                      border: "1px solid var(--nav-active-border)",
+                    } : undefined}
                   >
                     English
                   </Link>

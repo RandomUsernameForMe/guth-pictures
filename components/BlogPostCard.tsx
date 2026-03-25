@@ -16,7 +16,7 @@ export function BlogPostCard({ post, locale }: Props) {
     : "";
 
   return (
-    <article className="group border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-colors duration-300">
+    <article className="group border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-border-sub)] transition-colors duration-300 bg-[var(--color-bg-elevated)]">
       <Link href={`/blog/${post.slug}`} className="flex flex-col">
         {/* Cover image */}
         {post.coverImage && (
@@ -36,20 +36,20 @@ export function BlogPostCard({ post, locale }: Props) {
         <div className="p-6 flex flex-col gap-4">
           {/* Date + line */}
           <div className="flex items-center gap-3">
-            <time className="text-xs text-white/35 whitespace-nowrap">{date}</time>
-            <span className="flex-1 border-t border-white/10" />
+            <time className="text-xs text-[var(--color-text-muted)] whitespace-nowrap">{date}</time>
+            <span className="flex-1 border-t border-[var(--color-border)]" />
           </div>
 
-          <h2 className="text-xl font-semibold leading-snug group-hover:text-gray-200 transition-colors">
+          <h2 className="text-xl font-semibold leading-snug text-[var(--color-text)] group-hover:text-[var(--color-text-muted)] transition-colors">
             {loc.title}
           </h2>
 
           {loc.excerpt && (
-            <p className="text-white/50 text-sm leading-relaxed line-clamp-2">{loc.excerpt}</p>
+            <p className="text-[var(--color-text-muted)] text-sm leading-relaxed line-clamp-2">{loc.excerpt}</p>
           )}
 
           {/* Read more */}
-          <span className="flex items-center gap-2 text-xs text-white/35 group-hover:text-white/70 transition-colors duration-300 mt-1">
+          <span className="flex items-center gap-2 text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text)] transition-colors duration-300 mt-1">
             {locale === "cs" ? "Číst dál" : "Read more"}
             <ArrowRight
               size={12}

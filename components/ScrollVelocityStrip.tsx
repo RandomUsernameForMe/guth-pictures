@@ -55,8 +55,13 @@ export function ScrollVelocityStrip({ photos }: Props) {
 
   return (
     <div className="relative py-4 space-y-2 overflow-hidden">
-      {/* edge fade */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-black via-transparent to-black" />
+      {/* edge fade — matches page background color */}
+      <div
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{
+          background: "linear-gradient(to right, var(--color-bg) 0%, transparent 15%, transparent 85%, var(--color-bg) 100%)",
+        }}
+      />
       <Row photos={photos} direction={-1} />
       <Row photos={photos} direction={1} />
     </div>

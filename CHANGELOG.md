@@ -1,3 +1,13 @@
+## [2026-03-25] - Dark/light mode: CSS variables, ThemeProvider, ThemeToggle v Navu
+
+- Přidán `next-themes` s class-based přepínáním (dark default)
+- CSS tokeny v `globals.css`: dvě sady (`dark` / `.light`), warm off-black dark, cream paper light
+- Nové komponenty: `ThemeProvider.tsx`, `ThemeToggle.tsx` (Sun/Moon + Framer Motion fade)
+- ThemeToggle v desktop navu (za lang switcher) + v mobile draweru
+- Aktualizovány: Nav, Footer, BlogPostCard, ContactForm, PhotoGrid, ScrollVelocityStrip → CSS vars
+- Cinematic sekce (SelectedWork, Lightbox) záměrně zachovány dark
+- Globální color transitions 300ms ease, obrázky a SVG vyloučeny
+
 ## [2026-03-23] - AI blog generátor (Claude Code workflow)
 
 - `scripts/post-article.ts` – CLI skript pro uložení článku do Vercel KV jako draft

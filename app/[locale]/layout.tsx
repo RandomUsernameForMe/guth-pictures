@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import "../globals.css";
@@ -53,14 +54,16 @@ export default async function LocaleLayout({
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body className={`${geist.variable} font-sans antialiased bg-black text-white`}>
-        <NextIntlClientProvider messages={messages}>
-          <Nav />
-          <div className="pt-16 min-h-screen flex flex-col">
-            {children}
-            <Footer />
-          </div>
-        </NextIntlClientProvider>
+      <body className={`${geist.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Nav />
+            <div className="pt-16 min-h-screen flex flex-col">
+              {children}
+              <Footer />
+            </div>
+          </NextIntlClientProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
