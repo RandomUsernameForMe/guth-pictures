@@ -24,7 +24,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const track = [...displayed, ...displayed];
 
   return (
-    <section className="py-20">
+    <section className="py-20" style={{ backgroundColor: 'var(--color-bg)' }}>
       {/* Header */}
       <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-10">
         <h2 className="text-4xl font-bold text-[var(--color-text)]">{title}</h2>
@@ -36,11 +36,13 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         </Link>
       </div>
 
-      {/* Film strip — contained to max-width, edge fade via CSS mask */}
-      <div className="max-w-6xl mx-auto overflow-hidden"
+      {/* Film strip — edge fade via CSS mask, perspective for 3D depth */}
+      <div
+        className="max-w-6xl mx-auto overflow-hidden"
         style={{
-          maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          perspective: "1200px",
         }}
       >
         <div
@@ -58,11 +60,15 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         >
           {track.map((photo, i) => {
             const alt = getAlt(photo, locale);
+            // Scale down cards near the edges of the visible window (based on position in duplicated track)
+            const posInSet = i % displayed.length;
+            const distFromCenter = Math.abs(posInSet - (displayed.length - 1) / 2) / ((displayed.length - 1) / 2);
+            const scale = 1 - distFromCenter * 0.08;
             return (
               <figure
                 key={`${photo.publicId}-${i}`}
                 className="group relative flex-shrink-0 overflow-hidden bg-[var(--color-surface)]"
-                style={{ width: CARD_W, height: CARD_H }}
+                style={{ width: CARD_W, height: CARD_H, transform: `scale(${scale})`, transformOrigin: 'center' }}
               >
                 <Image
                   src={cloudinaryUrl(photo.publicId, `w_${CARD_W * 2},h_${CARD_H * 2},c_fill,q_auto,f_auto`)}
