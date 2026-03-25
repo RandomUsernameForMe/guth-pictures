@@ -12,6 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "."),
+      // server-only throws in non-Next.js environments — replace with empty stub
+      "server-only": path.resolve(__dirname, "vitest-mocks/server-only.ts"),
     },
   },
 });
