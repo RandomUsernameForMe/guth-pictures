@@ -24,7 +24,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const track = [...displayed, ...displayed];
 
   return (
-    <section className="py-20 bg-[var(--color-bg)]">
+    <section className="py-20">
       {/* Header */}
       <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-10">
         <h2 className="text-4xl font-bold text-[var(--color-text)]">{title}</h2>

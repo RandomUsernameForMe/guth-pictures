@@ -1,3 +1,9 @@
+## [2026-03-25] - Film grain + ambient glow, sjednocení pozadí
+
+- Odstraněn explicitní `bg-[var(--color-bg)]` z SelectedWork — carousel sdílí barvu body
+- `body::after` — statický SVG feTurbulence grain (opacity 3.8% dark / 2.2% light), analogová textura
+- `body` background-image — subtilní radial amber glow přes horní část stránky (přes hero přechod)
+
 ## [2026-03-25] - Odstraněn frosted glass, carousel omezen na max-width
 
 - Sekce o-mne, sluzby, kontakt: `backdrop-blur-2xl bg-[var(--glass-bg)]` → solid `bg-[var(--color-bg-elevated)]`
