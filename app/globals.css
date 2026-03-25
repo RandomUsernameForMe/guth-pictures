@@ -96,6 +96,12 @@
   }
 }
 
+/* ── Film strip auto-scroll animation ── */
+@keyframes film-strip {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 /* ── Blog markdown content ── */
 .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
   font-weight: 700;

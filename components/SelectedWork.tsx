@@ -1,15 +1,13 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
 
-const CARD_W = 380;
-const CARD_H = 480;
-const GAP = 16;
+const CARD_W = 210;
+const CARD_H = 290;
+const GAP = 12;
+const SCROLL_DURATION = 36; // seconds for one full loop
 
 type Props = {
   photos: GalleryPhoto[];
@@ -19,118 +17,78 @@ type Props = {
 };
 
 export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
-  const displayed = photos.slice(0, 8);
-
-  const targetRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: targetRef });
-  const endX = -(displayed.length - 1) * (CARD_W + GAP);
-  const x = useTransform(scrollYProgress, [0, 1], [0, endX]);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setActiveIndex(Math.round(v * (displayed.length - 1)));
-  });
-
+  const displayed = photos.slice(0, 10);
   if (displayed.length === 0) return null;
 
+  // Duplicate for seamless infinite loop (translateX -50% = one full set)
+  const track = [...displayed, ...displayed];
+
   return (
-    <>
-      {/* ── Desktop: horizontal scroll ── */}
-      <section
-        ref={targetRef}
-        className="hidden md:block relative h-[300vh] bg-black"
+    <section className="py-20 bg-[var(--color-bg)]">
+      {/* Header */}
+      <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-10">
+        <h2 className="text-4xl font-bold text-[var(--color-text)]">{title}</h2>
+        <Link
+          href="/portfolio"
+          className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors tracking-wide pb-1"
+        >
+          {linkLabel} →
+        </Link>
+      </div>
+
+      {/* Film strip — edge fade via CSS mask */}
+      <div
+        className="overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+        }}
       >
-        <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center gap-8">
-          {/* Header */}
-          <div className="px-6 max-w-6xl mx-auto w-full flex items-end justify-between">
-            <h2 className="text-4xl font-bold text-white">{title}</h2>
-            <Link
-              href="/portfolio"
-              className="text-sm text-white/50 hover:text-white transition-colors tracking-wide pb-1"
-            >
-              {linkLabel} →
-            </Link>
-          </div>
-
-          {/* Cards track */}
-          <motion.div className="flex gap-4 pl-6" style={{ x }}>
-            {displayed.map((photo, i) => {
-              const alt = getAlt(photo, locale);
-              return (
-                <figure
-                  key={photo.publicId}
-                  className="group relative flex-shrink-0 overflow-hidden bg-zinc-900 cursor-pointer"
-                  style={{ width: CARD_W, height: CARD_H }}
-                >
-                  <Image
-                    src={cloudinaryUrl(photo.publicId, `w_${CARD_W * 2},h_${CARD_H * 2},c_fill,q_auto,f_auto`)}
-                    alt={alt}
-                    fill
-                    placeholder="blur"
-                    blurDataURL={blurUrl(photo.publicId)}
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    sizes={`${CARD_W}px`}
-                    priority={i < 3}
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                  {alt && (
-                    <p className="absolute bottom-0 left-0 right-0 px-4 py-3 text-sm text-white/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent">
-                      {alt}
-                    </p>
-                  )}
-                  {/* index number */}
-                  <span className="absolute top-4 right-4 font-mono text-xs text-white/30">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </figure>
-              );
-            })}
-          </motion.div>
-
-          {/* Progress dots */}
-          <div className="px-6 max-w-6xl mx-auto w-full flex items-center gap-2">
-            {displayed.map((_, i) => (
-              <span
-                key={i}
-                className={`block h-px transition-all duration-300 ${
-                  i === activeIndex ? "w-6 bg-white" : "w-3 bg-white/25"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Mobile: 2-col grid ── */}
-      <section className="md:hidden px-4 py-16 bg-black">
-        <div className="flex items-end justify-between mb-10 px-2">
-          <h2 className="text-3xl font-bold text-white">{title}</h2>
-          <Link href="/portfolio" className="text-sm text-white/50 hover:text-white transition-colors">
-            {linkLabel} →
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {displayed.slice(0, 6).map((photo) => {
+        <div
+          className="flex"
+          style={{
+            gap: GAP,
+            animation: `film-strip ${SCROLL_DURATION}s linear infinite`,
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLDivElement).style.animationPlayState = "paused";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLDivElement).style.animationPlayState = "running";
+          }}
+        >
+          {track.map((photo, i) => {
             const alt = getAlt(photo, locale);
             return (
               <figure
-                key={photo.publicId}
-                className="relative overflow-hidden bg-zinc-900 aspect-[3/4]"
+                key={`${photo.publicId}-${i}`}
+                className="group relative flex-shrink-0 overflow-hidden bg-[var(--color-surface)]"
+                style={{ width: CARD_W, height: CARD_H }}
               >
                 <Image
-                  src={cloudinaryUrl(photo.publicId, "w_400,c_fill,q_auto")}
+                  src={cloudinaryUrl(photo.publicId, `w_${CARD_W * 2},h_${CARD_H * 2},c_fill,q_auto,f_auto`)}
                   alt={alt}
                   fill
                   placeholder="blur"
                   blurDataURL={blurUrl(photo.publicId)}
-                  className="object-cover"
-                  sizes="50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  sizes={`${CARD_W}px`}
+                  priority={i < 4}
                 />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300" />
+                <span className="absolute top-3 right-3 font-mono text-[10px] text-white/35">
+                  {String((i % displayed.length) + 1).padStart(2, "0")}
+                </span>
+                {alt && (
+                  <p className="absolute bottom-0 left-0 right-0 px-3 py-2 text-xs text-white/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent">
+                    {alt}
+                  </p>
+                )}
               </figure>
             );
           })}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

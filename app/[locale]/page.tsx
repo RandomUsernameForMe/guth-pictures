@@ -72,18 +72,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
       {photos.length > 0 && (
-        <div className="bg-black relative z-10">
-<SelectedWork
-            photos={photos}
-            locale={locale}
-            title={t("home.selectedWorkTitle")}
-            linkLabel={t("home.selectedWorkLink")}
-          />
-        </div>
+        <SelectedWork
+          photos={photos}
+          locale={locale}
+          title={t("home.selectedWorkTitle")}
+          linkLabel={t("home.selectedWorkLink")}
+        />
       )}
 
-      <div className="bg-black relative z-10">
-      <div className="border-t border-white/10" />
+      <div className="border-t border-[var(--color-border)]" />
       <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
@@ -101,18 +98,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 />
               </div>
             ) : (
-              <div className="aspect-[4/5] bg-zinc-900 flex items-center justify-center text-zinc-700 text-6xl font-light select-none">
+              <div className="aspect-[4/5] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-text-ghost)] text-6xl font-light select-none">
                 JG
               </div>
             )}
             {/* Bio */}
             <div>
               <h2 className="text-4xl font-bold">{content["o-mne"].title}</h2>
-              <p className="mt-2 text-lg text-gray-500">{content["o-mne"].subtitle}</p>
-              <WordReveal text={content["o-mne"].bio} className="mt-8 text-gray-300 text-lg leading-relaxed" />
+              <p className="mt-2 text-lg text-[var(--color-text-muted)]">{content["o-mne"].subtitle}</p>
+              <WordReveal text={content["o-mne"].bio} className="mt-8 text-[var(--color-text-muted)] text-lg leading-relaxed" />
               <a
                 href="#kontakt"
-                className="inline-block mt-8 px-6 py-3 border border-white/30 text-sm hover:bg-white/5 transition-colors"
+                className="inline-block mt-8 px-6 py-3 border border-[var(--color-border-sub)] text-sm hover:bg-[var(--color-bg-overlay)] transition-colors"
               >
                 {t("o-mne.cta")} →
               </a>
@@ -124,22 +121,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <AnimatedSection>
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
-          <p className="mt-2 text-gray-400">{t("sluzby.subtitle")}</p>
+          <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {services.map((key) => {
               return (
                 <Link
                   key={key}
                   href={`/portfolio?category=${serviceCategory[key]}`}
-                  className="group relative border border-white/15 p-8 flex flex-col hover:border-white/35 hover:bg-white/[0.03] transition-all duration-300 block overflow-hidden"
+                  className="group relative border border-[var(--color-border)] p-8 flex flex-col hover:border-[var(--color-border-sub)] hover:bg-[var(--color-bg-overlay)] transition-all duration-300 block overflow-hidden"
                 >
                   {/* number */}
-                  <span className="font-mono text-xs text-white/20 tracking-widest mb-6">
+                  <span className="font-mono text-xs text-[var(--color-text-ghost)] tracking-widest mb-6">
                     {serviceNumber[key]}
                   </span>
-                  <h3 className="text-lg font-semibold">{content.sluzby[key].title}</h3>
-                  <p className="mt-3 text-sm text-gray-400 leading-relaxed flex-1">{content.sluzby[key].desc}</p>
-                  <span className="inline-flex items-center gap-1 mt-6 text-xs text-gray-500 group-hover:text-gray-300 transition-colors duration-300">
+                  <h3 className="text-lg font-semibold text-[var(--color-text)]">{content.sluzby[key].title}</h3>
+                  <p className="mt-3 text-sm text-[var(--color-text-muted)] leading-relaxed flex-1">{content.sluzby[key].desc}</p>
+                  <span className="inline-flex items-center gap-1 mt-6 text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text)] transition-colors duration-300">
                     {t("home.cta")} →
                   </span>
                 </Link>
@@ -152,11 +149,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <AnimatedSection>
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
-          <p className="mt-2 text-gray-400 mb-10">{t("kontakt.subtitle")}</p>
+          <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
           <ContactForm />
         </section>
       </AnimatedSection>
-      </div>
     </main>
   );
 }
