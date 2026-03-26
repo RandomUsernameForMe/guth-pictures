@@ -153,5 +153,5 @@ body::after {
 .blog-content code { background: var(--color-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.875rem; }
 .blog-content pre { background: var(--color-bg-elevated); padding: 1.25rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1.25rem; }
 .blog-content pre code { background: none; padding: 0; }
-.blog-content img { border-radius: 8px; margin: 1.5rem 0; max-width: 100%; }
+.blog-content img { border-radius: 8px; margin: 1.5rem 0; max-width: 100%; height: auto; }
 .blog-content hr { border-color: var(--color-border); margin: 2rem 0; }

@@ -20,9 +20,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const altCs = typeof body.altCs === "string" ? body.altCs : "";
-  const altEn = typeof body.altEn === "string" ? body.altEn : "";
-  const category = typeof body.category === "string" ? body.category : "portréty";
+  // Strip Cloudinary context delimiter characters (| and =) to prevent context injection
+  const sanitizeContext = (v: string) => v.replace(/[|=]/g, "");
+  const altCs = sanitizeContext(typeof body.altCs === "string" ? body.altCs : "");
+  const altEn = sanitizeContext(typeof body.altEn === "string" ? body.altEn : "");
+  const category = sanitizeContext(typeof body.category === "string" ? body.category : "portréty");
 
   try {
     const timestamp = Math.round(Date.now() / 1000);

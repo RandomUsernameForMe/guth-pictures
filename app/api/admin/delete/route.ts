@@ -15,5 +15,6 @@ export async function DELETE(request: Request) {
   }
 
   await cloudinary.uploader.destroy(publicId);
+  console.log(`[delete] publicId=${publicId}`);
   return NextResponse.json({ ok: true });
 }

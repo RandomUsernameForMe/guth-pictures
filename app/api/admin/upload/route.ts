@@ -56,5 +56,6 @@ export async function POST(request: Request) {
       .end(buffer);
   });
 
+  console.log(`[upload] publicId=${result.public_id}, size=${file.size}, type=${detectedType}`);
   return NextResponse.json({ publicId: result.public_id });
 }

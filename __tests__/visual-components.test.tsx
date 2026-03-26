@@ -4,9 +4,16 @@ import React from "react";
 
 // --- Mocks ---
 
+type MotionProps = {
+  children?: React.ReactNode;
+  initial?: unknown; animate?: unknown; exit?: unknown;
+  whileInView?: unknown; viewport?: unknown; transition?: unknown; layoutId?: unknown;
+  [key: string]: unknown;
+};
+
 vi.mock("framer-motion", () => {
   const make = (tag: string) =>
-    ({ children, initial, animate, exit, whileInView, viewport, transition, layoutId, ...rest }: any) =>
+    ({ children, initial, animate, exit, whileInView, viewport, transition, layoutId, ...rest }: MotionProps) =>
       React.createElement(tag, rest, children);
   return {
     motion: {
@@ -16,17 +23,20 @@ vi.mock("framer-motion", () => {
       span: make("span"),
       figure: make("figure"),
     },
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
   };
 });
 
 vi.mock("next/image", () => ({
-  default: ({ src, alt, fill, sizes, placeholder, blurDataURL, priority, ...rest }: any) =>
-    <img src={src} alt={alt} {...rest} />,
+  default: ({ src, alt, fill, sizes, placeholder, blurDataURL, priority, ...rest }: {
+    src: string; alt: string; fill?: boolean; sizes?: string;
+    placeholder?: string; blurDataURL?: string; priority?: boolean; [key: string]: unknown;
+  }) => <img src={src} alt={alt} {...rest} />,
 }));
 
 vi.mock("@/i18n/navigation", () => ({
-  Link: ({ href, children, ...rest }: any) => <a href={href} {...rest}>{children}</a>,
+  Link: ({ href, children, ...rest }: { href: string; children?: React.ReactNode; [key: string]: unknown }) =>
+    <a href={href} {...rest}>{children}</a>,
   usePathname: () => "/",
 }));
 

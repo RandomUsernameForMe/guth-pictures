@@ -35,9 +35,10 @@ async function checkRateLimit(ip: string): Promise<boolean> {
 }
 
 export async function POST(request: Request) {
+  // x-vercel-forwarded-for is set by Vercel infrastructure and cannot be spoofed by clients
   const ip =
+    request.headers.get("x-vercel-forwarded-for") ??
     request.headers.get("x-real-ip") ??
-    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
     "unknown";
 
   if (!(await checkRateLimit(ip))) {
@@ -59,15 +60,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Support both bcrypt hash (ADMIN_PASSWORD_HASH) and plaintext fallback (ADMIN_PASSWORD)
-  // Set ADMIN_PASSWORD_HASH for production — generate with:
-  //   node -e "const b=require('bcryptjs');b.hash(process.env.ADMIN_PASSWORD,12).then(console.log)"
   const passwordHash = process.env.ADMIN_PASSWORD_HASH;
-  const passwordPlain = process.env.ADMIN_PASSWORD ?? "";
+  if (!passwordHash) {
+    console.error("[auth] ADMIN_PASSWORD_HASH not configured");
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
 
-  const valid = passwordHash
-    ? await compare(password, passwordHash)
-    : password === passwordPlain;
+  const valid = await compare(password, passwordHash);
 
   if (!valid) {
     console.error(`[auth] Failed login attempt from ${ip}`);

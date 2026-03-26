@@ -68,6 +68,7 @@ export function AdminDashboard({ photos: initial }: Props) {
     });
 
     if (!sigRes.ok) {
+      fileItems.forEach((item) => URL.revokeObjectURL(item.preview));
       setFileItems((prev) => prev.map((item) => ({ ...item, status: "error" })));
       setUploadError(`Chyba při získání upload podpisu (${sigRes.status}). Zkontroluj Cloudinary credentials.`);
       setProgress(null);
@@ -117,14 +118,17 @@ export function AdminDashboard({ photos: initial }: Props) {
 
   async function handleDelete(publicId: string) {
     if (!confirm("Smazat fotku?")) return;
-
-    await fetch("/api/admin/delete", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ publicId }),
-    });
-
-    setPhotos((prev) => prev.filter((p) => p.publicId !== publicId));
+    try {
+      const res = await fetch("/api/admin/delete", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId }),
+      });
+      if (!res.ok) throw new Error();
+      setPhotos((prev) => prev.filter((p) => p.publicId !== publicId));
+    } catch {
+      setUploadError("Smazání se nezdařilo.");
+    }
   }
 
   return (

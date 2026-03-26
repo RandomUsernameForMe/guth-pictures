@@ -1,12 +1,12 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/components/HeroSection";
 import { SelectedWork } from "@/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { WordReveal } from "@/components/WordReveal";
 import { getContent, getImages } from "@/lib/content";
+import { ServiceCards, type PricingPackage, type ServiceItem } from "@/components/ServiceCards";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
@@ -40,17 +40,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-const services = ["portraits", "weddings", "larp"] as const;
-const serviceCategory: Record<typeof services[number], string> = {
-  portraits: "portréty",
-  weddings: "svatby",
-  larp: "larpy",
-};
-const serviceNumber: Record<typeof services[number], string> = {
-  portraits: "001",
-  weddings: "002",
-  larp: "003",
-};
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -80,7 +69,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
       )}
 
-      <AnimatedSection className="bg-[var(--color-bg-elevated)] border-y border-[var(--color-border)]">
+      <AnimatedSection className="bg-[var(--color-bg)] border-y border-[var(--color-border)]">
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
             {/* Profilová fotka */}
@@ -117,35 +106,43 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       </AnimatedSection>
 
-      <AnimatedSection className="bg-[var(--color-bg-elevated)] border-b border-[var(--color-border)]">
+      <AnimatedSection className="bg-[var(--color-bg)] border-b border-[var(--color-border)]">
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {services.map((key) => {
-              return (
-                <Link
-                  key={key}
-                  href={`/portfolio?category=${serviceCategory[key]}`}
-                  className="group relative border border-[var(--color-border)] p-8 flex flex-col hover:border-[var(--color-border-sub)] hover:bg-[var(--color-bg-overlay)] transition-all duration-300 block overflow-hidden"
-                >
-                  {/* number */}
-                  <span className="font-mono text-xs text-[var(--color-text-ghost)] tracking-widest mb-6">
-                    {serviceNumber[key]}
-                  </span>
-                  <h3 className="text-lg font-semibold text-[var(--color-text)]">{content.sluzby[key].title}</h3>
-                  <p className="mt-3 text-sm text-[var(--color-text-muted)] leading-relaxed flex-1">{content.sluzby[key].desc}</p>
-                  <span className="inline-flex items-center gap-1 mt-6 text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text)] transition-colors duration-300">
-                    {t("home.cta")} →
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+          <ServiceCards
+            portfolioLabel={t("sluzby.portfolioBtn")}
+            pricingLabel={t("sluzby.cenik")}
+            closeLabel={t("sluzby.zavrit")}
+            bookLabel={t("sluzby.rezervovat")}
+            services={[
+              {
+                key: "portraits", number: "001", category: "portréty",
+                title: content.sluzby.portraits.title,
+                desc: content.sluzby.portraits.desc,
+                packages: t.raw("sluzby.portraits.packages") as PricingPackage[],
+                note: t("sluzby.portraits.note"),
+              },
+              {
+                key: "weddings", number: "002", category: "svatby",
+                title: content.sluzby.weddings.title,
+                desc: content.sluzby.weddings.desc,
+                packages: t.raw("sluzby.weddings.packages") as PricingPackage[],
+                note: t("sluzby.weddings.note"),
+              },
+              {
+                key: "larp", number: "003", category: "larpy",
+                title: content.sluzby.larp.title,
+                desc: content.sluzby.larp.desc,
+                packages: t.raw("sluzby.larp.packages") as PricingPackage[],
+                note: t("sluzby.larp.note"),
+              },
+            ]}
+          />
         </section>
       </AnimatedSection>
 
-      <AnimatedSection className="bg-[var(--color-bg-elevated)] border-b border-[var(--color-border)]">
+      <AnimatedSection className="bg-[var(--color-bg)] border-b border-[var(--color-border)]">
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
