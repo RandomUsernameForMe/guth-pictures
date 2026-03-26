@@ -116,11 +116,6 @@ export function Lightbox({ photos, currentIndex, locale, onClose, onNavigate }: 
           />
         </motion.div>
 
-        {alt && (
-          <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-400 text-sm">
-            {alt}
-          </p>
-        )}
       </motion.div>
     </AnimatePresence>
   );
