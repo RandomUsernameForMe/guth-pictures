@@ -82,9 +82,7 @@ export function Nav() {
             className={`transition-all duration-500 ${
               scrolled
                 ? "rounded-2xl backdrop-blur-xl"
-                : isHome
-                  ? "rounded-none border-b border-transparent bg-gradient-to-b from-black/70 via-black/20 to-transparent"
-                  : "rounded-none backdrop-blur-md"
+                : "rounded-none backdrop-blur-sm"
             }`}
             style={scrolled ? scrolledStyle : !isHome ? {
               background: "var(--nav-bg-subpage)",

@@ -46,7 +46,12 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         <div className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
-      {/* Overlay — bottom gradient only, theme-aware */}
+      {/* Overlay — top gradient for nav readability */}
+      <div
+        className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, var(--color-bg) 0%, transparent 100%)" }}
+      />
+      {/* Overlay — bottom gradient */}
       <div
         className="absolute inset-x-0 bottom-0 h-[60%] pointer-events-none"
         style={{ background: "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)" }}

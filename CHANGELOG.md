@@ -1,3 +1,39 @@
+## [2026-03-26] - Navbar: odstraněn hardcoded gradient, top overlay přesunut na hero
+
+- Nav nahoře průhledný (backdrop-blur-sm), bez hardcoded black gradientu
+- Top overlay přesunut do HeroSection, theme-aware přes --color-bg
+
+## [2026-03-26] - Lightbox v carouselu na homepage
+
+- Kliknutí na fotku v `SelectedWork` otevře `Lightbox` s navigací a klávesovými zkratkami
+
+## [2026-03-26] - Opravy z code review
+
+- `key={pkg.id}` místo `key={i}` v PackageEditor — stabilní klíče při mazání balíčků
+- `selectedService!` assertions odstraněny — TypeScript narrowing přes `selectedService !== null`
+- `filter(Boolean)` na includes při renderování — prázdné řádky z textarey nevyrobí prázdné `<li>`
+- Délkové limity v content validaci (MAX_SHORT 200, MAX_LONG 2000, MAX_PACKAGES 10, MAX_INCLUDES 20)
+- `isServiceContent`: packages volitelné pro backward compat, includes items validovány jako string
+- Backward compat: `getContent` normalizuje KV data — doplní `packages: []` a `id` pokud chybí
+- Logout cookie — přidány `httpOnly`, `secure`, `sameSite` při mazání
+- Login rate limit fail-closed v produkci bez KV; chybějící `ADMIN_PASSWORD_HASH` vrací 401 místo 500
+- `AdminNav`: startsWith fix (`href + "/"`) + `aria-current="page"`
+
+## [2026-03-26] - Admin rozdělen na podstránky
+
+- `/admin` → redirect na `/admin/fotky`
+- `/admin/fotky` — správa fotek
+- `/admin/obsah` — editor textů a ceníku
+- `/admin/blog` — editor blogu
+- Sdílený `AdminShell` (auth check + header + nav tabs)
+
+## [2026-03-26] - Ceník editovatelný z adminu
+
+- Ceníková data přesunuta z messages do KV storage (`lib/content.ts`)
+- Sdílený typ `PricingPackage` v `lib/types.ts`
+- `ContentEditor` rozšířen o editor balíčků (název, cena, délka, co zahrnuje, poznámka) pro každou službu
+- Validace v `/api/admin/content` rozšířena o strukturu packages
+
 ## [2026-03-26] - Rozbalovací ceník na kartách služeb
 
 - Nová komponenta `ServiceCards` — každá karta má tlačítka „Portfolio" a „Ceník"
