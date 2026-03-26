@@ -21,6 +21,8 @@ function checkMemoryRateLimit(ip: string): boolean {
 
 async function checkRateLimit(ip: string): Promise<boolean> {
   if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+    // In production without KV → fail-closed (better to block than bypass rate limit)
+    if (process.env.NODE_ENV === "production") return false;
     return checkMemoryRateLimit(ip);
   }
   try {
@@ -30,7 +32,9 @@ async function checkRateLimit(ip: string): Promise<boolean> {
     if (count === 1) await kv.expire(key, RATE_LIMIT_WINDOW_SEC);
     return count <= RATE_LIMIT_MAX;
   } catch {
-    return checkMemoryRateLimit(ip); // KV failure → in-memory fallback
+    // KV failure in production → fail-closed
+    if (process.env.NODE_ENV === "production") return false;
+    return checkMemoryRateLimit(ip);
   }
 }
 
@@ -63,7 +67,7 @@ export async function POST(request: Request) {
   const passwordHash = process.env.ADMIN_PASSWORD_HASH;
   if (!passwordHash) {
     console.error("[auth] ADMIN_PASSWORD_HASH not configured");
-    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const valid = await compare(password, passwordHash);

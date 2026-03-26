@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
+import { Lightbox } from "@/components/Lightbox";
 
 const CARD_W = 210;
 const CARD_H = 290;
@@ -18,12 +20,15 @@ type Props = {
 
 export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const displayed = photos.slice(0, 10);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   if (displayed.length === 0) return null;
 
   // Duplicate for seamless infinite loop (translateX -50% = one full set)
   const track = [...displayed, ...displayed];
 
   return (
+    <>
     <section className="py-20" style={{ backgroundColor: 'var(--color-bg)' }}>
       {/* Header */}
       <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-10">
@@ -60,6 +65,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         >
           {track.map((photo, i) => {
             const alt = getAlt(photo, locale);
+            const indexInSet = i % displayed.length;
             // Scale down cards near the edges of the visible window (based on position in duplicated track)
             const posInSet = i % displayed.length;
             const distFromCenter = Math.abs(posInSet - (displayed.length - 1) / 2) / ((displayed.length - 1) / 2);
@@ -67,8 +73,9 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
             return (
               <figure
                 key={`${photo.publicId}-${i}`}
-                className="group relative flex-shrink-0 overflow-hidden bg-[var(--color-surface)]"
+                className="group relative flex-shrink-0 overflow-hidden bg-[var(--color-surface)] cursor-zoom-in"
                 style={{ width: CARD_W, height: CARD_H, transform: `scale(${scale})`, transformOrigin: 'center' }}
+                onClick={() => setLightboxIndex(indexInSet)}
               >
                 <Image
                   src={cloudinaryUrl(photo.publicId, `w_${CARD_W * 2},h_${CARD_H * 2},c_fill,q_auto,f_auto`)}
@@ -82,18 +89,24 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300" />
                 <span className="absolute top-3 right-3 font-mono text-[10px] text-white/35">
-                  {String((i % displayed.length) + 1).padStart(2, "0")}
+                  {String(indexInSet + 1).padStart(2, "0")}
                 </span>
-                {alt && (
-                  <p className="absolute bottom-0 left-0 right-0 px-3 py-2 text-xs text-white/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent">
-                    {alt}
-                  </p>
-                )}
               </figure>
             );
           })}
         </div>
       </div>
     </section>
+
+    {lightboxIndex !== null && (
+      <Lightbox
+        photos={displayed}
+        currentIndex={lightboxIndex}
+        locale={locale}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={setLightboxIndex}
+      />
+    )}
+  </>
   );
 }

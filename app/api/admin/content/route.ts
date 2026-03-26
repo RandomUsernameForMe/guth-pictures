@@ -10,14 +10,38 @@ function isAllowedLocale(l: unknown): l is AllowedLocale {
   return ALLOWED_LOCALES.includes(l as AllowedLocale);
 }
 
+const MAX_SHORT = 200;
+const MAX_LONG = 2000;
+const MAX_PACKAGES = 10;
+const MAX_INCLUDES = 20;
+
+function isServiceContent(s: unknown): boolean {
+  if (!s || typeof s !== "object" || Array.isArray(s)) return false;
+  const o = s as Record<string, unknown>;
+  if (typeof o.title !== "string" || o.title.length > MAX_SHORT) return false;
+  if (typeof o.desc !== "string" || o.desc.length > MAX_LONG) return false;
+  // packages is optional for backward compat with KV data saved before this field existed
+  if (o.packages === undefined) return true;
+  if (!Array.isArray(o.packages) || o.packages.length > MAX_PACKAGES) return false;
+  return o.packages.every((p) => {
+    if (!p || typeof p !== "object" || Array.isArray(p)) return false;
+    const pkg = p as Record<string, unknown>;
+    if (typeof pkg.name !== "string" || pkg.name.length > MAX_SHORT) return false;
+    if (typeof pkg.price !== "string" || pkg.price.length > MAX_SHORT) return false;
+    if (typeof pkg.duration !== "string" || pkg.duration.length > MAX_SHORT) return false;
+    if (!Array.isArray(pkg.includes) || pkg.includes.length > MAX_INCLUDES) return false;
+    return pkg.includes.every((i) => typeof i === "string" && i.length <= MAX_SHORT);
+  });
+}
+
 function isValidContentData(d: unknown): d is ContentData {
   if (!d || typeof d !== "object" || Array.isArray(d)) return false;
   const o = d as Record<string, unknown>;
-  return (
-    !!o.home && typeof o.home === "object" &&
-    !!o["o-mne"] && typeof o["o-mne"] === "object" &&
-    !!o.sluzby && typeof o.sluzby === "object"
-  );
+  if (!o.home || typeof o.home !== "object") return false;
+  if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
+  if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
+  const s = o.sluzby as Record<string, unknown>;
+  return isServiceContent(s.portraits) && isServiceContent(s.weddings) && isServiceContent(s.larp);
 }
 
 export async function GET(req: NextRequest) {

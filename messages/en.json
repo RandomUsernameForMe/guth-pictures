@@ -38,32 +38,15 @@
     "rezervovat": "Book a session",
     "portraits": {
       "title": "Portraits",
-      "desc": "Individual and group portraits. Studio, outdoors or in your own environment — focused on natural expression.",
-      "packages": [
-        { "name": "Mini", "price": "1 500 CZK", "duration": "30 min", "includes": ["10 edited photos", "online gallery"] },
-        { "name": "Classic", "price": "2 500 CZK", "duration": "60 min", "includes": ["25 edited photos", "online gallery", "1 location"] },
-        { "name": "Extended", "price": "4 000 CZK", "duration": "2 hrs", "includes": ["50+ photos", "2 locations", "quick selection next day"] }
-      ],
-      "note": "Travel outside Prague billed separately."
+      "desc": "Individual and group portraits. Studio, outdoors or in your own environment — focused on natural expression."
     },
     "weddings": {
       "title": "Weddings",
-      "desc": "Full day coverage from preparations to the evening. Documentary style — no forced poses, just real moments.",
-      "packages": [
-        { "name": "Basic", "price": "8 000 CZK", "duration": "4 hrs", "includes": ["~150 photos", "online gallery", "ceremony or part of day"] },
-        { "name": "Full day", "price": "15 000 CZK", "duration": "8–10 hrs", "includes": ["300+ photos", "preparations to evening", "online gallery"] },
-        { "name": "Premium", "price": "20 000 CZK", "duration": "full day", "includes": ["unlimited time", "second photographer", "20×20 cm printed book"] }
-      ],
-      "note": "30% deposit available when booking."
+      "desc": "Full day coverage from preparations to the evening. Documentary style — no forced poses, just real moments."
     },
     "larp": {
       "title": "Larps & events",
-      "desc": "I specialise in larp event photography. Fast light, movement, atmosphere — that's my playground.",
-      "packages": [
-        { "name": "Single day", "price": "3 000 CZK", "duration": "1 day", "includes": ["100+ photos", "online gallery within 7 days"] },
-        { "name": "Weekend", "price": "5 000 CZK", "duration": "2 days", "includes": ["200+ photos", "online gallery within 7 days", "accommodation by organiser"] }
-      ],
-      "note": "Travel not included. Travel over 50 km from Prague by arrangement."
+      "desc": "I specialise in larp event photography. Fast light, movement, atmosphere — that's my playground."
     },
     "cta": "Send a message"
   },

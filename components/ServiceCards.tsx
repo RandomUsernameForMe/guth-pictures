@@ -5,12 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { X } from "lucide-react";
 
-export type PricingPackage = {
-  name: string;
-  price: string;
-  duration: string;
-  includes: string[];
-};
+export type { PricingPackage } from "@/lib/types";
+import type { PricingPackage } from "@/lib/types";
 
 export type ServiceItem = {
   key: string;
@@ -75,7 +71,7 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
               </div>
             ))}
           </motion.div>
-        ) : (
+        ) : selectedService !== null ? (
           <motion.div
             key="pricing"
             initial={{ opacity: 0, y: 12 }}
@@ -88,10 +84,10 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
             <div className="flex items-start justify-between mb-8">
               <div>
                 <h3 className="text-2xl font-bold text-[var(--color-text)]">
-                  {selectedService!.title}
+                  {selectedService.title}
                 </h3>
                 <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-                  {selectedService!.desc}
+                  {selectedService.desc}
                 </p>
               </div>
               <button
@@ -105,9 +101,9 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
 
             {/* Packages */}
             <div className="grid gap-4 sm:grid-cols-3">
-              {selectedService!.packages.map((pkg) => (
+              {selectedService.packages.map((pkg) => (
                 <div
-                  key={pkg.name}
+                  key={pkg.id ?? pkg.name}
                   className="border border-[var(--color-border)] p-6 flex flex-col bg-[var(--color-bg-elevated)]"
                 >
                   <div className="text-xs font-mono tracking-widest text-[var(--color-text-ghost)] uppercase mb-3">
@@ -116,7 +112,7 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
                   <div className="text-2xl font-bold text-[var(--color-text)]">{pkg.price}</div>
                   <div className="text-xs text-[var(--color-text-ghost)] mt-1 mb-4">{pkg.duration}</div>
                   <ul className="flex-1 space-y-2">
-                    {pkg.includes.map((item) => (
+                    {pkg.includes.filter(Boolean).map((item) => (
                       <li
                         key={item}
                         className="text-xs text-[var(--color-text-muted)] flex items-start gap-2"
@@ -131,9 +127,9 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
             </div>
 
             {/* Note */}
-            {selectedService!.note && (
+            {selectedService.note && (
               <p className="mt-6 text-xs text-[var(--color-text-ghost)]">
-                {selectedService!.note}
+                {selectedService.note}
               </p>
             )}
 
@@ -145,7 +141,7 @@ export function ServiceCards({ services, portfolioLabel, pricingLabel, closeLabe
               {bookLabel} →
             </a>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );

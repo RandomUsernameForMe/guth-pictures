@@ -3,16 +3,19 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ContentData, SiteImages } from "@/lib/content";
+import type { PricingPackage } from "@/lib/types";
 
 type Locale = "cs" | "en";
+
+const emptyPackage = (): PricingPackage => ({ id: crypto.randomUUID(), name: "", price: "", duration: "", includes: [] });
 
 const emptyContent = (): ContentData => ({
   home: { title: "", subtitle: "" },
   "o-mne": { title: "", subtitle: "", bio: "" },
   sluzby: {
-    portraits: { title: "", desc: "" },
-    weddings: { title: "", desc: "" },
-    larp: { title: "", desc: "" },
+    portraits: { title: "", desc: "", packages: [], note: "" },
+    weddings: { title: "", desc: "", packages: [], note: "" },
+    larp: { title: "", desc: "", packages: [], note: "" },
   },
 });
 
@@ -193,6 +196,15 @@ export function ContentEditor() {
             onChange={(v) => patch((d) => { d.sluzby.portraits.desc = v; })}
             textarea
           />
+          <PackageEditor
+            packages={current.sluzby.portraits.packages ?? []}
+            onChange={(pkgs) => patch((d) => { d.sluzby.portraits.packages = pkgs; })}
+          />
+          <Field
+            label="Poznámka pod ceníkem"
+            value={current.sluzby.portraits.note ?? ""}
+            onChange={(v) => patch((d) => { d.sluzby.portraits.note = v; })}
+          />
         </Section>
 
         <Section title="Svatby">
@@ -207,6 +219,15 @@ export function ContentEditor() {
             onChange={(v) => patch((d) => { d.sluzby.weddings.desc = v; })}
             textarea
           />
+          <PackageEditor
+            packages={current.sluzby.weddings.packages ?? []}
+            onChange={(pkgs) => patch((d) => { d.sluzby.weddings.packages = pkgs; })}
+          />
+          <Field
+            label="Poznámka pod ceníkem"
+            value={current.sluzby.weddings.note ?? ""}
+            onChange={(v) => patch((d) => { d.sluzby.weddings.note = v; })}
+          />
         </Section>
 
         <Section title="Larpy">
@@ -220,6 +241,15 @@ export function ContentEditor() {
             value={current.sluzby.larp.desc}
             onChange={(v) => patch((d) => { d.sluzby.larp.desc = v; })}
             textarea
+          />
+          <PackageEditor
+            packages={current.sluzby.larp.packages ?? []}
+            onChange={(pkgs) => patch((d) => { d.sluzby.larp.packages = pkgs; })}
+          />
+          <Field
+            label="Poznámka pod ceníkem"
+            value={current.sluzby.larp.note ?? ""}
+            onChange={(v) => patch((d) => { d.sluzby.larp.note = v; })}
           />
         </Section>
 
@@ -282,6 +312,84 @@ function Field({
           className="w-full bg-white/5 border border-white/10 px-3 py-2 text-sm text-white focus:outline-none focus:border-white/40"
         />
       )}
+    </div>
+  );
+}
+
+function PackageEditor({
+  packages,
+  onChange,
+}: {
+  packages: PricingPackage[];
+  onChange: (pkgs: PricingPackage[]) => void;
+}) {
+  function updatePkg(i: number, updater: (p: PricingPackage) => void) {
+    const next = packages.map((p, idx) => {
+      if (idx !== i) return p;
+      const copy = structuredClone(p);
+      updater(copy);
+      return copy;
+    });
+    onChange(next);
+  }
+
+  function addPkg() { onChange([...packages, emptyPackage()]); }
+  function removePkg(i: number) { onChange(packages.filter((_, idx) => idx !== i)); }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-gray-400">Balíčky ceníku</p>
+      {packages.map((pkg, i) => (
+        <div key={pkg.id ?? String(i)} className="border border-white/10 p-4 space-y-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Balíček {i + 1}</span>
+            <button
+              type="button"
+              onClick={() => removePkg(i)}
+              className="text-xs text-red-400 hover:text-red-300 transition-colors"
+            >
+              Odebrat
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <input
+              type="text"
+              placeholder="Název"
+              value={pkg.name}
+              onChange={(e) => updatePkg(i, (p) => { p.name = e.target.value; })}
+              className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
+            />
+            <input
+              type="text"
+              placeholder="Cena"
+              value={pkg.price}
+              onChange={(e) => updatePkg(i, (p) => { p.price = e.target.value; })}
+              className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
+            />
+            <input
+              type="text"
+              placeholder="Délka"
+              value={pkg.duration}
+              onChange={(e) => updatePkg(i, (p) => { p.duration = e.target.value; })}
+              className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
+            />
+          </div>
+          <textarea
+            placeholder={"Co zahrnuje (každá položka na nový řádek)"}
+            value={pkg.includes.join("\n")}
+            onChange={(e) => updatePkg(i, (p) => { p.includes = e.target.value.split("\n"); })}
+            rows={3}
+            className="w-full bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40 resize-none"
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={addPkg}
+        className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30"
+      >
+        + Přidat balíček
+      </button>
     </div>
   );
 }

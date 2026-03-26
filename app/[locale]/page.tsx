@@ -6,7 +6,7 @@ import { SelectedWork } from "@/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { WordReveal } from "@/components/WordReveal";
 import { getContent, getImages } from "@/lib/content";
-import { ServiceCards, type PricingPackage, type ServiceItem } from "@/components/ServiceCards";
+import { ServiceCards, type ServiceItem } from "@/components/ServiceCards";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
@@ -120,24 +120,24 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 key: "portraits", number: "001", category: "portréty",
                 title: content.sluzby.portraits.title,
                 desc: content.sluzby.portraits.desc,
-                packages: t.raw("sluzby.portraits.packages") as PricingPackage[],
-                note: t("sluzby.portraits.note"),
+                packages: content.sluzby.portraits.packages,
+                note: content.sluzby.portraits.note,
               },
               {
                 key: "weddings", number: "002", category: "svatby",
                 title: content.sluzby.weddings.title,
                 desc: content.sluzby.weddings.desc,
-                packages: t.raw("sluzby.weddings.packages") as PricingPackage[],
-                note: t("sluzby.weddings.note"),
+                packages: content.sluzby.weddings.packages,
+                note: content.sluzby.weddings.note,
               },
               {
                 key: "larp", number: "003", category: "larpy",
                 title: content.sluzby.larp.title,
                 desc: content.sluzby.larp.desc,
-                packages: t.raw("sluzby.larp.packages") as PricingPackage[],
-                note: t("sluzby.larp.note"),
+                packages: content.sluzby.larp.packages,
+                note: content.sluzby.larp.note,
               },
-            ]}
+            ] satisfies ServiceItem[]}
           />
         </section>
       </AnimatedSection>
