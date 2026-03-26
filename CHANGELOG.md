@@ -1,3 +1,7 @@
+## [2026-03-26] - Navbar: fix čitelnosti textu nad hero v light módu
+
+- Nav na hero stránce nyní vždy používá světlý text (přepis CSS vars inline), protože hero foto je vždy tmavé
+
 ## [2026-03-26] - Navbar: odstraněn hardcoded gradient, top overlay přesunut na hero
 
 - Nav nahoře průhledný (backdrop-blur-sm), bez hardcoded black gradientu
