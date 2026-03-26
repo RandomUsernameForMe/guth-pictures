@@ -1,3 +1,9 @@
+## [2026-03-26] - Rozbalovací ceník na kartách služeb
+
+- Nová komponenta `ServiceCards` — každá karta má tlačítka „Portfolio" a „Ceník"
+- Klik na Ceník animovaně vymění mřížku karet za panel s balíčky (framer-motion AnimatePresence)
+- Ceníková data v `messages/cs.json` + `messages/en.json` (packages + note)
+
 ## [2026-03-25] - Film grain + ambient glow, sjednocení pozadí
 
 - Odstraněn explicitní `bg-[var(--color-bg)]` z SelectedWork — carousel sdílí barvu body

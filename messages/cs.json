@@ -32,17 +32,38 @@
   "sluzby": {
     "title": "Služby",
     "subtitle": "Co pro vás mohu zachytit",
+    "cenik": "Ceník",
+    "zavrit": "Zavřít",
+    "portfolioBtn": "Portfolio",
+    "rezervovat": "Rezervovat termín",
     "portraits": {
       "title": "Portréty",
-      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."
+      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz.",
+      "packages": [
+        { "name": "Mini", "price": "1 500 Kč", "duration": "30 min", "includes": ["10 upravených fotek", "online galerie"] },
+        { "name": "Klasik", "price": "2 500 Kč", "duration": "60 min", "includes": ["25 upravených fotek", "online galerie", "1 lokace"] },
+        { "name": "Extended", "price": "4 000 Kč", "duration": "2 hod", "includes": ["50+ fotek", "2 lokace", "rychlý výběr den po focení"] }
+      ],
+      "note": "Ceny bez dopravy mimo Prahu."
     },
     "weddings": {
       "title": "Svatby",
-      "desc": "Celý den od příprav po večer. Reportážní styl — žádné nucené pózy, jen skutečné okamžiky."
+      "desc": "Celý den od příprav po večer. Reportážní styl — žádné nucené pózy, jen skutečné okamžiky.",
+      "packages": [
+        { "name": "Základ", "price": "8 000 Kč", "duration": "4 hod", "includes": ["cca 150 fotek", "online galerie", "jeden obřad / část dne"] },
+        { "name": "Celý den", "price": "15 000 Kč", "duration": "8–10 hod", "includes": ["300+ fotek", "přípravy až po večer", "online galerie"] },
+        { "name": "Premium", "price": "20 000 Kč", "duration": "celý den", "includes": ["neomezený čas", "druhý fotograf", "tištěná kniha 20×20 cm"] }
+      ],
+      "note": "Možná záloha 30 % při rezervaci termínu."
     },
     "larp": {
       "title": "Larpy a akce",
-      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa."
+      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa.",
+      "packages": [
+        { "name": "Jednodení akce", "price": "3 000 Kč", "duration": "1 den", "includes": ["100+ fotek", "online galerie do 7 dní"] },
+        { "name": "Víkendovka", "price": "5 000 Kč", "duration": "2 dny", "includes": ["200+ fotek", "online galerie do 7 dní", "ubytování zajistí pořadatel"] }
+      ],
+      "note": "Ceny bez dopravy. Doprava nad 50 km od Prahy dohodou."
     },
     "cta": "Nezávazně napsat"
   },
