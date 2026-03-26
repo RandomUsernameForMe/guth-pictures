@@ -243,3 +243,7 @@ Vyžaduje novou env proměnnou: `AUTH_SECRET` (náhodný string, min 32 znaků)
 - "Napsat mi" → "Chci fotky" (CTA, primární, první)
 - "Prohlédnout portfolio" → "Moje tvorba" (sekundární, druhý)
 - en: "Book a shoot" / "My work"
+
+## [2026-03-26] - hero nav scrim: neutrální black overlay místo --color-bg
+- přidána proměnná --hero-scrim-top (dark: 0.65, light: 0.30 alpha)
+- odstraněn efekt barevného pásu u navbaru v obou themes

@@ -49,7 +49,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       {/* Overlay — top gradient for nav readability */}
       <div
         className="absolute inset-x-0 top-0 h-40 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, var(--color-bg) 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(to bottom, var(--hero-scrim-top) 0%, transparent 100%)" }}
       />
       {/* Overlay — bottom gradient */}
       <div
