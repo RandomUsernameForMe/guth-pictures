@@ -60,14 +60,14 @@
 }
 
 .light {
-  --color-bg:          #C8C4BE;
-  --color-bg-elevated: #BFBBB5;
-  --color-bg-overlay:  #B6B2AC;
-  --color-surface:     #ADAAA4;
+  --color-bg:          #C8CDD6;
+  --color-bg-elevated: #BFC5CF;
+  --color-bg-overlay:  #B6BCC8;
+  --color-surface:     #ADB3C1;
 
-  --color-text:        #1A1917;
-  --color-text-muted:  #6B6560;
-  --color-text-ghost:  #A09A94;
+  --color-text:        #0F172A;
+  --color-text-muted:  #475569;
+  --color-text-ghost:  #94A3B8;
 
   --color-accent:      #6B3A1F;
   --color-accent-hover:#5A3019;
@@ -75,14 +75,14 @@
   --color-border:      rgba(0, 0, 0, 0.09);
   --color-border-sub:  rgba(0, 0, 0, 0.05);
 
-  --nav-bg-scrolled:     rgba(247, 245, 242, 0.82);
-  --nav-bg-subpage:      rgba(247, 245, 242, 0.70);
+  --nav-bg-scrolled:     rgba(200, 205, 214, 0.85);
+  --nav-bg-subpage:      rgba(200, 205, 214, 0.72);
   --nav-border:          rgba(0, 0, 0, 0.08);
   --nav-shadow:          0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(0, 0, 0, 0.06);
   --nav-active-bg:       rgba(0, 0, 0, 0.06);
   --nav-active-border:   rgba(0, 0, 0, 0.09);
 
-  --glass-bg:            rgba(247, 245, 242, 0.82);
+  --glass-bg:            rgba(200, 205, 214, 0.85);
   --hero-scrim-top:      rgba(0, 0, 0, 0.30);
 }
 

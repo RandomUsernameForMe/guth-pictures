@@ -112,8 +112,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <ServiceCards
             portfolioLabel={t("sluzby.portfolioBtn")}
-            pricingLabel={t("sluzby.cenik")}
-            closeLabel={t("sluzby.zavrit")}
+            pricingLabel=""
+            closeLabel=""
             bookLabel={t("sluzby.rezervovat")}
             services={[
               {

@@ -1,3 +1,10 @@
+## [2026-03-26] - ServiceCards: inline expand balíčků
+
+- Karty služeb jsou klikatelné, klik rozbalí balíčky přímo v kartě (accordion)
+- Více karet lze mít rozbalených současně, druhý klik sbalí danou kartu
+- Odstraněny portfolio linky z karet
+- Odstraněn globální detail view (nahrazen inline expandem)
+
 ## [2026-03-26] - Navbar: fix čitelnosti textu nad hero v light módu
 
 - Nav na hero stránce nyní vždy používá světlý text (přepis CSS vars inline), protože hero foto je vždy tmavé
