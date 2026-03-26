@@ -58,17 +58,17 @@
 }
 
 .light {
-  --color-bg:          #F7F5F2;
-  --color-bg-elevated: #EFECE7;
-  --color-bg-overlay:  #E8E4DE;
-  --color-surface:     #DDD9D2;
+  --color-bg:          #C8C4BE;
+  --color-bg-elevated: #BFBBB5;
+  --color-bg-overlay:  #B6B2AC;
+  --color-surface:     #ADAAA4;
 
   --color-text:        #1A1917;
   --color-text-muted:  #6B6560;
   --color-text-ghost:  #A09A94;
 
-  --color-accent:      #8B5E3C;
-  --color-accent-hover:#7A5234;
+  --color-accent:      #6B3A1F;
+  --color-accent-hover:#5A3019;
 
   --color-border:      rgba(0, 0, 0, 0.09);
   --color-border-sub:  rgba(0, 0, 0, 0.05);
