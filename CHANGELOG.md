@@ -238,3 +238,8 @@ Vyžaduje novou env proměnnou: `AUTH_SECRET` (náhodný string, min 32 znaků)
 - Folder struktura: `app/[locale]/` s placeholder stránkami (home, portfolio, sluzby, o-mne, kontakt)
 - `app/admin/page.tsx` (placeholder, bez locale)
 - Root layout zjednodušen, locale layout s NextIntlClientProvider a dark theme
+
+## [2026-03-26] - hero buttons: přejmenování a prohození pořadí
+- "Napsat mi" → "Chci fotky" (CTA, primární, první)
+- "Prohlédnout portfolio" → "Moje tvorba" (sekundární, druhý)
+- en: "Book a shoot" / "My work"
