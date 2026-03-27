@@ -6,9 +6,33 @@ import Image from "next/image";
 import { type GalleryPhoto, CATEGORIES, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_FILE_SIZE_MB = 20;
+const MAX_FILE_SIZE_MB = 100; // raw foťák fotky, komprese proběhne v prohlížeči
 
-type FileStatus = "pending" | "uploading" | "done" | "error";
+async function compressImage(file: File, maxPx = 4000, quality = 0.88): Promise<File> {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    const blobUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(blobUrl);
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(
+        (blob) => resolve(blob ? new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" }) : file),
+        "image/jpeg",
+        quality
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(blobUrl); resolve(file); };
+    img.src = blobUrl;
+  });
+}
+
+type FileStatus = "pending" | "compressing" | "uploading" | "done" | "error";
 type FileItem = { file: File; preview: string; status: FileStatus };
 
 type Props = { photos: GalleryPhoto[] };
@@ -30,22 +54,38 @@ export function AdminDashboard({ photos: initial }: Props) {
     return () => { fileItemsRef.current.forEach((item) => URL.revokeObjectURL(item.preview)); };
   }, []);
 
-  function addFiles(files: FileList | File[]) {
-    const oversized: string[] = [];
-    const items: FileItem[] = Array.from(files)
-      .filter((f) => {
-        if (!ALLOWED_TYPES.includes(f.type)) return false;
-        if (f.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-          oversized.push(f.name);
-          return false;
-        }
-        return true;
-      })
-      .map((file) => ({ file, preview: URL.createObjectURL(file), status: "pending" }));
-    if (oversized.length > 0) {
-      setUploadError(`Tyto soubory překračují limit ${MAX_FILE_SIZE_MB} MB: ${oversized.join(", ")}`);
-    }
-    setFileItems((prev) => [...prev, ...items]);
+  async function addFiles(files: FileList | File[]) {
+    const valid = Array.from(files).filter((f) => {
+      if (!ALLOWED_TYPES.includes(f.type)) return false;
+      if (f.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        setUploadError(`Soubor ${f.name} překračuje limit ${MAX_FILE_SIZE_MB} MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    // Přidej placeholdery ihned (ukazuje komprimaci)
+    const placeholders: FileItem[] = valid.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      status: "compressing",
+    }));
+    setFileItems((prev) => [...prev, ...placeholders]);
+
+    // Komprimuj na pozadí a aktualizuj
+    const compressed = await Promise.all(valid.map((f) => compressImage(f)));
+    setFileItems((prev) => {
+      const updated = [...prev];
+      // nahraď placeholdery komprimovanými verzemi (podle pořadí přidání)
+      let ci = 0;
+      for (let i = updated.length - placeholders.length; i < updated.length; i++) {
+        URL.revokeObjectURL(updated[i].preview);
+        const preview = URL.createObjectURL(compressed[ci]);
+        updated[i] = { file: compressed[ci], preview, status: "pending" };
+        ci++;
+      }
+      return updated;
+    });
   }
 
   function handleDrop(e: React.DragEvent) {
@@ -131,6 +171,28 @@ export function AdminDashboard({ photos: initial }: Props) {
     }
   }
 
+  async function handleToggleSelected(publicId: string, current: boolean) {
+    const next = !current;
+    setPhotos((prev) =>
+      prev.map((p) => (p.publicId === publicId ? { ...p, selected: next } : p))
+    );
+    try {
+      const res = await fetch("/api/admin/toggle-selected", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ publicId, selected: next }),
+      });
+      if (!res.ok) throw new Error();
+      await fetch("/api/admin/revalidate", { method: "POST" }).catch(() => {});
+    } catch {
+      // Rollback
+      setPhotos((prev) =>
+        prev.map((p) => (p.publicId === publicId ? { ...p, selected: current } : p))
+      );
+      setUploadError("Změna selected se nezdařila.");
+    }
+  }
+
   return (
     <div className="space-y-12">
       {/* Upload */}
@@ -193,6 +255,9 @@ export function AdminDashboard({ photos: initial }: Props) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.preview} alt="" className="w-full h-full object-cover rounded" />
                   <div className="absolute inset-0 flex items-center justify-center">
+                    {item.status === "compressing" && (
+                      <span className="text-xs bg-black/70 text-white px-1 rounded">↓</span>
+                    )}
                     {item.status === "uploading" && (
                       <span className="text-xs bg-black/70 text-white px-1 rounded">…</span>
                     )}
@@ -215,7 +280,7 @@ export function AdminDashboard({ photos: initial }: Props) {
           <div className="flex items-center gap-4">
             <button
               onClick={handleUpload}
-              disabled={fileItems.length === 0 || progress !== null}
+              disabled={fileItems.length === 0 || progress !== null || fileItems.some(f => f.status === "compressing")}
               className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
               {fileItems.length > 0
@@ -234,9 +299,12 @@ export function AdminDashboard({ photos: initial }: Props) {
 
       {/* Photo list */}
       <section>
-        <h2 className="text-lg font-semibold mb-4">
+        <h2 className="text-lg font-semibold mb-1">
           Fotky ({photos.length})
         </h2>
+        <p className="text-xs text-gray-500 mb-4">
+          ★ = zobrazí se v sekci Selected Work na homepage ({photos.filter(p => p.selected).length} označeno)
+        </p>
         {photos.length === 0 ? (
           <p className="text-gray-500">Žádné fotky</p>
         ) : (
@@ -253,6 +321,18 @@ export function AdminDashboard({ photos: initial }: Props) {
                   blurDataURL={blurUrl(photo.publicId)}
                   className="w-full aspect-[4/3] object-cover"
                 />
+                {/* Selected indicator — always visible */}
+                <button
+                  onClick={() => handleToggleSelected(photo.publicId, photo.selected ?? false)}
+                  title={photo.selected ? "Odebrat z Selected Work" : "Přidat do Selected Work"}
+                  className={`absolute top-2 left-2 w-6 h-6 flex items-center justify-center rounded-full text-sm transition-colors ${
+                    photo.selected
+                      ? "bg-yellow-400 text-black"
+                      : "bg-black/50 text-white/40 opacity-0 group-hover:opacity-100"
+                  }`}
+                >
+                  ★
+                </button>
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
                   <span className="text-xs text-gray-300 text-center truncate w-full px-1">
                     {photo.alt.cs || photo.publicId}

@@ -6,8 +6,8 @@ import { Link } from "@/i18n/navigation";
 import { type GalleryPhoto, cloudinaryUrl, blurUrl, getAlt } from "@/lib/cloudinary-utils";
 import { Lightbox } from "@/components/Lightbox";
 
-const CARD_W = 210;
-const CARD_H = 290;
+const CARD_W = 270;
+const CARD_H = 370;
 const GAP = 12;
 const SCROLL_DURATION = 36; // seconds for one full loop
 
@@ -19,7 +19,8 @@ type Props = {
 };
 
 export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
-  const displayed = photos.slice(0, 10);
+  const selectedPhotos = photos.filter((p) => p.selected);
+  const displayed = selectedPhotos.length > 0 ? selectedPhotos : photos.slice(0, 10);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (displayed.length === 0) return null;

@@ -9,6 +9,7 @@ export type GalleryPhoto = {
   height: number;
   alt: { cs: string; en: string };
   category: "portréty" | "svatby" | "larpy";
+  selected?: boolean;
 };
 
 export function cloudinaryUrl(publicId: string, transformation = ""): string {

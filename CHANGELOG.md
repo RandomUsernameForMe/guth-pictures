@@ -1,3 +1,18 @@
+## [2026-03-27] - feat: auto-komprese fotek při uploadu + kvalitnější hero
+
+- Upload: Canvas-based komprese v prohlížeči (max 4000px, JPEG 88%) — nahrát jde jakákoliv fotka z foťáku
+- Limit zvýšen na 100 MB (raw vstup, před kompresí)
+- Hero: transformace `w_2560,q_90,e_sharpen:60` místo `w_1920,q_auto`
+
+## [2026-03-27] - feat: výběr fotek do Selected Work v adminu + větší karty carouselu
+
+- Admin: hvězdičkový toggle na každé fotce označí ji jako Selected Work (Cloudinary tag `selected_work`)
+- Nový API endpoint `/api/admin/toggle-selected` (POST) pro přidání/odebrání tagu
+- `SelectedWork`: filtruje dle `selected` flagu, fallback na prvních 10 pokud nic není označeno
+- `GalleryPhoto` type: přidáno volitelné pole `selected?: boolean`
+- `lib/cloudinary.ts`: fetchuje tagy z Cloudinary, mapuje `selected_work` na `selected`
+- Karty carouselu zvětšeny z 210×290 na 270×370 px
+
 ## [2026-03-27] - fix: server-only nelze importovat z Client Component
 
 - Typy `ColorSet`, `ThemeColors` a `defaultColors` přesunuty do `lib/theme-types.ts` (bez server-only)

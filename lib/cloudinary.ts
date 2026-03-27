@@ -14,12 +14,14 @@ type CloudinaryResource = {
   width: number;
   height: number;
   context?: { alt_cs?: string; alt_en?: string; category?: GalleryPhoto["category"] };
+  tags?: string[];
 };
 
 async function fetchGalleryPhotos(folder: string): Promise<GalleryPhoto[]> {
   const result = await cloudinary.search
     .expression(`folder:${folder}`)
     .with_field("context")
+    .with_field("tags")
     .sort_by("created_at", "desc")
     .max_results(50)
     .execute();
@@ -33,6 +35,7 @@ async function fetchGalleryPhotos(folder: string): Promise<GalleryPhoto[]> {
       en: r.context?.alt_en ?? r.public_id,
     },
     category: r.context?.category ?? "portréty",
+    selected: r.tags?.includes("selected_work") ?? false,
   }));
 }
 
