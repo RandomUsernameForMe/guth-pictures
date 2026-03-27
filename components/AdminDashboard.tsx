@@ -325,10 +325,10 @@ export function AdminDashboard({ photos: initial }: Props) {
                 <button
                   onClick={() => handleToggleSelected(photo.publicId, photo.selected ?? false)}
                   title={photo.selected ? "Odebrat z Selected Work" : "Přidat do Selected Work"}
-                  className={`absolute top-2 left-2 w-6 h-6 flex items-center justify-center rounded-full text-sm transition-colors ${
+                  className={`absolute top-2 left-2 z-10 w-6 h-6 flex items-center justify-center rounded-full text-sm transition-colors ${
                     photo.selected
                       ? "bg-yellow-400 text-black"
-                      : "bg-black/50 text-white/40 opacity-0 group-hover:opacity-100"
+                      : "bg-black/50 text-white/30 hover:text-white/80"
                   }`}
                 >
                   ★

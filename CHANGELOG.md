@@ -1,3 +1,9 @@
+## [2026-03-27] - fix(admin): hvězdička vždy klikatelná, title linkuje na homepage
+
+- Hvězdička (Selected Work) dostala `z-10` — overlay ji už nepřekrývá při hoveru
+- Neoznačené fotky mají hvězdičku vždy viditelnou (ztlumená), ne jen při hoveru
+- Titulek "Admin — Guth Pictures" je klikatelný link na "/"
+
 ## [2026-03-27] - feat: auto-komprese fotek při uploadu + kvalitnější hero
 
 - Upload: Canvas-based komprese v prohlížeči (max 4000px, JPEG 88%) — nahrát jde jakákoliv fotka z foťáku
