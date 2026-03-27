@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { defaultColors, type ColorSet, type ThemeColors } from "@/lib/theme";
+import { defaultColors, type ColorSet, type ThemeColors } from "@/lib/theme-types";
 
 type Mode = "dark" | "light";
 

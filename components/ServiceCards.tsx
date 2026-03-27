@@ -18,13 +18,10 @@ export type ServiceItem = {
 
 type Props = {
   services: ServiceItem[];
-  portfolioLabel?: string;
-  pricingLabel?: string;
-  closeLabel?: string;
   bookLabel: string;
 };
 
-export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
+export function ServiceCards({ services, bookLabel }: Props) {
   const [openKeys, setOpenKeys] = useState<Set<string>>(new Set());
 
   const toggle = (key: string) =>
@@ -42,8 +39,13 @@ export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
         return (
           <div
             key={service.key}
+            role="button"
+            tabIndex={0}
+            aria-expanded={isOpen}
+            aria-controls={`packages-${service.key}`}
             onClick={() => toggle(service.key)}
-            className={`group relative border p-8 flex flex-col transition-all duration-300 cursor-pointer overflow-hidden
+            onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggle(service.key)}
+            className={`group relative border p-8 flex flex-col transition-all duration-300 cursor-pointer
               ${isOpen
                 ? "border-[var(--color-border-sub)] bg-[var(--color-bg-elevated)]"
                 : "border-[var(--color-border)] hover:border-[var(--color-border-sub)] hover:bg-[var(--color-bg-overlay)]"
@@ -61,6 +63,7 @@ export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
             <AnimatePresence initial={false}>
               {isOpen && (
                 <motion.div
+                  id={`packages-${service.key}`}
                   key="packages"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -69,9 +72,9 @@ export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
                   className="overflow-hidden"
                 >
                   <div className="mt-6 space-y-3">
-                    {service.packages.map((pkg) => (
+                    {service.packages.map((pkg, i) => (
                       <div
-                        key={pkg.id ?? pkg.name}
+                        key={pkg.id ?? `${pkg.name}-${i}`}
                         className="border border-[var(--color-border)] p-4 bg-[var(--color-bg)]"
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -105,7 +108,7 @@ export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
                     onClick={(e) => e.stopPropagation()}
                     className="inline-block mt-5 px-4 py-2 border border-[var(--color-border-sub)] text-xs hover:bg-[var(--color-bg-overlay)] transition-colors"
                   >
-                    {bookLabel} →
+                    {bookLabel}<span aria-hidden="true"> →</span>
                   </a>
                 </motion.div>
               )}
@@ -114,6 +117,7 @@ export function ServiceCards({ services, portfolioLabel, bookLabel }: Props) {
             {/* Footer — expand indicator */}
             <div className="flex items-center justify-end mt-6 pt-4 border-t border-[var(--color-border)]">
               <motion.span
+                aria-hidden="true"
                 animate={{ rotate: isOpen ? 45 : 0 }}
                 transition={{ duration: 0.2 }}
                 className="text-[var(--color-text-ghost)] text-lg leading-none select-none"

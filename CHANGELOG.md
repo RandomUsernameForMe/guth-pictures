@@ -1,3 +1,10 @@
+## [2026-03-27] - fix: server-only nelze importovat z Client Component
+
+- Typy `ColorSet`, `ThemeColors` a `defaultColors` přesunuty do `lib/theme-types.ts` (bez server-only)
+- `lib/theme.ts` re-exportuje typy z `theme-types.ts`, zachovává `server-only` pro KV logiku
+- `ThemeEditor.tsx` importuje z `lib/theme-types.ts`
+- `ServiceCards`: odebrány nepoužívané props, přidány aria atributy pro přístupnost
+
 ## [2026-03-27] - Admin: editor barev dark/light motivu
 
 - Nová admin sekce `/admin/tema` s color pickery pro 9 CSS proměnných × 2 motivy
