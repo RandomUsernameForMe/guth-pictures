@@ -10,7 +10,7 @@ const CARD_W = 270;
 const CARD_H = 370;
 const GAP = 12;
 const STEP = CARD_W + GAP;
-const SPEED = 0.5; // px per rAF tick (~30px/s at 60fps)
+const SPEED = 30; // px per second (refresh-rate independent)
 
 type Props = {
   photos: GalleryPhoto[];
@@ -30,6 +30,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
   const offsetRef = useRef(0);
   const pausedRef = useRef(false);
   const rafRef = useRef<number>(0);
+  const lastTsRef = useRef<number>(0);
 
   // 3 copies — loop stays within sets 2→3, reset to set 2 seamlessly
   const track = [...displayed, ...displayed, ...displayed];
@@ -41,9 +42,11 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
     // Start at beginning of set 2 so there's buffer on both sides
     offsetRef.current = totalSetW;
 
-    function tick() {
+    function tick(ts: number) {
+      const delta = lastTsRef.current ? Math.min(ts - lastTsRef.current, 50) : 0;
+      lastTsRef.current = ts;
       if (!pausedRef.current) {
-        offsetRef.current += SPEED;
+        offsetRef.current += SPEED * delta / 1000;
         // Reset when we've scrolled through one full set (seamless: set3 == set2 == set1)
         if (offsetRef.current >= 2 * totalSetW) {
           offsetRef.current -= totalSetW;
@@ -78,7 +81,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
       rafRef.current = requestAnimationFrame(tick);
     }
 
-    rafRef.current = requestAnimationFrame(tick);
+    rafRef.current = requestAnimationFrame((ts) => { lastTsRef.current = ts; tick(ts); });
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
