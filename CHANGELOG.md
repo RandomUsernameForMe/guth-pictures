@@ -1,3 +1,9 @@
+## [2026-03-27] - feat(admin/theme): live náhled kombinací barev pod color picky
+
+- Pod panely výběru barev přibyla sekce Náhled
+- Dvě karty (dark/light) ukazují text, muted, ghost, elevated, surface, overlay a accent button
+- Náhled reaguje živě na změny barev (inline styly z aktuálního stavu)
+
 ## [2026-03-27] - fix(admin): hvězdička vždy klikatelná, title linkuje na homepage
 
 - Hvězdička (Selected Work) dostala `z-10` — overlay ji už nepřekrývá při hoveru

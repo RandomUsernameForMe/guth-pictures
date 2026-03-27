@@ -130,6 +130,64 @@ export function ThemeEditor() {
           </div>
         ))}
       </div>
+
+      {/* Previews */}
+      <div className="mt-10">
+        <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">Náhled</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {(["dark", "light"] as Mode[]).map((mode) => {
+            const c = colors[mode];
+            return (
+              <div key={mode} style={{ backgroundColor: c.bg, color: c.text }} className="rounded p-5 space-y-4">
+                <p className="text-xs font-medium uppercase tracking-widest opacity-40" style={{ color: c.text }}>
+                  {mode === "dark" ? "Tmavý" : "Světlý"}
+                </p>
+
+                {/* Hlavní text */}
+                <div>
+                  <p style={{ color: c.text }} className="text-base font-semibold">Nadpis stránky</p>
+                  <p style={{ color: c.textMuted }} className="text-sm mt-0.5">Popisný text, doplňující info.</p>
+                  <p style={{ color: c.textGhost }} className="text-xs mt-0.5">Ghost text / placeholder</p>
+                </div>
+
+                {/* Elevated bg */}
+                <div style={{ backgroundColor: c.bgElevated }} className="rounded p-3">
+                  <p style={{ color: c.text }} className="text-sm font-medium">Elevated karta</p>
+                  <p style={{ color: c.textMuted }} className="text-xs mt-0.5">Text na vyvýšeném pozadí</p>
+                </div>
+
+                {/* Surface */}
+                <div style={{ backgroundColor: c.surface }} className="rounded p-3">
+                  <p style={{ color: c.text }} className="text-sm font-medium">Surface</p>
+                  <p style={{ color: c.textGhost }} className="text-xs mt-0.5">Ghost text na surface</p>
+                </div>
+
+                {/* Overlay */}
+                <div style={{ backgroundColor: c.bgOverlay }} className="rounded p-3">
+                  <p style={{ color: c.text }} className="text-sm font-medium">Overlay</p>
+                  <p style={{ color: c.textMuted }} className="text-xs mt-0.5">Muted text na overlay</p>
+                </div>
+
+                {/* Accent tlačítko */}
+                <div className="flex gap-2 items-center">
+                  <span
+                    style={{ backgroundColor: c.accent, color: c.bg }}
+                    className="px-4 py-1.5 text-sm font-medium rounded"
+                  >
+                    Akcent button
+                  </span>
+                  <span
+                    style={{ backgroundColor: c.accentHover, color: c.bg }}
+                    className="px-4 py-1.5 text-sm font-medium rounded"
+                  >
+                    Hover
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
