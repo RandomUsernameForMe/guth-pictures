@@ -1,3 +1,10 @@
+## [2026-03-27] - fix(carousel): plynulý loop + 3D coverflow efekt
+
+- Přepsáno z CSS animace na requestAnimationFrame + přímá DOM manipulace (bez React re-renderů)
+- Každá karta dostává scale + rotateY dynamicky podle vizuální vzdálenosti od středu viewportu
+- Loop: 3 kopie setu, reset na set2 → žádný skok, nekonečná plynulost
+- Odstraněn statický scale podle indexu, který způsoboval progresivní zvětšování
+
 ## [2026-03-27] - feat(admin/theme): live náhled kombinací barev pod color picky
 
 - Pod panely výběru barev přibyla sekce Náhled
