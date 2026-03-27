@@ -71,7 +71,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
         const norm = dist / (containerW * 0.55);
         const clamped = Math.max(-1.4, Math.min(1.4, norm));
         const scale = 1 - Math.abs(clamped) * 0.18;
-        const rotateY = clamped * 28;
+        const rotateY = clamped * 16;
         card.style.transform = `scale(${scale}) perspective(900px) rotateY(${rotateY}deg)`;
       });
 
