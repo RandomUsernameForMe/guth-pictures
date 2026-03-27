@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
+import { getThemeColors, buildThemeStyle } from "@/lib/theme";
 import "../globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
@@ -37,6 +38,8 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
+  const themeColors = await getThemeColors();
+  const themeStyle = buildThemeStyle(themeColors);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -53,6 +56,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
       <body className={`${geist.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
         <ThemeProvider>

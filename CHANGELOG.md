@@ -1,3 +1,10 @@
+## [2026-03-27] - Admin: editor barev dark/light motivu
+
+- Nová admin sekce `/admin/tema` s color pickery pro 9 CSS proměnných × 2 motivy
+- Barvy uloženy v Vercel KV, injektovány jako `<style>` tag v layoutu
+- Live preview při změně barvy, Reset na default hodnoty
+- API route `GET/POST/DELETE /api/admin/theme` s hex validací
+
 ## [2026-03-26] - ServiceCards: inline expand balíčků
 
 - Karty služeb jsou klikatelné, klik rozbalí balíčky přímo v kartě (accordion)

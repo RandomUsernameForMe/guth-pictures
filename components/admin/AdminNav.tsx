@@ -7,6 +7,7 @@ const tabs = [
   { href: "/admin/fotky", label: "Fotky" },
   { href: "/admin/obsah", label: "Obsah" },
   { href: "/admin/blog", label: "Blog" },
+  { href: "/admin/tema", label: "Téma" },
 ];
 
 export function AdminNav() {
