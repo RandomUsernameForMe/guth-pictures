@@ -1,8 +1,13 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { contactEmail } from "@/lib/config";
 
-export function Footer() {
+type Props = {
+  title: string;
+  subtitle: string;
+  email: string;
+};
+
+export function Footer({ title, subtitle, email }: Props) {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
 
@@ -13,9 +18,9 @@ export function Footer() {
           {/* Brand + tagline */}
           <div>
             <Link href="/" className="text-lg font-semibold tracking-wide text-[var(--color-text)] hover:text-[var(--color-text-muted)] transition-colors">
-              Guth Pictures
+              {title}
             </Link>
-            <p className="mt-1 text-sm text-[var(--color-text-muted)]">{t("tagline")}</p>
+            <p className="mt-1 text-sm text-[var(--color-text-muted)]">{subtitle}</p>
           </div>
 
           {/* Quick nav */}
@@ -23,7 +28,7 @@ export function Footer() {
             <Link href="/portfolio" className="hover:text-[var(--color-text)] transition-colors">{tNav("portfolio")}</Link>
             <Link href="/blog" className="hover:text-[var(--color-text)] transition-colors">{tNav("blog")}</Link>
             <a href="/#kontakt" className="hover:text-[var(--color-text)] transition-colors">{tNav("kontakt")}</a>
-            <a href={`mailto:${contactEmail}`} className="hover:text-[var(--color-text)] transition-colors">{contactEmail}</a>
+            <a href={`mailto:${email}`} className="hover:text-[var(--color-text)] transition-colors">{email}</a>
           </nav>
         </div>
 

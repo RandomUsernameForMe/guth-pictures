@@ -162,3 +162,22 @@ export async function setImages(data: SiteImages): Promise<void> {
   if (!kv) throw new Error("KV not configured");
   await kv.set("content:images", data);
 }
+
+export async function getContactEmail(): Promise<string> {
+  const kv = await getKv();
+  if (kv) {
+    try {
+      const email = await kv.get<string>("content:email");
+      if (email) return email;
+    } catch {
+      // KV unavailable, fall through to env
+    }
+  }
+  return process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "jan@guthpictures.cz";
+}
+
+export async function setContactEmail(email: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) throw new Error("KV not configured");
+  await kv.set("content:email", email);
+}

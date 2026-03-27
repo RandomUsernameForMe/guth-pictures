@@ -12,10 +12,10 @@ type Props = {
 export function AnimatedSection({ children, className, delay = 0 }: Props) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ clipPath: "inset(0 0 100% 0)" }}
+      whileInView={{ clipPath: "inset(0 0 0% 0)" }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94], delay }}
       className={className}
     >
       {children}

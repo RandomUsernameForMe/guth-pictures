@@ -29,6 +29,8 @@ export function ContentEditor() {
   const [status, setStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
   const [images, setImages] = useState<SiteImages>({ hero: "", profile: "" });
   const [imgStatus, setImgStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
+  const [email, setEmail] = useState("");
+  const [emailStatus, setEmailStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
 
   useEffect(() => {
     async function load(url: string) {
@@ -42,9 +44,11 @@ export function ContentEditor() {
       load("/api/admin/content?locale=cs"),
       load("/api/admin/content?locale=en"),
       load("/api/admin/images"),
-    ]).then(([cs, en, imgs]) => {
+      load("/api/admin/email"),
+    ]).then(([cs, en, imgs, emailData]) => {
       if (cs) setData({ cs, en: en ?? emptyContent() });
       if (imgs) setImages(imgs);
+      if (emailData) setEmail(emailData.email ?? "");
     }).catch(() => {
       // fetch failed, state stays at empty defaults
     });
@@ -76,6 +80,26 @@ export function ContentEditor() {
     }
   }
 
+  async function handleEmailSave(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailStatus("saving");
+    try {
+      const res = await fetch("/api/admin/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setEmailStatus("ok");
+        setTimeout(() => setEmailStatus("idle"), 3000);
+      } else {
+        setEmailStatus("error");
+      }
+    } catch {
+      setEmailStatus("error");
+    }
+  }
+
   async function handleImagesSave(e: React.FormEvent) {
     e.preventDefault();
     setImgStatus("saving");
@@ -98,6 +122,31 @@ export function ContentEditor() {
 
   return (
     <div className="mt-12 space-y-16">
+
+      {/* Kontaktní email */}
+      <div>
+        <h2 className="text-xl font-semibold mb-6">Kontaktní email</h2>
+        <form onSubmit={handleEmailSave} className="space-y-4 max-w-2xl">
+          <div className="border border-white/10 p-6 space-y-4">
+            <Field
+              label="Email (zobrazuje se v patičce a slouží pro kontaktní formulář)"
+              value={email}
+              onChange={setEmail}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={emailStatus === "saving"}
+              className="px-6 py-2 bg-white text-black font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              {emailStatus === "saving" ? "Ukládám…" : "Uložit email"}
+            </button>
+            {emailStatus === "ok" && <span className="text-green-400 text-sm">Uloženo</span>}
+            {emailStatus === "error" && <span className="text-red-400 text-sm">Chyba při ukládání</span>}
+          </div>
+        </form>
+      </div>
 
       {/* Obrázky */}
       <div>

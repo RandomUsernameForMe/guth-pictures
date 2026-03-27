@@ -1,3 +1,11 @@
+## [2026-03-27] - feat: clip-path scroll animace, footer z hero obsahu, admin email
+
+- AnimatedSection: fade-in/slide nahrazen clip-path reveal (žádné prosvítání hero fotky)
+- Footer: title + subtitle ze stejného zdroje jako hero banner (přes props z layoutu)
+- Admin obsah: nová sekce pro úpravu kontaktního emailu
+- lib/content: getContactEmail / setContactEmail (KV + env fallback)
+- Nová API route /api/admin/email (GET + POST, validace formátu)
+
 ## [2026-03-27] - fix(carousel): plynulý loop + 3D coverflow efekt
 
 - Přepsáno z CSS animace na requestAnimationFrame + přímá DOM manipulace (bez React re-renderů)

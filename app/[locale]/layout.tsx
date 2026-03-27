@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
+import { getContent, getContactEmail } from "@/lib/content";
 import "../globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
@@ -37,8 +38,12 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  const messages = await getMessages();
-  const themeColors = await getThemeColors();
+  const [messages, themeColors, content, email] = await Promise.all([
+    getMessages(),
+    getThemeColors(),
+    getContent(locale),
+    getContactEmail(),
+  ]);
   const themeStyle = buildThemeStyle(themeColors);
 
   const jsonLd = {
@@ -64,7 +69,7 @@ export default async function LocaleLayout({
             <Nav />
             <div className="pt-16 min-h-screen flex flex-col">
               {children}
-              <Footer />
+              <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
             </div>
           </NextIntlClientProvider>
         </ThemeProvider>
