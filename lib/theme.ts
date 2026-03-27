@@ -1,5 +1,6 @@
 import "server-only";
 import { getKv } from "./kv";
+import type { ThemeColors } from "./theme-types";
 export type { ColorSet, ThemeColors } from "./theme-types";
 export { defaultColors } from "./theme-types";
 
