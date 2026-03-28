@@ -1,3 +1,8 @@
+## [2026-03-28] - fix: AnimatedSection sekce neviditelné — clipPath nahrazen opacity+y
+
+- clipPath: "inset(0 0 100% 0)" způsoboval neviditelnost sekcí (whileInView se nespustil)
+- Nahrazeno opacity: 0→1 + y: 32→0
+
 ## [2026-03-27] - feat: clip-path scroll animace, footer z hero obsahu, admin email
 
 - AnimatedSection: fade-in/slide nahrazen clip-path reveal (žádné prosvítání hero fotky)
