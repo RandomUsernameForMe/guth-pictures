@@ -19,9 +19,10 @@ export type ServiceItem = {
 type Props = {
   services: ServiceItem[];
   bookLabel: string;
+  selectLabel: string;
 };
 
-export function ServiceCards({ services, bookLabel }: Props) {
+export function ServiceCards({ services, bookLabel, selectLabel }: Props) {
   const [openKeys, setOpenKeys] = useState<Set<string>>(new Set());
 
   const toggle = (key: string) =>
@@ -95,6 +96,13 @@ export function ServiceCards({ services, bookLabel }: Props) {
                             </li>
                           ))}
                         </ul>
+                        <a
+                          href={`?package=${encodeURIComponent(pkg.name)}&service=${encodeURIComponent(service.title)}#kontakt`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-block mt-3 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] underline underline-offset-2 transition-colors"
+                        >
+                          {selectLabel}<span aria-hidden="true"> →</span>
+                        </a>
                       </div>
                     ))}
                   </div>

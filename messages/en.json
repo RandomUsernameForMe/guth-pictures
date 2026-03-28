@@ -36,6 +36,7 @@
     "zavrit": "Close",
     "portfolioBtn": "Portfolio",
     "rezervovat": "Book a session",
+    "vybrat": "Select package",
     "portraits": {
       "title": "Portraits",
       "desc": "Individual and group portraits. Studio, outdoors or in your own environment — focused on natural expression."
@@ -82,6 +83,7 @@
     "sending": "Sending…",
     "success": "Message sent. I'll get back to you as soon as possible.",
     "error": "Something went wrong. Please try again or email <link>{email}</link>.",
-    "notConfigured": "The contact form is not available at the moment."
+    "notConfigured": "The contact form is not available at the moment.",
+    "packagePreset": "I'm interested in the {package} package ({service}). "
   }
 }

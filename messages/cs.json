@@ -36,6 +36,7 @@
     "zavrit": "Zavřít",
     "portfolioBtn": "Portfolio",
     "rezervovat": "Rezervovat termín",
+    "vybrat": "Vybrat balíček",
     "portraits": {
       "title": "Portréty",
       "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."
@@ -82,6 +83,7 @@
     "sending": "Odesílám…",
     "success": "Zpráva odeslána. Ozvu se co nejdříve.",
     "error": "Něco se pokazilo. Zkuste to znovu nebo napište přímo na <link>{email}</link>.",
-    "notConfigured": "Kontaktní formulář není momentálně dostupný."
+    "notConfigured": "Kontaktní formulář není momentálně dostupný.",
+    "packagePreset": "Mám zájem o balíček {package} ({service}). "
   }
 }

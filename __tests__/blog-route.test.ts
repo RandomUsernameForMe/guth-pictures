@@ -13,7 +13,16 @@ import { saveBlogPost } from "@/lib/blog";
 import { GET, POST } from "@/app/api/admin/blog/route";
 
 const VALID_UUID = "11111111-1111-1111-1111-111111111111";
-const VALID_POST = {
+const VALID_POST: {
+  id: string;
+  slug: string;
+  publishedAt: string;
+  updatedAt: string;
+  published: boolean;
+  cs: { title: string; excerpt: string; content: string };
+  en: { title: string; excerpt: string; content: string };
+  coverImage?: string;
+} = {
   id: VALID_UUID,
   slug: "test-post",
   publishedAt: "2024-01-01T00:00:00Z",

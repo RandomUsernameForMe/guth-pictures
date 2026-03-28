@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { contactEmail } from "@/lib/config";
 
@@ -9,6 +10,12 @@ type Status = "idle" | "sending" | "success" | "error";
 export function ContactForm() {
   const t = useTranslations("kontakt");
   const [status, setStatus] = useState<Status>("idle");
+  const searchParams = useSearchParams();
+  const packageName = searchParams.get("package");
+  const serviceName = searchParams.get("service");
+  const defaultMessage = packageName && serviceName
+    ? t("packagePreset", { package: packageName, service: serviceName })
+    : undefined;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -74,6 +81,7 @@ export function ContactForm() {
           name="message"
           required
           rows={5}
+          defaultValue={defaultMessage}
           placeholder={t("messagePlaceholder")}
           className="w-full bg-[var(--color-bg-elevated)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-ghost)] px-4 py-3 focus:outline-none focus:border-[var(--color-text-muted)] focus:ring-1 focus:ring-[var(--color-border)] transition-colors resize-none"
         />

@@ -24,7 +24,7 @@ import { POST } from "@/app/api/admin/upload/route";
 class TestFile extends File {
   private readonly _bytes: Uint8Array;
   constructor(bytes: Uint8Array) {
-    super([bytes], "test.bin", { type: "application/octet-stream" });
+    super([bytes as Uint8Array<ArrayBuffer>], "test.bin", { type: "application/octet-stream" });
     this._bytes = bytes;
   }
   async arrayBuffer(): Promise<ArrayBuffer> {

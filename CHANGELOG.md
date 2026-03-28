@@ -1,3 +1,10 @@
+## [2026-03-29] - feat: výběr balíčku předvyplní kontaktní formulář
+
+- Každý balíček v ServiceCards má tlačítko "Vybrat balíček →" s URL params `?package=&service=`
+- ContactForm čte params přes useSearchParams a předvyplní textarea
+- Přidány překlady `vybrat` a `packagePreset` (cs/en)
+- Opraveny TS chyby v testech (blog-route, upload-route)
+
 ## [2026-03-28] - fix: AnimatedSection sekce neviditelné — clipPath nahrazen opacity+y
 
 - clipPath: "inset(0 0 100% 0)" způsoboval neviditelnost sekcí (whileInView se nespustil)
