@@ -87,12 +87,7 @@ export function Nav() {
             style={scrolled ? scrolledStyle : !isHome ? {
               background: "var(--nav-bg-subpage)",
               borderBottom: "1px solid var(--nav-border)",
-            } : {
-              // Hero nav — always light text regardless of theme (hero is always dark)
-              ["--color-text" as string]: "#F2F0EB",
-              ["--color-text-muted" as string]: "#9B9899",
-              ["--color-text-ghost" as string]: "#5C5A5E",
-            }}
+            } : scrolledStyle}
           >
             <nav className="flex items-center justify-between px-6 h-16">
               {/* Logo */}

@@ -1,3 +1,5 @@
+## [2026-03-29] - fix(Nav): navbar nahoře má stejné pozadí jako při scrollování
+
 ## [2026-03-29] - feat: výběr balíčku předvyplní kontaktní formulář
 
 - Každý balíček v ServiceCards má tlačítko "Vybrat balíček →" s URL params `?package=&service=`
