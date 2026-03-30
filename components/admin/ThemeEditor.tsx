@@ -68,14 +68,19 @@ export function ThemeEditor() {
   }
 
   async function reset() {
-    await fetch("/api/admin/theme", { method: "DELETE" });
-    setColors(defaultColors);
-    // Clear inline overrides
-    for (const cssVar of Object.values(CSS_VAR_MAP)) {
-      document.documentElement.style.removeProperty(cssVar);
+    try {
+      const r = await fetch("/api/admin/theme", { method: "DELETE" });
+      if (!r.ok) throw new Error();
+      setColors(defaultColors);
+      // Clear inline overrides
+      for (const cssVar of Object.values(CSS_VAR_MAP)) {
+        document.documentElement.style.removeProperty(cssVar);
+      }
+      setStatus("ok");
+      setTimeout(() => setStatus("idle"), 2000);
+    } catch {
+      setStatus("error");
     }
-    setStatus("ok");
-    setTimeout(() => setStatus("idle"), 2000);
   }
 
   return (
