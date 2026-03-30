@@ -1,3 +1,8 @@
+## [2026-03-30] - feat(vop): stránka obchodních podmínek s českou a anglickou verzí
+
+- Nová stránka `/vop` — CS: plné VOP (právní dokument), EN: neformální collaboration guidelines
+- Odkaz "Obchodní podmínky" / "Terms & Guidelines" přidán do footeru
+
 ## [2026-03-29] - fix(Nav): navbar nahoře má stejné pozadí jako při scrollování
 
 ## [2026-03-29] - feat: výběr balíčku předvyplní kontaktní formulář
