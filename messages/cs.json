@@ -15,8 +15,8 @@
   "home": {
     "title": "Guth Pictures",
     "subtitle": "Portréty, eventy a larpy.",
-    "cta": "Moje služby",
-    "ctaContact": "Moje tvorba",
+    "cta": "Chci fotky",
+    "ctaContact": "Portfolio",
     "selectedWorkTitle": "Vybraná práce",
     "selectedWorkLink": "Celé portfolio"
   },
@@ -37,7 +37,7 @@
     "zavrit": "Zavřít",
     "portfolioBtn": "Portfolio",
     "rezervovat": "Rezervovat termín",
-    "vybrat": "Vybrat balíček",
+    "vybrat": "Mám zájem",
     "portraits": {
       "title": "Portréty",
       "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."

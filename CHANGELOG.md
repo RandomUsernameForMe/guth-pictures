@@ -1,3 +1,8 @@
+## [2026-04-03] - fix(sluzby): úprava buttonů v sekci služby
+
+- Odstraněn button "Rezervovat termín" ze spodní části rozevřeného balíčku
+- Odkaz "Vybrat balíček" nahrazen buttonem "Mám zájem" / "I'm interested" (stejná funkcionalita)
+
 ## [2026-03-30] - feat(vop): stránka obchodních podmínek s českou a anglickou verzí
 
 - Nová stránka `/vop` — CS: plné VOP (právní dokument), EN: neformální collaboration guidelines

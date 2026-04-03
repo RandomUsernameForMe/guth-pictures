@@ -18,11 +18,10 @@ export type ServiceItem = {
 
 type Props = {
   services: ServiceItem[];
-  bookLabel: string;
   selectLabel: string;
 };
 
-export function ServiceCards({ services, bookLabel, selectLabel }: Props) {
+export function ServiceCards({ services, selectLabel }: Props) {
   const [openKeys, setOpenKeys] = useState<Set<string>>(new Set());
 
   const toggle = (key: string) =>
@@ -99,7 +98,7 @@ export function ServiceCards({ services, bookLabel, selectLabel }: Props) {
                         <a
                           href={`?package=${encodeURIComponent(pkg.name)}&service=${encodeURIComponent(service.title)}#kontakt`}
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-block mt-3 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] underline underline-offset-2 transition-colors"
+                          className="inline-block mt-3 px-3 py-1.5 border border-[var(--color-border-sub)] text-xs hover:bg-[var(--color-bg-overlay)] transition-colors"
                         >
                           {selectLabel}<span aria-hidden="true"> →</span>
                         </a>
@@ -111,13 +110,6 @@ export function ServiceCards({ services, bookLabel, selectLabel }: Props) {
                     <p className="mt-4 text-xs text-[var(--color-text-ghost)]">{service.note}</p>
                   )}
 
-                  <a
-                    href="#kontakt"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block mt-5 px-4 py-2 border border-[var(--color-border-sub)] text-xs hover:bg-[var(--color-bg-overlay)] transition-colors"
-                  >
-                    {bookLabel}<span aria-hidden="true"> →</span>
-                  </a>
                 </motion.div>
               )}
             </AnimatePresence>
