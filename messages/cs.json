@@ -9,13 +9,13 @@
     "vop": "Obchodní podmínky"
   },
   "meta": {
-    "home":      { "title": "Guth Pictures — Fotograf Praha", "description": "Profesionální fotograf Praha. Portréty, svatby a larpy. Reportážní styl, přirozené okamžiky." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, svatební fotografie a larpové akce." }
+    "home":      { "title": "Guth Pictures — Fotograf", "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty." },
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, eventy a larpy." }
   },
   "home": {
     "title": "Guth Pictures",
-    "subtitle": "Portréty, svatby a larpy. Praha a okolí.",
-    "cta": "Chci fotky",
+    "subtitle": "Portréty, eventy a larpy.",
+    "cta": "Moje služby",
     "ctaContact": "Moje tvorba",
     "selectedWorkTitle": "Vybraná práce",
     "selectedWorkLink": "Celé portfolio"
