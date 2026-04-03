@@ -1,3 +1,10 @@
+## [2026-04-03] - feat(ui): mouse-reactive a ambient glows na homepage
+
+- Přidána komponenta MouseGlow — cursor-following glow (2 vrstvy, spring animace)
+- 5 ambient glow bodů reagujících na myš útěkem, návrat na domovskou pozici
+- Barva glow odvozena z `--color-accent` (nastavitelné přes admin theme editor)
+- prefers-reduced-motion podpora
+
 ## [2026-04-03] - fix(sluzby): úprava buttonů v sekci služby
 
 - Odstraněn button "Rezervovat termín" ze spodní části rozevřeného balíčku
