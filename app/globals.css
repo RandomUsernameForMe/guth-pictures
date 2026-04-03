@@ -88,10 +88,7 @@
 
 /* ── Ambient accent glow — visible through hero bottom-fade ── */
 body {
-  background-image: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(200, 169, 110, 0.07) 0%, transparent 60%);
-}
-.light body {
-  background-image: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(139, 94, 60, 0.06) 0%, transparent 60%);
+  background-image: radial-gradient(ellipse 80% 55% at 50% 0%, color-mix(in srgb, var(--color-accent) 7%, transparent) 0%, transparent 60%);
 }
 
 /* ── Film grain — SVG feTurbulence, static, analog texture ── */

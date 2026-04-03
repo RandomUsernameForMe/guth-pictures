@@ -8,6 +8,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
+import { MouseGlow } from "@/components/MouseGlow";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
 import { getContent, getContactEmail } from "@/lib/content";
@@ -66,6 +67,7 @@ export default async function LocaleLayout({
       <body className={`${geist.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
+            <MouseGlow />
             <Nav />
             <div className="pt-16 min-h-screen flex flex-col">
               {children}
