@@ -1,3 +1,10 @@
+## [2026-04-03] - feat(ui): ambient glows scrollují se stránkou, cursor glow odstraněn
+
+- Ambient glows přesunuty z fixed na absolute — scrollují se stránkou
+- Mouse pozice převedena do document coordinates (clientY + scrollY)
+- Cursor-following glow odstraněn
+- Počet ambient glow bodů navýšen na 8
+
 ## [2026-04-03] - feat(ui): mouse-reactive a ambient glows na homepage
 
 - Přidána komponenta MouseGlow — cursor-following glow (2 vrstvy, spring animace)

@@ -14,11 +14,14 @@ const FLEE_THRESHOLD = 350;
 const FLEE_REPULSION = 200;
 
 const AMBIENT_GLOWS = [
-  { id: 1, homeXPct: 0.15, homeYPct: 0.25, size: 500, opacity: 4 },
-  { id: 2, homeXPct: 0.78, homeYPct: 0.12, size: 420, opacity: 3 },
-  { id: 3, homeXPct: 0.88, homeYPct: 0.68, size: 380, opacity: 4 },
-  { id: 4, homeXPct: 0.22, homeYPct: 0.82, size: 450, opacity: 3 },
-  { id: 5, homeXPct: 0.55, homeYPct: 0.48, size: 350, opacity: 2 },
+  { id: 1, homeXPct: 0.12, homeYPct: 0.08, size: 520, opacity: 4 },
+  { id: 2, homeXPct: 0.80, homeYPct: 0.14, size: 440, opacity: 3 },
+  { id: 3, homeXPct: 0.90, homeYPct: 0.32, size: 380, opacity: 4 },
+  { id: 4, homeXPct: 0.18, homeYPct: 0.45, size: 460, opacity: 3 },
+  { id: 5, homeXPct: 0.60, homeYPct: 0.52, size: 350, opacity: 2 },
+  { id: 6, homeXPct: 0.85, homeYPct: 0.68, size: 400, opacity: 3 },
+  { id: 7, homeXPct: 0.25, homeYPct: 0.75, size: 480, opacity: 4 },
+  { id: 8, homeXPct: 0.50, homeYPct: 0.90, size: 420, opacity: 3 },
 ];
 
 type FleeProps = {
@@ -41,7 +44,7 @@ function FleeingGlow({ homeXPct, homeYPct, size, opacity, mouseX, mouseY }: Flee
   useEffect(() => {
     homeRef.current = {
       x: window.innerWidth * homeXPct,
-      y: window.innerHeight * homeYPct,
+      y: document.documentElement.scrollHeight * homeYPct,
       ready: true,
     };
     targetX.set(homeRef.current.x);
@@ -93,20 +96,15 @@ function FleeingGlow({ homeXPct, homeYPct, size, opacity, mouseX, mouseY }: Flee
 export function MouseGlow() {
   const prefersReduced = useReducedMotion();
 
+  // Mouse position in document coordinates (clientY + scrollY)
   const rawX = useMotionValue(-1000);
   const rawY = useMotionValue(-1000);
-
-  const x1 = useSpring(rawX, { damping: 25, stiffness: 150 });
-  const y1 = useSpring(rawY, { damping: 25, stiffness: 150 });
-
-  const x2 = useSpring(rawX, { damping: 45, stiffness: 80 });
-  const y2 = useSpring(rawY, { damping: 45, stiffness: 80 });
 
   useEffect(() => {
     if (prefersReduced) return;
     const onMove = (e: MouseEvent) => {
-      rawX.set(e.clientX);
-      rawY.set(e.clientY);
+      rawX.set(e.clientX + window.scrollX);
+      rawY.set(e.clientY + window.scrollY);
     };
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
@@ -115,35 +113,10 @@ export function MouseGlow() {
   if (prefersReduced) return null;
 
   return (
-    <>
-      {/* Ambient fleeing glows — za vším obsahem */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        {AMBIENT_GLOWS.map((g) => (
-          <FleeingGlow key={g.id} {...g} mouseX={rawX} mouseY={rawY} />
-        ))}
-      </div>
-
-      {/* Kurzor-following glow */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <motion.div
-          style={{ x: x1, y: y1, translateX: "-50%", translateY: "-50%", willChange: "transform" }}
-          className="absolute w-[600px] h-[600px]"
-        >
-          <div
-            className="w-full h-full rounded-full"
-            style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 7%, transparent) 0%, transparent 70%)" }}
-          />
-        </motion.div>
-        <motion.div
-          style={{ x: x2, y: y2, translateX: "calc(-50% + 80px)", translateY: "calc(-50% + 60px)", willChange: "transform" }}
-          className="absolute w-[300px] h-[300px]"
-        >
-          <div
-            className="w-full h-full rounded-full"
-            style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 3%, transparent) 0%, transparent 70%)" }}
-          />
-        </motion.div>
-      </div>
-    </>
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+      {AMBIENT_GLOWS.map((g) => (
+        <FleeingGlow key={g.id} {...g} mouseX={rawX} mouseY={rawY} />
+      ))}
+    </div>
   );
 }

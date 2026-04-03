@@ -67,9 +67,9 @@ export default async function LocaleLayout({
       <body className={`${geist.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
-            <MouseGlow />
             <Nav />
-            <div className="pt-16 min-h-screen flex flex-col">
+            <div className="relative pt-16 min-h-screen flex flex-col">
+              <MouseGlow />
               {children}
               <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
             </div>
