@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -10,19 +10,22 @@ import {
   type MotionValue,
 } from "framer-motion";
 
-const FLEE_THRESHOLD = 350;
-const FLEE_REPULSION = 200;
+const FLEE_THRESHOLD = 500;
+const FLEE_REPULSION = 360;
 
-const AMBIENT_GLOWS = [
-  { id: 1, homeXPct: 0.12, homeYPct: 0.08, size: 520, opacity: 4 },
-  { id: 2, homeXPct: 0.80, homeYPct: 0.14, size: 440, opacity: 3 },
-  { id: 3, homeXPct: 0.90, homeYPct: 0.32, size: 380, opacity: 4 },
-  { id: 4, homeXPct: 0.18, homeYPct: 0.45, size: 460, opacity: 3 },
-  { id: 5, homeXPct: 0.60, homeYPct: 0.52, size: 350, opacity: 2 },
-  { id: 6, homeXPct: 0.85, homeYPct: 0.68, size: 400, opacity: 3 },
-  { id: 7, homeXPct: 0.25, homeYPct: 0.75, size: 480, opacity: 4 },
-  { id: 8, homeXPct: 0.50, homeYPct: 0.90, size: 420, opacity: 3 },
-];
+type GlowConfig = { id: number; homeXPct: number; homeYPct: number; size: number; opacity: number };
+
+function generateGlows(count: number): GlowConfig[] {
+  const sizes = [600, 680, 560, 720, 640, 590, 660, 610];
+  const opacities = [5, 4, 6, 4, 5, 6, 4, 5];
+  return Array.from({ length: count }, (_, i) => ({
+    id: i + 1,
+    homeXPct: 0.05 + Math.random() * 0.90,
+    homeYPct: 0.05 + Math.random() * 0.90,
+    size: sizes[i % sizes.length],
+    opacity: opacities[i % opacities.length],
+  }));
+}
 
 type FleeProps = {
   homeXPct: number;
@@ -38,8 +41,8 @@ function FleeingGlow({ homeXPct, homeYPct, size, opacity, mouseX, mouseY }: Flee
 
   const targetX = useMotionValue(0);
   const targetY = useMotionValue(0);
-  const springX = useSpring(targetX, { damping: 35, stiffness: 45 });
-  const springY = useSpring(targetY, { damping: 35, stiffness: 45 });
+  const springX = useSpring(targetX, { damping: 50, stiffness: 22 });
+  const springY = useSpring(targetY, { damping: 50, stiffness: 22 });
 
   useEffect(() => {
     homeRef.current = {
@@ -95,10 +98,14 @@ function FleeingGlow({ homeXPct, homeYPct, size, opacity, mouseX, mouseY }: Flee
 
 export function MouseGlow() {
   const prefersReduced = useReducedMotion();
+  const [glows, setGlows] = useState<GlowConfig[]>([]);
 
-  // Mouse position in document coordinates (clientY + scrollY)
-  const rawX = useMotionValue(-1000);
-  const rawY = useMotionValue(-1000);
+  const rawX = useMotionValue(-9999);
+  const rawY = useMotionValue(-9999);
+
+  useEffect(() => {
+    setGlows(generateGlows(8));
+  }, []);
 
   useEffect(() => {
     if (prefersReduced) return;
@@ -114,7 +121,7 @@ export function MouseGlow() {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-      {AMBIENT_GLOWS.map((g) => (
+      {glows.map((g) => (
         <FleeingGlow key={g.id} {...g} mouseX={rawX} mouseY={rawY} />
       ))}
     </div>
