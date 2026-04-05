@@ -1,3 +1,8 @@
+## [2026-04-05] - fix(o-mne): odebrat WordReveal animaci, přejmenovat CTA na "Portfolio"
+
+- Bio v sekci "O mně" zobrazeno staticky místo postupného odhalování slov
+- cs.json: CTA "Moje tvorba" → "Portfolio"
+
 ## [2026-04-03] - feat(ui): ambient glows scrollují se stránkou, cursor glow odstraněn
 
 - Ambient glows přesunuty z fixed na absolute — scrollují se stránkou
