@@ -89,7 +89,8 @@ function FleeingGlow({ homeXPct, homeYPct, size, opacity, mouseX, mouseY }: Flee
       <div
         className="w-full h-full rounded-full"
         style={{
-          background: `radial-gradient(circle, color-mix(in srgb, var(--color-accent) ${opacity}%, transparent) 0%, transparent 70%)`,
+          background: `radial-gradient(circle, transparent 0%, color-mix(in srgb, var(--color-accent) ${opacity}%, transparent) 30%, transparent 100%)`,
+          filter: "blur(140px)",
         }}
       />
     </motion.div>

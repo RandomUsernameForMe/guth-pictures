@@ -1,3 +1,7 @@
+## [2026-04-05] - fix(ui): ambient glows bez viditelných kruhů
+
+- blur 140px + gradient s peakem na 30% místo ostrého středu
+
 ## [2026-04-05] - fix(o-mne): odebrat WordReveal animaci, přejmenovat CTA na "Portfolio"
 
 - Bio v sekci "O mně" zobrazeno staticky místo postupného odhalování slov
