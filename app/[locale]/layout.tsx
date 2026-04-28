@@ -5,6 +5,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
+import { AmbientGlow } from "@/components/AmbientGlow";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
@@ -68,6 +69,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <Nav />
             <div className="relative pt-16 min-h-screen flex flex-col">
+              <AmbientGlow />
               {children}
               <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
             </div>

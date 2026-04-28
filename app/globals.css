@@ -279,6 +279,61 @@ body::after {
 .blog-content img { border-radius: 8px; margin: 1.5rem 0; max-width: 100%; height: auto; }
 .blog-content hr { border-color: var(--color-border); margin: 2rem 0; }
 
+/* ── Ambient glow ──────────────────────────────────────────────── */
+@keyframes ag-breathe {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.ambient-glow-root {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: ag-breathe var(--ag-dur, 18s) ease-in-out infinite;
+  animation-delay: var(--ag-delay, 0s);
+  will-change: opacity;
+}
+
+/* top-left — teplý brass, hlavní */
+.ag-1 {
+  width: 700px; height: 700px;
+  top: -180px; left: -160px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 7%, transparent) 0%, transparent 70%);
+  --ag-dur: 18s;
+  --ag-delay: 0s;
+}
+
+/* bottom-right — tlumenější, chladnější */
+.ag-2 {
+  width: 600px; height: 600px;
+  bottom: -140px; right: -120px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 4%, transparent) 0%, transparent 70%);
+  --ag-dur: 22s;
+  --ag-delay: -7s;
+}
+
+/* střed nahoře — velmi jemný */
+.ag-3 {
+  width: 800px; height: 400px;
+  top: 30%; left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--color-accent) 3%, transparent) 0%, transparent 70%);
+  --ag-dur: 26s;
+  --ag-delay: -13s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow { animation: none; }
+}
+
 /* ── Light Tester ──────────────────────────────────────────────── */
 .lt-page {
   height: calc(100svh - 64px);
