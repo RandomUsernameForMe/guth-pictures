@@ -230,15 +230,9 @@ export function Inspector({
         <div className="ctrl">
           <div className="ctrl-row"><span>Model hlavy</span></div>
           <div className="seg-group">
-            {(["clay", "realistic", "wireframe"] as const).map((v) => (
-              <button
-                key={v}
-                className={`seg-btn ${tweaks.headStyle === v ? "seg-btn-active" : ""}`}
-                onClick={() => onTweak("headStyle", v)}
-              >
-                {v === "clay" ? "Clay" : v === "realistic" ? "Real" : "Wire"}
-              </button>
-            ))}
+            <button className="seg-btn seg-btn-active">
+              Real
+            </button>
           </div>
         </div>
 

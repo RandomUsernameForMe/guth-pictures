@@ -68,7 +68,7 @@ export function LightTesterApp() {
   const [cameraPos, setCameraPos] = useState({ x: 0, z: 1.6 });
   const [savedSetups, setSavedSetups] = useState<SavedSetup[]>(() => loadSaved());
   const [tweaks, setTweaks] = useState<Tweaks>({
-    headStyle: "clay",
+    headStyle: "realistic",
     focal: 50,
     backdrop: "#3A3A3F",
   });
