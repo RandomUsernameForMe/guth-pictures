@@ -21,7 +21,7 @@ export interface Light {
 }
 
 export interface Tweaks {
-  headStyle: 'realistic';
+  headStyle: 'realistic' | 'clay';
   focal: number;
   backdrop: string;
 }

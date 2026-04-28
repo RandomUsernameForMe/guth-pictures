@@ -11,9 +11,11 @@ const SUBJECT_HEIGHT = 1.55;
 const BASE_FOCAL = 50;
 const BASE_DISTANCE = 1.6;
 
-function buildHead(_style: string): THREE.Group {
+function buildHead(style: string): THREE.Group {
   const group = new THREE.Group();
-  const mat = new THREE.MeshStandardMaterial({ color: 0xcba88a, roughness: 0.55, metalness: 0.0 });
+  const mat = style === "clay"
+    ? new THREE.MeshStandardMaterial({ color: 0xd8d2c4, roughness: 0.85, metalness: 0.0 })
+    : new THREE.MeshStandardMaterial({ color: 0xcba88a, roughness: 0.55, metalness: 0.0 });
 
   const skullGeo = new THREE.SphereGeometry(0.18, 64, 64);
   skullGeo.scale(1.0, 1.18, 1.05);
@@ -56,7 +58,9 @@ function buildHead(_style: string): THREE.Group {
     group.add(iris);
   });
 
-  const lipMat = new THREE.MeshStandardMaterial({ color: 0xa88070, roughness: 0.7 });
+  const lipMat = style === "clay"
+    ? mat
+    : new THREE.MeshStandardMaterial({ color: 0xa88070, roughness: 0.7 });
   const lipGeo = new THREE.SphereGeometry(0.04, 24, 16);
   lipGeo.scale(1.4, 0.35, 0.4);
   const lips = new THREE.Mesh(lipGeo, lipMat);
