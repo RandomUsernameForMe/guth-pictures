@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import type { Light, LightType } from "./types";
 import { TYPE_INFO } from "./types";
+import { lightColorCSS } from "./colorUtils";
 
 const FLOOR_W = 6;
 const SUBJECT_Y = 1.55;
@@ -151,7 +152,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
           const angle = Math.atan2(dy, dx) * (180 / Math.PI);
           const spreadDeg = 25 + (L.size || 50) * 0.25;
           const reach = Math.min(dist * 1.4 + size.w * 0.05, size.w * 0.7);
-          const color = TYPE_INFO[L.type]?.color ?? "#C8A96E";
+          const color = lightColorCSS(L.kelvin, L.gel);
           const opacity = 0.10 + (L.power / 100) * 0.20;
           return (
             <g key={`cone-${L.id}`} transform={`translate(${tx} ${ty}) rotate(${angle})`} style={{ color, opacity, pointerEvents: "none" }}>
@@ -292,6 +293,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
         const isOff = !L.on;
         const isSoftbox = L.type === "softbox";
         const hRingR = 10 + L.height * 6;
+        const emitColor = isOff ? "rgba(255,255,255,0.30)" : lightColorCSS(L.kelvin, L.gel);
 
         return (
           <div key={L.id} style={{
@@ -351,12 +353,12 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
                 width: isSoftbox ? 60 : 38,
                 height: 38,
                 borderRadius: isSoftbox ? 4 : "50%",
-                background: isOff ? "rgba(255,255,255,0.04)" : `color-mix(in srgb, ${info.color} 20%, transparent)`,
-                border: `1.5px solid ${isOff ? "rgba(255,255,255,0.30)" : info.color}`,
+                background: isOff ? "rgba(255,255,255,0.04)" : `color-mix(in srgb, ${emitColor} 20%, transparent)`,
+                border: `1.5px solid ${emitColor}`,
                 boxShadow: isSelected
-                  ? `0 0 0 3px rgba(255,255,255,0.10), 0 0 24px ${info.color}`
-                  : isOff ? "none" : `0 0 16px color-mix(in srgb, ${info.color} 35%, transparent)`,
-                color: isOff ? "rgba(242,240,235,0.40)" : info.color,
+                  ? `0 0 0 3px rgba(255,255,255,0.10), 0 0 24px ${emitColor}`
+                  : isOff ? "none" : `0 0 16px color-mix(in srgb, ${emitColor} 35%, transparent)`,
+                color: isOff ? "rgba(242,240,235,0.40)" : emitColor,
                 fontFamily: "Geist Mono, monospace",
                 fontSize: 13,
                 fontWeight: 600,

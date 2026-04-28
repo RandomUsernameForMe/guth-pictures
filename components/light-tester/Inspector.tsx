@@ -176,21 +176,38 @@ export function Inspector({
           <div className="ctrl">
             <div className="ctrl-row">
               <span>Gel · barva</span>
-              <span className="ctrl-val">{(GEL_SWATCHES.find((g) => g.hex === sel.gel) ?? GEL_SWATCHES[0]).label}</span>
+              <span className="ctrl-val">{sel.gel === "none" ? "Bez gelu" : sel.gel}</span>
             </div>
-            <div className="swatches">
-              {GEL_SWATCHES.map((g) => (
+            <div className="gel-row">
+              {/* Quick presets */}
+              {GEL_SWATCHES.filter((g) => g.id !== "none").map((g) => (
                 <span
                   key={g.id}
-                  className={`swatch ${(sel.gel || "none") === g.hex ? "swatch-active" : ""}`}
-                  style={{
-                    background: g.hex === "none" ? "transparent" : g.css,
-                    borderStyle: g.hex === "none" ? "dashed" : "solid",
-                  }}
+                  className={`swatch ${sel.gel === g.hex ? "swatch-active" : ""}`}
+                  style={{ background: g.css }}
                   title={g.label}
                   onClick={() => onUpdate(sel.id, { gel: g.hex })}
                 />
               ))}
+              {/* Custom color picker */}
+              <label className="gel-picker-wrap" title="Vlastní barva">
+                <input
+                  type="color"
+                  className="gel-picker"
+                  value={sel.gel === "none" ? "#ffffff" : sel.gel}
+                  onChange={(e) => onUpdate(sel.id, { gel: e.target.value })}
+                />
+                <span className="gel-picker-icon">+</span>
+              </label>
+              {/* None */}
+              <span
+                className={`swatch ${sel.gel === "none" ? "swatch-active" : ""}`}
+                style={{ background: "transparent", borderStyle: "dashed" }}
+                title="Bez gelu"
+                onClick={() => onUpdate(sel.id, { gel: "none" })}
+              >
+                <span style={{ fontSize: 10, color: "var(--color-text-ghost)", lineHeight: 1 }}>∅</span>
+              </span>
             </div>
           </div>
 

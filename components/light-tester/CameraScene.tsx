@@ -4,33 +4,12 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { kelvinToRGB, mixGel } from "./colorUtils";
 import type { Light, Tweaks } from "./types";
 
 const SUBJECT_HEIGHT = 1.55;
 const BASE_FOCAL = 50;
 const BASE_DISTANCE = 1.6;
-
-function kelvinToRGB(k: number): [number, number, number] {
-  const t = k / 100;
-  let r: number, g: number, b: number;
-  if (t <= 66) {
-    r = 255;
-    g = 99.4708025861 * Math.log(t) - 161.1195681661;
-    b = t <= 19 ? 0 : 138.5177312231 * Math.log(t - 10) - 305.0447927307;
-  } else {
-    r = 329.698727446 * Math.pow(t - 60, -0.1332047592);
-    g = 288.1221695283 * Math.pow(t - 60, -0.0755148492);
-    b = 255;
-  }
-  const clamp = (v: number) => Math.max(0, Math.min(255, v)) / 255;
-  return [clamp(r), clamp(g), clamp(b)];
-}
-
-function mixGel(kelvinRGB: [number, number, number], gelHex: string): [number, number, number] {
-  if (!gelHex || gelHex === "none") return kelvinRGB;
-  const c = new THREE.Color(gelHex);
-  return [kelvinRGB[0] * c.r, kelvinRGB[1] * c.g, kelvinRGB[2] * c.b];
-}
 
 function buildHead(style: string): THREE.Group {
   const group = new THREE.Group();
