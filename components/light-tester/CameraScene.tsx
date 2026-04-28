@@ -164,8 +164,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     controls.target.set(0, SUBJECT_HEIGHT, 0);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    controls.minDistance = 0.4;
-    controls.maxDistance = 6;
+    controls.enableZoom = false;
     // Don't let camera go underground
     controls.maxPolarAngle = Math.PI * 0.72;
     controls.update();
