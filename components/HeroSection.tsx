@@ -46,24 +46,34 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
         <div className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
-      {/* Overlay — top gradient for nav readability */}
+      {/* Filmic overlay — cool-warm grade, multiply blend */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(180deg, rgba(10,20,40,0.18) 0%, rgba(0,0,0,0) 40%, rgba(90,48,25,0.10) 100%)",
+          mixBlendMode: "multiply",
+          zIndex: 1,
+        }}
+      />
+      {/* Top scrim — nav legibility */}
       <div
         className="absolute inset-x-0 top-0 h-40 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, var(--hero-scrim-top) 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(to bottom, var(--hero-scrim-top) 0%, transparent 100%)", zIndex: 2 }}
       />
-      {/* Overlay — bottom gradient */}
+      {/* Bottom fade — merges into page */}
       <div
         className="absolute inset-x-0 bottom-0 h-[60%] pointer-events-none"
-        style={{ background: "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(to top, var(--color-bg) 0%, transparent 100%)", zIndex: 2 }}
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full">
+      <div className="relative max-w-6xl mx-auto w-full" style={{ zIndex: 10 }}>
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9 }}
-          className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-none text-[var(--color-text)]"
+          className="font-bold tracking-tight leading-none text-[var(--color-text)]"
+          style={{ fontSize: "clamp(60px, 10vw, 128px)" }}
         >
           {title}
         </motion.h1>
@@ -101,6 +111,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        style={{ zIndex: 10 }}
         animate={scrolled ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.3 }}
       >

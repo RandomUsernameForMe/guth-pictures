@@ -17,7 +17,7 @@ export function Footer({ title, subtitle, email }: Props) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           {/* Brand + tagline */}
           <div>
-            <Link href="/" className="text-lg font-semibold tracking-wide text-[var(--color-text)] hover:text-[var(--color-text-muted)] transition-colors">
+            <Link href="/" className="text-lg font-semibold tracking-widest uppercase text-[var(--color-text)] hover:text-[var(--color-text-muted)] transition-colors">
               {title}
             </Link>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">{subtitle}</p>

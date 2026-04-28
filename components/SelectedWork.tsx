@@ -93,7 +93,7 @@ export function SelectedWork({ photos, locale, title, linkLabel }: Props) {
       <section className="py-20" style={{ backgroundColor: "var(--color-bg)" }}>
         {/* Header */}
         <div className="px-6 max-w-6xl mx-auto flex items-end justify-between mb-10">
-          <h2 className="text-4xl font-bold text-[var(--color-text)]">{title}</h2>
+          <h2 className="text-4xl font-bold tracking-tight text-[var(--color-text)]">{title}</h2>
           <Link
             href="/portfolio"
             className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors tracking-wide pb-1"

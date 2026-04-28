@@ -44,7 +44,16 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div role="alert" aria-live="polite" className="bg-green-950/30 border border-green-900/50 text-green-400 p-4">
+      <div
+        role="alert"
+        aria-live="polite"
+        className="p-4"
+        style={{
+          background: "var(--color-success-bg)",
+          border: "1px solid var(--color-success-border)",
+          color: "var(--color-success-fg)",
+        }}
+      >
         {t("success")}
       </div>
     );
@@ -87,11 +96,20 @@ export function ContactForm() {
         />
       </div>
       {status === "error" && (
-        <div role="alert" aria-live="polite" className="bg-red-950/30 border border-red-900/50 text-red-400 p-4 text-sm">
+        <div
+          role="alert"
+          aria-live="polite"
+          className="p-4 text-sm"
+          style={{
+            background: "var(--color-error-bg)",
+            border: "1px solid var(--color-error-border)",
+            color: "var(--color-error-fg)",
+          }}
+        >
           {t.rich("error", {
             email: contactEmail,
             link: (chunks) => (
-              <a href={`mailto:${contactEmail}`} className="underline hover:text-red-300 transition-colors">
+              <a href={`mailto:${contactEmail}`} className="underline hover:opacity-80 transition-opacity">
                 {chunks}
               </a>
             ),
