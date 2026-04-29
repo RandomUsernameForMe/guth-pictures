@@ -233,39 +233,57 @@
       }
       applyOrbit();
 
-      // Mouse drag to orbit
+      // Mouse drag — left: orbit, right: pan target
       const canvas = renderer.domElement;
       canvas.style.cursor = 'grab';
-      let dragging = false, lastX = 0, lastY = 0;
+      let dragMode = null; // 'orbit' | 'pan'
+      let lastX = 0, lastY = 0;
+
+      const _right = new THREE.Vector3();
+      const _up = new THREE.Vector3();
 
       function onMouseDown(e) {
-        dragging = true;
+        dragMode = e.button === 2 ? 'pan' : 'orbit';
         lastX = e.clientX; lastY = e.clientY;
-        canvas.style.cursor = 'grabbing';
+        canvas.style.cursor = dragMode === 'pan' ? 'move' : 'grabbing';
         e.preventDefault();
       }
       function onMouseMove(e) {
-        if (!dragging) return;
+        if (!dragMode) return;
         const dx = e.clientX - lastX;
         const dy = e.clientY - lastY;
         lastX = e.clientX; lastY = e.clientY;
-        orbit.theta -= dx * 0.008;
-        orbit.phi = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, orbit.phi + dy * 0.006));
+        if (dragMode === 'orbit') {
+          orbit.theta -= dx * 0.008;
+          orbit.phi = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, orbit.phi + dy * 0.006));
+        } else {
+          // Pan: move target along camera's local right/up axes
+          const panSpeed = orbit.radius * 0.0008;
+          _right.setFromMatrixColumn(camera.matrix, 0);
+          _up.setFromMatrixColumn(camera.matrix, 1);
+          orbit.target.addScaledVector(_right, -dx * panSpeed);
+          orbit.target.addScaledVector(_up, dy * panSpeed);
+        }
         applyOrbit();
       }
       function onMouseUp() {
-        dragging = false;
+        dragMode = null;
         canvas.style.cursor = 'grab';
       }
+      function onContextMenu(e) { e.preventDefault(); }
 
-      // Touch support
+      // Touch: one finger = orbit, two fingers = pan
       let lastTouchX = 0, lastTouchY = 0;
+      let lastPinchMidX = 0, lastPinchMidY = 0;
       function onTouchStart(e) {
         if (e.touches.length === 1) {
           lastTouchX = e.touches[0].clientX;
           lastTouchY = e.touches[0].clientY;
-          e.preventDefault();
+        } else if (e.touches.length === 2) {
+          lastPinchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          lastPinchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
         }
+        e.preventDefault();
       }
       function onTouchMove(e) {
         if (e.touches.length === 1) {
@@ -276,13 +294,26 @@
           orbit.theta -= dx * 0.008;
           orbit.phi = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, orbit.phi + dy * 0.006));
           applyOrbit();
-          e.preventDefault();
+        } else if (e.touches.length === 2) {
+          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+          const dx = midX - lastPinchMidX;
+          const dy = midY - lastPinchMidY;
+          lastPinchMidX = midX; lastPinchMidY = midY;
+          const panSpeed = orbit.radius * 0.0008;
+          _right.setFromMatrixColumn(camera.matrix, 0);
+          _up.setFromMatrixColumn(camera.matrix, 1);
+          orbit.target.addScaledVector(_right, -dx * panSpeed);
+          orbit.target.addScaledVector(_up, dy * panSpeed);
+          applyOrbit();
         }
+        e.preventDefault();
       }
 
       canvas.addEventListener('mousedown', onMouseDown);
       window.addEventListener('mousemove', onMouseMove);
       window.addEventListener('mouseup', onMouseUp);
+      canvas.addEventListener('contextmenu', onContextMenu);
       canvas.addEventListener('touchstart', onTouchStart, { passive: false });
       canvas.addEventListener('touchmove', onTouchMove, { passive: false });
 
@@ -325,6 +356,7 @@
         canvas.removeEventListener('mousedown', onMouseDown);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
+        canvas.removeEventListener('contextmenu', onContextMenu);
         canvas.removeEventListener('touchstart', onTouchStart);
         canvas.removeEventListener('touchmove', onTouchMove);
         if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
