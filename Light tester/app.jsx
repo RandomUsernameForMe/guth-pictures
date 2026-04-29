@@ -47,6 +47,9 @@
 
     const [tweaks, setTweak] = window.useTweaks ? window.useTweaks(tweakDefaults) : [tweakDefaults, () => {}];
 
+    // ── Camera position (floor coords) ───────────────────────────────
+    const [camPos, setCamPos] = useState({ x: 0, z: 1.6 });
+
     // ── Lights state ─────────────────────────────────────────────────
     const [lights, setLights] = useState(() => clonePreset(window.PRESETS[0]));
     const [selectedId, setSelectedId] = useState(null);
@@ -169,6 +172,8 @@
                 onMove={moveLight}
                 onUpdate={updateLight}
                 onAdd={addType}
+                camPos={camPos}
+                onCamPosChange={setCamPos}
               />
 
               {/* Live camera preview corner */}
@@ -182,6 +187,8 @@
                   tweaks={tweaks}
                   selectedId={selectedId}
                   onSelectLight={setSelectedId}
+                  camPos={camPos}
+                  onCamPosChange={setCamPos}
                 />
               </div>
             </div>

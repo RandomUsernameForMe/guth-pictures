@@ -191,7 +191,7 @@
   }
 
   // ── Component ──────────────────────────────────────────────────────
-  function CameraScene({ lights, tweaks, selectedId, onSelectLight }) {
+  function CameraScene({ lights, tweaks, selectedId, onSelectLight, camPos, onCamPosChange }) {
     const mountRef = useRef(null);
     const stateRef = useRef(null);
 
@@ -370,10 +370,24 @@
       while (s.headGroup.children.length) s.headGroup.remove(s.headGroup.children[0]);
       const { group, faceCenter } = buildHead(tweaks.headStyle);
       s.headGroup.add(group);
-      s.orbit.target.set(0, faceCenter.y, 0);
+      s.orbit.target.y = faceCenter.y;
       s.applyOrbit();
       s.currentHeadStyle = tweaks.headStyle;
     }, [tweaks.headStyle]);
+
+    // Sync camera position from floor plan
+    useEffect(() => {
+      const s = stateRef.current; if (!s) return;
+      if (!camPos) return;
+      const { orbit } = s;
+      const dx = camPos.x - orbit.target.x;
+      const dz = camPos.z - orbit.target.z;
+      const hDist = Math.sqrt(dx * dx + dz * dz);
+      if (hDist < 0.05) return;
+      orbit.theta = Math.atan2(dx, dz);
+      orbit.radius = hDist / Math.max(0.1, Math.cos(orbit.phi));
+      s.applyOrbit();
+    }, [camPos]);
 
     // Update backdrop
     useEffect(() => {

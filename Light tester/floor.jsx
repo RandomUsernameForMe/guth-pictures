@@ -22,10 +22,10 @@
     softbox: { label: 'Softbox', color: '#E8D49A', short: 'S' },
   };
 
-  function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate }) {
+  function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, camPos, onCamPosChange }) {
     const wrapRef = useRef(null);
     const [size, setSize] = useState({ w: 600, h: 600 });
-    const dragRef = useRef(null); // { id, mode: 'move'|'aim'|'height', startY, startHeight }
+    const dragRef = useRef(null); // { id?, mode: 'move'|'aim'|'height'|'camera', startY, startHeight }
 
     useEffect(() => {
       const wrap = wrapRef.current; if (!wrap) return;
@@ -54,22 +54,26 @@
       }
       function onMouseMove(e) {
         const d = dragRef.current; if (!d) return;
-        const L = lights.find(l => l.id === d.id); if (!L) return;
         const rel = getRel(e); if (!rel) return;
+
+        if (d.mode === 'camera') {
+          const x = Math.max(-FLOOR_W / 2 + 0.1, Math.min(FLOOR_W / 2 - 0.1, p2m(rel.x)));
+          const z = Math.max(-FLOOR_W / 2 + 0.1, Math.min(FLOOR_W / 2 - 0.1, p2m(rel.y)));
+          onCamPosChange && onCamPosChange({ x, z });
+          return;
+        }
+
+        const L = lights.find(l => l.id === d.id); if (!L) return;
 
         if (d.mode === 'move') {
           const x = Math.max(-FLOOR_W / 2 + 0.2, Math.min(FLOOR_W / 2 - 0.2, p2m(rel.x)));
           const z = Math.max(-FLOOR_W / 2 + 0.2, Math.min(FLOOR_W / 2 - 0.2, p2m(rel.y)));
-          // If light has explicit aim, keep aim absolute (so direction "freezes")
-          // If aim is null, position changes will auto-aim at subject (handled by scene)
           onMove(d.id, { x, z });
         } else if (d.mode === 'aim') {
-          // Aim point: floor coords of cursor; height pinned to subject height for simplicity
           const ax = Math.max(-FLOOR_W / 2, Math.min(FLOOR_W / 2, p2m(rel.x)));
           const az = Math.max(-FLOOR_W / 2, Math.min(FLOOR_W / 2, p2m(rel.y)));
           onUpdate(d.id, { aim: { x: ax, z: az, y: SUBJECT_Y } });
         } else if (d.mode === 'height') {
-          // Vertical drag — up = higher
           const dy = d.startClientY - rel.clientY;
           const newH = Math.max(0.5, Math.min(3.0, d.startHeight + dy * 0.005));
           onUpdate(d.id, { height: +newH.toFixed(2) });
@@ -85,11 +89,12 @@
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
       };
-    }, [lights, onMove, onUpdate, p2m, size.w, size.h]);
+    }, [lights, onMove, onUpdate, onCamPosChange, p2m, size.w, size.h]);
 
     const cx = size.w / 2, cy = size.h / 2;
     const subjectPx = { x: m2p(0), y: m2p(0) };
-    const camPx = { x: m2p(0), y: m2p(1.6) };
+    const resolvedCam = camPos || { x: 0, z: 1.6 };
+    const camPx = { x: m2p(resolvedCam.x), y: m2p(resolvedCam.z) };
 
     // Helper: get aim point in floor coords for a light
     const aimPoint = (L) => {
@@ -166,9 +171,39 @@
             <text y={size.w * 0.075} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize={9} fill="#9B9899" letterSpacing="0.15em">SUBJECT</text>
           </g>
 
-          {/* camera */}
-          <g transform={`translate(${camPx.x} ${camPx.y})`} style={{ pointerEvents: 'none' }}>
-            <rect x={-14} y={-9} width={28} height={18} fill="none" stroke="#C8A96E" strokeWidth="1.5" rx="2" />
+          {/* camera direction line */}
+          {(() => {
+            const dx = subjectPx.x - camPx.x, dy = subjectPx.y - camPx.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 2) return null;
+            const nx = dx / dist, ny = dy / dist;
+            // FOV spread cone (approximate 40° half-angle)
+            const spread = 0.36;
+            const len = dist - size.w * 0.045;
+            const px = camPx.x + nx * len, py = camPx.y + ny * len;
+            const rx = -ny * spread * len, ry = nx * spread * len;
+            return (
+              <g style={{ pointerEvents: 'none' }}>
+                <path d={`M ${camPx.x} ${camPx.y} L ${px + rx} ${py + ry} L ${px - rx} ${py - ry} Z`}
+                  fill="rgba(200,169,110,0.07)" stroke="#C8A96E" strokeWidth="0.8" strokeOpacity="0.35" />
+                <line x1={camPx.x} y1={camPx.y} x2={px} y2={py}
+                  stroke="#C8A96E" strokeWidth="1" strokeOpacity="0.5" strokeDasharray="3 3" />
+              </g>
+            );
+          })()}
+
+          {/* camera (draggable) */}
+          <g
+            transform={`translate(${camPx.x} ${camPx.y})`}
+            style={{ cursor: 'grab' }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              dragRef.current = { mode: 'camera' };
+              document.body.style.cursor = 'grabbing';
+            }}
+          >
+            <circle r={18} fill="transparent" />
+            <rect x={-14} y={-9} width={28} height={18} fill="rgba(200,169,110,0.12)" stroke="#C8A96E" strokeWidth="1.5" rx="2" />
             <circle r={5} fill="none" stroke="#C8A96E" strokeWidth="1.5" />
             <text y={28} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize={9} fill="#C8A96E" letterSpacing="0.15em">CAM</text>
           </g>
