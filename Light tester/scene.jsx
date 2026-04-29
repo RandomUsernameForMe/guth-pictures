@@ -10,6 +10,10 @@
   // The "subject" sits at origin, head centred at y=1.55.
 
   const SUBJECT_HEIGHT = 1.55;
+  // Vertical center of the face (midpoint of skull top and jaw bottom)
+  // skull top = SUBJECT_HEIGHT + 0.05 + 0.18*1.18 ≈ 1.812
+  // jaw bottom = SUBJECT_HEIGHT - 0.13 - 0.135*0.85 ≈ 1.305
+  const HEAD_CENTER_Y = (SUBJECT_HEIGHT + 0.05 + 0.18 * 1.18 + SUBJECT_HEIGHT - 0.13 - 0.135 * 0.85) / 2; // ≈ 1.559
 
   function kelvinToRGB(k) {
     // Tanner Helland approximation, normalised to 0..1
@@ -38,7 +42,6 @@
   // ── Build the head mesh based on style ─────────────────────────────
   function buildHead(style) {
     const group = new THREE.Group();
-    const faceMeshes = []; // used to compute portrait framing center (excludes neck/shoulders)
     const mat = (() => {
       if (style === 'wireframe') {
         return new THREE.MeshBasicMaterial({ color: 0xC8A96E, wireframe: true });
@@ -66,7 +69,6 @@
     skull.castShadow = true;
     skull.receiveShadow = true;
     group.add(skull);
-    faceMeshes.push(skull);
 
     // Jaw — narrower
     const jawGeo = new THREE.SphereGeometry(0.135, 48, 48);
@@ -76,7 +78,6 @@
     jaw.castShadow = true;
     jaw.receiveShadow = true;
     group.add(jaw);
-    faceMeshes.push(jaw);
 
     // Nose
     const noseGeo = new THREE.ConeGeometry(0.028, 0.075, 16);
@@ -86,7 +87,6 @@
     nose.castShadow = true;
     nose.receiveShadow = true;
     group.add(nose);
-    faceMeshes.push(nose);
 
     // Brow ridge — small torus segment
     const browGeo = new THREE.TorusGeometry(0.085, 0.012, 8, 24, Math.PI);
@@ -94,7 +94,6 @@
     brow.position.set(0, SUBJECT_HEIGHT + 0.05, 0.155);
     brow.rotation.set(0, 0, Math.PI);
     group.add(brow);
-    faceMeshes.push(brow);
 
     // Eyes — dark pupils with reflective sclera (catchlights live here)
     const eyeGeo = new THREE.SphereGeometry(0.022, 24, 24);
@@ -104,11 +103,9 @@
       const sclera = new THREE.Mesh(eyeGeo, scleraMat);
       sclera.position.set(x, SUBJECT_HEIGHT + 0.025, z);
       group.add(sclera);
-      faceMeshes.push(sclera);
-      const iris = new THREE.Mesh(new THREE.SphereGeometry(0.011, 16, 16), irisMat);
+const iris = new THREE.Mesh(new THREE.SphereGeometry(0.011, 16, 16), irisMat);
       iris.position.set(x, SUBJECT_HEIGHT + 0.025, z + 0.013);
       group.add(iris);
-      faceMeshes.push(iris);
     });
 
     // Lips — flat ellipse
@@ -122,7 +119,6 @@
     const lips = new THREE.Mesh(lipGeo, lipMat);
     lips.position.set(0, SUBJECT_HEIGHT - 0.085, 0.165);
     group.add(lips);
-    faceMeshes.push(lips);
 
     // Neck cylinder
     const neckGeo = new THREE.CylinderGeometry(0.07, 0.085, 0.18, 24);
@@ -141,13 +137,7 @@
     sh.receiveShadow = true;
     group.add(sh);
 
-    // Compute bounding box of face features only (excludes neck/shoulders)
-    // so the camera centers on the head, not the full bust
-    const faceBox = new THREE.Box3();
-    faceMeshes.forEach(m => faceBox.expandByObject(m));
-    const faceCenter = faceBox.getCenter(new THREE.Vector3());
-
-    return { group, faceCenter };
+    return group;
   }
 
   function buildBackdrop(color) {
@@ -229,9 +219,8 @@
           target.y + radius * Math.sin(phi),
           target.z + radius * Math.cos(theta) * Math.cos(phi),
         );
-        camera.lookAt(target);
+        camera.lookAt(target.x, target.y, target.z);
       }
-      applyOrbit();
 
       // Mouse drag — left: orbit, right: pan target
       const canvas = renderer.domElement;
@@ -264,7 +253,6 @@
           orbit.target.addScaledVector(_right, -dx * panSpeed);
           orbit.target.addScaledVector(_up, dy * panSpeed);
         }
-        applyOrbit();
       }
       function onMouseUp() {
         dragMode = null;
@@ -293,7 +281,6 @@
           lastTouchY = e.touches[0].clientY;
           orbit.theta -= dx * 0.008;
           orbit.phi = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, orbit.phi + dy * 0.006));
-          applyOrbit();
         } else if (e.touches.length === 2) {
           const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
           const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
@@ -305,7 +292,6 @@
           _up.setFromMatrixColumn(camera.matrix, 1);
           orbit.target.addScaledVector(_right, -dx * panSpeed);
           orbit.target.addScaledVector(_up, dy * panSpeed);
-          applyOrbit();
         }
         e.preventDefault();
       }
@@ -334,7 +320,7 @@
         const w = mount.clientWidth;
         const h = mount.clientHeight;
         if (!w || !h) return;
-        renderer.setSize(w, h, false);
+        renderer.setSize(w, h); // updateStyle=true: keeps canvas CSS in sync with pixel size
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
       });
@@ -342,12 +328,14 @@
 
       let raf;
       const tick = () => {
+        applyOrbit(); // always apply current orbit state before each frame
         renderer.render(scene, camera);
         raf = requestAnimationFrame(tick);
       };
       tick();
 
-      stateRef.current = { scene, renderer, camera, orbit, applyOrbit, headGroup, backdropGroup, lightGroup, lightObjs: new Map(), currentHeadStyle: null, currentBackdrop: null };
+      orbit.target.y = HEAD_CENTER_Y;
+      stateRef.current = { scene, renderer, camera, orbit, headGroup, backdropGroup, lightGroup, lightObjs: new Map(), currentHeadStyle: null, currentBackdrop: null };
 
       return () => {
         cancelAnimationFrame(raf);
@@ -368,10 +356,8 @@
       const s = stateRef.current; if (!s) return;
       if (s.currentHeadStyle === tweaks.headStyle) return;
       while (s.headGroup.children.length) s.headGroup.remove(s.headGroup.children[0]);
-      const { group, faceCenter } = buildHead(tweaks.headStyle);
-      s.headGroup.add(group);
-      s.orbit.target.y = faceCenter.y;
-      s.applyOrbit();
+      s.headGroup.add(buildHead(tweaks.headStyle));
+      s.orbit.target.y = HEAD_CENTER_Y;
       s.currentHeadStyle = tweaks.headStyle;
     }, [tweaks.headStyle]);
 
@@ -386,7 +372,6 @@
       if (hDist < 0.05) return;
       orbit.theta = Math.atan2(dx, dz);
       orbit.radius = hDist / Math.max(0.1, Math.cos(orbit.phi));
-      s.applyOrbit();
     }, [camPos]);
 
     // Update backdrop
