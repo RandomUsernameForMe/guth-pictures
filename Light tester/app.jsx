@@ -4,6 +4,54 @@
 (function () {
   const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
+  // ── Support toast ────────────────────────────────────────────────────────
+  const SNOOZE_MS = 24 * 60 * 60 * 1000;
+
+  function shouldShowSupport() {
+    if (localStorage.getItem('lt_supported')) return false;
+    const snoozed = localStorage.getItem('lt_snoozed');
+    if (snoozed && Date.now() - Number(snoozed) < SNOOZE_MS) return false;
+    return true;
+  }
+
+  function SupportToast({ onDismiss }) {
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+      const t = setTimeout(() => setVisible(true), 30);
+      return () => clearTimeout(t);
+    }, []);
+
+    const hide = (cb) => {
+      setVisible(false);
+      setTimeout(cb, 320);
+    };
+
+    const openBMC = () => {
+      window.open('https://buymeacoffee.com/guth', 'bmc', 'width=500,height=650,scrollbars=yes');
+      localStorage.setItem('lt_supported', '1');
+      hide(onDismiss);
+    };
+
+    const snooze = () => {
+      localStorage.setItem('lt_snoozed', String(Date.now()));
+      hide(onDismiss);
+    };
+
+    return (
+      <div className={`support-toast${visible ? ' support-toast--in' : ''}`}>
+        <p className="support-text">
+          Light Tester je zdarma a vždy bude. Stál ale čas a zkušenosti —
+          pokud ti pomohl, budu rád za příspěvek.
+        </p>
+        <div className="support-actions">
+          <button className="btn primary" onClick={openBMC}>☕ Přispět</button>
+          <button className="btn ghost" onClick={snooze}>Příště</button>
+        </div>
+      </div>
+    );
+  }
+
   let _id = 0;
   const newId = () => `L${++_id}_${Math.random().toString(36).slice(2, 6)}`;
 
@@ -55,6 +103,8 @@
     const [selectedId, setSelectedId] = useState(null);
     const [activePresetId, setActivePresetId] = useState('rembrandt');
     const [shareCopied, setShareCopied] = useState(false);
+    const [showSupport, setShowSupport] = useState(false);
+    const sessionStartRef = useRef(Date.now());
 
     // Initial: load from hash if present
     useEffect(() => {
@@ -117,6 +167,17 @@
       applyPreset(window.PRESETS[0]);
     }, [applyPreset]);
 
+    // ── Support timer: show after 5 minutes ──────────────────────────
+    useEffect(() => {
+      const iv = setInterval(() => {
+        if (shouldShowSupport() && Date.now() - sessionStartRef.current >= 5 * 60 * 1000) {
+          setShowSupport(true);
+          clearInterval(iv);
+        }
+      }, 30_000);
+      return () => clearInterval(iv);
+    }, []);
+
     // ── Share ────────────────────────────────────────────────────────
     const share = useCallback(() => {
       const hash = encodeState(lights, tweaks, activePresetId);
@@ -127,6 +188,7 @@
       window.history.replaceState(null, '', `#${hash}`);
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 1800);
+      setTimeout(() => { if (shouldShowSupport()) setShowSupport(true); }, 2000);
     }, [lights, tweaks, activePresetId]);
 
     // Keep hash live but don't spam history
@@ -208,6 +270,9 @@
             />
           </aside>
         </div>
+
+        {/* Support toast */}
+        {showSupport && <SupportToast onDismiss={() => setShowSupport(false)} />}
 
         {/* Tweaks panel */}
         {window.TweaksPanel && (
