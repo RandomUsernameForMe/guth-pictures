@@ -849,9 +849,54 @@ body::after {
 }
 .lt-attribution a:hover { color: var(--color-text-muted); }
 
+.lt-mobile-tabs { display: none; }
+
 @media (max-width: 1100px) {
   .lt-layout { grid-template-columns: 1fr; }
   .lt-aside { display: none; }
+
+  /* Tab bar */
+  .lt-mobile-tabs {
+    display: flex;
+    flex-shrink: 0;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+  }
+  .lt-mobile-tab {
+    flex: 1;
+    padding: 13px 8px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-ghost);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 150ms, background 150ms;
+  }
+  .lt-mobile-tab--active {
+    color: var(--color-text);
+    background: var(--color-bg-overlay);
+  }
+
+  /* Floor view: skryj camera preview */
+  .lt-mobile-floor .lt-preview { display: none; }
+
+  /* Camera view: preview přes celý stage */
+  .lt-mobile-camera .lt-preview {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    z-index: 5;
+  }
+
+  /* Inspector view: skryj stage, zobraz aside */
+  .lt-mobile-inspector .lt-stage { display: none; }
+  .lt-mobile-inspector .lt-aside { display: block !important; }
 }
 
 .lt-support-toast {

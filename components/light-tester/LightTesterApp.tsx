@@ -113,6 +113,7 @@ export function LightTesterApp() {
   const [activePresetId, setActivePresetId] = useState<string | null>("rembrandt");
   const [shareCopied, setShareCopied] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [mobileView, setMobileView] = useState<'floor' | 'camera' | 'inspector'>('floor');
   const sessionStartRef = useRef(Date.now());
   const [cameraPos, setCameraPos] = useState({ x: 0, z: 1.6 });
   const [savedSetups, setSavedSetups] = useState<SavedSetup[]>(() => loadSaved());
@@ -254,7 +255,7 @@ export function LightTesterApp() {
   }, [activePresetId]);
 
   return (
-    <div className="lt-app">
+    <div className={`lt-app lt-mobile-${mobileView}`}>
       {/* Toolbar */}
       <header className="lt-topbar">
         <div className="lt-topmeta">
@@ -321,6 +322,18 @@ export function LightTesterApp() {
         </aside>
       </div>
       {showSupport && <SupportToast onDismiss={() => setShowSupport(false)} />}
+
+      <nav className="lt-mobile-tabs" aria-label="Přepínač pohledů">
+        {(["floor", "camera", "inspector"] as const).map((view) => (
+          <button
+            key={view}
+            className={`lt-mobile-tab${mobileView === view ? " lt-mobile-tab--active" : ""}`}
+            onClick={() => setMobileView(view)}
+          >
+            {view === "floor" ? "Plán" : view === "camera" ? "Kamera" : "Ovládání"}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
