@@ -202,6 +202,15 @@ const iris = new THREE.Mesh(new THREE.SphereGeometry(0.011, 16, 16), irisMat);
       renderer.toneMappingExposure = 1.05;
       mount.appendChild(renderer.domElement);
 
+      // Canvas must always fill the mount div regardless of DPR or ResizeObserver timing.
+      // Using absolute positioning bypasses any intrinsic-size interference from Three.js.
+      const cvs = renderer.domElement;
+      cvs.style.position = 'absolute';
+      cvs.style.top = '0';
+      cvs.style.left = '0';
+      cvs.style.width = '100%';
+      cvs.style.height = '100%';
+
       const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 50);
 
       // Orbit state — camera always looks at orbitTarget
@@ -320,7 +329,7 @@ const iris = new THREE.Mesh(new THREE.SphereGeometry(0.011, 16, 16), irisMat);
         const w = mount.clientWidth;
         const h = mount.clientHeight;
         if (!w || !h) return;
-        renderer.setSize(w, h); // updateStyle=true: keeps canvas CSS in sync with pixel size
+        renderer.setSize(w, h, false); // CSS handled by absolute positioning above
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
       });
