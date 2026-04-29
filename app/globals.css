@@ -337,7 +337,6 @@ body::after {
 /* ── Light Tester ──────────────────────────────────────────────── */
 .lt-page {
   height: calc(100svh - 64px);
-  margin-top: 64px;
   overflow: hidden;
 }
 
