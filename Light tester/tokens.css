@@ -1,0 +1,207 @@
+/* ──────────────────────────────────────────────────────────────
+   Guth Pictures — Colors & Type tokens
+   Source of truth: guth-pictures/app/globals.css + lib/theme-types.ts
+   ────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Base color tokens (dark is the default theme) ── */
+  --color-bg:          #0A0A0B;   /* page background — near-black, not pure */
+  --color-bg-elevated: #111113;   /* cards, drawers, elevated surfaces */
+  --color-bg-overlay:  #18181C;   /* hovered / pressed surface */
+  --color-surface:     #1E1E23;   /* inputs, image placeholders, wells */
+
+  --color-text:        #F2F0EB;   /* primary text — warm off-white (film) */
+  --color-text-muted:  #9B9899;   /* secondary, body copy, labels */
+  --color-text-ghost:  #5C5A5E;   /* tertiary, captions, meta */
+
+  --color-accent:      #C8A96E;   /* warm brass — CTAs + ambient glow */
+  --color-accent-hover:#D4B87A;
+
+  --color-border:      rgba(255,255,255,0.10);
+  --color-border-sub:  rgba(255,255,255,0.06);
+
+  /* ── Glass / nav ── */
+  --nav-bg-scrolled:   rgba(10,10,11,0.72);
+  --nav-bg-subpage:    rgba(10,10,11,0.60);
+  --nav-border:        rgba(255,255,255,0.08);
+  --nav-shadow:        0 8px 32px rgba(0,0,0,0.4);
+  --nav-active-bg:     rgba(255,255,255,0.08);
+  --nav-active-border: rgba(255,255,255,0.12);
+  --glass-bg:          rgba(10,10,11,0.78);
+  --hero-scrim-top:    rgba(0,0,0,0.65);
+
+  /* ── Semantic signal ── */
+  --color-success-bg: rgba(22,101,52,0.30);
+  --color-success-border: rgba(22,101,52,0.50);
+  --color-success-fg: #4ADE80;
+  --color-error-bg: rgba(127,29,29,0.30);
+  --color-error-border: rgba(127,29,29,0.50);
+  --color-error-fg: #F87171;
+
+  /* ── Typography ── */
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Type scale — matches Tailwind usage across the site */
+  --text-xs:   0.75rem;   /* 12 — meta, labels */
+  --text-sm:   0.875rem;  /* 14 — body-small, nav links */
+  --text-base: 1rem;      /* 16 — body */
+  --text-lg:   1.125rem;  /* 18 — subtitle body */
+  --text-xl:   1.25rem;   /* 20 — hero subtitle, post title */
+  --text-2xl:  1.5rem;    /* 24 */
+  --text-3xl:  1.875rem;  /* 30 */
+  --text-4xl:  2.25rem;   /* 36 — section H2 */
+  --text-5xl:  3rem;      /* 48 — page H1 */
+  --text-6xl:  3.75rem;   /* 60 — hero H1 (sm) */
+  --text-7xl:  4.5rem;    /* 72 — hero H1 (md) */
+  --text-8xl:  6rem;      /* 96 — hero H1 (lg) */
+
+  /* Weights — Geist used at 400/500/600/700 */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* Tracking */
+  --tracking-tight:   -0.02em;   /* hero, display */
+  --tracking-normal:  0;
+  --tracking-wide:    0.025em;   /* buttons, footer brand */
+  --tracking-wider:   0.05em;    /* meta, labels, mono */
+  --tracking-widest:  0.1em;     /* nav logo "GUTH PICTURES", numbered labels */
+
+  /* Leading */
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose:   1.75;
+
+  /* ── Spacing / radius / shadow ── */
+  --radius-none: 0;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-full: 9999px;
+
+  --shadow-nav:     0 8px 32px rgba(0,0,0,0.4);
+  --shadow-card:    0 1px 0 rgba(255,255,255,0.02);
+
+  /* ── Motion ── */
+  --ease-standard: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out:      ease-out;
+  --duration-fast: 200ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+  --duration-reveal: 700ms;
+}
+
+/* Light theme — desaturated cool slate, rarely used; dark is canonical */
+.light {
+  --color-bg:          #C8CDD6;
+  --color-bg-elevated: #BFC5CF;
+  --color-bg-overlay:  #B6BCC8;
+  --color-surface:     #ADB3C1;
+  --color-text:        #0F172A;
+  --color-text-muted:  #475569;
+  --color-text-ghost:  #94A3B8;
+  --color-accent:      #6B3A1F;
+  --color-accent-hover:#5A3019;
+  --color-border:      rgba(0,0,0,0.09);
+  --color-border-sub:  rgba(0,0,0,0.05);
+  --nav-bg-scrolled:   rgba(200,205,214,0.85);
+  --nav-bg-subpage:    rgba(200,205,214,0.72);
+  --nav-border:        rgba(0,0,0,0.08);
+  --nav-shadow:        0 8px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(0,0,0,0.06);
+  --nav-active-bg:     rgba(0,0,0,0.06);
+  --nav-active-border: rgba(0,0,0,0.09);
+  --glass-bg:          rgba(200,205,214,0.85);
+  --hero-scrim-top:    rgba(0,0,0,0.30);
+}
+
+/* ── Semantic element defaults ── */
+body, .gp-body {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: var(--leading-normal);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+.gp-h1 {
+  font-size: var(--text-7xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-none);
+  color: var(--color-text);
+}
+.gp-h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
+.gp-h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+.gp-subtitle {
+  font-size: var(--text-xl);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+.gp-body-md {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+.gp-body-sm {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+}
+.gp-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-ghost);
+}
+.gp-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-ghost);
+}
+.gp-brand {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* ── Film grain overlay — enable with `.gp-grain` on a full-bleed wrapper ── */
+.gp-grain::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* Ambient accent glow at the top of a page */
+.gp-ambient-glow {
+  background-image: radial-gradient(ellipse 80% 55% at 50% 0%,
+    color-mix(in srgb, var(--color-accent) 7%, transparent) 0%,
+    transparent 60%);
+}
