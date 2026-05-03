@@ -32,7 +32,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       {heroPublicId ? (
         <div className="fixed inset-0 -z-10">
           <Image
-            src={cloudinaryUrl(heroPublicId, "w_2560,c_fill,q_90,f_webp")}
+            src={cloudinaryUrl(heroPublicId, "w_1920,c_fill,q_75,f_webp")}
             alt=""
             fill
             priority
