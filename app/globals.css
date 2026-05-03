@@ -452,6 +452,9 @@ body::after {
 .lt-aside::-webkit-scrollbar { width: 8px; }
 .lt-aside::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
 
+.lt-sheet-handle { display: none; }
+.lt-sheet-body { height: 100%; }
+
 /* ── Inspector internals ── */
 .insp {
   padding: 18px;
@@ -853,7 +856,6 @@ body::after {
 
 @media (max-width: 1100px) {
   .lt-layout { grid-template-columns: 1fr; }
-  .lt-aside { display: none; }
 
   /* Tab bar */
   .lt-mobile-tabs {
@@ -894,9 +896,52 @@ body::after {
     z-index: 5;
   }
 
-  /* Inspector view: skryj stage, zobraz aside */
-  .lt-mobile-inspector .lt-stage { display: none; }
-  .lt-mobile-inspector .lt-aside { display: block !important; }
+  /* Bottom sheet — aside se přetvoří v panel nad tab barem */
+  .lt-aside {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    height: var(--sheet-height, 180px);
+    width: 100%;
+    border-top: 1px solid var(--color-border);
+    border-radius: 12px 12px 0 0;
+    z-index: 10;
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height 200ms ease;
+  }
+  .lt-aside.lt-aside--dragging {
+    transition: none;
+  }
+  .lt-sheet-handle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0 8px;
+    cursor: grab;
+    touch-action: none;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .lt-sheet-handle:active { cursor: grabbing; }
+  .lt-sheet-pill {
+    width: 36px;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    transition: background 150ms;
+  }
+  .lt-sheet-handle:hover .lt-sheet-pill {
+    background: var(--color-text-ghost);
+  }
+  .lt-sheet-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+  }
 }
 
 .lt-support-toast {
