@@ -4,17 +4,15 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 
 type Props = {
   title: string;
   subtitle: string;
   ctaPortfolio: string;
   ctaContact: string;
-  heroPublicId?: string;
 };
 
-export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPublicId }: Props) {
+export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact }: Props) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -29,22 +27,16 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, heroPub
       className="relative -mt-16 min-h-screen flex items-end pb-20 px-6 overflow-hidden"
     >
       {/* Background — fixed, stays behind nav the whole time */}
-      {heroPublicId ? (
-        <div className="fixed inset-0 -z-10">
-          <Image
-            src={cloudinaryUrl(heroPublicId, "w_1920,c_fill,q_75,f_webp")}
-            alt=""
-            fill
-            priority
-            placeholder="blur"
-            blurDataURL={blurUrl(heroPublicId)}
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-      ) : (
-        <div className="fixed inset-0 -z-10 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
-      )}
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src="/hero.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
 
       {/* Filmic overlay — cool-warm grade, multiply blend */}
       <div

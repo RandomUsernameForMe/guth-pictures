@@ -56,7 +56,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         subtitle={content.home.subtitle}
         ctaPortfolio={t("home.cta")}
         ctaContact={t("home.ctaContact")}
-        heroPublicId={images.hero || undefined}
       />
 
       {photos.length > 0 && (
