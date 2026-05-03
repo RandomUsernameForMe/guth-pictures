@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo, CSSProperties } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { StudioFloor } from "./StudioFloor";
 import { Inspector } from "./Inspector";
@@ -113,37 +113,6 @@ export function LightTesterApp() {
   const [activePresetId, setActivePresetId] = useState<string | null>("rembrandt");
   const [shareCopied, setShareCopied] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
-  const [mobileView, setMobileView] = useState<'floor' | 'camera'>('floor');
-  const [sheetHeight, setSheetHeight] = useState(180);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-
-  const MIN_SHEET_H = 180;
-
-  const handleSheetPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    dragRef.current = { startY: e.clientY, startH: sheetHeight };
-    setIsDragging(true);
-  }, [sheetHeight]);
-
-  const handleSheetPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return;
-    const delta = dragRef.current.startY - e.clientY;
-    const maxH = Math.round(window.innerHeight * 0.85);
-    const newH = Math.max(MIN_SHEET_H, Math.min(maxH, dragRef.current.startH + delta));
-    setSheetHeight(newH);
-  }, []);
-
-  const handleSheetPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragRef.current) return;
-    const moved = Math.abs(dragRef.current.startY - e.clientY);
-    if (moved < 5) {
-      const expandedH = Math.round(window.innerHeight * 0.78);
-      setSheetHeight(prev => prev > MIN_SHEET_H + 20 ? MIN_SHEET_H : expandedH);
-    }
-    dragRef.current = null;
-    setIsDragging(false);
-  }, []);
   const sessionStartRef = useRef(Date.now());
   const [cameraPos, setCameraPos] = useState({ x: 0, z: 1.6 });
   const [savedSetups, setSavedSetups] = useState<SavedSetup[]>(() => loadSaved());
@@ -285,7 +254,7 @@ export function LightTesterApp() {
   }, [activePresetId]);
 
   return (
-    <div className={`lt-app lt-mobile-${mobileView}`}>
+    <div className="lt-app">
       {/* Toolbar */}
       <header className="lt-topbar">
         <div className="lt-topmeta">
@@ -332,51 +301,27 @@ export function LightTesterApp() {
           </div>
         </main>
 
-        <aside
-          className={`lt-aside${isDragging ? " lt-aside--dragging" : ""}`}
-          style={{ "--sheet-height": `${sheetHeight}px` } as CSSProperties}
-        >
-          <div
-            className="lt-sheet-handle"
-            onPointerDown={handleSheetPointerDown}
-            onPointerMove={handleSheetPointerMove}
-            onPointerUp={handleSheetPointerUp}
-          >
-            <div className="lt-sheet-pill" />
-          </div>
-          <div className="lt-sheet-body">
-            <Inspector
-              lights={lights}
-              selectedId={selectedId}
-              activePresetId={activePresetId}
-              tweaks={tweaks}
-              savedSetups={savedSetups}
-              onSelect={setSelectedId}
-              onUpdate={updateLight}
-              onRemove={removeLight}
-              onAddType={addType}
-              onApplyPreset={applyPreset}
-              onTweak={setTweak}
-              onSaveSetup={saveSetup}
-              onDeleteSaved={deleteSaved}
-              onLoadSaved={loadSavedSetup}
-            />
-          </div>
+        <aside className="lt-aside">
+          <Inspector
+            lights={lights}
+            selectedId={selectedId}
+            activePresetId={activePresetId}
+            tweaks={tweaks}
+            savedSetups={savedSetups}
+            onSelect={setSelectedId}
+            onUpdate={updateLight}
+            onRemove={removeLight}
+            onAddType={addType}
+            onApplyPreset={applyPreset}
+            onTweak={setTweak}
+            onSaveSetup={saveSetup}
+            onDeleteSaved={deleteSaved}
+            onLoadSaved={loadSavedSetup}
+          />
         </aside>
       </div>
       {showSupport && <SupportToast onDismiss={() => setShowSupport(false)} />}
 
-      <nav className="lt-mobile-tabs" aria-label="Přepínač pohledů">
-        {(["floor", "camera"] as const).map((view) => (
-          <button
-            key={view}
-            className={`lt-mobile-tab${mobileView === view ? " lt-mobile-tab--active" : ""}`}
-            onClick={() => setMobileView(view)}
-          >
-            {view === "floor" ? "Plán" : "Kamera"}
-          </button>
-        ))}
-      </nav>
     </div>
   );
 }

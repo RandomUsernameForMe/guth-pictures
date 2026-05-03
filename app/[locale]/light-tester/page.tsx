@@ -10,7 +10,13 @@ export const metadata: Metadata = {
 export default function LightTesterPage() {
   return (
     <div className="lt-page">
-      <LightTesterApp />
+      <div className="lt-mobile-unavailable">
+        <p>Light Tester není dostupný na mobilních zařízeních a malých obrazovkách.</p>
+        <p>Otevři ho na počítači.</p>
+      </div>
+      <div className="lt-desktop-only">
+        <LightTesterApp />
+      </div>
     </div>
   );
 }
