@@ -17,7 +17,7 @@ describe("signToken", () => {
     const token = await signToken();
     const parts = token.split(".");
     expect(parts).toHaveLength(2);
-    expect(Number(parts[0])).toBeGreaterThan(0);
+    expect(Number(parts[0].split(":")[0])).toBeGreaterThan(0);
     expect(parts[1].length).toBeGreaterThan(10);
   });
 });

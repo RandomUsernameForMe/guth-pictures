@@ -1,5 +1,5 @@
-import { AdminShell } from "@/components/admin/AdminShell";
-import { BlogEditor } from "@/components/admin/BlogEditor";
+import { AdminShell } from "@/modules/admin/components/AdminShell";
+import { BlogEditor } from "@/modules/admin/components/BlogEditor";
 
 export default function BlogPage() {
   return (

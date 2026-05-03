@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import { Link } from "@/i18n/navigation";
-import { getBlogPost, getBlogPosts } from "@/lib/blog";
+import { getBlogPost, getBlogPosts } from "@/modules/blog/lib/blog";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 
 export const revalidate = 60;
@@ -38,6 +38,10 @@ export async function generateMetadata({
   };
 }
 
+function readingMinutes(content: string): number {
+  return Math.max(1, Math.round(content.trim().split(/\s+/).length / 200));
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -54,18 +58,20 @@ export default async function BlogPostPage({
     locale === "cs" ? "cs-CZ" : "en-GB",
     { year: "numeric", month: "long", day: "numeric" }
   );
+  const minutes = readingMinutes(loc.content);
+  const readLabel = locale === "cs" ? `${minutes} min čtení` : `${minutes} min read`;
 
   return (
     <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
       <Link
         href="/blog"
-        className="text-sm text-gray-400 hover:text-white transition-colors mb-10 inline-block"
+        className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors mb-10 inline-block"
       >
         ← {t("back")}
       </Link>
 
       {post.coverImage && (
-        <div className="relative w-full h-64 sm:h-80 rounded-lg overflow-hidden mb-10">
+        <div className="relative w-full h-64 sm:h-80 overflow-hidden mb-10">
           <Image
             src={cloudinaryUrl(post.coverImage, "w_1200,h_630,c_fill")}
             alt={loc.title}
@@ -77,11 +83,18 @@ export default async function BlogPostPage({
         </div>
       )}
 
-      <time className="text-sm text-gray-500">{date}</time>
-      <h1 className="text-4xl font-bold mt-3 mb-6 leading-tight">{loc.title}</h1>
+      <div className="flex items-center gap-3 mb-3">
+        <time className="text-sm text-[var(--color-text-ghost)]">{date}</time>
+        <span className="border-l border-[var(--color-border)] h-3" />
+        <span className="text-sm text-[var(--color-text-ghost)]">{readLabel}</span>
+      </div>
+
+      <h1 className="text-4xl font-bold mb-6 leading-tight text-[var(--color-text)]">{loc.title}</h1>
 
       {loc.excerpt && (
-        <p className="text-xl text-gray-300 mb-8 leading-relaxed">{loc.excerpt}</p>
+        <p className="text-xl text-[var(--color-text-muted)] mb-10 leading-relaxed border-l-2 border-[var(--color-accent)] pl-5">
+          {loc.excerpt}
+        </p>
       )}
 
       <div className="blog-content">

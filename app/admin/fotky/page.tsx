@@ -1,6 +1,6 @@
 import { getGalleryPhotos } from "@/lib/cloudinary";
-import { AdminDashboard } from "@/components/AdminDashboard";
-import { AdminShell } from "@/components/admin/AdminShell";
+import { AdminDashboard } from "@/modules/admin/components/AdminDashboard";
+import { AdminShell } from "@/modules/admin/components/AdminShell";
 
 export default async function FotkyPage() {
   const photos = await getGalleryPhotos("portfolio");

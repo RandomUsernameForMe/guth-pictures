@@ -14,7 +14,11 @@ import { GET, POST } from "@/app/api/admin/content/route";
 const VALID_DATA = {
   home: { title: "Domů", subtitle: "Podtitulek" },
   "o-mne": { title: "O mně", text: "Popis" },
-  sluzby: { title: "Služby", items: [] },
+  sluzby: {
+    portraits: { title: "Portréty", desc: "Popis portrétů" },
+    weddings: { title: "Svatby", desc: "Popis svateb" },
+    larp: { title: "LARP", desc: "Popis larpu" },
+  },
 };
 
 function makeGetRequest(locale: string): NextRequest {

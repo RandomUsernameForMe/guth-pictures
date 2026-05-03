@@ -63,10 +63,9 @@ describe("POST /api/admin/login — plaintext heslo (ADMIN_PASSWORD)", () => {
     process.env.ADMIN_PASSWORD = "tajne-heslo";
   });
 
-  it("vrátí 200 při správném hesle", async () => {
+  it("vrátí 401 pokud ADMIN_PASSWORD_HASH není nastaven (plaintext login není podporován)", async () => {
     const res = await POST(makeRequest("tajne-heslo", "10.1.0.1"));
-    expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true });
+    expect(res.status).toBe(401);
   });
 
   it("vrátí 401 při špatném hesle", async () => {
@@ -141,8 +140,8 @@ describe("POST /api/admin/login — extrakce IP z hlaviček", () => {
     vi.clearAllMocks();
     delete process.env.KV_REST_API_URL;
     delete process.env.KV_REST_API_TOKEN;
-    delete process.env.ADMIN_PASSWORD_HASH;
-    process.env.ADMIN_PASSWORD = "heslo";
+    process.env.ADMIN_PASSWORD_HASH = "$2a$12$fakehash";
+    vi.mocked(compare).mockResolvedValue(true as never);
   });
 
   it("čte IP z x-real-ip", async () => {

@@ -40,7 +40,6 @@ export function Nav() {
 
   const subpageLinks: NavLink[] = [
     { href: "/", label: `← ${t("home")}` },
-    { href: "/#kontakt", label: t("kontakt") },
   ];
 
   const homeLinks: NavLink[] = [

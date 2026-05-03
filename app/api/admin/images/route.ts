@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
-import { getImages, setImages } from "@/lib/content";
+import { getImages, setImages } from "@/modules/admin/lib/content";
 
 const CLOUDINARY_ID_RE = /^[a-zA-Z0-9_\-.\/]{1,200}$/;
 

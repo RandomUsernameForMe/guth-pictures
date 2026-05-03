@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
-import { getContent, setContent, type ContentData } from "@/lib/content";
+import { getContent, setContent, type ContentData } from "@/modules/admin/lib/content";
 
 const ALLOWED_LOCALES = ["cs", "en"] as const;
 type AllowedLocale = typeof ALLOWED_LOCALES[number];

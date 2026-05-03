@@ -5,13 +5,13 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
-import { AmbientGlow } from "@/components/AmbientGlow";
+import { AmbientGlow } from "@/modules/homepage/components/AmbientGlow";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
-import { getContent, getContactEmail } from "@/lib/content";
+import { getContent, getContactEmail } from "@/modules/admin/lib/content";
 import "../globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });

@@ -4,7 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { ContactForm } from "@/components/ContactForm";
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => {
+    const t = (key: string) => key;
+    t.rich = (key: string) => key;
+    return t;
+  },
 }));
 
 describe("ContactForm", () => {

@@ -20,6 +20,19 @@ Object.defineProperty(window, "location", {
 global.URL.createObjectURL = vi.fn(() => "blob:mock-url");
 global.URL.revokeObjectURL = vi.fn();
 
+// compressImage uses window.Image + canvas — neither works in jsdom.
+// vi.stubGlobal replaces window.Image so onerror fires synchronously → compressImage
+// resolves with the original file, button leaves "compressing" state.
+class MockImage {
+  onload: (() => void) | null = null;
+  onerror: ((e: Event) => void) | null = null;
+  width = 800;
+  height = 600;
+  set src(_: string) {
+    if (this.onerror) this.onerror(new Event("error"));
+  }
+}
+
 function makeFile(name = "photo.jpg") {
   return new File([new Uint8Array(100)], name, { type: "image/jpeg" });
 }
@@ -52,6 +65,7 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
     vi.clearAllMocks();
     global.fetch = mockFetch;
     process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "testcloud";
+    vi.stubGlobal("Image", MockImage);
   });
 
   it("nejdřív zavolá /api/admin/upload-signature", async () => {
@@ -97,7 +111,11 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
   });
 
   it("zobrazí ✓ po úspěšném uploadu", async () => {
-    mockFetch.mockResolvedValueOnce(mockSigOk()).mockResolvedValue(mockUploadOk());
+    // revalidate hangs so setFileItems([]) is never called — ✓ stays visible
+    mockFetch
+      .mockResolvedValueOnce(mockSigOk())
+      .mockResolvedValueOnce(mockUploadOk())
+      .mockReturnValueOnce(new Promise(() => {}));
     const user = userEvent.setup();
     render(<AdminDashboard photos={[]} />);
 
@@ -108,9 +126,11 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
   });
 
   it("zobrazí ✗ když Cloudinary vrátí chybu", async () => {
+    // revalidate hangs so setFileItems([]) is never called — ✗ stays visible
     mockFetch
       .mockResolvedValueOnce(mockSigOk())
-      .mockResolvedValueOnce({ ok: false });
+      .mockResolvedValueOnce({ ok: false })
+      .mockReturnValueOnce(new Promise(() => {}));
     const user = userEvent.setup();
     render(<AdminDashboard photos={[]} />);
 
@@ -132,9 +152,11 @@ describe("AdminDashboard — přímý upload na Cloudinary", () => {
   });
 
   it("zobrazí ✗ při síťové chybě", async () => {
+    // revalidate hangs so setFileItems([]) is never called — ✗ stays visible
     mockFetch
       .mockResolvedValueOnce(mockSigOk())
-      .mockRejectedValueOnce(new Error("Network error"));
+      .mockRejectedValueOnce(new Error("Network error"))
+      .mockReturnValueOnce(new Promise(() => {}));
     const user = userEvent.setup();
     render(<AdminDashboard photos={[]} />);
 

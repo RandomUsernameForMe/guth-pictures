@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/config";
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/modules/blog/lib/blog";
 
 const locales = ["cs", "en"] as const;
 const pages = ["", "/portfolio", "/sluzby", "/o-mne", "/blog"] as const;

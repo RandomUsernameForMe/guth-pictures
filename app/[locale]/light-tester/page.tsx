@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LightTesterApp } from "@/components/light-tester/LightTesterApp";
+import { LightTesterApp } from "@/modules/light-tester/components/LightTesterApp";
 
 export const metadata: Metadata = {
   title: "Light Tester — Guth Pictures",
