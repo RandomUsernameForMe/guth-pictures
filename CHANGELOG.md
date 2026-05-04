@@ -1,3 +1,10 @@
+## [2026-05-04] - feat(admin+homepage): odebrat larp z ContentData, adminu a grid rozšířit na 2 sloupce
+
+- content.ts: odebrán larp ze ServiceContent, defaults, normalizeContent
+- ContentEditor.tsx: odstraněna sekce Larpy + larp z emptyContent
+- content/route.ts: odstraněna larp validace
+- ServiceCards.tsx: grid dynamicky 2 nebo 3 sloupce dle počtu karet
+
 ## [2026-05-04] - test: opravit testy po odebrání kategorie larpy
 
 ## [2026-05-04] - feat(homepage): odebrat sekci Larpy ze služeb a kategorie z portfolio filtru

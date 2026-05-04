@@ -41,7 +41,7 @@ function isValidContentData(d: unknown): d is ContentData {
   if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   const s = o.sluzby as Record<string, unknown>;
-  return isServiceContent(s.portraits) && isServiceContent(s.weddings) && isServiceContent(s.larp);
+  return isServiceContent(s.portraits) && isServiceContent(s.weddings);
 }
 
 export async function GET(req: NextRequest) {

@@ -17,7 +17,6 @@ export type ContentData = {
   sluzby: {
     portraits: ServiceContent;
     weddings: ServiceContent;
-    larp: ServiceContent;
   };
 };
 
@@ -56,14 +55,6 @@ const defaults: Record<string, ContentData> = {
         ],
         note: "Možná záloha 30 % při rezervaci termínu.",
       },
-      larp: {
-        title: "Larpy a akce",
-        desc: "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa.",
-        packages: [
-          { name: "Akce", price: "dohodou", duration: "dle délky akce", includes: ["100+ fotek za den hry", "dodání do měsíce"] },
-        ],
-        note: "Ceny bez dopravy. Doprava nad 50 km od Prahy dohodou.",
-      },
     },
   },
   en: {
@@ -95,14 +86,6 @@ const defaults: Record<string, ContentData> = {
         ],
         note: "30% deposit available when booking.",
       },
-      larp: {
-        title: "Larps & events",
-        desc: "I specialise in larp event photography. Fast light, movement, atmosphere — that's my playground.",
-        packages: [
-          { name: "Event", price: "by arrangement", duration: "depends on event length", includes: ["100+ photos per day of play", "delivery within a month"] },
-        ],
-        note: "Travel not included. Travel over 50 km from Prague by arrangement.",
-      },
     },
   },
 };
@@ -120,7 +103,6 @@ function normalizeContent(data: ContentData): ContentData {
     sluzby: {
       portraits: normalizeService(data.sluzby.portraits),
       weddings: normalizeService(data.sluzby.weddings),
-      larp: normalizeService(data.sluzby.larp),
     },
   };
 }

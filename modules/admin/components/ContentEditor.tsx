@@ -15,7 +15,6 @@ const emptyContent = (): ContentData => ({
   sluzby: {
     portraits: { title: "", desc: "", packages: [], note: "" },
     weddings: { title: "", desc: "", packages: [], note: "" },
-    larp: { title: "", desc: "", packages: [], note: "" },
   },
 });
 
@@ -276,29 +275,6 @@ export function ContentEditor() {
             label="Poznámka pod ceníkem"
             value={current.sluzby.weddings.note ?? ""}
             onChange={(v) => patch((d) => { d.sluzby.weddings.note = v; })}
-          />
-        </Section>
-
-        <Section title="Larpy">
-          <Field
-            label="Nadpis"
-            value={current.sluzby.larp.title}
-            onChange={(v) => patch((d) => { d.sluzby.larp.title = v; })}
-          />
-          <Field
-            label="Popis"
-            value={current.sluzby.larp.desc}
-            onChange={(v) => patch((d) => { d.sluzby.larp.desc = v; })}
-            textarea
-          />
-          <PackageEditor
-            packages={current.sluzby.larp.packages ?? []}
-            onChange={(pkgs) => patch((d) => { d.sluzby.larp.packages = pkgs; })}
-          />
-          <Field
-            label="Poznámka pod ceníkem"
-            value={current.sluzby.larp.note ?? ""}
-            onChange={(v) => patch((d) => { d.sluzby.larp.note = v; })}
           />
         </Section>
 

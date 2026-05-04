@@ -17,7 +17,6 @@ const VALID_DATA = {
   sluzby: {
     portraits: { title: "Portréty", desc: "Popis portrétů" },
     weddings: { title: "Svatby", desc: "Popis svateb" },
-    larp: { title: "LARP", desc: "Popis larpu" },
   },
 };
 

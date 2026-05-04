@@ -32,7 +32,7 @@ export function ServiceCards({ services, selectLabel }: Props) {
     });
 
   return (
-    <div className="mt-12 grid gap-6 sm:grid-cols-3 items-start">
+    <div className={`mt-12 grid gap-6 items-start ${services.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
       {services.map((service) => {
         const isOpen = openKeys.has(service.key);
 
