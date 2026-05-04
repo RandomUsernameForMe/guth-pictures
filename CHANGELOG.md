@@ -1,3 +1,11 @@
+## [2026-05-04] - refactor(ui): nahradit ambient glows za brass top linku + tinted grain
+
+- AmbientGlow.tsx: vrací null, odstraněny 3 blur divs
+- globals.css: smazány .ambient-glow-root/.ag-* + @keyframes ag-breathe
+- body::before: 2px brass gradient linka nahoře (z-index 10000)
+- body: statický brass warm gradient 5% accent, 220px výška
+- body::after: brass grain přes background-blend-mode: color (#C8A96E / #6B3A1F light)
+
 ## [2026-05-04] - feat(typography): přechod z Geist na DM Sans + DM Mono
 
 - layout.tsx: DM_Sans (s opsz osou) + DM_Mono přes next/font/google
