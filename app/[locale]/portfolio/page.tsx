@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { getGalleryPhotos } from "@/lib/cloudinary";
-import { PortfolioFilter } from "@/components/PortfolioFilter";
+import { PortfolioFilter } from "@/modules/homepage/components/PortfolioFilter";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;

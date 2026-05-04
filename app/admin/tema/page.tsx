@@ -1,5 +1,5 @@
-import { AdminShell } from "@/components/admin/AdminShell";
-import { ThemeEditor } from "@/components/admin/ThemeEditor";
+import { AdminShell } from "@/modules/admin/components/AdminShell";
+import { ThemeEditor } from "@/modules/admin/components/ThemeEditor";
 
 export default function TemaPage() {
   return (

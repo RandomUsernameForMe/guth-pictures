@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,16 +34,25 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
         <h1 className="text-2xl font-bold">Admin</h1>
         <label htmlFor="admin-password" className="block text-sm text-gray-300 mb-1">Heslo</label>
-        <input
-          id="admin-password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Heslo"
-          className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 focus:outline-none focus:border-white"
-          autoFocus
-          aria-required="true"
-        />
+        <div className="relative">
+          <input
+            id="admin-password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Heslo"
+            className="w-full bg-zinc-900 border border-zinc-700 px-4 py-3 pr-12 focus:outline-none focus:border-white"
+            autoFocus
+            aria-required="true"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors text-xs"
+          >
+            {showPassword ? "skrýt" : "zobrazit"}
+          </button>
+        </div>
         {error && <p className="text-red-400 text-sm" role="alert">{error}</p>}
         <button
           type="submit"

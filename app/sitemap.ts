@@ -1,15 +1,15 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/config";
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/modules/blog/lib/blog";
 
 const locales = ["cs", "en"] as const;
-const pages = ["", "/portfolio", "/blog"] as const;
+const pages = ["", "/portfolio", "/sluzby", "/o-mne", "/blog"] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = pages.flatMap((page) =>
     locales.map((locale) => ({
       url: `${siteUrl}/${locale}${page}`,
-      lastModified: new Date("2025-03-05"),
+      lastModified: new Date(),
       alternates: {
         languages: {
           "x-default": `${siteUrl}/cs${page}`,

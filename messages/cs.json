@@ -6,17 +6,18 @@
     "sluzby": "Služby",
     "o-mne": "O mně",
     "kontakt": "Kontakt",
-    "vop": "Obchodní podmínky"
+    "vop": "Obchodní podmínky",
+    "light-tester": "Light Tester"
   },
   "meta": {
-    "home":      { "title": "Guth Pictures — Fotograf Praha", "description": "Profesionální fotograf Praha. Portréty, svatby a larpy. Reportážní styl, přirozené okamžiky." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, svatební fotografie a larpové akce." }
+    "home":      { "title": "Guth Pictures — Fotograf", "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty." },
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, eventy a larpy." }
   },
   "home": {
     "title": "Guth Pictures",
-    "subtitle": "Portréty, svatby a larpy. Praha a okolí.",
+    "subtitle": "Portréty, eventy a larpy.",
     "cta": "Chci fotky",
-    "ctaContact": "Moje tvorba",
+    "ctaContact": "Portfolio",
     "selectedWorkTitle": "Vybraná práce",
     "selectedWorkLink": "Celé portfolio"
   },
@@ -37,7 +38,7 @@
     "zavrit": "Zavřít",
     "portfolioBtn": "Portfolio",
     "rezervovat": "Rezervovat termín",
-    "vybrat": "Vybrat balíček",
+    "vybrat": "Mám zájem",
     "portraits": {
       "title": "Portréty",
       "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."

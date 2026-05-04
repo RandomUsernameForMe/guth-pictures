@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
-import { getBlogPosts, saveBlogPost, type BlogPost } from "@/lib/blog";
+import { getBlogPosts, saveBlogPost, type BlogPost } from "@/modules/blog/lib/blog";
 
 export async function GET() {
   if (!(await isAuthenticated())) {

@@ -1,3 +1,36 @@
+## [2026-05-04] - feat(typography): přechod z Geist na DM Sans + DM Mono
+
+- layout.tsx: DM_Sans (s opsz osou) + DM_Mono přes next/font/google
+- globals.css: @theme inline + --font-sans/--font-mono tokeny v :root
+
+## [2026-04-05] - fix(ui): ambient glows bez viditelných kruhů
+
+- blur 140px + gradient s peakem na 30% místo ostrého středu
+
+## [2026-04-05] - fix(o-mne): odebrat WordReveal animaci, přejmenovat CTA na "Portfolio"
+
+- Bio v sekci "O mně" zobrazeno staticky místo postupného odhalování slov
+- cs.json: CTA "Moje tvorba" → "Portfolio"
+
+## [2026-04-03] - feat(ui): ambient glows scrollují se stránkou, cursor glow odstraněn
+
+- Ambient glows přesunuty z fixed na absolute — scrollují se stránkou
+- Mouse pozice převedena do document coordinates (clientY + scrollY)
+- Cursor-following glow odstraněn
+- Počet ambient glow bodů navýšen na 8
+
+## [2026-04-03] - feat(ui): mouse-reactive a ambient glows na homepage
+
+- Přidána komponenta MouseGlow — cursor-following glow (2 vrstvy, spring animace)
+- 5 ambient glow bodů reagujících na myš útěkem, návrat na domovskou pozici
+- Barva glow odvozena z `--color-accent` (nastavitelné přes admin theme editor)
+- prefers-reduced-motion podpora
+
+## [2026-04-03] - fix(sluzby): úprava buttonů v sekci služby
+
+- Odstraněn button "Rezervovat termín" ze spodní části rozevřeného balíčku
+- Odkaz "Vybrat balíček" nahrazen buttonem "Mám zájem" / "I'm interested" (stejná funkcionalita)
+
 ## [2026-03-30] - feat(vop): stránka obchodních podmínek s českou a anglickou verzí
 
 - Nová stránka `/vop` — CS: plné VOP (právní dokument), EN: neformální collaboration guidelines

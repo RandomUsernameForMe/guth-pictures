@@ -1,12 +1,11 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
 import { ContactForm } from "@/components/ContactForm";
-import { HeroSection } from "@/components/HeroSection";
-import { SelectedWork } from "@/components/SelectedWork";
+import { HeroSection } from "@/modules/homepage/components/HeroSection";
+import { SelectedWork } from "@/modules/homepage/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
-import { WordReveal } from "@/components/WordReveal";
-import { getContent, getImages } from "@/lib/content";
-import { ServiceCards, type ServiceItem } from "@/components/ServiceCards";
+import { getContent, getImages } from "@/modules/admin/lib/content";
+import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
@@ -57,7 +56,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         subtitle={content.home.subtitle}
         ctaPortfolio={t("home.cta")}
         ctaContact={t("home.ctaContact")}
-        heroPublicId={images.hero || undefined}
       />
 
       {photos.length > 0 && (
@@ -94,7 +92,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div>
               <h2 className="text-4xl font-bold">{content["o-mne"].title}</h2>
               <p className="mt-2 text-lg text-[var(--color-text-muted)]">{content["o-mne"].subtitle}</p>
-              <WordReveal text={content["o-mne"].bio} className="mt-8 text-[var(--color-text-muted)] text-lg leading-relaxed" />
+              <p className="mt-8 text-[var(--color-text-muted)] text-lg leading-relaxed">{content["o-mne"].bio}</p>
               <a
                 href="#kontakt"
                 className="inline-block mt-8 px-6 py-3 border border-[var(--color-border-sub)] text-sm hover:bg-[var(--color-bg-overlay)] transition-colors"
@@ -111,7 +109,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <ServiceCards
-            bookLabel={t("sluzby.rezervovat")}
             selectLabel={t("sluzby.vybrat")}
             services={[
               {

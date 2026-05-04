@@ -19,6 +19,7 @@ export function Nav() {
   const locale = useLocale();
   const isPortfolio = pathname.startsWith("/portfolio");
   const isBlog = pathname.startsWith("/blog");
+  const isLightTester = pathname.startsWith("/light-tester");
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -39,7 +40,6 @@ export function Nav() {
 
   const subpageLinks: NavLink[] = [
     { href: "/", label: `← ${t("home")}` },
-    { href: "/#kontakt", label: t("kontakt") },
   ];
 
   const homeLinks: NavLink[] = [
@@ -48,12 +48,15 @@ export function Nav() {
     { href: "#kontakt", label: t("kontakt"), anchor: true },
     { href: "/blog", label: t("blog") },
     { href: "/portfolio", label: t("portfolio") },
+    { href: "/light-tester", label: t("light-tester") },
   ];
 
-  const links = (isPortfolio || isBlog) ? subpageLinks : homeLinks;
+  const links = (isPortfolio || isBlog || isLightTester) ? subpageLinks : homeLinks;
 
   const isActive = (href: string) =>
-    (href === "/portfolio" && isPortfolio) || (href === "/blog" && isBlog);
+    (href === "/portfolio" && isPortfolio) ||
+    (href === "/blog" && isBlog) ||
+    (href === "/light-tester" && isLightTester);
 
   const scrolledStyle = {
     background: "var(--nav-bg-scrolled)",

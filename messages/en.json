@@ -6,7 +6,8 @@
     "sluzby": "Services",
     "o-mne": "About",
     "kontakt": "Contact",
-    "vop": "Terms & Guidelines"
+    "vop": "Terms & Guidelines",
+    "light-tester": "Light Tester"
   },
   "meta": {
     "home":      { "title": "Guth Pictures — Photographer Prague", "description": "Professional photographer based in Prague. Portraits, weddings and larps. Reportage style, natural moments." },
@@ -37,7 +38,7 @@
     "zavrit": "Close",
     "portfolioBtn": "Portfolio",
     "rezervovat": "Book a date",
-    "vybrat": "Choose a package",
+    "vybrat": "I'm interested",
     "portraits": {
       "title": "Portraits",
       "desc": "Individual and group portraits. In the studio, outdoors or in your own environment — with an emphasis on naturalness and expression."

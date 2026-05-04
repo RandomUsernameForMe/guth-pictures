@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
-import { getBlogPostById, deleteBlogPost } from "@/lib/blog";
+import { getBlogPostById, deleteBlogPost } from "@/modules/blog/lib/blog";
 
 export async function DELETE(
   _req: NextRequest,

@@ -1,19 +1,31 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { DM_Sans, DM_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
+import { AmbientGlow } from "@/modules/homepage/components/AmbientGlow";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
-import { getContent, getContactEmail } from "@/lib/content";
+import { getContent, getContactEmail } from "@/modules/admin/lib/content";
 import "../globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  axes: ["opsz"],
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  variable: "--font-dm-mono",
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -63,11 +75,12 @@ export default async function LocaleLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
-      <body className={`${geist.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
+      <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <Nav />
-            <div className="pt-16 min-h-screen flex flex-col">
+            <div className="relative pt-16 min-h-screen flex flex-col">
+              <AmbientGlow />
               {children}
               <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
             </div>
