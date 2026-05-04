@@ -1,3 +1,5 @@
+## [2026-05-04] - test: opravit testy po odebrání kategorie larpy
+
 ## [2026-05-04] - feat(homepage): odebrat sekci Larpy ze služeb a kategorie z portfolio filtru
 
 - app/[locale]/page.tsx: odstraněn larp ServiceItem (003)

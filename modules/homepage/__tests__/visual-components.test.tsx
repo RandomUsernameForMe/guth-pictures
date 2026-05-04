@@ -124,7 +124,6 @@ describe("PortfolioFilter", () => {
     expect(screen.getByRole("button", { name: "filterAll" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /portréty/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /svatby/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /larpy/i })).toBeInTheDocument();
   });
 
   it("bez filtru zobrazí všechny fotky", () => {

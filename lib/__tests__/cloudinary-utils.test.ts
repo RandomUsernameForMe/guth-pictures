@@ -45,10 +45,9 @@ describe("CATEGORIES", () => {
   it("obsahuje správné kategorie", () => {
     expect(CATEGORIES).toContain("portréty");
     expect(CATEGORIES).toContain("svatby");
-    expect(CATEGORIES).toContain("larpy");
   });
 
-  it("je readonly tuple se třemi položkami", () => {
-    expect(CATEGORIES).toHaveLength(3);
+  it("je readonly tuple se dvěma položkami", () => {
+    expect(CATEGORIES).toHaveLength(2);
   });
 });

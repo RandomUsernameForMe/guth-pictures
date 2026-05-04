@@ -11,7 +11,6 @@ vi.mock("next-intl", () => ({
       filterAll: "Vše",
       "categories.portréty": "Portréty",
       "categories.svatby": "Svatby",
-      "categories.larpy": "Larpy",
     };
     return translations[key] ?? key;
   },
@@ -45,13 +44,12 @@ const photos: GalleryPhoto[] = [
   makePhoto("p1", "portréty"),
   makePhoto("p2", "portréty"),
   makePhoto("s1", "svatby"),
-  makePhoto("l1", "larpy"),
 ];
 
 describe("PortfolioFilter", () => {
   it("zobrazí všechny fotky při startu (žádný filtr)", () => {
     render(<PortfolioFilter photos={photos} locale="cs" />);
-    expect(screen.getAllByRole("img")).toHaveLength(4);
+    expect(screen.getAllByRole("img")).toHaveLength(3);
   });
 
   it("zobrazí tlačítka pro všechny kategorie + Vše", () => {
@@ -59,7 +57,6 @@ describe("PortfolioFilter", () => {
     expect(screen.getByRole("button", { name: "Vše" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Portréty" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Svatby" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Larpy" })).toBeInTheDocument();
   });
 
   it("filtruje na portréty po kliknutí", async () => {
@@ -84,7 +81,7 @@ describe("PortfolioFilter", () => {
     render(<PortfolioFilter photos={photos} locale="cs" />);
     await user.click(screen.getByRole("button", { name: "Portréty" }));
     await user.click(screen.getByRole("button", { name: "Vše" }));
-    expect(screen.getAllByRole("img")).toHaveLength(4);
+    expect(screen.getAllByRole("img")).toHaveLength(3);
   });
 
   it("edge case: prázdné pole fotek nezpůsobí crash", () => {
