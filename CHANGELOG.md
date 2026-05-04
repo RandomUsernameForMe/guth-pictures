@@ -1,3 +1,8 @@
+## [2026-05-04] - feat(typography): přechod z Geist na DM Sans + DM Mono
+
+- layout.tsx: DM_Sans (s opsz osou) + DM_Mono přes next/font/google
+- globals.css: @theme inline + --font-sans/--font-mono tokeny v :root
+
 ## [2026-04-05] - fix(ui): ambient glows bez viditelných kruhů
 
 - blur 140px + gradient s peakem na 30% místo ostrého středu
