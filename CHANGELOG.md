@@ -1,3 +1,5 @@
+## [2026-05-04] - fix(hero): prohodit CTA buttony — primární na kontakt, sekundární na portfolio
+
 ## [2026-05-04] - refactor(ui): nahradit ambient glows za brass top linku + tinted grain
 
 - AmbientGlow.tsx: vrací null, odstraněny 3 blur divs

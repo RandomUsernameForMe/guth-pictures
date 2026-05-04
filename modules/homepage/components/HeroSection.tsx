@@ -85,18 +85,18 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact }: Props
           transition={{ duration: 0.9, delay: 0.6 }}
           className="mt-10 flex gap-4 flex-wrap"
         >
-          <Link
-            href="/portfolio"
-            className="px-8 py-4 bg-[var(--color-text)] text-[var(--color-bg)] font-medium rounded-xl hover:opacity-90 transition-opacity duration-200"
-          >
-            {ctaPortfolio}
-          </Link>
           <a
             href="#kontakt"
-            className="px-8 py-4 bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--color-border)] text-[var(--color-text)] rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200"
+            className="px-8 py-4 bg-[var(--color-text)] text-[var(--color-bg)] font-medium rounded-xl hover:opacity-90 transition-opacity duration-200"
           >
             {ctaContact}
           </a>
+          <Link
+            href="/portfolio"
+            className="px-8 py-4 bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--color-border)] text-[var(--color-text)] rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200"
+          >
+            {ctaPortfolio}
+          </Link>
         </motion.div>
       </div>
 
