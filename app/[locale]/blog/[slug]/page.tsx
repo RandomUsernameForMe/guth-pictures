@@ -8,6 +8,7 @@ import rehypeSanitize from "rehype-sanitize";
 import { Link } from "@/i18n/navigation";
 import { getBlogPost, getBlogPosts } from "@/modules/blog/lib/blog";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { siteUrl } from "@/lib/config";
 
 export const revalidate = 60;
 
@@ -28,12 +29,30 @@ export async function generateMetadata({
   const post = await getBlogPost(slug);
   if (!post) return {};
   const loc = post[locale as "cs" | "en"] ?? post.cs;
+  const ogImageUrl = post.coverImage
+    ? cloudinaryUrl(post.coverImage, "w_1200,h_630,c_fill,q_auto,f_jpg")
+    : `${siteUrl}/og-image.jpg`;
+
   return {
     title: `${loc.title} — Guth Pictures`,
     description: loc.excerpt,
     alternates: {
       canonical: `/${locale}/blog/${slug}`,
       languages: { cs: `/cs/blog/${slug}`, en: `/en/blog/${slug}` },
+    },
+    openGraph: {
+      title: loc.title,
+      description: loc.excerpt,
+      url: `${siteUrl}/${locale}/blog/${slug}`,
+      type: "article",
+      publishedTime: post.publishedAt,
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: loc.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: loc.title,
+      description: loc.excerpt,
+      images: [ogImageUrl],
     },
   };
 }
