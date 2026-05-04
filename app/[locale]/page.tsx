@@ -125,13 +125,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 packages: content.sluzby.weddings.packages,
                 note: content.sluzby.weddings.note,
               },
-              {
-                key: "larp", number: "003", category: "larpy",
-                title: content.sluzby.larp.title,
-                desc: content.sluzby.larp.desc,
-                packages: content.sluzby.larp.packages,
-                note: content.sluzby.larp.note,
-              },
             ] satisfies ServiceItem[]}
           />
         </section>

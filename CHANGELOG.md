@@ -1,3 +1,8 @@
+## [2026-05-04] - feat(homepage): odebrat sekci Larpy ze služeb a kategorie z portfolio filtru
+
+- app/[locale]/page.tsx: odstraněn larp ServiceItem (003)
+- lib/cloudinary-utils.ts: "larpy" odebráno z CATEGORIES (filtr skryt; existující foto stále viditelná pod "Vše")
+
 ## [2026-05-04] - fix(hero): prohodit CTA buttony — primární na kontakt, sekundární na portfolio
 
 ## [2026-05-04] - refactor(ui): nahradit ambient glows za brass top linku + tinted grain
