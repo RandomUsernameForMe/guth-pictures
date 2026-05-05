@@ -29,6 +29,7 @@ export function Footer({ title, subtitle, email }: Props) {
             <Link href="/blog" className="hover:text-[var(--color-text)] transition-colors">{tNav("blog")}</Link>
             <a href="/#kontakt" className="hover:text-[var(--color-text)] transition-colors">{tNav("kontakt")}</a>
             <Link href="/vop" className="hover:text-[var(--color-text)] transition-colors">{tNav("vop")}</Link>
+            <Link href="/privacy" className="hover:text-[var(--color-text)] transition-colors">{tNav("privacy")}</Link>
             <a href={`mailto:${email}`} className="hover:text-[var(--color-text)] transition-colors">{email}</a>
           </nav>
         </div>
