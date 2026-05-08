@@ -69,7 +69,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
             {/* Profilová fotka */}
-            {images.profile ? (
+            {images.profile && (
               <div className="aspect-[4/5] relative overflow-hidden">
                 <Image
                   src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
@@ -80,10 +80,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 280px"
                 />
-              </div>
-            ) : (
-              <div className="aspect-[4/5] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-text-ghost)] text-6xl font-light select-none">
-                JG
               </div>
             )}
             {/* Bio */}
