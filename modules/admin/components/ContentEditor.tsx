@@ -26,7 +26,7 @@ export function ContentEditor() {
     en: emptyContent(),
   });
   const [status, setStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
-  const [images, setImages] = useState<SiteImages>({ hero: "", profile: "" });
+  const [images, setImages] = useState<SiteImages>({ profile: "" });
   const [imgStatus, setImgStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
   const [email, setEmail] = useState("");
   const [emailStatus, setEmailStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
@@ -153,11 +153,6 @@ export function ContentEditor() {
         <form onSubmit={handleImagesSave} className="space-y-4 max-w-2xl">
           <div className="border border-white/10 p-6 space-y-4">
             <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Klíčové obrázky</h3>
-            <Field
-              label="Hero banner — Cloudinary public ID"
-              value={images.hero}
-              onChange={(v) => setImages((prev) => ({ ...prev, hero: v }))}
-            />
             <Field
               label="Profilová fotka — Cloudinary public ID"
               value={images.profile}

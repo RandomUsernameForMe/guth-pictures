@@ -212,7 +212,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
       const res = await fetch("/api/admin/images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hero: current.hero ?? "", profile: current.profile ?? "", heroTriptych: triptych }),
+        body: JSON.stringify({ profile: current.profile ?? "", heroTriptych: triptych }),
       });
       setTriptychMsg(res.ok ? { ok: true, text: "Uloženo" } : { ok: false, text: "Chyba při ukládání" });
       if (res.ok) router.refresh();

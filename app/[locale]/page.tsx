@@ -43,7 +43,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const [t, content, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
-    getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ hero: "", profile: "" })),
+    getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ profile: "" })),
   ]);
 
   const normalizeSlot = (slot: unknown): string[] =>

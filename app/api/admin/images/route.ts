@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const body = await req.json();
-  const { hero, profile, heroTriptych } = body ?? {};
-  if (!isValidPublicId(hero) || !isValidPublicId(profile)) {
+  const { profile, heroTriptych } = body ?? {};
+  if (!isValidPublicId(profile)) {
     return NextResponse.json({ error: "Invalid public ID" }, { status: 400 });
   }
   const current = await getImages();
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     }
     resolvedTriptych = heroTriptych as [string[], string[], string[]];
   }
-  await setImages({ hero, profile, heroTriptych: resolvedTriptych });
+  await setImages({ profile, heroTriptych: resolvedTriptych });
   revalidatePath("/cs");
   revalidatePath("/en");
   return NextResponse.json({ ok: true });

@@ -1,3 +1,8 @@
+## [2026-05-08] - refactor(admin): odstranit reliktní hero banner pole
+
+- SiteImages.hero odstraněn z typu, defaults, admin formu, API route i page.tsx catch
+- hero triptych zůstává, single-banner pole nikdy nebylo používáno na frontendu
+
 ## [2026-05-08] - perf: loading optimalizace hero + fonty
 
 - hero `<img>` tagy: `loading="eager"`, první panel `fetchPriority="high"`
