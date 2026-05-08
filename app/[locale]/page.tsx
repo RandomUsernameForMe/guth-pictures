@@ -49,15 +49,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ hero: "", profile: "" })),
   ]);
 
-  const t3 = images.heroTriptych;
-  const heroPhotos: [{ publicId: string; category: "portraits" | "events" }, { publicId: string; category: "portraits" | "events" }, { publicId: string; category: "portraits" | "events" }] | undefined =
-    t3 && t3.every(Boolean)
-      ? [
-          { publicId: t3[0], category: "portraits" },
-          { publicId: t3[1], category: "events" },
-          { publicId: t3[2], category: "portraits" },
-        ]
-      : undefined;
+  const normalizeSlot = (slot: unknown): string[] =>
+    Array.isArray(slot) ? slot.filter((s): s is string => typeof s === "string") : [];
+  const raw = images.heroTriptych as unknown;
+  const heroPhotos: [string[], string[], string[]] | undefined = Array.isArray(raw) && raw.length === 3
+    ? [normalizeSlot(raw[0]), normalizeSlot(raw[1]), normalizeSlot(raw[2])]
+    : undefined;
 
   return (
     <main className="-mt-16">
