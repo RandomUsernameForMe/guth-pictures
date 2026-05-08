@@ -15,6 +15,7 @@ vi.mock("framer-motion", () => {
   const make = (tag: string) =>
     ({ children, initial, animate, exit, whileInView, viewport, transition, layoutId, ...rest }: MotionProps) =>
       React.createElement(tag, rest, children);
+  const mockMotionValue = { get: () => 0, on: () => () => {}, subscribe: () => () => {} };
   return {
     motion: {
       div: make("div"),
@@ -24,6 +25,9 @@ vi.mock("framer-motion", () => {
       figure: make("figure"),
     },
     AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+    useScroll: () => ({ scrollY: mockMotionValue }),
+    useTransform: () => mockMotionValue,
+    useMotionValueEvent: () => {},
   };
 });
 
@@ -88,6 +92,7 @@ describe("HeroSection", () => {
     subtitle: "Portréty, svatby a larpy.",
     ctaPortfolio: "Prohlédnout portfolio",
     ctaContact: "Napsat mi",
+    locale: "cs",
   };
 
   it("renderuje titulek", () => {

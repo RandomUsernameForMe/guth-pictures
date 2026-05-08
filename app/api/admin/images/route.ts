@@ -22,11 +22,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const body = await req.json();
-  const { hero, profile } = body ?? {};
+  const { hero, profile, heroTriptych } = body ?? {};
   if (!isValidPublicId(hero) || !isValidPublicId(profile)) {
     return NextResponse.json({ error: "Invalid public ID" }, { status: 400 });
   }
-  await setImages({ hero, profile });
+  const current = await getImages();
+  let resolvedTriptych: [string, string, string] | undefined = current.heroTriptych;
+  if (heroTriptych !== undefined) {
+    if (
+      !Array.isArray(heroTriptych) ||
+      heroTriptych.length !== 3 ||
+      !heroTriptych.every(isValidPublicId)
+    ) {
+      return NextResponse.json({ error: "Invalid heroTriptych" }, { status: 400 });
+    }
+    resolvedTriptych = heroTriptych as [string, string, string];
+  }
+  await setImages({ hero, profile, heroTriptych: resolvedTriptych });
   revalidatePath("/cs");
   revalidatePath("/en");
   return NextResponse.json({ ok: true });
