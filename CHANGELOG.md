@@ -1,3 +1,8 @@
+## [2026-05-08] - fix(hero): opravit nav linky a CTA buttony
+
+- navLinks v hero sekci — span → Link s reálnými href (#o-mne, #sluzby, #kontakt, /portfolio)
+- CTA buttony — prohozené labely opraveny (Chci fotky → kontakt, Portfolio → /portfolio)
+
 ## [2026-05-07] - feat(admin): hero triptych picker v adminu
 
 - SiteImages rozšířen o heroTriptych?: [string, string, string]

@@ -64,8 +64,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <HeroSection
         title={content.home.title}
         subtitle={content.home.subtitle}
-        ctaPortfolio={t("home.cta")}
-        ctaContact={t("home.ctaContact")}
+        ctaPortfolio={t("home.ctaContact")}
+        ctaContact={t("home.cta")}
         locale={locale}
         photos={heroPhotos}
       />
