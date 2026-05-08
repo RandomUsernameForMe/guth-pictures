@@ -1,3 +1,9 @@
+## [2026-05-08] - feat(admin): file picker pro profilovou fotku
+
+- upload route přijímá volitelný `folder` param (default `"portfolio"`)
+- ContentEditor: textové pole nahrazeno file pickerem s náhledem + auto-save po uploadu
+- foto se nahrává do složky `site/` na Cloudinary
+
 ## [2026-05-08] - refactor(admin): odstranit reliktní hero banner pole
 
 - SiteImages.hero odstraněn z typu, defaults, admin formu, API route i page.tsx catch

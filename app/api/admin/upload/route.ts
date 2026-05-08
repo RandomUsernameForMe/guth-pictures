@@ -40,19 +40,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
   }
 
+  const folder = (formData.get("folder") as string) || "portfolio";
   const category = (formData.get("category") as string) ?? "portréty";
   const altCs = (formData.get("alt_cs") as string) ?? "";
   const altEn = (formData.get("alt_en") as string) ?? "";
 
+  const uploadOptions: Record<string, unknown> = { folder };
+  if (folder === "portfolio") {
+    uploadOptions.context = { alt_cs: altCs, alt_en: altEn, category };
+  }
+
   const result = await new Promise<{ public_id: string }>((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream(
-        {
-          folder: "portfolio",
-          context: { alt_cs: altCs, alt_en: altEn, category },
-        },
-        (err, result) => (err ? reject(err) : resolve(result!))
-      )
+      .upload_stream(uploadOptions, (err, result) => (err ? reject(err) : resolve(result!)))
       .end(buffer);
   });
 
