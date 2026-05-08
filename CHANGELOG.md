@@ -1,3 +1,8 @@
+## [2026-05-08] - fix(admin): normalizace heroTriptych v admin/fotky
+
+- stejný backward compat fix jako na public page — staré KV [string,string,string] → [string[],string[],string[]]
+- opravuje client-side exception při výběru fotek do hero slotů
+
 ## [2026-05-08] - fix(hero): backward compat pro staré heroTriptych KV data
 
 - normalizace v page.tsx: starý formát [string,string,string] → [string[],string[],string[]]
