@@ -53,6 +53,8 @@ export function Nav() {
 
   const links = (isPortfolio || isBlog || isLightTester) ? subpageLinks : homeLinks;
 
+  if (isHome) return null;
+
   const isActive = (href: string) =>
     (href === "/portfolio" && isPortfolio) ||
     (href === "/blog" && isBlog) ||

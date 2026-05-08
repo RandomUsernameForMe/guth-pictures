@@ -42,25 +42,37 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, photos, images] = await Promise.all([
+  const [t, content, portfolioPhotos, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
     getGalleryPhotos("portfolio").catch(() => []),
-    getImages().catch(() => ({ hero: "", profile: "" })),
+    getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ hero: "", profile: "" })),
   ]);
 
+  const t3 = images.heroTriptych;
+  const heroPhotos: [{ publicId: string; category: "portraits" | "events" }, { publicId: string; category: "portraits" | "events" }, { publicId: string; category: "portraits" | "events" }] | undefined =
+    t3 && t3.every(Boolean)
+      ? [
+          { publicId: t3[0], category: "portraits" },
+          { publicId: t3[1], category: "events" },
+          { publicId: t3[2], category: "portraits" },
+        ]
+      : undefined;
+
   return (
-    <main>
+    <main className="-mt-16">
       <HeroSection
         title={content.home.title}
         subtitle={content.home.subtitle}
         ctaPortfolio={t("home.cta")}
         ctaContact={t("home.ctaContact")}
+        locale={locale}
+        photos={heroPhotos}
       />
 
-      {photos.length > 0 && (
+      {portfolioPhotos.length > 0 && (
         <SelectedWork
-          photos={photos}
+          photos={portfolioPhotos}
           locale={locale}
           title={t("home.selectedWorkTitle")}
           linkLabel={t("home.selectedWorkLink")}

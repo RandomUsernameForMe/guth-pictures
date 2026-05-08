@@ -1,3 +1,34 @@
+## [2026-05-07] - feat(admin): hero triptych picker v adminu
+
+- SiteImages rozšířen o heroTriptych?: [string, string, string]
+- images API route: validace + merge heroTriptych při POST
+- AdminDashboard: picker sekce — 3 sloty, klik slot → klik fotku → přiřazení, badge P1/P2/P3 na fotce, Uložit button
+- fotky/page.tsx: fetchuje getImages() a předává heroTriptych do AdminDashboard
+- page.tsx: hero čte images.heroTriptych z KV místo prvních 3 portfolio fotek
+
+## [2026-05-07] - feat(hero): nový HeroSection — triptych, scroll-driven navbar, Kenburns
+
+- HeroSection.tsx: kompletně nahrazen — triptych s fade, vlastní glass navbar, Grain overlay
+- Nav.tsx: return null na homepage (HeroSection má vlastní nav)
+- page.tsx: -mt-16 na main, předán locale + heroPhotos (první 3 z portfolia)
+- visual-components.test.tsx: přidán locale prop, framer-motion mock rozšířen o useScroll/useMotionValueEvent
+
+## [2026-05-04] - feat(admin+homepage): odebrat larp z ContentData, adminu a grid rozšířit na 2 sloupce
+
+- content.ts: odebrán larp ze ServiceContent, defaults, normalizeContent
+- ContentEditor.tsx: odstraněna sekce Larpy + larp z emptyContent
+- content/route.ts: odstraněna larp validace
+- ServiceCards.tsx: grid dynamicky 2 nebo 3 sloupce dle počtu karet
+
+## [2026-05-04] - test: opravit testy po odebrání kategorie larpy
+
+## [2026-05-04] - feat(homepage): odebrat sekci Larpy ze služeb a kategorie z portfolio filtru
+
+- app/[locale]/page.tsx: odstraněn larp ServiceItem (003)
+- lib/cloudinary-utils.ts: "larpy" odebráno z CATEGORIES (filtr skryt; existující foto stále viditelná pod "Vše")
+
+## [2026-05-04] - fix(hero): prohodit CTA buttony — primární na kontakt, sekundární na portfolio
+
 ## [2026-05-04] - refactor(ui): nahradit ambient glows za brass top linku + tinted grain
 
 - AmbientGlow.tsx: vrací null, odstraněny 3 blur divs
