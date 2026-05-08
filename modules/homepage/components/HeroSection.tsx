@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
@@ -134,12 +133,13 @@ function TriptychPanel({
 // ─────────────────────────────────────────────────────────────
 export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos, locale }: Props) {
   // Scroll progress over the first 160px of page scroll (0 → 1)
-  const { scrollY } = useScroll();
   const [progress, setProgress] = useState(0);
 
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setProgress(Math.min(1, y / 160));
-  });
+  useEffect(() => {
+    const onScroll = () => setProgress(Math.min(1, window.scrollY / 160));
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Eased progress (ease-in-out quad)
   const ease = progress < 0.5
@@ -271,7 +271,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
       {/* ── Hero section ── */}
       <section
         id="hero"
-        className="relative min-h-[80vh] flex items-stretch overflow-hidden"
+        className="relative h-screen flex items-stretch overflow-hidden"
         aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
       >
         {/* Triptych */}
