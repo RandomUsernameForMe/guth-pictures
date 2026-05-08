@@ -91,6 +91,7 @@ function TriptychPanel({
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
         style={{ animation: kbAnimation }}
+        loading="eager"
         aria-hidden
       />
       {/* Incoming image — fades in */}
@@ -100,6 +101,8 @@ function TriptychPanel({
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
         style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }}
+        loading="eager"
+        fetchPriority={index === 0 ? "high" : "auto"}
         aria-hidden
       />
       <FilmicTint />
@@ -324,7 +327,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
               opacity: eyebrowOpacity,
             }}
           >
-            {locale === "cs" ? "Jakub Guth · Praha" : "Jakub Guth · Prague"}
+            {locale === "cs" ? "Tomáš Guth Jarkovský · Praha" : "Tomáš Guth Jarkovský · Prague"}
           </div>
 
           {/* Wordmark */}

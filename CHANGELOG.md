@@ -1,3 +1,9 @@
+## [2026-05-08] - perf: loading optimalizace hero + fonty
+
+- hero `<img>` tagy: `loading="eager"`, první panel `fetchPriority="high"`
+- DM Sans + DM Mono: přidáno `display: "swap"`
+- přejmenování "Jakub Guth" → "Tomáš Guth Jarkovský" v hero banneru
+
 ## [2026-05-08] - feat(homepage): odstranit sekci Vybraná práce
 
 - SelectedWork carousel odebrán z homepage

@@ -18,6 +18,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   axes: ["opsz"],
+  display: "swap",
 });
 
 const dmMono = DM_Mono({
@@ -25,6 +26,7 @@ const dmMono = DM_Mono({
   variable: "--font-dm-mono",
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
