@@ -184,10 +184,20 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
     },
   ];
 
-  const navLinks =
+  const navLinks: { label: string; href: string }[] =
     locale === "cs"
-      ? ["Portfolio", "O mně", "Služby", "Kontakt"]
-      : ["Portfolio", "About", "Services", "Contact"];
+      ? [
+          { label: "Portfolio", href: "/portfolio" },
+          { label: "O mně", href: "#o-mne" },
+          { label: "Služby", href: "#sluzby" },
+          { label: "Kontakt", href: "#kontakt" },
+        ]
+      : [
+          { label: "Portfolio", href: "/portfolio" },
+          { label: "About", href: "#o-mne" },
+          { label: "Services", href: "#sluzby" },
+          { label: "Contact", href: "#kontakt" },
+        ];
 
   return (
     <>
@@ -246,13 +256,14 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             transform: `translateY(${navItemsY.toFixed(1)}px)`,
           }}
         >
-          {navLinks.map((l) => (
-            <span
-              key={l}
-              className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200 cursor-pointer"
+          {navLinks.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
             >
-              {l}
-            </span>
+              {label}
+            </Link>
           ))}
           <span
             className="ml-2"
@@ -389,14 +400,15 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
               transform: `translateY(${(ease * -6).toFixed(1)}px)`,
             }}
           >
-            {navLinks.map((l) => (
-              <span
-                key={l}
-                className="cursor-pointer hover:text-[var(--color-text)] transition-colors duration-200"
+            {navLinks.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="hover:text-[var(--color-text)] transition-colors duration-200"
                 style={{ color: "rgba(242,240,235,0.55)" }}
               >
-                {l}
-              </span>
+                {label}
+              </Link>
             ))}
             <span
               style={{
