@@ -3,24 +3,18 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 
 // ─────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────
-type HeroPhoto = {
-  publicId: string;
-  category: "portraits" | "events";
-};
-
 type Props = {
   title: string;
   subtitle: string;
   ctaPortfolio: string;
   ctaContact: string;
-  /** Three photos for the triptych — one per panel. Falls back to a
-   *  plain dark surface if not provided. */
-  photos?: [HeroPhoto, HeroPhoto, HeroPhoto];
+  /** PublicIds per panel — each panel cycles through its own list. */
+  photos?: [string[], string[], string[]];
   locale: string;
 };
 
@@ -158,30 +152,17 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
   const navItemsY = (1 - ease) * -10;
   const scrollHintOpacity = Math.max(0, 1 - ease * 3);
 
-  // Build image URL arrays per panel.
-  // panels[0] = portraits, panels[1] = events, panels[2] = portraits (mix)
-  // If no photos provided, panels are empty (surface colour shows).
-  const buildSrcs = (category: "portraits" | "events") =>
-    (photos ?? [])
-      .filter((p) => p.category === category)
-      .map((p) => cloudinaryUrl(p.publicId, "w_800,c_fill,q_auto:good,f_auto"));
+  const toSrcs = (ids: string[]) =>
+    ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+
+  const panelLabels = locale === "cs"
+    ? ["Portréty", "Eventy", "Portréty"]
+    : ["Portraits", "Events", "Portraits"];
 
   const panelData: { srcs: string[]; label: string; kb: string }[] = [
-    {
-      srcs: buildSrcs("portraits"),
-      label: locale === "cs" ? "Portréty" : "Portraits",
-      kb: "heroKb1 18s ease-in-out infinite alternate",
-    },
-    {
-      srcs: buildSrcs("events"),
-      label: locale === "cs" ? "Eventy" : "Events",
-      kb: "heroKb2 22s ease-in-out infinite alternate",
-    },
-    {
-      srcs: [...buildSrcs("portraits")].reverse(),
-      label: locale === "cs" ? "Portréty" : "Portraits",
-      kb: "heroKb3 16s ease-in-out infinite alternate",
-    },
+    { srcs: toSrcs(photos?.[0] ?? []), label: panelLabels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
+    { srcs: toSrcs(photos?.[1] ?? []), label: panelLabels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
+    { srcs: toSrcs(photos?.[2] ?? []), label: panelLabels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
   ];
 
   const navLinks: { label: string; href: string }[] =

@@ -37,7 +37,7 @@ type FileItem = { file: File; preview: string; status: FileStatus };
 
 type Props = {
   photos: GalleryPhoto[];
-  heroTriptych?: [string, string, string];
+  heroTriptych?: [string[], string[], string[]];
 };
 
 const PANEL_LABELS = ["Panel 1 · Portréty", "Panel 2 · Eventy", "Panel 3 · Portréty"];
@@ -52,8 +52,8 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
   const [dragOver, setDragOver] = useState(false);
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [triptych, setTriptych] = useState<[string, string, string]>(
-    initialTriptych ?? ["", "", ""]
+  const [triptych, setTriptych] = useState<[string[], string[], string[]]>(
+    initialTriptych ?? [[], [], []]
   );
   const [activeSlot, setActiveSlot] = useState<0 | 1 | 2 | null>(null);
   const [triptychSaving, setTriptychSaving] = useState(false);
@@ -224,11 +224,20 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
 
   function handlePhotoClick(publicId: string) {
     if (activeSlot === null) return;
-    const next = [...triptych] as [string, string, string];
-    next[activeSlot] = publicId;
+    const next = triptych.map((arr) => [...arr]) as [string[], string[], string[]];
+    const idx = next[activeSlot].indexOf(publicId);
+    if (idx !== -1) {
+      next[activeSlot].splice(idx, 1);
+    } else {
+      next[activeSlot].push(publicId);
+    }
     setTriptych(next);
-    const nextEmpty = ([0, 1, 2] as const).find((s) => s !== activeSlot && !next[s]);
-    setActiveSlot(nextEmpty ?? null);
+  }
+
+  function handleRemoveFromSlot(slot: 0 | 1 | 2, publicId: string) {
+    const next = triptych.map((arr) => [...arr]) as [string[], string[], string[]];
+    next[slot] = next[slot].filter((id) => id !== publicId);
+    setTriptych(next);
   }
 
   return (
@@ -239,9 +248,11 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
         <p className="text-xs text-gray-500 mb-4">
           Klikni slot → klikni fotku níže. Aktivní slot = bílý rámeček.
         </p>
-        <div className="flex gap-3 mb-4 max-w-lg">
+        {/* Slot preview — 3 panels */}
+        <div className="flex gap-3 mb-3 max-w-2xl">
           {([0, 1, 2] as const).map((slot) => {
-            const pid = triptych[slot];
+            const ids = triptych[slot];
+            const first = ids[0];
             return (
               <button
                 key={slot}
@@ -252,10 +263,10 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
                     : "border-zinc-700 hover:border-zinc-500"
                 }`}
               >
-                {pid ? (
+                {first ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={cloudinaryUrl(pid, "w_300,c_fill,q_auto")}
+                    src={cloudinaryUrl(first, "w_300,c_fill,q_auto")}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover"
                   />
@@ -264,27 +275,46 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
                     Prázdný
                   </span>
                 )}
+                {ids.length > 0 && (
+                  <span className="absolute top-1 left-1 bg-black/80 text-white text-[10px] font-bold px-1.5 py-0.5">
+                    {ids.length} foto
+                  </span>
+                )}
                 <span className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1 text-xs text-gray-400 text-left">
                   {PANEL_LABELS[slot]}
                 </span>
-                {pid && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const next = [...triptych] as [string, string, string];
-                      next[slot] = "";
-                      setTriptych(next);
-                    }}
-                    className="absolute top-1 right-1 w-5 h-5 bg-black/70 text-white text-xs flex items-center justify-center hover:bg-red-900 transition-colors"
-                    title="Odebrat"
-                  >
-                    ×
-                  </button>
-                )}
               </button>
             );
           })}
         </div>
+
+        {/* Active slot image strip */}
+        {activeSlot !== null && triptych[activeSlot].length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3 max-w-2xl">
+            {triptych[activeSlot].map((pid) => (
+              <div key={pid} className="relative w-16 h-20 flex-shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cloudinaryUrl(pid, "w_120,c_fill,q_auto")}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  onClick={() => handleRemoveFromSlot(activeSlot, pid)}
+                  className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/80 text-white text-[10px] flex items-center justify-center hover:bg-red-900 transition-colors"
+                  title="Odebrat"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        {activeSlot !== null && (
+          <p className="text-xs text-zinc-500 mb-3">
+            Klikni na fotky níže pro přidání/odebrání ze slotu {activeSlot + 1}.
+          </p>
+        )}
         <div className="flex items-center gap-3">
           <button
             onClick={handleSaveTriptych}
@@ -421,7 +451,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {photos.map((photo) => {
-              const inTriptych = triptych.indexOf(photo.publicId);
+              const inSlots = ([0, 1, 2] as const).filter((s) => triptych[s].includes(photo.publicId));
               return (
               <div
                 key={photo.publicId}
@@ -451,9 +481,9 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
                   ★
                 </button>
                 {/* Triptych slot badge */}
-                {inTriptych !== -1 && (
+                {inSlots.length > 0 && (
                   <span className="absolute top-2 right-2 z-10 bg-white text-black text-[10px] font-bold px-1.5 py-0.5 rounded">
-                    P{inTriptych + 1}
+                    {inSlots.map((s) => `P${s + 1}`).join(" ")}
                   </span>
                 )}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">

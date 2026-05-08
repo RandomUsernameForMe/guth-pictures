@@ -23,7 +23,7 @@ export type ContentData = {
 export type SiteImages = {
   hero: string;    // Cloudinary public ID
   profile: string; // Cloudinary public ID
-  heroTriptych?: [string, string, string]; // publicIds pro 3 panely hero sekce
+  heroTriptych?: [string[], string[], string[]]; // pole publicIds pro 3 panely hero sekce
 };
 
 const defaults: Record<string, ContentData> = {
