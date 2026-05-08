@@ -1,3 +1,16 @@
+## [2026-05-08] - fix(hero): funkční anchor linky a přepínač jazyků
+
+- anchor linky v hero lište renderovány jako plain <a>, ne Link (locale prefix problém)
+- CS/EN přepínač — byl span, teď klikatelné Link s locale prop, aktivní locale zvýrazněn
+
+## [2026-05-08] - feat(hero+admin): multi-foto triptych sloty
+
+- každý ze 3 hero panelů má vlastní pole obrázků (bylo fixní 1)
+- admin: klik fotky toggleuje ji do/z aktivního slotu, strip miniatur per slot s × tlačítkem
+- badge na fotkách v gridu ukazuje "P1 P2" místo jediného slotu
+- SiteImages.heroTriptych: [string, string, string] → [string[], string[], string[]]
+- HeroSection.photos prop zjednodušen, buildSrcs odstraněna
+
 ## [2026-05-08] - fix(hero): opravit nav linky a CTA buttony
 
 - navLinks v hero sekci — span → Link s reálnými href (#o-mne, #sluzby, #kontakt, /portfolio)

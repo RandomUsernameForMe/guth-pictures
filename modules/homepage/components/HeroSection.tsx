@@ -256,25 +256,32 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             transform: `translateY(${navItemsY.toFixed(1)}px)`,
           }}
         >
-          {navLinks.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-            >
-              {label}
-            </Link>
-          ))}
+          {navLinks.map(({ label, href }) =>
+            href.startsWith("#") ? (
+              <a
+                key={href}
+                href={href}
+                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
+              >
+                {label}
+              </a>
+            ) : (
+              <Link
+                key={href}
+                href={href}
+                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
+              >
+                {label}
+              </Link>
+            )
+          )}
           <span
-            className="ml-2"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: "var(--color-text-ghost)",
-              letterSpacing: "0.1em",
-            }}
+            className="ml-2 flex items-center gap-1"
+            style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}
           >
-            {locale === "cs" ? "CS / EN" : "EN / CS"}
+            <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)" }}>CS</Link>
+            <span style={{ color: "var(--color-text-ghost)" }}>/</span>
+            <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)" }}>EN</Link>
           </span>
         </div>
       </div>
@@ -400,25 +407,34 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
               transform: `translateY(${(ease * -6).toFixed(1)}px)`,
             }}
           >
-            {navLinks.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className="hover:text-[var(--color-text)] transition-colors duration-200"
-                style={{ color: "rgba(242,240,235,0.55)" }}
-              >
-                {label}
-              </Link>
-            ))}
+            {navLinks.map(({ label, href }) =>
+              href.startsWith("#") ? (
+                <a
+                  key={href}
+                  href={href}
+                  className="hover:text-[var(--color-text)] transition-colors duration-200"
+                  style={{ color: "rgba(242,240,235,0.55)" }}
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  className="hover:text-[var(--color-text)] transition-colors duration-200"
+                  style={{ color: "rgba(242,240,235,0.55)" }}
+                >
+                  {label}
+                </Link>
+              )
+            )}
             <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                color: "rgba(242,240,235,0.35)",
-                letterSpacing: "0.15em",
-              }}
+              className="flex items-center gap-1"
+              style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em" }}
             >
-              {locale === "cs" ? "CS / EN" : "EN / CS"}
+              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>CS</Link>
+              <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
+              <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>EN</Link>
             </span>
           </div>
         </div>
