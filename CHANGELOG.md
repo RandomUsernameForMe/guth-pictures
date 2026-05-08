@@ -1,3 +1,5 @@
+## [2026-05-08] - fix(homepage): třetí panel hero triptych přejmenován na Larpy/Larps
+
 ## [2026-05-08] - fix(homepage): skrýt JG placeholder když není profilová fotka
 
 ## [2026-05-08] - feat(admin): file picker pro profilovou fotku

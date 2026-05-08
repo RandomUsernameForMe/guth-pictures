@@ -159,8 +159,8 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
     ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
 
   const panelLabels = locale === "cs"
-    ? ["Portréty", "Eventy", "Portréty"]
-    : ["Portraits", "Events", "Portraits"];
+    ? ["Portréty", "Eventy", "Larpy"]
+    : ["Portraits", "Events", "Larps"];
 
   const panelData: { srcs: string[]; label: string; kb: string }[] = [
     { srcs: toSrcs(photos?.[0] ?? []), label: panelLabels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
