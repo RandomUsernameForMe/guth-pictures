@@ -1,3 +1,8 @@
+## [2026-05-08] - fix(hero): backward compat pro staré heroTriptych KV data
+
+- normalizace v page.tsx: starý formát [string,string,string] → [string[],string[],string[]]
+- zabraňuje runtime crash když KV obsahuje data v původním formátu
+
 ## [2026-05-08] - fix(hero): funkční anchor linky a přepínač jazyků
 
 - anchor linky v hero lište renderovány jako plain <a>, ne Link (locale prefix problém)
