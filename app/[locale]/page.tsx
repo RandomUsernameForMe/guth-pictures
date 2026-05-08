@@ -2,11 +2,9 @@ import React from "react";
 import { getTranslations } from "next-intl/server";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/modules/homepage/components/HeroSection";
-import { SelectedWork } from "@/modules/homepage/components/SelectedWork";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
-import { getGalleryPhotos } from "@/lib/cloudinary";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -42,10 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, portfolioPhotos, images] = await Promise.all([
+  const [t, content, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
-    getGalleryPhotos("portfolio").catch(() => []),
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ hero: "", profile: "" })),
   ]);
 
@@ -67,14 +64,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         photos={heroPhotos}
       />
 
-      {portfolioPhotos.length > 0 && (
-        <SelectedWork
-          photos={portfolioPhotos}
-          locale={locale}
-          title={t("home.selectedWorkTitle")}
-          linkLabel={t("home.selectedWorkLink")}
-        />
-      )}
 
       <AnimatedSection className="bg-[var(--color-bg)] border-y border-[var(--color-border)]">
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">

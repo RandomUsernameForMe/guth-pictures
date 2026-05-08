@@ -1,3 +1,8 @@
+## [2026-05-08] - feat(homepage): odstranit sekci Vybraná práce
+
+- SelectedWork carousel odebrán z homepage
+- odstraněn import + getGalleryPhotos fetch (portfolioPhotos nepoužito)
+
 ## [2026-05-08] - fix(admin): normalizace heroTriptych v admin/fotky
 
 - stejný backward compat fix jako na public page — staré KV [string,string,string] → [string[],string[],string[]]
