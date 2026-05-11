@@ -1,43 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 
-// ─────────────────────────────────────────────────────────────
-// Types
-// ─────────────────────────────────────────────────────────────
 type Props = {
   title: string;
   subtitle: string;
   ctaPortfolio: string;
   ctaContact: string;
-  /** PublicIds per panel — each panel cycles through its own list. */
   photos?: [string[], string[], string[]];
   locale: string;
 };
 
-// ─────────────────────────────────────────────────────────────
-// Sub-components
-// ─────────────────────────────────────────────────────────────
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * Math.max(0, Math.min(1, t));
+}
 
-/** Filmic warm/cool tint overlay, multiply blend */
 function FilmicTint() {
   return (
     <div
       aria-hidden
       className="absolute inset-0 pointer-events-none"
       style={{
-        background:
-          "linear-gradient(180deg, rgba(10,20,40,0.18) 0%, rgba(0,0,0,0) 40%, rgba(90,48,25,0.10) 100%)",
+        background: "linear-gradient(180deg, rgba(10,20,40,0.18) 0%, rgba(0,0,0,0) 40%, rgba(90,48,25,0.10) 100%)",
         mixBlendMode: "multiply",
       }}
     />
   );
 }
 
-/** Subtle film-grain texture */
 function Grain() {
   return (
     <div
@@ -53,13 +45,8 @@ function Grain() {
   );
 }
 
-/** One triptych panel. Fades between `images` on an interval. */
 function TriptychPanel({
-  images,
-  interval = 5000,
-  kbAnimation,
-  label,
-  index,
+  images, interval = 5000, kbAnimation, label, index,
 }: {
   images: string[];
   interval?: number;
@@ -80,42 +67,14 @@ function TriptychPanel({
   return (
     <div
       className="relative overflow-hidden"
-      style={{
-        background: "var(--color-surface)",
-        borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none",
-      }}
+      style={{ background: "var(--color-surface)", borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none" }}
     >
-      {/* Outgoing image */}
-      <img
-        src={images[prev]}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ animation: kbAnimation }}
-        loading="eager"
-        aria-hidden
-      />
-      {/* Incoming image — fades in */}
-      <img
-        key={cur}
-        src={images[cur]}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }}
-        loading="eager"
-        fetchPriority={index === 0 ? "high" : "auto"}
-        aria-hidden
-      />
+      <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
+      <img key={cur} src={images[cur]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
       <FilmicTint />
-      {/* Category label */}
       <div
         className="absolute top-20 left-5 flex items-center gap-2"
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          color: "rgba(255,255,255,0.45)",
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-        }}
+        style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.45)", letterSpacing: "0.22em", textTransform: "uppercase" }}
       >
         <span>{String(index + 1).padStart(3, "0")}</span>
         <span style={{ width: 14, height: 1, background: "rgba(255,255,255,0.3)", display: "block" }} />
@@ -125,327 +84,243 @@ function TriptychPanel({
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────────────────────
 export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos, locale }: Props) {
-  // Scroll progress over the first 160px of page scroll (0 → 1)
   const [progress, setProgress] = useState(0);
+  const [vh, setVh] = useState(800);
 
   useEffect(() => {
-    const onScroll = () => setProgress(Math.min(1, window.scrollY / 160));
+    setVh(window.innerHeight);
+    const onScroll = () => setProgress(Math.min(1, window.scrollY / 280));
+    const onResize = () => setVh(window.innerHeight);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
-  // Eased progress (ease-in-out quad)
   const ease = progress < 0.5
     ? 2 * progress * progress
     : -1 + (4 - 2 * progress) * progress;
 
-  // Derived values
-  const navBgAlpha = ease * 0.72;
-  const navBorderAlpha = ease * 0.08;
-  const navBlur = ease * 14;
-  const bandY = ease * -24;
-  const bandOpacity = 1 - ease * 0.45;
-  const eyebrowOpacity = Math.max(0, 1 - ease * 2.5);
-  const bandLinksOpacity = Math.max(0, 1 - ease * 2.2);
-  const navItemsOpacity = ease;
-  const navItemsY = (1 - ease) * -10;
-  const scrollHintOpacity = Math.max(0, 1 - ease * 3);
+  // ── Morphing container ──────────────────────────────────────
+  const BAND_H = 320;
+  const NAV_H = 64;
+  const navH = lerp(BAND_H, NAV_H, ease);
+  const navTranslateY = (1 - ease) * (vh / 2 - navH / 2);
+  const navSide = lerp(10, 0, ease);          // % inset
+  const navBR = lerp(20, 0, ease);            // border-radius px
+  const navBgAlpha = lerp(0.40, 0.72, ease);
+  const navBlur = lerp(8, 16, ease);
+  const navBorderAlpha = lerp(0.06, 0.10, ease);
 
-  const toSrcs = (ids: string[]) =>
-    ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+  // ── Opacity timings ─────────────────────────────────────────
+  const heroContentOpacity = Math.max(0, 1 - ease / 0.38);  // eyebrow, rule, subtitle, CTAs
+  const bandLinksOpacity   = Math.max(0, 1 - ease / 0.48);  // band nav links row
+  const largeTitleOpacity  = Math.max(0, 1 - ease / 0.68);  // big h1
+  const navbarOpacity      = Math.max(0, (ease - 0.52) / 0.48); // navbar row content
+  const scrollHintOpacity  = Math.max(0, 1 - ease * 4);
 
-  const panelLabels = locale === "cs"
-    ? ["Portréty", "Eventy", "Larpy"]
-    : ["Portraits", "Events", "Larps"];
+  const navLinks: { label: string; href: string }[] = locale === "cs"
+    ? [
+        { label: "Portfolio", href: "/portfolio" },
+        { label: "O mně",     href: "#o-mne" },
+        { label: "Služby",    href: "#sluzby" },
+        { label: "Kontakt",   href: "#kontakt" },
+      ]
+    : [
+        { label: "Portfolio", href: "/portfolio" },
+        { label: "About",     href: "#o-mne" },
+        { label: "Services",  href: "#sluzby" },
+        { label: "Contact",   href: "#kontakt" },
+      ];
 
-  const panelData: { srcs: string[]; label: string; kb: string }[] = [
+  const toSrcs = (ids: string[]) => ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+  const panelLabels = locale === "cs" ? ["Portréty", "Eventy", "Larpy"] : ["Portraits", "Events", "Larps"];
+  const panelData = [
     { srcs: toSrcs(photos?.[0] ?? []), label: panelLabels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
     { srcs: toSrcs(photos?.[1] ?? []), label: panelLabels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
     { srcs: toSrcs(photos?.[2] ?? []), label: panelLabels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
   ];
 
-  const navLinks: { label: string; href: string }[] =
-    locale === "cs"
-      ? [
-          { label: "Portfolio", href: "/portfolio" },
-          { label: "O mně", href: "#o-mne" },
-          { label: "Služby", href: "#sluzby" },
-          { label: "Kontakt", href: "#kontakt" },
-        ]
-      : [
-          { label: "Portfolio", href: "/portfolio" },
-          { label: "About", href: "#o-mne" },
-          { label: "Services", href: "#sluzby" },
-          { label: "Contact", href: "#kontakt" },
-        ];
+  const linkStyle: React.CSSProperties = { color: "rgba(242,240,235,0.55)" };
+  const langCs: React.CSSProperties = { color: locale === "cs" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" };
+  const langEn: React.CSSProperties = { color: locale === "en" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" };
 
   return (
     <>
-      {/* Global keyframes — injected once */}
       <style>{`
-        @keyframes heroKb1 {
-          from { transform: scale(1.02) translate(0,0); }
-          to   { transform: scale(1.10) translate(-1.5%,-1%); }
-        }
-        @keyframes heroKb2 {
-          from { transform: scale(1.06) translate(0.5%,0); }
-          to   { transform: scale(1.02) translate(-0.5%,0.8%); }
-        }
-        @keyframes heroKb3 {
-          from { transform: scale(1.04) translate(0,0); }
-          to   { transform: scale(1.10) translate(1%,-1%); }
-        }
-        @keyframes heroFadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
+        @keyframes heroKb1 { from { transform: scale(1.02) translate(0,0); }    to { transform: scale(1.10) translate(-1.5%,-1%); } }
+        @keyframes heroKb2 { from { transform: scale(1.06) translate(0.5%,0); } to { transform: scale(1.02) translate(-0.5%,0.8%); } }
+        @keyframes heroKb3 { from { transform: scale(1.04) translate(0,0); }    to { transform: scale(1.10) translate(1%,-1%); } }
+        @keyframes heroFadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
 
-      {/* ── Glass navbar — emerges on scroll ── */}
+      {/* ── Morphing nav — band at rest, navbar on scroll ─── */}
       <div
-        className="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-10"
         style={{
+          position: "fixed",
           zIndex: 50,
+          top: 0,
+          left: `${navSide.toFixed(2)}%`,
+          right: `${navSide.toFixed(2)}%`,
+          height: `${navH.toFixed(1)}px`,
+          transform: `translateY(${navTranslateY.toFixed(1)}px)`,
+          borderRadius: `${navBR.toFixed(1)}px`,
           background: `rgba(10,10,11,${navBgAlpha.toFixed(3)})`,
           backdropFilter: `blur(${navBlur.toFixed(1)}px)`,
           WebkitBackdropFilter: `blur(${navBlur.toFixed(1)}px)`,
-          borderBottom: `1px solid rgba(255,255,255,${navBorderAlpha.toFixed(3)})`,
+          border: `1px solid rgba(255,255,255,${navBorderAlpha.toFixed(3)})`,
+          overflow: "hidden",
         }}
       >
-        {/* Logo */}
+        {/* ── Band state: centered column ── */}
         <div
           style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: 13,
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--color-text)",
-            opacity: navItemsOpacity,
-            transform: `translateY(${(1 - ease) * -8}px)`,
-          }}
-        >
-          {title}
-        </div>
-
-        {/* Links */}
-        <div
-          className="flex items-center gap-7"
-          style={{
-            opacity: navItemsOpacity,
-            transform: `translateY(${navItemsY.toFixed(1)}px)`,
-          }}
-        >
-          {navLinks.map(({ label, href }) =>
-            href.startsWith("#") ? (
-              <a
-                key={href}
-                href={href}
-                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-              >
-                {label}
-              </a>
-            ) : (
-              <Link
-                key={href}
-                href={href}
-                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-              >
-                {label}
-              </Link>
-            )
-          )}
-          <span
-            className="ml-2 flex items-center gap-1"
-            style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}
-          >
-            <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)" }}>CS</Link>
-            <span style={{ color: "var(--color-text-ghost)" }}>/</span>
-            <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)" }}>EN</Link>
-          </span>
-        </div>
-      </div>
-
-      {/* ── Hero section ── */}
-      <section
-        id="hero"
-        className="relative h-screen flex items-stretch overflow-hidden"
-        aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
-      >
-        {/* Triptych */}
-        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
-          {panelData.map((p, i) => (
-            <TriptychPanel
-              key={i}
-              images={p.srcs}
-              kbAnimation={p.kb}
-              label={p.label}
-              index={i}
-              interval={4800 + i * 600}
-            />
-          ))}
-        </div>
-
-        {/* Overlays */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 90% 80% at 50% 50%, rgba(10,10,11,0.20) 0%, rgba(10,10,11,0.70) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }}
-        />
-
-        {/* ── Centred composition — dissolves into navbar on scroll ── */}
-        <div
-          className="relative z-10 w-full flex flex-col items-center justify-center"
-          style={{
-            transform: `translateY(${bandY.toFixed(1)}px)`,
-            opacity: bandOpacity,
+            position: "absolute", inset: 0,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            pointerEvents: ease > 0.5 ? "none" : "auto",
           }}
         >
           {/* Eyebrow */}
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              letterSpacing: "0.45em",
-              textTransform: "uppercase",
-              color: "rgba(242,240,235,0.50)",
-              marginBottom: 22,
-              opacity: eyebrowOpacity,
-            }}
-          >
+          <div style={{
+            opacity: heroContentOpacity,
+            fontFamily: "var(--font-mono)", fontSize: 10,
+            letterSpacing: "0.45em", textTransform: "uppercase",
+            color: "rgba(242,240,235,0.50)", marginBottom: 16,
+          }}>
             {locale === "cs" ? "Tomáš Guth Jarkovský · Praha" : "Tomáš Guth Jarkovský · Prague"}
           </div>
 
-          {/* Wordmark */}
-          <h1
-            className="font-bold text-[var(--color-text)] text-center"
-            style={{
-              margin: 0,
-              letterSpacing: "-0.04em",
-              lineHeight: 0.88,
-              fontSize: "clamp(80px, 10vw, 140px)",
-              textShadow: "0 2px 40px rgba(0,0,0,0.4)",
-            }}
-          >
+          {/* Large title */}
+          <h1 style={{
+            opacity: largeTitleOpacity,
+            margin: 0, fontWeight: 700,
+            letterSpacing: "-0.04em", lineHeight: 0.88,
+            fontSize: "clamp(64px, 8vw, 110px)",
+            color: "var(--color-text)",
+            textShadow: "0 2px 40px rgba(0,0,0,0.4)",
+          }}>
             {title}
           </h1>
 
-          {/* Rule */}
-          <div
-            style={{
-              width: 40,
-              height: 1,
-              background: "rgba(255,255,255,0.22)",
-              margin: "28px 0",
-            }}
-          />
-
-          {/* Subtitle */}
-          <p
-            className="text-[var(--color-text-muted)] text-center"
-            style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}
-          >
-            {subtitle}
-          </p>
+          {/* Rule + subtitle */}
+          <div style={{ opacity: heroContentOpacity, width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "22px 0" }} />
+          {subtitle && (
+            <p style={{ opacity: heroContentOpacity, margin: 0, fontSize: 15, letterSpacing: "0.02em", color: "var(--color-text-muted)" }}>
+              {subtitle}
+            </p>
+          )}
 
           {/* CTAs */}
-          <div className="mt-7 flex gap-3 flex-wrap justify-center">
+          <div style={{ opacity: heroContentOpacity, marginTop: 20, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <a
               href="#kontakt"
-              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
+              className="px-7 py-3 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
             >
               {ctaContact} <span>→</span>
             </a>
             <Link
               href="/portfolio"
-              className="px-7 py-3.5 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
+              className="px-7 py-3 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
               style={{ background: "rgba(10,10,11,0.45)", backdropFilter: "blur(8px)" }}
             >
               {ctaPortfolio}
             </Link>
           </div>
 
-          {/* Nav links in band — fade out as navbar takes over */}
-          <div
-            className="mt-9 flex gap-8"
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: 13,
-              color: "rgba(242,240,235,0.55)",
-              letterSpacing: "0.04em",
-              opacity: bandLinksOpacity,
-              transform: `translateY(${(ease * -6).toFixed(1)}px)`,
-            }}
-          >
+          {/* Band nav links */}
+          <div style={{
+            opacity: bandLinksOpacity, marginTop: 20,
+            display: "flex", gap: 24, alignItems: "center",
+            fontFamily: "var(--font-sans)", fontSize: 13, letterSpacing: "0.04em",
+          }}>
             {navLinks.map(({ label, href }) =>
-              href.startsWith("#") ? (
-                <a
-                  key={href}
-                  href={href}
-                  className="hover:text-[var(--color-text)] transition-colors duration-200"
-                  style={{ color: "rgba(242,240,235,0.55)" }}
-                >
-                  {label}
-                </a>
-              ) : (
-                <Link
-                  key={href}
-                  href={href}
-                  className="hover:text-[var(--color-text)] transition-colors duration-200"
-                  style={{ color: "rgba(242,240,235,0.55)" }}
-                >
-                  {label}
-                </Link>
-              )
+              href.startsWith("#")
+                ? <a key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={linkStyle}>{label}</a>
+                : <Link key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={linkStyle}>{label}</Link>
             )}
-            <span
-              className="flex items-center gap-1"
-              style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em" }}
-            >
-              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>CS</Link>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em", display: "flex", alignItems: "center", gap: 4 }}>
+              <Link href="/" locale="cs" style={langCs}>CS</Link>
               <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
-              <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>EN</Link>
+              <Link href="/" locale="en" style={langEn}>EN</Link>
             </span>
           </div>
         </div>
 
+        {/* ── Navbar state: logo left, links right ── */}
+        <div
+          style={{
+            position: "absolute", inset: 0,
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            paddingLeft: 24, paddingRight: 16,
+            opacity: navbarOpacity,
+            pointerEvents: ease < 0.5 ? "none" : "auto",
+          }}
+        >
+          <div style={{
+            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600,
+            letterSpacing: "0.18em", textTransform: "uppercase",
+            color: "var(--color-text)",
+          }}>
+            {title}
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {navLinks.map(({ label, href }) =>
+              href.startsWith("#")
+                ? <a key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</a>
+                : <Link key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</Link>
+            )}
+            <span className="ml-2 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
+              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)" }}>CS</Link>
+              <span style={{ color: "var(--color-text-ghost)" }}>/</span>
+              <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)" }}>EN</Link>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Hero section (triptych + overlays) ──────────────── */}
+      <section
+        id="hero"
+        className="relative h-screen flex items-stretch overflow-hidden"
+        aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
+      >
+        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
+          {panelData.map((p, i) => (
+            <TriptychPanel key={i} images={p.srcs} kbAnimation={p.kb} label={p.label} index={i} interval={4800 + i * 600} />
+          ))}
+        </div>
+
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 90% 80% at 50% 50%, rgba(10,10,11,0.20) 0%, rgba(10,10,11,0.70) 100%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }} />
+
         {/* Scroll hint */}
         <div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 pointer-events-none"
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "rgba(242,240,235,0.35)",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            opacity: scrollHintOpacity,
+            fontFamily: "var(--font-mono)", fontSize: 10,
+            color: "rgba(242,240,235,0.35)", letterSpacing: "0.22em",
+            textTransform: "uppercase", opacity: scrollHintOpacity,
           }}
         >
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
-          <span>{locale === "cs" ? "Scroll" : "Scroll"}</span>
+          <span>Scroll</span>
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
         </div>
 
-        {/* Scroll progress line — brass accent */}
-        {progress > 0 && (
+        {/* Scroll progress line — tracks bottom of morphing nav */}
+        {progress > 0.6 && (
           <div
-            className="fixed top-[63px] left-0 h-px z-50 pointer-events-none"
+            className="fixed left-0 h-px z-50 pointer-events-none"
             style={{
+              top: `${(navTranslateY + navH - 1).toFixed(0)}px`,
               width: `${progress * 100}%`,
+              opacity: Math.min(1, (progress - 0.6) / 0.25),
               background: "rgba(200,169,110,0.4)",
             }}
           />
