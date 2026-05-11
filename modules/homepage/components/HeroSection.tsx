@@ -284,14 +284,14 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             {title}
           </h1>
 
-          {/* Rule + subtitle — only when subtitle exists */}
+          {/* Rule — always */}
+          <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "24px 0" }} />
+
+          {/* Subtitle — only when set */}
           {subtitle && (
-            <>
-              <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "24px 0" }} />
-              <p className="text-[var(--color-text-muted)] text-center" style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}>
-                {subtitle}
-              </p>
-            </>
+            <p className="text-[var(--color-text-muted)] text-center" style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}>
+              {subtitle}
+            </p>
           )}
 
           {/* CTAs */}
