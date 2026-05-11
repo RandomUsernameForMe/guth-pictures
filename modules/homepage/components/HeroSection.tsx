@@ -105,23 +105,30 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
     ? 2 * progress * progress
     : -1 + (4 - 2 * progress) * progress;
 
-  // ── Morphing container ──────────────────────────────────────
-  const BAND_H = 320;
+  // ── Morphing pill ───────────────────────────────────────────
+  // At rest: small pill just around nav links row, positioned below hero content
+  // At end:  full-width navbar at top
+  const BAND_H = 44;
   const NAV_H = 64;
   const navH = lerp(BAND_H, NAV_H, ease);
-  const navTranslateY = (1 - ease) * (vh / 2 - navH / 2);
-  const navSide = lerp(10, 0, ease);          // % inset
-  const navBR = lerp(20, 0, ease);            // border-radius px
-  const navBgAlpha = lerp(0.40, 0.72, ease);
+  // Band center sits at ~69% of viewport height (just below CTAs)
+  const navTranslateY = (1 - ease) * (vh * 0.69 - navH / 2);
+  const navSide = lerp(22, 0, ease);           // % inset → full width
+  const navBR = lerp(22, 0, ease);             // pill → bar
+  const navBgAlpha = lerp(0.32, 0.72, ease);
   const navBlur = lerp(8, 16, ease);
-  const navBorderAlpha = lerp(0.06, 0.10, ease);
+  const navBorderAlpha = lerp(0.08, 0.12, ease);
 
-  // ── Opacity timings ─────────────────────────────────────────
-  const heroContentOpacity = Math.max(0, 1 - ease / 0.38);  // eyebrow, rule, subtitle, CTAs
-  const bandLinksOpacity   = Math.max(0, 1 - ease / 0.48);  // band nav links row
-  const largeTitleOpacity  = Math.max(0, 1 - ease / 0.68);  // big h1
-  const navbarOpacity      = Math.max(0, (ease - 0.52) / 0.48); // navbar row content
-  const scrollHintOpacity  = Math.max(0, 1 - ease * 4);
+  // ── Hero content (title, subtitle, CTAs) — no glass behind them
+  // Shift slightly above center so band below reads as grouped
+  const heroContentOpacity = Math.max(0, 1 - ease / 0.45);
+  const heroContentY = ease * -32; // drifts up as it fades
+
+  // ── Pill content opacities
+  const bandLinksOpacity = Math.max(0, 1 - ease / 0.48);
+  const navbarOpacity    = Math.max(0, (ease - 0.52) / 0.48);
+
+  const scrollHintOpacity = Math.max(0, 1 - ease * 4);
 
   const navLinks: { label: string; href: string }[] = locale === "cs"
     ? [
@@ -145,9 +152,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
     { srcs: toSrcs(photos?.[2] ?? []), label: panelLabels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
   ];
 
-  const linkStyle: React.CSSProperties = { color: "rgba(242,240,235,0.55)" };
-  const langCs: React.CSSProperties = { color: locale === "cs" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" };
-  const langEn: React.CSSProperties = { color: locale === "en" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" };
+  const dimLink: React.CSSProperties = { color: "rgba(242,240,235,0.55)" };
 
   return (
     <>
@@ -158,7 +163,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         @keyframes heroFadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
 
-      {/* ── Morphing nav — band at rest, navbar on scroll ─── */}
+      {/* ── Morphing nav pill → navbar ───────────────────────── */}
       <div
         style={{
           position: "fixed",
@@ -176,81 +181,29 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           overflow: "hidden",
         }}
       >
-        {/* ── Band state: centered column ── */}
+        {/* Band state — nav links row centered in pill */}
         <div
           style={{
             position: "absolute", inset: 0,
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 24,
+            fontFamily: "var(--font-sans)", fontSize: 13, letterSpacing: "0.04em",
+            opacity: bandLinksOpacity,
             pointerEvents: ease > 0.5 ? "none" : "auto",
           }}
         >
-          {/* Eyebrow */}
-          <div style={{
-            opacity: heroContentOpacity,
-            fontFamily: "var(--font-mono)", fontSize: 10,
-            letterSpacing: "0.45em", textTransform: "uppercase",
-            color: "rgba(242,240,235,0.50)", marginBottom: 16,
-          }}>
-            {locale === "cs" ? "Tomáš Guth Jarkovský · Praha" : "Tomáš Guth Jarkovský · Prague"}
-          </div>
-
-          {/* Large title */}
-          <h1 style={{
-            opacity: largeTitleOpacity,
-            margin: 0, fontWeight: 700,
-            letterSpacing: "-0.04em", lineHeight: 0.88,
-            fontSize: "clamp(64px, 8vw, 110px)",
-            color: "var(--color-text)",
-            textShadow: "0 2px 40px rgba(0,0,0,0.4)",
-          }}>
-            {title}
-          </h1>
-
-          {/* Rule + subtitle */}
-          <div style={{ opacity: heroContentOpacity, width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "22px 0" }} />
-          {subtitle && (
-            <p style={{ opacity: heroContentOpacity, margin: 0, fontSize: 15, letterSpacing: "0.02em", color: "var(--color-text-muted)" }}>
-              {subtitle}
-            </p>
+          {navLinks.map(({ label, href }) =>
+            href.startsWith("#")
+              ? <a key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={dimLink}>{label}</a>
+              : <Link key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={dimLink}>{label}</Link>
           )}
-
-          {/* CTAs */}
-          <div style={{ opacity: heroContentOpacity, marginTop: 20, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-            <a
-              href="#kontakt"
-              className="px-7 py-3 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
-            >
-              {ctaContact} <span>→</span>
-            </a>
-            <Link
-              href="/portfolio"
-              className="px-7 py-3 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
-              style={{ background: "rgba(10,10,11,0.45)", backdropFilter: "blur(8px)" }}
-            >
-              {ctaPortfolio}
-            </Link>
-          </div>
-
-          {/* Band nav links */}
-          <div style={{
-            opacity: bandLinksOpacity, marginTop: 20,
-            display: "flex", gap: 24, alignItems: "center",
-            fontFamily: "var(--font-sans)", fontSize: 13, letterSpacing: "0.04em",
-          }}>
-            {navLinks.map(({ label, href }) =>
-              href.startsWith("#")
-                ? <a key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={linkStyle}>{label}</a>
-                : <Link key={href} href={href} className="hover:text-[var(--color-text)] transition-colors duration-200" style={linkStyle}>{label}</Link>
-            )}
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em", display: "flex", alignItems: "center", gap: 4 }}>
-              <Link href="/" locale="cs" style={langCs}>CS</Link>
-              <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
-              <Link href="/" locale="en" style={langEn}>EN</Link>
-            </span>
-          </div>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em", display: "flex", alignItems: "center", gap: 4 }}>
+            <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" }}>CS</Link>
+            <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
+            <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.75)" : "rgba(242,240,235,0.35)" }}>EN</Link>
+          </span>
         </div>
 
-        {/* ── Navbar state: logo left, links right ── */}
+        {/* Navbar state — logo left, links right */}
         <div
           style={{
             position: "absolute", inset: 0,
@@ -267,7 +220,6 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           }}>
             {title}
           </div>
-
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
             {navLinks.map(({ label, href }) =>
               href.startsWith("#")
@@ -283,21 +235,81 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         </div>
       </div>
 
-      {/* ── Hero section (triptych + overlays) ──────────────── */}
+      {/* ── Hero section ─────────────────────────────────────── */}
       <section
         id="hero"
         className="relative h-screen flex items-stretch overflow-hidden"
         aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
       >
+        {/* Triptych */}
         <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
           {panelData.map((p, i) => (
             <TriptychPanel key={i} images={p.srcs} kbAnimation={p.kb} label={p.label} index={i} interval={4800 + i * 600} />
           ))}
         </div>
 
+        {/* Overlays */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 90% 80% at 50% 50%, rgba(10,10,11,0.20) 0%, rgba(10,10,11,0.70) 100%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }} />
+
+        {/* Hero content — no glass, floats directly over photos */}
+        <div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center"
+          style={{
+            opacity: heroContentOpacity,
+            transform: `translateY(calc(-4vh + ${heroContentY.toFixed(1)}px))`,
+            pointerEvents: ease > 0.5 ? "none" : "auto",
+          }}
+        >
+          {/* Eyebrow */}
+          <div style={{
+            fontFamily: "var(--font-mono)", fontSize: 11,
+            letterSpacing: "0.45em", textTransform: "uppercase",
+            color: "rgba(242,240,235,0.50)", marginBottom: 22,
+          }}>
+            {locale === "cs" ? "Tomáš Guth Jarkovský · Praha" : "Tomáš Guth Jarkovský · Prague"}
+          </div>
+
+          {/* Wordmark */}
+          <h1
+            className="font-bold text-[var(--color-text)] text-center"
+            style={{
+              margin: 0, letterSpacing: "-0.04em", lineHeight: 0.88,
+              fontSize: "clamp(80px, 10vw, 140px)",
+              textShadow: "0 2px 40px rgba(0,0,0,0.4)",
+            }}
+          >
+            {title}
+          </h1>
+
+          {/* Rule */}
+          <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "28px 0" }} />
+
+          {/* Subtitle */}
+          {subtitle && (
+            <p className="text-[var(--color-text-muted)] text-center" style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}>
+              {subtitle}
+            </p>
+          )}
+
+          {/* CTAs */}
+          <div className="mt-7 flex gap-3 flex-wrap justify-center">
+            <a
+              href="#kontakt"
+              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
+            >
+              {ctaContact} <span>→</span>
+            </a>
+            <Link
+              href="/portfolio"
+              className="px-7 py-3.5 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
+              style={{ background: "rgba(10,10,11,0.45)", backdropFilter: "blur(8px)" }}
+            >
+              {ctaPortfolio}
+            </Link>
+          </div>
+        </div>
 
         {/* Scroll hint */}
         <div
@@ -313,7 +325,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
         </div>
 
-        {/* Scroll progress line — tracks bottom of morphing nav */}
+        {/* Scroll progress line */}
         {progress > 0.6 && (
           <div
             className="fixed left-0 h-px z-50 pointer-events-none"
