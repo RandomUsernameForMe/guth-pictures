@@ -116,8 +116,9 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
   const navBlur = lerp(8, 16, ease);
   const navBorderAlpha = lerp(0.08, 0.12, ease);
 
-  // ── Logo fades in as pill becomes navbar
-  const logoOpacity = Math.max(0, (ease - 0.45) / 0.55);
+  // ── Pill content: crossfade same links between centered → right-aligned
+  const bandOpacity  = Math.max(0, 1 - ease / 0.6);
+  const navbarOpacity = Math.max(0, (ease - 0.4) / 0.6);
 
   // ── Hero content
   const heroContentOpacity = Math.max(0, 1 - ease / 0.45);
@@ -184,29 +185,17 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           WebkitBackdropFilter: `blur(${navBlur.toFixed(1)}px)`,
           border: `1px solid rgba(255,255,255,${navBorderAlpha.toFixed(3)})`,
           overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingLeft: 16,
-          paddingRight: 16,
         }}
       >
-        {/* Logo — fades in from left as pill becomes navbar */}
+        {/* Band state — links centered */}
         <div
           style={{
-            fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600,
-            letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "var(--color-text)",
-            opacity: logoOpacity,
-            pointerEvents: logoOpacity < 0.1 ? "none" : "auto",
-            whiteSpace: "nowrap",
+            position: "absolute", inset: 0,
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+            opacity: bandOpacity,
+            pointerEvents: bandOpacity < 0.05 ? "none" : "auto",
           }}
         >
-          {title}
-        </div>
-
-        {/* Links + lang — always visible, right-aligned, move with pill */}
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           {navLinks.map(({ label, href }) =>
             href.startsWith("#")
               ? <a key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</a>
@@ -217,6 +206,33 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             <span style={{ color: "var(--color-text-ghost)" }}>/</span>
             <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
           </span>
+        </div>
+
+        {/* Navbar state — logo left, links right */}
+        <div
+          style={{
+            position: "absolute", inset: 0,
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            paddingLeft: 16, paddingRight: 16,
+            opacity: navbarOpacity,
+            pointerEvents: navbarOpacity < 0.05 ? "none" : "auto",
+          }}
+        >
+          <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--color-text)", whiteSpace: "nowrap" }}>
+            {title}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {navLinks.map(({ label, href }) =>
+              href.startsWith("#")
+                ? <a key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</a>
+                : <Link key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</Link>
+            )}
+            <span className="ml-1 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
+              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>CS</Link>
+              <span style={{ color: "var(--color-text-ghost)" }}>/</span>
+              <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
+            </span>
+          </div>
         </div>
       </div>
 
