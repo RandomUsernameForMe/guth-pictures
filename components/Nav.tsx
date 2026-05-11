@@ -43,9 +43,9 @@ export function Nav() {
   ];
 
   const homeLinks: NavLink[] = [
-    { href: "#o-mne", label: t("o-mne"), anchor: true },
-    { href: "#sluzby", label: t("sluzby"), anchor: true },
-    { href: "#kontakt", label: t("kontakt"), anchor: true },
+    { href: "/#o-mne", label: t("o-mne"), anchor: true },
+    { href: "/#sluzby", label: t("sluzby"), anchor: true },
+    { href: "/#kontakt", label: t("kontakt"), anchor: true },
     { href: "/blog", label: t("blog") },
     { href: "/portfolio", label: t("portfolio") },
     { href: "/light-tester", label: t("light-tester") },
@@ -110,7 +110,7 @@ export function Nav() {
                   return (
                     <li key={href}>
                       {anchor ? (
-                        <a
+                        <Link
                           href={href}
                           className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 block ${
                             active
@@ -127,7 +127,7 @@ export function Nav() {
                             />
                           )}
                           <span className="relative z-10">{label}</span>
-                        </a>
+                        </Link>
                       ) : (
                         <Link
                           href={href}
@@ -259,7 +259,7 @@ export function Nav() {
                         transition={{ delay: i * 0.05 + 0.1 }}
                       >
                         {anchor ? (
-                          <a
+                          <Link
                             href={href}
                             onClick={() => setMenuOpen(false)}
                             className={`block px-5 py-3.5 text-base font-medium rounded-xl transition-all duration-200 ${
@@ -273,7 +273,7 @@ export function Nav() {
                             } : undefined}
                           >
                             {label}
-                          </a>
+                          </Link>
                         ) : (
                           <Link
                             href={href}
