@@ -11,14 +11,14 @@
     "light-tester": "Light Tester"
   },
   "meta": {
-    "home":      { "title": "Guth Pictures — Photographer Prague", "description": "Professional photographer based in Prague. Portraits, weddings and larps. Reportage style, natural moments." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "A selection of photographs: portraits, weddings and larp events." }
+    "home":      { "title": "Guth Pictures — Photographer", "description": "Professional photographer. Strong atmosphere, distinctive creative portraits." },
+    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "A selection of photographs: portraits, events and larps." }
   },
   "home": {
     "title": "Guth Pictures",
-    "subtitle": "Portraits, weddings and larps. Prague and surroundings.",
-    "cta": "Book a shoot",
-    "ctaContact": "My work",
+    "subtitle": "Portraits, events and larps.",
+    "cta": "Get photos",
+    "ctaContact": "Portfolio",
     "selectedWorkTitle": "Selected work",
     "selectedWorkLink": "Full portfolio"
   },
@@ -52,7 +52,7 @@
       "title": "Larps & events",
       "desc": "I specialise in larp event photography. Fast light, movement, atmosphere — that's my playing field."
     },
-    "cta": "Get in touch"
+    "cta": "Drop me a line"
   },
   "o-mne": {
     "title": "About me",
