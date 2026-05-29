@@ -1,7 +1,7 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
 import { ContactForm } from "@/components/ContactForm";
-import { HeroSection } from "@/modules/homepage/components/HeroSection";
+import { HeroSection, type HeroPhoto } from "@/modules/homepage/components/HeroSection";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
@@ -46,11 +46,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ hero: "", profile: "" })),
   ]);
 
-  const normalizeSlot = (slot: unknown): string[] =>
-    Array.isArray(slot) ? slot.filter((s): s is string => typeof s === "string") : [];
-  const raw = images.heroTriptych as unknown;
-  const heroPhotos: [string[], string[], string[]] | undefined = Array.isArray(raw) && raw.length === 3
-    ? [normalizeSlot(raw[0]), normalizeSlot(raw[1]), normalizeSlot(raw[2])]
+  const t3 = images.heroTriptych;
+  const heroPhotos: [HeroPhoto, HeroPhoto, HeroPhoto] | undefined = t3
+    ? [
+        { publicId: t3[0], category: "portraits" },
+        { publicId: t3[1], category: "events" },
+        { publicId: t3[2], category: "portraits" },
+      ]
     : undefined;
 
   return (

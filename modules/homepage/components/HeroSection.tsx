@@ -8,7 +8,7 @@ import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 // ─────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────
-type HeroPhoto = {
+export type HeroPhoto = {
   publicId: string;
   category: "portraits" | "events";
 };
