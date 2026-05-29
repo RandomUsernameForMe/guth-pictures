@@ -87,12 +87,9 @@ export function Nav() {
             className={`transition-all duration-500 ${
               scrolled
                 ? "rounded-2xl backdrop-blur-xl"
-                : "rounded-none backdrop-blur-sm"
+                : "rounded-none"
             }`}
-            style={scrolled ? scrolledStyle : !isHome ? {
-              background: "var(--nav-bg-subpage)",
-              borderBottom: "1px solid var(--nav-border)",
-            } : scrolledStyle}
+            style={scrolled ? scrolledStyle : {}}
           >
             <nav className="flex items-center justify-between px-6 h-16">
               {/* Logo */}
