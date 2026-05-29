@@ -1,3 +1,9 @@
+## [2026-05-29] - fix(hero): opravit typ heroPhotos pro triptych
+
+- `[string[][]]` → `[HeroPhoto, HeroPhoto, HeroPhoto]` s kategoriemi dle panelu
+- stará normalizace vracela prázdná pole → hero neměl žádné fotky
+- exportován typ `HeroPhoto` z HeroSection
+
 ## [2026-05-29] - fix(nav): frosted glass efekt až po scrollu
 
 - nav nahoře průhledný bez pozadí a blur
