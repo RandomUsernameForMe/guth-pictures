@@ -1,3 +1,8 @@
+## [2026-05-29] - fix(nav): frosted glass efekt až po scrollu
+
+- nav nahoře průhledný bez pozadí a blur
+- backdrop-blur-xl + background + shadow až po scrollu (>40px)
+
 ## [2026-05-08] - feat(homepage): odstranit sekci Vybraná práce
 
 - SelectedWork carousel odebrán z homepage
