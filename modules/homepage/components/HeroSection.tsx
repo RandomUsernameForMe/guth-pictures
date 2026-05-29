@@ -132,35 +132,6 @@ function TriptychPanel({
 // Main component
 // ─────────────────────────────────────────────────────────────
 export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos, locale }: Props) {
-  // Scroll progress over the first 160px of page scroll (0 → 1)
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => setProgress(Math.min(1, window.scrollY / 160));
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Eased progress (ease-in-out quad)
-  const ease = progress < 0.5
-    ? 2 * progress * progress
-    : -1 + (4 - 2 * progress) * progress;
-
-  // Derived values
-  const navBgAlpha = ease * 0.72;
-  const navBorderAlpha = ease * 0.08;
-  const navBlur = ease * 14;
-  const bandY = ease * -24;
-  const bandOpacity = 1 - ease * 0.45;
-  const eyebrowOpacity = Math.max(0, 1 - ease * 2.5);
-  const bandLinksOpacity = Math.max(0, 1 - ease * 2.2);
-  const navItemsOpacity = ease;
-  const navItemsY = (1 - ease) * -10;
-  const scrollHintOpacity = Math.max(0, 1 - ease * 3);
-
-  // Build image URL arrays per panel.
-  // panels[0] = portraits, panels[1] = events, panels[2] = portraits (mix)
-  // If no photos provided, panels are empty (surface colour shows).
   const buildSrcs = (category: "portraits" | "events") =>
     (photos ?? [])
       .filter((p) => p.category === category)
@@ -221,71 +192,6 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         }
       `}</style>
 
-      {/* ── Glass navbar — emerges on scroll ── */}
-      <div
-        className="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-10"
-        style={{
-          zIndex: 50,
-          background: `rgba(10,10,11,${navBgAlpha.toFixed(3)})`,
-          backdropFilter: `blur(${navBlur.toFixed(1)}px)`,
-          WebkitBackdropFilter: `blur(${navBlur.toFixed(1)}px)`,
-          borderBottom: `1px solid rgba(255,255,255,${navBorderAlpha.toFixed(3)})`,
-        }}
-      >
-        {/* Logo */}
-        <div
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: 13,
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--color-text)",
-            opacity: navItemsOpacity,
-            transform: `translateY(${(1 - ease) * -8}px)`,
-          }}
-        >
-          {title}
-        </div>
-
-        {/* Links */}
-        <div
-          className="flex items-center gap-7"
-          style={{
-            opacity: navItemsOpacity,
-            transform: `translateY(${navItemsY.toFixed(1)}px)`,
-          }}
-        >
-          {navLinks.map(({ label, href }) =>
-            href.startsWith("#") ? (
-              <a
-                key={href}
-                href={href}
-                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-              >
-                {label}
-              </a>
-            ) : (
-              <Link
-                key={href}
-                href={href}
-                className="text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-              >
-                {label}
-              </Link>
-            )
-          )}
-          <span
-            className="ml-2 flex items-center gap-1"
-            style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}
-          >
-            <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)" }}>CS</Link>
-            <span style={{ color: "var(--color-text-ghost)" }}>/</span>
-            <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)" }}>EN</Link>
-          </span>
-        </div>
-      </div>
-
       {/* ── Hero section ── */}
       <section
         id="hero"
@@ -323,14 +229,8 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }}
         />
 
-        {/* ── Centred composition — dissolves into navbar on scroll ── */}
-        <div
-          className="relative z-10 w-full flex flex-col items-center justify-center"
-          style={{
-            transform: `translateY(${bandY.toFixed(1)}px)`,
-            opacity: bandOpacity,
-          }}
-        >
+        {/* ── Centred composition ── */}
+        <div className="relative z-10 w-full flex flex-col items-center justify-center">
           {/* Eyebrow */}
           <div
             style={{
@@ -340,7 +240,6 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
               textTransform: "uppercase",
               color: "rgba(242,240,235,0.50)",
               marginBottom: 22,
-              opacity: eyebrowOpacity,
             }}
           >
             {locale === "cs" ? "Jakub Guth · Praha" : "Jakub Guth · Prague"}
@@ -395,16 +294,13 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             </Link>
           </div>
 
-          {/* Nav links in band — fade out as navbar takes over */}
+          {/* Nav links below title */}
           <div
             className="mt-9 flex gap-8"
             style={{
               fontFamily: "var(--font-sans)",
               fontSize: 13,
-              color: "rgba(242,240,235,0.55)",
               letterSpacing: "0.04em",
-              opacity: bandLinksOpacity,
-              transform: `translateY(${(ease * -6).toFixed(1)}px)`,
             }}
           >
             {navLinks.map(({ label, href }) =>
@@ -448,24 +344,12 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             color: "rgba(242,240,235,0.35)",
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            opacity: scrollHintOpacity,
           }}
         >
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
-          <span>{locale === "cs" ? "Scroll" : "Scroll"}</span>
+          <span>Scroll</span>
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
         </div>
-
-        {/* Scroll progress line — brass accent */}
-        {progress > 0 && (
-          <div
-            className="fixed top-[63px] left-0 h-px z-50 pointer-events-none"
-            style={{
-              width: `${progress * 100}%`,
-              background: "rgba(200,169,110,0.4)",
-            }}
-          />
-        )}
       </section>
 
       <Grain />
