@@ -1,42 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Link } from "@/i18n/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 
-// ─────────────────────────────────────────────────────────────
-// Types
-// ─────────────────────────────────────────────────────────────
 type Props = {
   title: string;
   subtitle: string;
   ctaPortfolio: string;
   ctaContact: string;
-  /** PublicIds per panel — each panel cycles through its own list. */
   photos?: [string[], string[], string[]];
   locale: string;
 };
 
-// ─────────────────────────────────────────────────────────────
-// Sub-components
-// ─────────────────────────────────────────────────────────────
-
-/** Filmic warm/cool tint overlay, multiply blend */
 function FilmicTint() {
   return (
     <div
       aria-hidden
       className="absolute inset-0 pointer-events-none"
       style={{
-        background:
-          "linear-gradient(180deg, rgba(10,20,40,0.18) 0%, rgba(0,0,0,0) 40%, rgba(90,48,25,0.10) 100%)",
+        background: "linear-gradient(180deg, rgba(10,20,40,0.18) 0%, rgba(0,0,0,0) 40%, rgba(90,48,25,0.10) 100%)",
         mixBlendMode: "multiply",
       }}
     />
   );
 }
 
-/** Subtle film-grain texture */
 function Grain() {
   return (
     <div
@@ -52,13 +41,8 @@ function Grain() {
   );
 }
 
-/** One triptych panel. Fades between `images` on an interval. */
 function TriptychPanel({
-  images,
-  interval = 5000,
-  kbAnimation,
-  label,
-  index,
+  images, interval = 5000, kbAnimation, label, index,
 }: {
   images: string[];
   interval?: number;
@@ -79,42 +63,14 @@ function TriptychPanel({
   return (
     <div
       className="relative overflow-hidden"
-      style={{
-        background: "var(--color-surface)",
-        borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none",
-      }}
+      style={{ background: "var(--color-surface)", borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none" }}
     >
-      {/* Outgoing image */}
-      <img
-        src={images[prev]}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ animation: kbAnimation }}
-        loading="eager"
-        aria-hidden
-      />
-      {/* Incoming image — fades in */}
-      <img
-        key={cur}
-        src={images[cur]}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }}
-        loading="eager"
-        fetchPriority={index === 0 ? "high" : "auto"}
-        aria-hidden
-      />
+      <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
+      <img key={cur} src={images[cur]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
       <FilmicTint />
-      {/* Category label */}
       <div
         className="absolute top-20 left-5 flex items-center gap-2"
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          color: "rgba(255,255,255,0.45)",
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-        }}
+        style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.45)", letterSpacing: "0.22em", textTransform: "uppercase" }}
       >
         <span>{String(index + 1).padStart(3, "0")}</span>
         <span style={{ width: 14, height: 1, background: "rgba(255,255,255,0.3)", display: "block" }} />
@@ -124,62 +80,122 @@ function TriptychPanel({
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────────────────────
+const NAV_LINK_CLASS = "px-3 py-2 text-[13px] tracking-[0.02em] text-[rgba(242,240,235,0.55)] hover:text-[var(--color-text)] transition-colors duration-200";
+
+// rootMargin value must match the navbar height
+const NAVBAR_HEIGHT = 64;
+
 export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos, locale }: Props) {
-  const toSrcs = (ids: string[]) =>
-    ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+  const [navbarVisible, setNavbarVisible] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
 
-  const panelLabels = locale === "cs"
-    ? ["Portréty", "Eventy", "Portréty"]
-    : ["Portraits", "Events", "Portraits"];
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
 
-  const panelData: { srcs: string[]; label: string; kb: string }[] = [
-    { srcs: toSrcs(photos?.[0] ?? []), label: panelLabels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
-    { srcs: toSrcs(photos?.[1] ?? []), label: panelLabels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
-    { srcs: toSrcs(photos?.[2] ?? []), label: panelLabels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
-  ];
+    // Sync initial state — needed when page loads with scrollY > 0 (back-navigation, scroll restoration)
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom <= NAVBAR_HEIGHT) {
+      setNavbarVisible(true);
+    }
 
-  const navLinks: { label: string; href: string }[] =
-    locale === "cs"
+    const observer = new IntersectionObserver(
+      ([entry]) => setNavbarVisible(!entry.isIntersecting),
+      { threshold: 0, rootMargin: `-${NAVBAR_HEIGHT}px 0px 0px 0px` },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const navLinks = useMemo<{ label: string; href: string }[]>(
+    () => locale === "cs"
       ? [
           { label: "Portfolio", href: "/portfolio" },
-          { label: "O mně", href: "#o-mne" },
-          { label: "Služby", href: "#sluzby" },
-          { label: "Kontakt", href: "#kontakt" },
+          { label: "O mně",     href: "#o-mne" },
+          { label: "Služby",    href: "#sluzby" },
+          { label: "Kontakt",   href: "#kontakt" },
         ]
       : [
           { label: "Portfolio", href: "/portfolio" },
-          { label: "About", href: "#o-mne" },
-          { label: "Services", href: "#sluzby" },
-          { label: "Contact", href: "#kontakt" },
-        ];
+          { label: "About",     href: "#o-mne" },
+          { label: "Services",  href: "#sluzby" },
+          { label: "Contact",   href: "#kontakt" },
+        ],
+    [locale],
+  );
+
+  const panelData = useMemo(() => {
+    const toSrcs = (ids: string[]) => ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+    const labels = locale === "cs" ? ["Portréty", "Eventy", "Portréty"] : ["Portraits", "Events", "Portraits"];
+    return [
+      { srcs: toSrcs(photos?.[0] ?? []), label: labels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
+      { srcs: toSrcs(photos?.[1] ?? []), label: labels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
+      { srcs: toSrcs(photos?.[2] ?? []), label: labels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
+    ];
+  }, [photos, locale]);
+
+  const langSwitcher = (
+    <span className="ml-1 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
+      <Link href={pathname} locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>CS</Link>
+      <span style={{ color: "var(--color-text-ghost)" }}>/</span>
+      <Link href={pathname} locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
+    </span>
+  );
 
   return (
     <>
-      {/* Global keyframes — injected once */}
       <style>{`
-        @keyframes heroKb1 {
-          from { transform: scale(1.02) translate(0,0); }
-          to   { transform: scale(1.10) translate(-1.5%,-1%); }
-        }
-        @keyframes heroKb2 {
-          from { transform: scale(1.06) translate(0.5%,0); }
-          to   { transform: scale(1.02) translate(-0.5%,0.8%); }
-        }
-        @keyframes heroKb3 {
-          from { transform: scale(1.04) translate(0,0); }
-          to   { transform: scale(1.10) translate(1%,-1%); }
-        }
-        @keyframes heroFadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
+        @keyframes heroKb1 { from { transform: scale(1.02) translate(0,0); }    to { transform: scale(1.10) translate(-1.5%,-1%); } }
+        @keyframes heroKb2 { from { transform: scale(1.06) translate(0.5%,0); } to { transform: scale(1.02) translate(-0.5%,0.8%); } }
+        @keyframes heroKb3 { from { transform: scale(1.04) translate(0,0); }    to { transform: scale(1.10) translate(1%,-1%); } }
+        @keyframes heroFadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
 
-      {/* ── Hero section ── */}
+      {/* ── Fixed navbar — visible after hero scrolls away ──── */}
+      {/*
+        visibility:hidden (not just opacity:0) is intentional:
+        it removes the nav from the accessibility tree and prevents
+        keyboard focus when visually hidden, avoiding invisible focusable links.
+      */}
+      <nav
+        aria-label={locale === "cs" ? "Hlavní navigace" : "Main navigation"}
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0,
+          height: NAVBAR_HEIGHT,
+          zIndex: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingLeft: 16,
+          paddingRight: 16,
+          background: "rgba(10,10,11,0.72)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(255,255,255,0.12)",
+          opacity: navbarVisible ? 1 : 0,
+          visibility: navbarVisible ? "visible" : "hidden",
+          transform: navbarVisible ? "translateY(0)" : "translateY(-6px)",
+          transition: "opacity 0.3s ease, transform 0.3s ease, visibility 0.3s",
+        }}
+      >
+        <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--color-text)", whiteSpace: "nowrap" }}>
+          {title}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {navLinks.map(({ label, href }) =>
+            href.startsWith("#")
+              ? <a key={href} href={href} className={NAV_LINK_CLASS}>{label}</a>
+              : <Link key={href} href={href} className={NAV_LINK_CLASS}>{label}</Link>
+          )}
+          {langSwitcher}
+        </div>
+      </nav>
+
+      {/* ── Hero section ─────────────────────────────────────── */}
       <section
+        ref={heroRef}
         id="hero"
         className="relative h-screen flex items-stretch overflow-hidden"
         aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
@@ -187,47 +203,23 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         {/* Triptych */}
         <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
           {panelData.map((p, i) => (
-            <TriptychPanel
-              key={i}
-              images={p.srcs}
-              kbAnimation={p.kb}
-              label={p.label}
-              index={i}
-              interval={4800 + i * 600}
-            />
+            <TriptychPanel key={i} images={p.srcs} kbAnimation={p.kb} label={p.label} index={i} interval={4800 + i * 600} />
           ))}
         </div>
 
         {/* Overlays */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 90% 80% at 50% 50%, rgba(10,10,11,0.20) 0%, rgba(10,10,11,0.70) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }}
-        />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 90% 80% at 50% 50%, rgba(10,10,11,0.20) 0%, rgba(10,10,11,0.70) 100%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }} />
 
-        {/* ── Centred composition ── */}
-        <div className="relative z-10 w-full flex flex-col items-center justify-center">
+        {/* Hero content */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center">
           {/* Eyebrow */}
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              letterSpacing: "0.45em",
-              textTransform: "uppercase",
-              color: "rgba(242,240,235,0.50)",
-              marginBottom: 22,
-            }}
-          >
+          <div style={{
+            fontFamily: "var(--font-mono)", fontSize: 11,
+            letterSpacing: "0.45em", textTransform: "uppercase",
+            color: "rgba(242,240,235,0.50)", marginBottom: 22,
+          }}>
             {locale === "cs" ? "Tomáš Guth Jarkovský · Praha" : "Tomáš Guth Jarkovský · Prague"}
           </div>
 
@@ -235,9 +227,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           <h1
             className="font-bold text-[var(--color-text)] text-center"
             style={{
-              margin: 0,
-              letterSpacing: "-0.04em",
-              lineHeight: 0.88,
+              margin: 0, letterSpacing: "-0.04em", lineHeight: 0.88,
               fontSize: "clamp(80px, 10vw, 140px)",
               textShadow: "0 2px 40px rgba(0,0,0,0.4)",
             }}
@@ -246,25 +236,17 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           </h1>
 
           {/* Rule */}
-          <div
-            style={{
-              width: 40,
-              height: 1,
-              background: "rgba(255,255,255,0.22)",
-              margin: "28px 0",
-            }}
-          />
+          <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "24px 0" }} />
 
           {/* Subtitle */}
-          <p
-            className="text-[var(--color-text-muted)] text-center"
-            style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}
-          >
-            {subtitle}
-          </p>
+          {subtitle && (
+            <p className="text-[var(--color-text-muted)] text-center" style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}>
+              {subtitle}
+            </p>
+          )}
 
           {/* CTAs + nav links — grouped so nav stays tight under buttons */}
-          <div className="mt-7 flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4" style={{ marginTop: subtitle ? 28 : 20 }}>
             <div className="flex gap-3 flex-wrap justify-center">
               <a
                 href="#kontakt"
@@ -281,55 +263,24 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
               </Link>
             </div>
 
-            <div
-              className="flex gap-8"
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: 13,
-                letterSpacing: "0.04em",
-              }}
-            >
+            {/* Plain nav links — no background, always tight under CTAs */}
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               {navLinks.map(({ label, href }) =>
-                href.startsWith("#") ? (
-                  <a
-                    key={href}
-                    href={href}
-                    className="hover:text-[var(--color-text)] transition-colors duration-200"
-                    style={{ color: "rgba(242,240,235,0.55)" }}
-                  >
-                    {label}
-                  </a>
-                ) : (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="hover:text-[var(--color-text)] transition-colors duration-200"
-                    style={{ color: "rgba(242,240,235,0.55)" }}
-                  >
-                    {label}
-                  </Link>
-                )
+                href.startsWith("#")
+                  ? <a key={href} href={href} className={NAV_LINK_CLASS}>{label}</a>
+                  : <Link key={href} href={href} className={NAV_LINK_CLASS}>{label}</Link>
               )}
-              <span
-                className="flex items-center gap-1"
-                style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em" }}
-              >
-                <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>CS</Link>
-                <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
-                <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>EN</Link>
-              </span>
+              {langSwitcher}
             </div>
           </div>
         </div>
 
         {/* Scroll hint */}
         <div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 pointer-events-none"
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "rgba(242,240,235,0.35)",
-            letterSpacing: "0.22em",
+            fontFamily: "var(--font-mono)", fontSize: 10,
+            color: "rgba(242,240,235,0.35)", letterSpacing: "0.22em",
             textTransform: "uppercase",
           }}
         >
