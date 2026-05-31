@@ -1,3 +1,8 @@
+## [2026-05-31] - fix(hero+nav): nav linky blíž CTAs, nav bez border při scrollu
+
+- HeroSection: `mt-9` → `mt-4` na nav linkách pod CTAs
+- Nav: odstraněn `border` ze scrolled stavu (frosted glass pill)
+
 ## [2026-05-29] - fix(hero): opravit typ heroPhotos pro triptych
 
 - `[string[][]]` → `[HeroPhoto, HeroPhoto, HeroPhoto]` s kategoriemi dle panelu

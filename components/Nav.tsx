@@ -61,7 +61,6 @@ export function Nav() {
   const scrolledStyle = {
     background: "var(--nav-bg-scrolled)",
     boxShadow: "var(--nav-shadow)",
-    border: "1px solid var(--nav-border)",
   };
 
   return (

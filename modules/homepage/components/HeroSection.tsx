@@ -296,7 +296,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
 
           {/* Nav links below title */}
           <div
-            className="mt-9 flex gap-8"
+            className="mt-4 flex gap-8"
             style={{
               fontFamily: "var(--font-sans)",
               fontSize: 13,
