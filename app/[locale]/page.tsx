@@ -46,13 +46,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ profile: "" })),
   ]);
 
-  const normalizeSlot = (slot: unknown): string[] =>
-    Array.isArray(slot) ? slot.filter((s): s is string => typeof s === "string") : [];
-  const raw = images.heroTriptych as unknown;
-  const heroPhotos: [string[], string[], string[]] | undefined = Array.isArray(raw) && raw.length === 3
-    ? [normalizeSlot(raw[0]), normalizeSlot(raw[1]), normalizeSlot(raw[2])]
-    : undefined;
-
   return (
     <main className="-mt-16">
       <HeroSection
@@ -61,7 +54,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         ctaPortfolio={t("home.ctaContact")}
         ctaContact={t("home.cta")}
         locale={locale}
-        photos={heroPhotos}
+        photos={images.heroTriptych}
       />
 
 

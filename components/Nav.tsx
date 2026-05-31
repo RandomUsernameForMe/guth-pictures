@@ -53,8 +53,6 @@ export function Nav() {
 
   const links = (isPortfolio || isBlog || isLightTester) ? subpageLinks : homeLinks;
 
-  if (isHome) return null;
-
   const isActive = (href: string) =>
     (href === "/portfolio" && isPortfolio) ||
     (href === "/blog" && isBlog) ||
@@ -63,16 +61,16 @@ export function Nav() {
   const scrolledStyle = {
     background: "var(--nav-bg-scrolled)",
     boxShadow: "var(--nav-shadow)",
-    border: "1px solid var(--nav-border)",
   };
 
   return (
     <>
       <motion.div
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
+        animate={{ y: 0, opacity: isHome && !scrolled ? 0 : 1 }}
+        transition={{ type: "spring", stiffness: 120, damping: 20, delay: isHome ? 0 : 0.1 }}
         className="fixed top-0 inset-x-0 z-50"
+        style={{ pointerEvents: isHome && !scrolled ? "none" : "auto" }}
       >
         <div
           className={`mx-auto transition-all duration-500 ${
@@ -87,12 +85,9 @@ export function Nav() {
             className={`transition-all duration-500 ${
               scrolled
                 ? "rounded-2xl backdrop-blur-xl"
-                : "rounded-none backdrop-blur-sm"
+                : "rounded-none"
             }`}
-            style={scrolled ? scrolledStyle : !isHome ? {
-              background: "var(--nav-bg-subpage)",
-              borderBottom: "1px solid var(--nav-border)",
-            } : scrolledStyle}
+            style={scrolled ? scrolledStyle : {}}
           >
             <nav className="flex items-center justify-between px-6 h-16">
               {/* Logo */}

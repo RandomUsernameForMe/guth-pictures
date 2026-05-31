@@ -1,3 +1,24 @@
+## [2026-05-31] - fix(hero): nav linky skupinově pod CTAs, vždy těsně za buttons
+
+- CTAs + nav linky zabaleny do společného flex-col bloku — nav se neodsouvá dolů za H1
+- Odstraněn zbytečný mt-4 wrapper
+
+## [2026-05-31] - fix(hero+nav): nav linky blíž CTAs, nav bez border při scrollu
+
+- HeroSection: `mt-9` → `mt-4` na nav linkách pod CTAs
+- Nav: odstraněn `border` ze scrolled stavu (frosted glass pill)
+
+## [2026-05-29] - fix(hero): opravit typ heroPhotos pro triptych
+
+- `[string[][]]` → `[HeroPhoto, HeroPhoto, HeroPhoto]` s kategoriemi dle panelu
+- stará normalizace vracela prázdná pole → hero neměl žádné fotky
+- exportován typ `HeroPhoto` z HeroSection
+
+## [2026-05-29] - fix(nav): frosted glass efekt až po scrollu
+
+- nav nahoře průhledný bez pozadí a blur
+- backdrop-blur-xl + background + shadow až po scrollu (>40px)
+
 ## [2026-05-08] - fix(homepage): třetí panel hero triptych přejmenován na Larpy/Larps
 
 ## [2026-05-08] - fix(homepage): skrýt JG placeholder když není profilová fotka
