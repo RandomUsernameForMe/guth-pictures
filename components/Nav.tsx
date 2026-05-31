@@ -63,6 +63,9 @@ export function Nav() {
     boxShadow: "var(--nav-shadow)",
   };
 
+  // HeroSection has its own navbar on homepage
+  if (isHome) return null;
+
   return (
     <>
       <motion.div

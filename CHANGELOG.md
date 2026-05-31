@@ -1,3 +1,5 @@
+## [2026-05-31] - fix(nav): Nav.tsx vrací null na homepage — HeroSection má vlastní navbar
+
 ## [2026-05-31] - fix(hero): nav linky skupinově pod CTAs, vždy těsně za buttons
 
 - CTAs + nav linky zabaleny do společného flex-col bloku — nav se neodsouvá dolů za H1
