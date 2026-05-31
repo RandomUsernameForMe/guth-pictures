@@ -277,61 +277,62 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             {subtitle}
           </p>
 
-          {/* CTAs */}
-          <div className="mt-7 flex gap-3 flex-wrap justify-center">
-            <a
-              href="#kontakt"
-              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
-            >
-              {ctaContact} <span>→</span>
-            </a>
-            <Link
-              href="/portfolio"
-              className="px-7 py-3.5 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
-              style={{ background: "rgba(10,10,11,0.45)", backdropFilter: "blur(8px)" }}
-            >
-              {ctaPortfolio}
-            </Link>
-          </div>
+          {/* CTAs + nav links — grouped so nav stays tight under buttons */}
+          <div className="mt-7 flex flex-col items-center gap-4">
+            <div className="flex gap-3 flex-wrap justify-center">
+              <a
+                href="#kontakt"
+                className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
+              >
+                {ctaContact} <span>→</span>
+              </a>
+              <Link
+                href="/portfolio"
+                className="px-7 py-3.5 border border-[var(--color-border)] text-[var(--color-text)] text-sm rounded-xl hover:bg-[var(--color-bg-overlay)] transition-all duration-200 inline-flex items-center gap-2"
+                style={{ background: "rgba(10,10,11,0.45)", backdropFilter: "blur(8px)" }}
+              >
+                {ctaPortfolio}
+              </Link>
+            </div>
 
-          {/* Nav links below title */}
-          <div
-            className="mt-4 flex gap-8"
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: 13,
-              letterSpacing: "0.04em",
-            }}
-          >
-            {navLinks.map(({ label, href }) =>
-              href.startsWith("#") ? (
-                <a
-                  key={href}
-                  href={href}
-                  className="hover:text-[var(--color-text)] transition-colors duration-200"
-                  style={{ color: "rgba(242,240,235,0.55)" }}
-                >
-                  {label}
-                </a>
-              ) : (
-                <Link
-                  key={href}
-                  href={href}
-                  className="hover:text-[var(--color-text)] transition-colors duration-200"
-                  style={{ color: "rgba(242,240,235,0.55)" }}
-                >
-                  {label}
-                </Link>
-              )
-            )}
-            <span
-              className="flex items-center gap-1"
-              style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em" }}
+            <div
+              className="flex gap-8"
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: 13,
+                letterSpacing: "0.04em",
+              }}
             >
-              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>CS</Link>
-              <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
-              <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>EN</Link>
-            </span>
+              {navLinks.map(({ label, href }) =>
+                href.startsWith("#") ? (
+                  <a
+                    key={href}
+                    href={href}
+                    className="hover:text-[var(--color-text)] transition-colors duration-200"
+                    style={{ color: "rgba(242,240,235,0.55)" }}
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="hover:text-[var(--color-text)] transition-colors duration-200"
+                    style={{ color: "rgba(242,240,235,0.55)" }}
+                  >
+                    {label}
+                  </Link>
+                )
+              )}
+              <span
+                className="flex items-center gap-1"
+                style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.15em" }}
+              >
+                <Link href="/" locale="cs" style={{ color: locale === "cs" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>CS</Link>
+                <span style={{ color: "rgba(242,240,235,0.25)" }}>/</span>
+                <Link href="/" locale="en" style={{ color: locale === "en" ? "rgba(242,240,235,0.7)" : "rgba(242,240,235,0.35)" }}>EN</Link>
+              </span>
+            </div>
           </div>
         </div>
 

@@ -1,3 +1,8 @@
+## [2026-05-31] - fix(hero): nav linky skupinově pod CTAs, vždy těsně za buttons
+
+- CTAs + nav linky zabaleny do společného flex-col bloku — nav se neodsouvá dolů za H1
+- Odstraněn zbytečný mt-4 wrapper
+
 ## [2026-05-31] - fix(hero+nav): nav linky blíž CTAs, nav bez border při scrollu
 
 - HeroSection: `mt-9` → `mt-4` na nav linkách pod CTAs
