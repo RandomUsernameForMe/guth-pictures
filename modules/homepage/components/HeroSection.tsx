@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Link } from "@/i18n/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 
 type Props = {
@@ -12,10 +12,6 @@ type Props = {
   photos?: [string[], string[], string[]];
   locale: string;
 };
-
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * Math.max(0, Math.min(1, t));
-}
 
 function FilmicTint() {
   return (
@@ -84,68 +80,80 @@ function TriptychPanel({
   );
 }
 
+const NAV_LINK_CLASS = "px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200";
+
+function NavLinkList({ links }: { links: { label: string; href: string }[] }) {
+  return (
+    <>
+      {links.map(({ label, href }) =>
+        href.startsWith("#")
+          ? <a key={href} href={href} className={NAV_LINK_CLASS}>{label}</a>
+          : <Link key={href} href={href} className={NAV_LINK_CLASS}>{label}</Link>
+      )}
+    </>
+  );
+}
+
+// rootMargin value must match the navbar height
+const NAVBAR_HEIGHT = 64;
+
 export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos, locale }: Props) {
-  const [progress, setProgress] = useState(0);
-  const [vh, setVh] = useState(800);
+  const [navbarVisible, setNavbarVisible] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    setVh(window.innerHeight);
-    const onScroll = () => setProgress(Math.min(1, window.scrollY / 280));
-    const onResize = () => setVh(window.innerHeight);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-    };
+    const el = heroRef.current;
+    if (!el) return;
+
+    // Sync initial state — needed when page loads with scrollY > 0 (back-navigation, scroll restoration)
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom <= NAVBAR_HEIGHT) {
+      setNavbarVisible(true);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setNavbarVisible(!entry.isIntersecting),
+      { threshold: 0, rootMargin: `-${NAVBAR_HEIGHT}px 0px 0px 0px` },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
-  const ease = progress < 0.5
-    ? 2 * progress * progress
-    : -1 + (4 - 2 * progress) * progress;
+  const navLinks = useMemo<{ label: string; href: string }[]>(
+    () => locale === "cs"
+      ? [
+          { label: "Portfolio", href: "/portfolio" },
+          { label: "O mně",     href: "#o-mne" },
+          { label: "Služby",    href: "#sluzby" },
+          { label: "Kontakt",   href: "#kontakt" },
+        ]
+      : [
+          { label: "Portfolio", href: "/portfolio" },
+          { label: "About",     href: "#o-mne" },
+          { label: "Services",  href: "#sluzby" },
+          { label: "Contact",   href: "#kontakt" },
+        ],
+    [locale],
+  );
 
-  // ── Morphing pill ───────────────────────────────────────────
-  const BAND_H = 44;
-  const NAV_H = 64;
-  const navH = lerp(BAND_H, NAV_H, ease);
-  const navTranslateY = (1 - ease) * (vh * 0.69 - navH / 2);
-  const navSide = lerp(22, 0, ease);
-  const navBR = lerp(22, 0, ease);
-  const navBgAlpha = lerp(0.32, 0.72, ease);
-  const navBlur = lerp(8, 16, ease);
-  const navBorderAlpha = lerp(0.08, 0.12, ease);
+  const panelData = useMemo(() => {
+    const toSrcs = (ids: string[]) => ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+    const labels = locale === "cs" ? ["Portréty", "Eventy", "Larpy"] : ["Portraits", "Events", "Larps"];
+    return [
+      { srcs: toSrcs(photos?.[0] ?? []), label: labels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
+      { srcs: toSrcs(photos?.[1] ?? []), label: labels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
+      { srcs: toSrcs(photos?.[2] ?? []), label: labels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
+    ];
+  }, [photos, locale]);
 
-  // ── Pill content: crossfade same links between centered → right-aligned
-  const bandOpacity  = Math.max(0, 1 - ease / 0.6);
-  const navbarOpacity = Math.max(0, (ease - 0.4) / 0.6);
-
-  // ── Hero content
-  const heroContentOpacity = Math.max(0, 1 - ease / 0.45);
-  const heroContentY = ease * -28;
-  const scrollHintOpacity = Math.max(0, 1 - ease * 4);
-
-  const navLinks: { label: string; href: string }[] = locale === "cs"
-    ? [
-        { label: "Portfolio", href: "/portfolio" },
-        { label: "O mně",     href: "#o-mne" },
-        { label: "Služby",    href: "#sluzby" },
-        { label: "Kontakt",   href: "#kontakt" },
-      ]
-    : [
-        { label: "Portfolio", href: "/portfolio" },
-        { label: "About",     href: "#o-mne" },
-        { label: "Services",  href: "#sluzby" },
-        { label: "Contact",   href: "#kontakt" },
-      ];
-
-  const toSrcs = (ids: string[]) => ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
-  const panelLabels = locale === "cs" ? ["Portréty", "Eventy", "Larpy"] : ["Portraits", "Events", "Larps"];
-  const panelData = [
-    { srcs: toSrcs(photos?.[0] ?? []), label: panelLabels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },
-    { srcs: toSrcs(photos?.[1] ?? []), label: panelLabels[1], kb: "heroKb2 22s ease-in-out infinite alternate" },
-    { srcs: toSrcs(photos?.[2] ?? []), label: panelLabels[2], kb: "heroKb3 16s ease-in-out infinite alternate" },
-  ];
+  const langSwitcher = (
+    <span className="ml-1 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
+      <Link href={pathname} locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>CS</Link>
+      <span style={{ color: "var(--color-text-ghost)" }}>/</span>
+      <Link href={pathname} locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
+    </span>
+  );
 
   return (
     <>
@@ -156,88 +164,46 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         @keyframes heroFadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
 
-      {/* ── Scroll progress line — top of viewport ─────────── */}
-      {progress > 0 && (
-        <div
-          className="fixed top-0 left-0 h-px z-[60] pointer-events-none"
-          style={{ width: `${progress * 100}%`, background: "rgba(200,169,110,0.5)" }}
-        />
-      )}
-
-      {/* ── Morphing pill → navbar ───────────────────────────── */}
+      {/* ── Fixed navbar — visible after hero scrolls away ──── */}
       {/*
-        Single set of links — always right-aligned.
-        Logo fades in on left as pill grows into navbar.
-        Same elements move with the pill, no crossfade swap.
+        visibility:hidden (not just opacity:0) is intentional:
+        it removes the nav from the accessibility tree and prevents
+        keyboard focus when visually hidden, avoiding invisible focusable links.
       */}
-      <div
+      <nav
+        aria-label={locale === "cs" ? "Hlavní navigace" : "Main navigation"}
         style={{
           position: "fixed",
+          top: 0, left: 0, right: 0,
+          height: NAVBAR_HEIGHT,
           zIndex: 50,
-          top: 0,
-          left: `${navSide.toFixed(2)}%`,
-          right: `${navSide.toFixed(2)}%`,
-          height: `${navH.toFixed(1)}px`,
-          transform: `translateY(${navTranslateY.toFixed(1)}px)`,
-          borderRadius: `${navBR.toFixed(1)}px`,
-          background: `rgba(10,10,11,${navBgAlpha.toFixed(3)})`,
-          backdropFilter: `blur(${navBlur.toFixed(1)}px)`,
-          WebkitBackdropFilter: `blur(${navBlur.toFixed(1)}px)`,
-          border: `1px solid rgba(255,255,255,${navBorderAlpha.toFixed(3)})`,
-          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingLeft: 16,
+          paddingRight: 16,
+          background: "rgba(10,10,11,0.72)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(255,255,255,0.12)",
+          opacity: navbarVisible ? 1 : 0,
+          visibility: navbarVisible ? "visible" : "hidden",
+          transform: navbarVisible ? "translateY(0)" : "translateY(-6px)",
+          transition: "opacity 0.3s ease, transform 0.3s ease, visibility 0.3s",
         }}
       >
-        {/* Band state — links centered */}
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
-            opacity: bandOpacity,
-            pointerEvents: bandOpacity < 0.05 ? "none" : "auto",
-          }}
-        >
-          {navLinks.map(({ label, href }) =>
-            href.startsWith("#")
-              ? <a key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</a>
-              : <Link key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</Link>
-          )}
-          <span className="ml-1 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
-            <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>CS</Link>
-            <span style={{ color: "var(--color-text-ghost)" }}>/</span>
-            <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
-          </span>
+        <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--color-text)", whiteSpace: "nowrap" }}>
+          {title}
         </div>
-
-        {/* Navbar state — logo left, links right */}
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            paddingLeft: 16, paddingRight: 16,
-            opacity: navbarOpacity,
-            pointerEvents: navbarOpacity < 0.05 ? "none" : "auto",
-          }}
-        >
-          <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--color-text)", whiteSpace: "nowrap" }}>
-            {title}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            {navLinks.map(({ label, href }) =>
-              href.startsWith("#")
-                ? <a key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</a>
-                : <Link key={href} href={href} className="px-3 py-2 text-[13px] tracking-[0.02em] text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200">{label}</Link>
-            )}
-            <span className="ml-1 flex items-center gap-1" style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em" }}>
-              <Link href="/" locale="cs" style={{ color: locale === "cs" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>CS</Link>
-              <span style={{ color: "var(--color-text-ghost)" }}>/</span>
-              <Link href="/" locale="en" style={{ color: locale === "en" ? "var(--color-text)" : "var(--color-text-ghost)", padding: "4px 6px" }}>EN</Link>
-            </span>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <NavLinkList links={navLinks} />
+          {langSwitcher}
         </div>
-      </div>
+      </nav>
 
       {/* ── Hero section ─────────────────────────────────────── */}
       <section
+        ref={heroRef}
         id="hero"
         className="relative h-screen flex items-stretch overflow-hidden"
         aria-label={locale === "cs" ? "Úvodní sekce" : "Hero section"}
@@ -254,15 +220,8 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }} />
 
-        {/* Hero content — no glass, floats directly over photos */}
-        <div
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center"
-          style={{
-            opacity: heroContentOpacity,
-            transform: `translateY(calc(-4vh + ${heroContentY.toFixed(1)}px))`,
-            pointerEvents: ease > 0.5 ? "none" : "auto",
-          }}
-        >
+        {/* Hero content */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center">
           {/* Eyebrow */}
           <div style={{
             fontFamily: "var(--font-mono)", fontSize: 11,
@@ -284,10 +243,10 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
             {title}
           </h1>
 
-          {/* Rule — always */}
+          {/* Rule */}
           <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.22)", margin: "24px 0" }} />
 
-          {/* Subtitle — only when set */}
+          {/* Subtitle */}
           {subtitle && (
             <p className="text-[var(--color-text-muted)] text-center" style={{ margin: 0, fontSize: 16, letterSpacing: "0.02em" }}>
               {subtitle}
@@ -315,13 +274,41 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
           </div>
         </div>
 
+        {/* Band — static pill, scrolls away with hero, hides when navbar takes over */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "18%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 20,
+            height: 44,
+            borderRadius: 22,
+            background: "rgba(10,10,11,0.32)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            padding: "0 8px",
+            whiteSpace: "nowrap",
+            opacity: navbarVisible ? 0 : 1,
+            pointerEvents: navbarVisible ? "none" : "auto",
+            transition: "opacity 0.3s ease",
+          }}
+        >
+          <NavLinkList links={navLinks} />
+          {langSwitcher}
+        </div>
+
         {/* Scroll hint */}
         <div
           className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 pointer-events-none"
           style={{
             fontFamily: "var(--font-mono)", fontSize: 10,
             color: "rgba(242,240,235,0.35)", letterSpacing: "0.22em",
-            textTransform: "uppercase", opacity: scrollHintOpacity,
+            textTransform: "uppercase",
           }}
         >
           <span style={{ width: 20, height: 1, background: "rgba(242,240,235,0.25)", display: "block" }} />
