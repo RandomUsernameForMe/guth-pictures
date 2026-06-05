@@ -7,7 +7,7 @@ import { Inspector } from "./Inspector";
 import type { Light, LightType, Tweaks, SavedSetup } from "./types";
 import { PRESETS } from "./types";
 
-const FORMSPREE_URL = `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}`;
+const FORMSPREE_URL = `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_LT_FORM_ID}`;
 
 type FeedbackType = "bug" | "navrh" | "jine";
 
