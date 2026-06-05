@@ -5,6 +5,7 @@ import { HeroSection } from "@/modules/homepage/components/HeroSection";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
+import { LightTesterPromo } from "@/modules/homepage/components/LightTesterPromo";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -115,6 +116,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             ] satisfies ServiceItem[]}
           />
         </section>
+      </AnimatedSection>
+
+      <AnimatedSection className="bg-[var(--color-bg)] border-b border-[var(--color-border)]">
+        <LightTesterPromo
+          label={t("light-tester-promo.label")}
+          title={t("light-tester-promo.title")}
+          desc={t("light-tester-promo.desc")}
+          cta={t("light-tester-promo.cta")}
+          locale={locale}
+        />
       </AnimatedSection>
 
       <AnimatedSection className="bg-[var(--color-bg)] border-b border-[var(--color-border)]">

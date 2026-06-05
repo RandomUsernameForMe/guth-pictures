@@ -301,6 +301,71 @@ body::after {
 .blog-content img { border-radius: 8px; margin: 1.5rem 0; max-width: 100%; height: auto; }
 .blog-content hr { border-color: var(--color-border); margin: 2rem 0; }
 
+/* ── Light Tester Promo (homepage) ────────────────────────────── */
+.lt-promo {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 6rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  align-items: center;
+}
+.lt-promo-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid rgba(200,169,110,0.25);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+}
+.lt-promo-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  margin: 0 0 1rem;
+}
+.lt-promo-desc {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  max-width: 38ch;
+  margin: 0 0 2rem;
+}
+.lt-promo-cta {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--color-border-sub);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background var(--duration-fast), border-color var(--duration-fast);
+}
+.lt-promo-cta:hover {
+  background: var(--color-bg-overlay);
+  border-color: var(--color-border);
+}
+.lt-promo-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+}
+@media (max-width: 768px) {
+  .lt-promo {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 4rem 1.5rem;
+  }
+  .lt-promo-diagram { display: none; }
+}
+
 /* ── Light Tester ──────────────────────────────────────────────── */
 .lt-page {
   height: calc(100svh - 64px);

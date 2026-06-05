@@ -54,6 +54,12 @@
     },
     "cta": "Drop me a line"
   },
+  "light-tester-promo": {
+    "label": "Free tool",
+    "title": "Try the lights before the shoot",
+    "desc": "Interactive 3D studio lighting simulator. Set up your lighting scheme, explore presets and come prepared.",
+    "cta": "Open Light Tester"
+  },
   "o-mne": {
     "title": "About me",
     "subtitle": "I'm a photographer based in Prague.",

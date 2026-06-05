@@ -54,6 +54,12 @@
     },
     "cta": "Nezávazně napsat"
   },
+  "light-tester-promo": {
+    "label": "Nástroj zdarma",
+    "title": "Vyzkoušej světla před focením",
+    "desc": "Interaktivní 3D simulátor studiového osvětlení. Nastav si světelné schéma, prozkoumej presety a přijď připravený.",
+    "cta": "Otevřít Light Tester"
+  },
   "o-mne": {
     "title": "O mně",
     "subtitle": "Jsem fotograf z Prahy.",
