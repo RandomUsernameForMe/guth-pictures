@@ -199,9 +199,9 @@ export default function Image() {
           <LightSource x={0} y={138} color="#7BA7BC" label="RIM" />
 
           {/* Lines from lights to center */}
-          <Line x1={-90} y1={-100} x2={0} y2={0} color={C.accent} opacity={0.50} />
-          <Line x1={82} y1={-90} x2={0} y2={0} color={C.muted} opacity={0.38} />
-          <Line x1={0} y1={118} x2={0} y2={0} color="#7BA7BC" opacity={0.42} />
+          <Line x1={-108} y1={-120} x2={0} y2={0} color={C.accent} opacity={0.50} />
+          <Line x1={100} y1={-110} x2={0} y2={0} color={C.muted} opacity={0.38} />
+          <Line x1={0} y1={138} x2={0} y2={0} color="#7BA7BC" opacity={0.42} />
 
           {/* Subject — center circle */}
           <div

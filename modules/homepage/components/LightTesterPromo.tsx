@@ -28,9 +28,9 @@ export function LightTesterPromo({ label, title, desc, cta, locale }: Props) {
           <circle cx="0" cy="0" r="110" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
 
           {/* Light rays */}
-          <line x1="-90" y1="-100" x2="0" y2="0" stroke="#C8A96E" strokeWidth="1" opacity="0.45" />
-          <line x1="95" y1="-95" x2="0" y2="0" stroke="#9B9899" strokeWidth="1" opacity="0.32" />
-          <line x1="0" y1="130" x2="0" y2="0" stroke="#7BA7BC" strokeWidth="1" opacity="0.38" />
+          <line x1="-108" y1="-118" x2="0" y2="0" stroke="#C8A96E" strokeWidth="1" opacity="0.45" />
+          <line x1="108" y1="-108" x2="0" y2="0" stroke="#9B9899" strokeWidth="1" opacity="0.32" />
+          <line x1="0" y1="140" x2="0" y2="0" stroke="#7BA7BC" strokeWidth="1" opacity="0.38" />
 
           {/* KEY light */}
           <circle cx="-108" cy="-118" r="22" fill="#C8A96E" opacity="0.9" />
