@@ -175,7 +175,10 @@ function encodeState(lights: Light[], tweaks: Tweaks, presetId: string | null): 
     v: 1,
     p: presetId,
     l: lights.map((L) => [
-      L.type, +L.x.toFixed(2), +L.z.toFixed(2), +L.height.toFixed(2),
+      L.type,
+      L.type === "sun" ? +(L.azimuth ?? 45).toFixed(1) : +L.x.toFixed(2),
+      L.type === "sun" ? +(L.elevation ?? 45).toFixed(1) : +L.z.toFixed(2),
+      L.type === "sun" ? 0 : +L.height.toFixed(2),
       Math.round(L.power), L.kelvin, L.gel, Math.round(L.size || 50),
       L.on ? 1 : 0,
       L.aim ? [+L.aim.x.toFixed(2), +L.aim.z.toFixed(2)] : 0,
@@ -190,10 +193,11 @@ function decodeState(hash: string): { lights: Light[]; tweaks: Tweaks; presetId:
     const j = JSON.parse(atob(hash));
     if (j.v !== 1) return null;
     const lights: Light[] = j.l.map(
-      ([type, x, z, height, power, kelvin, gel, size, on, aim]: [string, number, number, number, number, number, string, number, number, number[] | 0]) => ({
-        id: newId(), type, x, z, height, power, kelvin, gel, size, on: !!on,
-        aim: Array.isArray(aim) ? { x: aim[0], z: aim[1], y: 1.55 } : null,
-      })
+      ([type, x, z, height, power, kelvin, gel, size, on, aim]: [string, number, number, number, number, number, string, number, number, number[] | 0]) => {
+        const base = { id: newId(), type, power, kelvin, gel, size, on: !!on, aim: Array.isArray(aim) ? { x: aim[0], z: aim[1], y: 1.55 } : null };
+        if (type === "sun") return { ...base, x: 0, z: 0, height: 0, azimuth: x, elevation: z };
+        return { ...base, x, z, height };
+      }
     );
     const tweaks: Tweaks = { headStyle: j.t[0], focal: j.t[1], backdrop: j.t[2] };
     return { lights, tweaks, presetId: j.p ?? null };
@@ -266,6 +270,7 @@ export function LightTesterApp() {
       rim:     { x: -1.5, z: -1.4, height: 2.1, power: 60, kelvin: 6500, gel: "none", size: 30, on: true, aim: null },
       beauty:  { x:  0.0, z:  1.0, height: 2.3, power: 80, kelvin: 5500, gel: "none", size: 55, on: true, aim: null },
       softbox: { x:  1.4, z:  0.6, height: 2.0, power: 70, kelvin: 5500, gel: "none", size: 75, on: true, aim: null },
+      sun:     { x:  0.0, z:  0.0, height: 0.0, power: 75, kelvin: 5600, gel: "none", size: 50, on: true, aim: null, azimuth: 45, elevation: 42 },
     };
     const newLight: Light = { id: newId(), type, ...defaults[type] };
     setLights((prev) => [...prev, newLight]);

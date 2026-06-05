@@ -120,6 +120,11 @@ function buildBackdrop(color: string): THREE.Group {
   return group;
 }
 
+interface LightEntry {
+  spot?: THREE.SpotLight;
+  dir?: THREE.DirectionalLight;
+}
+
 interface SceneState {
   scene: THREE.Scene;
   renderer: THREE.WebGLRenderer;
@@ -128,7 +133,7 @@ interface SceneState {
   headGroup: THREE.Group;
   backdropGroup: THREE.Group;
   lightGroup: THREE.Group;
-  lightObjs: Map<string, { spot: THREE.SpotLight }>;
+  lightObjs: Map<string, LightEntry>;
   currentHeadStyle: string | null;
   currentBackdrop: string | null;
 }
@@ -320,50 +325,99 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     const seen = new Set<string>();
     lights.forEach((L) => {
       seen.add(L.id);
-      let entry = s.lightObjs.get(L.id);
-      if (!entry) {
-        const sl = new THREE.SpotLight(0xffffff, 0, 12, Math.PI / 4, 0.5, 1.6);
-        sl.castShadow = true;
-        sl.shadow.mapSize.set(1024, 1024);
-        sl.shadow.bias = -0.0005;
-        s.lightGroup.add(sl);
-        s.lightGroup.add(sl.target);
-        entry = { spot: sl };
-        s.lightObjs.set(L.id, entry);
+      const existing = s.lightObjs.get(L.id);
+
+      if (L.type === "sun") {
+        // Ensure DirectionalLight, remove SpotLight if type changed
+        let entry = existing;
+        if (!entry?.dir) {
+          if (entry?.spot) {
+            s.lightGroup.remove(entry.spot);
+            s.lightGroup.remove(entry.spot.target);
+          }
+          const dir = new THREE.DirectionalLight(0xffffff, 0);
+          dir.castShadow = true;
+          dir.shadow.mapSize.set(2048, 2048);
+          dir.shadow.camera.near = 0.1;
+          dir.shadow.camera.far = 50;
+          dir.shadow.camera.left = -3;
+          dir.shadow.camera.right = 3;
+          dir.shadow.camera.top = 3;
+          dir.shadow.camera.bottom = -3;
+          s.lightGroup.add(dir);
+          s.lightGroup.add(dir.target);
+          entry = { dir };
+          s.lightObjs.set(L.id, entry);
+        }
+
+        const az = ((L.azimuth ?? 45) * Math.PI) / 180;
+        const el = ((L.elevation ?? 45) * Math.PI) / 180;
+        const dist = 12;
+        entry.dir!.position.set(
+          Math.sin(az) * Math.cos(el) * dist,
+          Math.sin(el) * dist,
+          Math.cos(az) * Math.cos(el) * dist,
+        );
+        entry.dir!.target.position.set(0, SUBJECT_HEIGHT, 0);
+        entry.dir!.target.updateMatrixWorld();
+        entry.dir!.intensity = (L.on ? 1 : 0) * (L.power / 100) * 3.5;
+
+        const k = kelvinToRGB(L.kelvin);
+        const m = mixGel(k, L.gel);
+        entry.dir!.color.setRGB(m[0], m[1], m[2]);
+
+      } else {
+        // Ensure SpotLight, remove DirectionalLight if type changed
+        let entry = existing;
+        if (!entry?.spot) {
+          if (entry?.dir) {
+            s.lightGroup.remove(entry.dir);
+            s.lightGroup.remove(entry.dir.target);
+          }
+          const sl = new THREE.SpotLight(0xffffff, 0, 12, Math.PI / 4, 0.5, 1.6);
+          sl.castShadow = true;
+          sl.shadow.mapSize.set(1024, 1024);
+          sl.shadow.bias = -0.0005;
+          s.lightGroup.add(sl);
+          s.lightGroup.add(sl.target);
+          entry = { spot: sl };
+          s.lightObjs.set(L.id, entry);
+        }
+
+        entry.spot!.position.set(L.x, L.height, L.z);
+
+        const tx = L.aim?.x ?? 0;
+        const tz = L.aim?.z ?? 0;
+        const ty = L.aim?.y ?? SUBJECT_HEIGHT;
+        entry.spot!.target.position.set(tx, ty, tz);
+        entry.spot!.target.updateMatrixWorld();
+
+        const on = L.on ? 1 : 0;
+        const intensityScale: Record<string, number> = {
+          key: 12, fill: 6, rim: 10, beauty: 11, softbox: 9,
+        };
+        entry.spot!.intensity = on * (L.power / 100) * (intensityScale[L.type] ?? 8);
+
+        const k = kelvinToRGB(L.kelvin);
+        const m = mixGel(k, L.gel);
+        entry.spot!.color.setRGB(m[0], m[1], m[2]);
+
+        const sizeAngle: Record<string, number> = {
+          key: Math.PI / 5,
+          fill: Math.PI / 3.5,
+          rim: Math.PI / 6,
+          beauty: Math.PI / 5.5,
+          softbox: Math.PI / 3,
+        };
+        entry.spot!.angle = (sizeAngle[L.type] ?? Math.PI / 5) * (0.7 + (L.size || 50) / 100);
+        entry.spot!.penumbra = (L.type === "softbox" || L.type === "beauty") ? 0.85 : 0.55;
       }
-      entry.spot.position.set(L.x, L.height, L.z);
-
-      const tx = L.aim?.x ?? 0;
-      const tz = L.aim?.z ?? 0;
-      const ty = L.aim?.y ?? SUBJECT_HEIGHT;
-      entry.spot.target.position.set(tx, ty, tz);
-      entry.spot.target.updateMatrixWorld();
-
-      const on = L.on ? 1 : 0;
-      const intensityScale: Record<string, number> = {
-        key: 12, fill: 6, rim: 10, beauty: 11, softbox: 9,
-      };
-      entry.spot.intensity = on * (L.power / 100) * (intensityScale[L.type] ?? 8);
-
-      const k = kelvinToRGB(L.kelvin);
-      const m = mixGel(k, L.gel);
-      entry.spot.color.setRGB(m[0], m[1], m[2]);
-
-      const sizeAngle: Record<string, number> = {
-        key: Math.PI / 5,
-        fill: Math.PI / 3.5,
-        rim: Math.PI / 6,
-        beauty: Math.PI / 5.5,
-        softbox: Math.PI / 3,
-      };
-      entry.spot.angle = (sizeAngle[L.type] ?? Math.PI / 5) * (0.7 + (L.size || 50) / 100);
-      entry.spot.penumbra = (L.type === "softbox" || L.type === "beauty") ? 0.85 : 0.55;
     });
 
     for (const [id, entry] of s.lightObjs.entries()) {
       if (!seen.has(id)) {
-        s.lightGroup.remove(entry.spot);
-        s.lightGroup.remove(entry.spot.target);
+        if (entry.spot) { s.lightGroup.remove(entry.spot); s.lightGroup.remove(entry.spot.target); }
+        if (entry.dir)  { s.lightGroup.remove(entry.dir);  s.lightGroup.remove(entry.dir.target);  }
         s.lightObjs.delete(id);
       }
     }

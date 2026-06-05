@@ -4,7 +4,7 @@ export interface AimPoint {
   y: number;
 }
 
-export type LightType = 'key' | 'fill' | 'rim' | 'beauty' | 'softbox';
+export type LightType = 'key' | 'fill' | 'rim' | 'beauty' | 'softbox' | 'sun';
 
 export interface Light {
   id: string;
@@ -18,6 +18,8 @@ export interface Light {
   size: number;
   on: boolean;
   aim: AimPoint | null;
+  azimuth?: number;   // sun only, 0–360°
+  elevation?: number; // sun only, 0–90°
 }
 
 export interface Tweaks {
@@ -38,6 +40,7 @@ export const TYPE_INFO: Record<LightType, TypeInfo> = {
   rim:     { label: 'Rim',     color: '#DC6EC8', short: 'R' },
   beauty:  { label: 'Beauty',  color: '#6EDCA0', short: 'B' },
   softbox: { label: 'Softbox', color: '#E8D49A', short: 'S' },
+  sun:     { label: 'Sun',     color: '#FFD580', short: '✦' },
 };
 
 export interface GelSwatch {

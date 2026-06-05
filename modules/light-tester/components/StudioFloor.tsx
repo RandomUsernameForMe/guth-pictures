@@ -19,7 +19,7 @@ interface Props {
   onMoveCamera: (pos: { x: number; z: number }) => void;
 }
 
-type DragMode = "move" | "aim" | "height" | "camera";
+type DragMode = "move" | "aim" | "height" | "camera" | "sun-azimuth";
 
 interface DragState {
   id: string;
@@ -65,6 +65,16 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
       if (!d) return;
       const rel = getRel(e);
       if (!rel) return;
+
+      if (d.mode === "sun-azimuth") {
+        const rel = getRel(e);
+        if (!rel) return;
+        const dx = rel.x - cx;
+        const dy = rel.y - cy;
+        const angleDeg = (Math.atan2(dx, dy) * 180 / Math.PI + 360) % 360;
+        onUpdate(d.id, { azimuth: +angleDeg.toFixed(1) });
+        return;
+      }
 
       if (d.mode === "camera") {
         const half = FLOOR_W / 2;
@@ -141,8 +151,38 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
         <line x1={0} y1={cy} x2={size.w} y2={cy} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4" />
         <line x1={cx} y1={0} x2={cx} y2={size.h} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 4" />
 
+        {/* Sun directional rays */}
+        {lights.filter((L) => L.type === "sun" && L.on).map((L) => {
+          const az = ((L.azimuth ?? 45) * Math.PI) / 180;
+          const edgeR = size.w * 0.44;
+          const sx = cx + Math.sin(az) * edgeR;
+          const sy = cy + Math.cos(az) * edgeR;
+          const color = lightColorCSS(L.kelvin, L.gel);
+          const opacity = 0.08 + (L.power / 100) * 0.18;
+          // parallel rays
+          const perpX = Math.cos(az);
+          const perpY = -Math.sin(az);
+          return (
+            <g key={`sun-ray-${L.id}`} style={{ pointerEvents: "none" }}>
+              {[-0.18, -0.09, 0, 0.09, 0.18].map((offset) => {
+                const ox = perpX * offset * size.w;
+                const oy = perpY * offset * size.w;
+                return (
+                  <line
+                    key={offset}
+                    x1={sx + ox} y1={sy + oy}
+                    x2={cx + ox * 0.3} y2={cy + oy * 0.3}
+                    stroke={color} strokeWidth={offset === 0 ? 1.5 : 1}
+                    opacity={opacity * (offset === 0 ? 1 : 0.5)}
+                  />
+                );
+              })}
+            </g>
+          );
+        })}
+
         {lights.map((L) => {
-          if (!L.on) return null;
+          if (!L.on || L.type === "sun") return null;
           const tx = m2p(L.x), ty = m2p(L.z);
           const aim = aimPoint(L);
           const sx = m2p(aim.x), sy = m2p(aim.z);
@@ -163,7 +203,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
 
         {(() => {
           const L = lights.find((l) => l.id === selectedId);
-          if (!L || !L.on) return null;
+          if (!L || !L.on || L.type === "sun") return null;
           const tx = m2p(L.x), ty = m2p(L.z);
           const aim = aimPoint(L);
           const ax = m2p(aim.x), ay = m2p(aim.z);
@@ -199,7 +239,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
       {/* Aim handle for selected light */}
       {(() => {
         const L = lights.find((l) => l.id === selectedId);
-        if (!L || !L.on) return null;
+        if (!L || !L.on || L.type === "sun") return null;
         const aim = aimPoint(L);
         const ax = m2p(aim.x);
         const ay = m2p(aim.z);
@@ -284,8 +324,70 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
         </div>
       </div>
 
+      {/* Sun indicators on circle edge */}
+      {lights.filter((L) => L.type === "sun").map((L) => {
+        const az = ((L.azimuth ?? 45) * Math.PI) / 180;
+        const edgeR = size.w * 0.44;
+        const tx = cx + Math.sin(az) * edgeR;
+        const ty = cy + Math.cos(az) * edgeR;
+        const isSelected = L.id === selectedId;
+        const isOff = !L.on;
+        const emitColor = isOff ? "rgba(255,255,255,0.30)" : lightColorCSS(L.kelvin, L.gel);
+        return (
+          <div key={L.id} style={{
+            position: "absolute",
+            left: `calc(50% - ${size.w / 2}px + ${tx}px)`,
+            top: `calc(50% - ${size.h / 2}px + ${ty}px)`,
+            transform: "translate(-50%, -50%)",
+            zIndex: isSelected ? 5 : 3,
+            userSelect: "none",
+          }}>
+            <div
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onSelect(L.id);
+                dragRef.current = { id: L.id, mode: "sun-azimuth" };
+                document.body.style.cursor = "crosshair";
+              }}
+              title="Táhni pro změnu azimutu"
+              style={{
+                width: 38, height: 38,
+                borderRadius: "50%",
+                background: isOff ? "rgba(255,255,255,0.04)" : `color-mix(in srgb, ${emitColor} 20%, transparent)`,
+                border: `1.5px solid ${emitColor}`,
+                boxShadow: isSelected
+                  ? `0 0 0 3px rgba(255,255,255,0.10), 0 0 24px ${emitColor}`
+                  : isOff ? "none" : `0 0 16px color-mix(in srgb, ${emitColor} 35%, transparent)`,
+                color: isOff ? "rgba(242,240,235,0.40)" : emitColor,
+                fontFamily: "Geist Mono, monospace",
+                fontSize: 14,
+                display: "grid",
+                placeItems: "center",
+                cursor: "crosshair",
+                transition: "box-shadow 200ms",
+              }}
+            >
+              ✦
+            </div>
+            <div style={{
+              position: "absolute",
+              top: "calc(100% + 4px)", left: "50%", transform: "translateX(-50%)",
+              fontFamily: "Geist Mono, monospace",
+              fontSize: 10,
+              color: isSelected ? "#F2F0EB" : "#9B9899",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              pointerEvents: "none",
+            }}>
+              Sun · {Math.round(L.power)}%
+            </div>
+          </div>
+        );
+      })}
+
       {/* Light pucks */}
-      {lights.map((L) => {
+      {lights.filter((L) => L.type !== "sun").map((L) => {
         const tx = m2p(L.x);
         const ty = m2p(L.z);
         const info = TYPE_INFO[L.type] ?? TYPE_INFO.key;
@@ -405,7 +507,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
         position: "absolute", bottom: 10, right: 12,
         display: "flex", gap: 6,
       }}>
-        {(["key", "fill", "rim", "beauty", "softbox"] as LightType[]).map((t) => {
+        {(["key", "fill", "rim", "beauty", "softbox", "sun"] as LightType[]).map((t) => {
           const info = TYPE_INFO[t];
           return (
             <button

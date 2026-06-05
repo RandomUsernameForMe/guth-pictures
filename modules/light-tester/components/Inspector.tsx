@@ -136,7 +136,7 @@ export function Inspector({
           );
         })}
         <div className="add-row">
-          {(["key", "fill", "rim", "beauty", "softbox"] as LightType[]).map((t) => {
+          {(["key", "fill", "rim", "beauty", "softbox", "sun"] as LightType[]).map((t) => {
             const info = TYPE_INFO[t];
             return (
               <button key={t} className="chip" onClick={() => onAddType(t)}>
@@ -156,22 +156,31 @@ export function Inspector({
           </div>
           <Slider label="Intenzita" value={sel.power} min={0} max={100} fmt={(v) => `${Math.round(v)}%`} onChange={(v) => onUpdate(sel.id, { power: v })} />
           <Slider label="Teplota" value={sel.kelvin} min={2700} max={8000} step={50} fmt={(v) => `${Math.round(v)} K`} onChange={(v) => onUpdate(sel.id, { kelvin: v })} />
-          <Slider label="Velikost" value={sel.size || 50} min={10} max={100} fmt={(v) => `${Math.round(v)}`} onChange={(v) => onUpdate(sel.id, { size: v })} />
-          <Slider label="Výška" value={sel.height} min={0.5} max={3.0} step={0.05} fmt={(v) => `${v.toFixed(2)} m`} onChange={(v) => onUpdate(sel.id, { height: v })} />
 
-          <div className="ctrl">
-            <div className="ctrl-row">
-              <span>Směr</span>
-              <span className="ctrl-val">{sel.aim ? "Volný" : "Na subjekt"}</span>
-            </div>
-            <button
-              className="btn ghost"
-              style={{ marginTop: 4, fontSize: 11 }}
-              onClick={() => onUpdate(sel.id, { aim: sel.aim ? null : { x: 0, z: 0, y: 1.55 } })}
-            >
-              {sel.aim ? "🔒 Zamknout na subjekt" : "🔓 Odemknout směr"}
-            </button>
-          </div>
+          {sel.type === "sun" ? (
+            <>
+              <Slider label="Azimut" value={sel.azimuth ?? 45} min={0} max={360} step={1} fmt={(v) => `${Math.round(v)}°`} onChange={(v) => onUpdate(sel.id, { azimuth: v })} />
+              <Slider label="Výška nad horizontem" value={sel.elevation ?? 45} min={0} max={90} step={1} fmt={(v) => `${Math.round(v)}°`} onChange={(v) => onUpdate(sel.id, { elevation: v })} />
+            </>
+          ) : (
+            <>
+              <Slider label="Velikost" value={sel.size || 50} min={10} max={100} fmt={(v) => `${Math.round(v)}`} onChange={(v) => onUpdate(sel.id, { size: v })} />
+              <Slider label="Výška" value={sel.height} min={0.5} max={3.0} step={0.05} fmt={(v) => `${v.toFixed(2)} m`} onChange={(v) => onUpdate(sel.id, { height: v })} />
+              <div className="ctrl">
+                <div className="ctrl-row">
+                  <span>Směr</span>
+                  <span className="ctrl-val">{sel.aim ? "Volný" : "Na subjekt"}</span>
+                </div>
+                <button
+                  className="btn ghost"
+                  style={{ marginTop: 4, fontSize: 11 }}
+                  onClick={() => onUpdate(sel.id, { aim: sel.aim ? null : { x: 0, z: 0, y: 1.55 } })}
+                >
+                  {sel.aim ? "🔒 Zamknout na subjekt" : "🔓 Odemknout směr"}
+                </button>
+              </div>
+            </>
+          )}
 
           <div className="ctrl">
             <div className="ctrl-row">
