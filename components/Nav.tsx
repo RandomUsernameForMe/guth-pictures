@@ -5,7 +5,6 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 type NavLink = {
   href: string;
@@ -180,11 +179,6 @@ export function Nav() {
                   </Link>
                 </div>
 
-                {/* Theme toggle */}
-                <div className="hidden md:block">
-                  <ThemeToggle />
-                </div>
-
                 {/* Hamburger */}
                 <button
                   className="md:hidden p-2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors rounded-lg hover:bg-[var(--nav-active-bg)]"
@@ -300,13 +294,6 @@ export function Nav() {
                 style={{ borderColor: "var(--color-border)" }}
               >
                 {/* Theme toggle row */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-text-muted)]">
-                    Vzhled
-                  </span>
-                  <ThemeToggle />
-                </div>
-
                 {/* Language switcher */}
                 <div className="flex items-center gap-2 text-sm font-medium tracking-wider">
                   <Link
