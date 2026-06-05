@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { track } from "@vercel/analytics";
 import dynamic from "next/dynamic";
 import { StudioFloor } from "./StudioFloor";
 import { Inspector } from "./Inspector";
@@ -212,6 +213,14 @@ export function LightTesterApp() {
   const [showSupport, setShowSupport] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const sessionStartRef = useRef(Date.now());
+
+  useEffect(() => {
+    track("lt_open");
+    const start = Date.now();
+    return () => {
+      track("lt_close", { duration_sec: Math.round((Date.now() - start) / 1000) });
+    };
+  }, []);
   const [cameraPos, setCameraPos] = useState({ x: 0, z: 1.6 });
   const [savedSetups, setSavedSetups] = useState<SavedSetup[]>(() => loadSaved());
   const [tweaks, setTweaks] = useState<Tweaks>({
