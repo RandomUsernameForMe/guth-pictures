@@ -13,6 +13,7 @@ const emptyPackage = (): PricingPackage => ({ id: crypto.randomUUID(), name: "",
 const emptyContent = (): ContentData => ({
   home: { title: "", subtitle: "" },
   "o-mne": { title: "", subtitle: "", bio: "" },
+  lightTesterPromo: { title: "", desc: "" },
   sluzby: {
     portraits: { title: "", desc: "", packages: [], note: "" },
     weddings: { title: "", desc: "", packages: [], note: "" },
@@ -223,6 +224,20 @@ export function ContentEditor() {
             label="Podnadpis"
             value={current.home.subtitle}
             onChange={(v) => patch((d) => { d.home.subtitle = v; })}
+          />
+        </Section>
+
+        <Section title="Light Tester — promo sekce">
+          <Field
+            label="Nadpis"
+            value={current.lightTesterPromo.title}
+            onChange={(v) => patch((d) => { d.lightTesterPromo.title = v; })}
+          />
+          <Field
+            label="Popis"
+            value={current.lightTesterPromo.desc}
+            onChange={(v) => patch((d) => { d.lightTesterPromo.desc = v; })}
+            textarea
           />
         </Section>
 

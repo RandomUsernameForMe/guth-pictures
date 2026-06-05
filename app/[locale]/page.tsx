@@ -121,8 +121,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <AnimatedSection className="bg-[var(--color-bg)] border-b border-[var(--color-border)]">
         <LightTesterPromo
           label={t("light-tester-promo.label")}
-          title={t("light-tester-promo.title")}
-          desc={t("light-tester-promo.desc")}
+          title={content.lightTesterPromo.title}
+          desc={content.lightTesterPromo.desc}
           cta={t("light-tester-promo.cta")}
           locale={locale}
         />

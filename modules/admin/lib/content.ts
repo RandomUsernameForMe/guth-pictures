@@ -18,6 +18,7 @@ export type ContentData = {
     portraits: ServiceContent;
     weddings: ServiceContent;
   };
+  lightTesterPromo: { title: string; desc: string };
 };
 
 export type SiteImages = {
@@ -35,6 +36,10 @@ const defaults: Record<string, ContentData> = {
       title: "O mně",
       subtitle: "Jsem fotograf z Prahy.",
       bio: "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
+    },
+    lightTesterPromo: {
+      title: "Vyzkoušej světla před focením",
+      desc: "Interaktivní 3D simulátor studiového osvětlení. Nastav si světelné schéma, prozkoumej presety a přijď připravený.",
     },
     sluzby: {
       portraits: {
@@ -66,6 +71,10 @@ const defaults: Record<string, ContentData> = {
       title: "About",
       subtitle: "I'm a photographer based in Prague.",
       bio: "I shoot portraits, weddings and larps. I like capturing things as they actually happened — no over-posing. I travel across the Czech Republic but my home base is Prague.",
+    },
+    lightTesterPromo: {
+      title: "Try the lights before the shoot",
+      desc: "Interactive 3D studio lighting simulator. Set up your lighting scheme, explore presets and come prepared.",
     },
     sluzby: {
       portraits: {
@@ -100,6 +109,7 @@ function normalizeContent(data: ContentData): ContentData {
   });
   return {
     ...data,
+    lightTesterPromo: data.lightTesterPromo ?? { title: "", desc: "" },
     sluzby: {
       portraits: normalizeService(data.sluzby.portraits),
       weddings: normalizeService(data.sluzby.weddings),
