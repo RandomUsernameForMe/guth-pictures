@@ -270,7 +270,7 @@ export function LightTesterApp() {
       rim:     { x: -1.5, z: -1.4, height: 2.1, power: 60, kelvin: 6500, gel: "none", size: 30, on: true, aim: null },
       beauty:  { x:  0.0, z:  1.0, height: 2.3, power: 80, kelvin: 5500, gel: "none", size: 55, on: true, aim: null },
       softbox: { x:  1.4, z:  0.6, height: 2.0, power: 70, kelvin: 5500, gel: "none", size: 75, on: true, aim: null },
-      sun:     { x:  0.0, z:  0.0, height: 0.0, power: 75, kelvin: 5600, gel: "none", size: 50, on: true, aim: null, azimuth: 45, elevation: 42 },
+      sun:     { x:  0.0, z:  0.0, height: 0.0, power: 75, kelvin: 5600, gel: "none", size: 0,  on: true, aim: null, azimuth: 45, elevation: 42 },
     };
     const newLight: Light = { id: newId(), type, ...defaults[type] };
     setLights((prev) => [...prev, newLight]);

@@ -161,6 +161,7 @@ export function Inspector({
             <>
               <Slider label="Azimut" value={sel.azimuth ?? 45} min={0} max={360} step={1} fmt={(v) => `${Math.round(v)}°`} onChange={(v) => onUpdate(sel.id, { azimuth: v })} />
               <Slider label="Výška nad horizontem" value={sel.elevation ?? 45} min={0} max={90} step={1} fmt={(v) => `${Math.round(v)}°`} onChange={(v) => onUpdate(sel.id, { elevation: v })} />
+              <Slider label="Měkkost" value={sel.size ?? 0} min={0} max={100} step={1} fmt={(v) => v < 15 ? "Hard" : v < 50 ? "Soft" : "Diffuse"} onChange={(v) => onUpdate(sel.id, { size: v })} />
             </>
           ) : (
             <>

@@ -361,6 +361,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
         entry.dir!.target.position.set(0, SUBJECT_HEIGHT, 0);
         entry.dir!.target.updateMatrixWorld();
         entry.dir!.intensity = (L.on ? 1 : 0) * (L.power / 100) * 3.5;
+        entry.dir!.shadow.radius = 1 + ((L.size ?? 0) / 100) * 7;
 
         const k = kelvinToRGB(L.kelvin);
         const m = mixGel(k, L.gel);
