@@ -163,6 +163,12 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
+    // setSize(w, h, false) keeps the drawing buffer at w×pixelRatio without
+    // touching CSS — the canvas must be pinned to the container or it
+    // displays at 2× on retina and gets cropped by overflow:hidden
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
     mount.appendChild(renderer.domElement);
 
     const fov = 2 * Math.atan(36 / (2 * BASE_FOCAL)) * (180 / Math.PI);
