@@ -136,6 +136,9 @@ interface SceneState {
   lightObjs: Map<string, LightEntry>;
   currentHeadStyle: string | null;
   currentBackdrop: string | null;
+  // Request a redraw. The scene is static between interactions, so we render
+  // on-demand instead of every frame — see the render loop below.
+  invalidate: () => void;
 }
 
 interface Props {
@@ -194,6 +197,36 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     const lightGroup = new THREE.Group();
     scene.add(lightGroup);
 
+    // ── On-demand render loop ──────────────────────────────────────────
+    // The scene is static between user interactions, so rendering every frame
+    // just burns the main thread (heavy: soft shadows, AA, ACES tonemapping)
+    // and inflates TBT during load. We only render when something changed
+    // (invalidate) and while OrbitControls damping is still settling, and we
+    // pause entirely when the tab is hidden or the canvas is scrolled offscreen.
+    let raf = 0;
+    let needsRender = true;
+    let visible = !document.hidden;
+    let onScreen = true;
+    const active = () => visible && onScreen;
+
+    const renderFrame = () => {
+      const damping = controls.update(); // true while damping is still moving
+      if (needsRender || damping) {
+        renderer.render(scene, camera);
+        needsRender = false;
+        raf = requestAnimationFrame(renderFrame);
+      } else {
+        raf = 0; // settled — stop the loop until the next invalidate()
+      }
+    };
+    const invalidate = () => {
+      needsRender = true;
+      if (raf === 0 && active()) raf = requestAnimationFrame(renderFrame);
+    };
+    const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+
+    controls.addEventListener("change", invalidate);
+
     const ro = new ResizeObserver(() => {
       const w = mount.clientWidth;
       const h = mount.clientHeight;
@@ -201,16 +234,23 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      invalidate();
     });
     ro.observe(mount);
 
-    let raf: number;
-    const tick = () => {
-      controls.update();
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(tick);
+    const onVisibility = () => {
+      visible = !document.hidden;
+      if (active()) invalidate(); else stop();
     };
-    tick();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      if (active()) invalidate(); else stop();
+    });
+    io.observe(mount);
+
+    invalidate(); // first paint
 
     stateRef.current = {
       scene, renderer, camera, controls,
@@ -218,10 +258,14 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
       lightObjs: new Map(),
       currentHeadStyle: null,
       currentBackdrop: null,
+      invalidate,
     };
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      controls.removeEventListener("change", invalidate);
+      document.removeEventListener("visibilitychange", onVisibility);
+      io.disconnect();
       ro.disconnect();
       controls.dispose();
       renderer.dispose();
@@ -244,6 +288,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
       // Show clay placeholder while the GLB loads
       clearHead();
       s.headGroup.add(buildHead("clay"));
+      s.invalidate();
 
       const loader = new GLTFLoader();
       loader.load(
@@ -283,6 +328,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
           });
 
           s.headGroup.add(model);
+          s.invalidate();
         },
         undefined,
         () => {
@@ -290,11 +336,13 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
           if (stateRef.current?.currentHeadStyle !== "realistic") return;
           clearHead();
           s.headGroup.add(buildHead("realistic"));
+          s.invalidate();
         }
       );
     } else {
       clearHead();
       s.headGroup.add(buildHead(tweaks.headStyle));
+      s.invalidate();
     }
   }, [tweaks.headStyle]);
 
@@ -304,6 +352,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     while (s.backdropGroup.children.length) s.backdropGroup.remove(s.backdropGroup.children[0]);
     s.backdropGroup.add(buildBackdrop(tweaks.backdrop));
     s.currentBackdrop = tweaks.backdrop;
+    s.invalidate();
   }, [tweaks.backdrop]);
 
   // Camera floor-plan position: teleport to new XZ, keep current height
@@ -313,6 +362,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     s.camera.position.set(cameraPos.x, s.camera.position.y, cameraPos.z);
     s.controls.target.set(0, SUBJECT_HEIGHT, 0);
     s.controls.update();
+    s.invalidate();
   }, [cameraPos]);
 
   // Focal length = pure FOV (optical lens swap); camera distance = floor-plan drag
@@ -323,6 +373,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
     const fov = 2 * Math.atan(36 / (2 * focal)) * (180 / Math.PI);
     s.camera.fov = fov;
     s.camera.updateProjectionMatrix();
+    s.invalidate();
   }, [tweaks.focal]);
 
   useEffect(() => {
@@ -428,6 +479,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
         s.lightObjs.delete(id);
       }
     }
+    s.invalidate();
   }, [lights]);
 
   return (
