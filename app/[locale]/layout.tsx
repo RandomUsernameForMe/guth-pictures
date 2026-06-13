@@ -9,6 +9,7 @@ import { AmbientGlow } from "@/modules/homepage/components/AmbientGlow";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
 import { getContent, getContactEmail } from "@/modules/admin/lib/content";
@@ -74,6 +75,10 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/* All photos load from Cloudinary — open the connection early so the LCP image isn't gated on DNS+TLS.
+            No crossOrigin: the <img>/next-image requests are not CORS, so a credentialled preconnect would
+            warm a different connection pool and be wasted. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
@@ -89,6 +94,7 @@ export default async function LocaleLayout({
           </NextIntlClientProvider>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

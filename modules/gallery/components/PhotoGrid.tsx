@@ -8,9 +8,13 @@ import { Lightbox } from "./Lightbox";
 type Props = {
   photos: GalleryPhoto[];
   locale: string;
+  // Number of leading images eagerly loaded with high priority. Kept small: mobile (where LCP is
+  // measured) is a single column, so extra priority preloads only starve the real LCP image of
+  // bandwidth on a throttled link. 2 covers the first visible image plus the next.
+  priorityCount?: number;
 };
 
-export function PhotoGrid({ photos, locale }: Props) {
+export function PhotoGrid({ photos, locale, priorityCount = 2 }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   if (photos.length === 0) {
@@ -38,6 +42,7 @@ export function PhotoGrid({ photos, locale }: Props) {
               width={photo.width}
               height={photo.height}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={i < priorityCount}
               placeholder="blur"
               blurDataURL={blurUrl(photo.publicId)}
               className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
