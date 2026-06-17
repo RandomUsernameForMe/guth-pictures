@@ -1,0 +1,17 @@
+{
+  "finalized": true,
+  "finalizedAt": "2026-06-17T12:01:21.204Z",
+  "concepts": {
+    "C": "approved"
+  },
+  "moodboard": {
+    "0001.jpg": "approved",
+    "0003.jpg": "approved",
+    "0005.jpg": "approved",
+    "0002.jpg": "rejected"
+  },
+  "poses": {
+    "0001.jpg": "approved",
+    "0003.jpg": "approved"
+  }
+}

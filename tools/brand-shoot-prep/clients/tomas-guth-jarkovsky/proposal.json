@@ -1,0 +1,247 @@
+{
+  "slug": "tomas-guth-jarkovsky",
+  "name": "Tomáš Guth Jarkovský",
+  "locale": "cs",
+  "brief": {
+    "linkedin": "https://www.linkedin.com/in/tgjarkovsky",
+    "date": "2026-06-17"
+  },
+  "research": "# Research — Tomáš Guth Jarkovský\n\n_Date: 2026-06-17 · LinkedIn blocked (HTTP 999); built from public web sources._\n\n## Who he is (2–3 sentences)\nCzech human-rights advocate, technologist, and civic figure. Works as an advocacy specialist\nat **Amnesty International** (Czech branch) and as a **software project manager / game\ndesigner**; active in the **Czech Pirate Party** (deputy head of the foreign-affairs\ndepartment, coordinates Young Pirates) and a former parliamentary advisor. Self-describes as\nhuman-rights worker, activist, math/physics graduate, **photographer**, and **AI instructor**.\n\n## Profile\n- **Education:** Informatics, Faculty of Mathematics & Physics, Charles University (MFF UK);\n  Biskupské gymnázium, České Budějovice.\n- **Base:** České Budějovice / South Bohemia + Prague (Amnesty / party work).\n- **Hats:** advocacy & human rights · tech/PM & game design · politics · AI education · photography.\n\n## Focus areas\nHuman rights, gender equality, **digital rights**, foreign human-rights policy, migration,\nChina-related issues, combating sexualized violence, humanitarian response to war.\n\n## Audience (who the photos must convince)\n- NGO / policy / human-rights community (credibility, gravitas, trust)\n- Czech public & party supporters (approachable, principled, modern)\n- International human-rights networks (professional, English-facing)\n- Tech / AI training audiences (competent, contemporary, clear communicator)\n\n## Brand voice\nPrincipled, substantive, civic-minded, modern-progressive. Earnest but not stiff; values\nauthenticity and competence over polish-for-polish's-sake.\n\n## Current visual identity\n- No personal website provided. Present on Instagram (`@tgjarkovsky`), X (`@TGuthJarkovsky`).\n- **Note:** he is himself a photographer + AI instructor → a visually literate, discerning\n  subject. Concepts should be craft-forward and concept-driven, not generic corporate.\n- Pirate Party visual language skews modern, clean, **black + party-color accents**; Amnesty\n  skews humanist photojournalism (candid, real, human-centered, often b&w or desaturated).\n\n## Competitive / category visual landscape\n- **Advocacy / NGO leaders:** candid, environmental, human-centered, documentary feel;\n  authenticity over gloss.\n- **Political figures (CZ/EU):** clean studio or civic-location portraits, confident eye\n  contact, restrained palette, flag/architecture context.\n- **Tech / AI educators:** contemporary, well-lit, approachable, often desk/stage/teaching context.\n- **Gap to exploit:** few people sit at the intersection of *human-rights gravitas* + *tech\n  credibility*. A look that fuses humanist warmth with modern technologist clarity is distinctive.\n\n## Opportunities\n- He spans advocacy, tech, and politics — give him a **modular set** usable across Amnesty,\n  party, speaking, and AI-teaching contexts rather than one narrow look.\n- Lean into authenticity (his audiences distrust over-polish) while keeping it sharp.\n\n## Visual keywords\n**humanist · principled · modern-civic · candid-but-considered · clear/competent**\nPalette leanings: restrained neutrals + a single confident accent; documentary b&w option.\n\n## Sources\n- https://www.instagram.com/tgjarkovsky/ (self-description)\n- https://cz.linkedin.com/in/tgjarkovsky/cs (role: PM / game designer — title only, body blocked)\n- https://lide.pirati.cz/profil/3684/ , https://lide.pirati.cz/profil/2876/ (party affiliation)\n- https://denikreferendum.cz/author/2192 (writing: \"How can we help people affected by war?\")\n- https://eurovolby.pirati.cz/kandidati/tomas-guth-jarkovsky/ , https://twitter.com/TGuthJarkovsky\n",
+  "concepts": [
+    {
+      "id": "A",
+      "title": "Humanist Advocate",
+      "pitch": "Documentary-style portraits that read as principled, warm, and real — Amnesty / NGO register.",
+      "why": "advocacy specialist at Amnesty + writes on war/human rights; his audiences distrust gloss and reward authenticity (research: brand voice, NGO visual norms).",
+      "mood": "humanist, candid, warm, quietly serious — 4 adjectives.",
+      "palette": [
+        "#1c1b19",
+        "#5b5347",
+        "#a8967a",
+        "#e7e1d6",
+        "#b23a2e"
+      ],
+      "wardrobe": "simple, textured, lived-in — knit, open collar, no flashy logos; earth tones.",
+      "location": "real environments — desk with papers, bookshelf, window light, street/urban exterior. Backup: home/office near window.",
+      "lighting": "natural / available light, soft directional from window; documentary, not staged.",
+      "shotList": [
+        "tight candid headshot, eyes to camera",
+        "¾ at desk, mid-thought",
+        "by window, looking out",
+        "walking/urban environmental",
+        "hands + notebook/laptop detail",
+        "talking/gesturing as if mid-conversation"
+      ],
+      "poseDirection": "relaxed, unguarded; weight settled; genuine micro-expressions over posed smiles; hands engaged.",
+      "status": "pending"
+    },
+    {
+      "id": "B",
+      "title": "Modern Civic",
+      "pitch": "Clean, confident portraits with architectural restraint — political / speaking / LinkedIn register.",
+      "why": "Pirate Party deputy (foreign affairs), civic/public figure; political visual norms = clean, confident, restrained palette (research: competitive landscape).",
+      "mood": "principled, composed, contemporary, trustworthy.",
+      "palette": [
+        "#0d0f12",
+        "#2b2f36",
+        "#8a9099",
+        "#f2f3f5",
+        "#1f6feb"
+      ],
+      "wardrobe": "sharp but unfussy — dark jacket, fine knit or crisp shirt, no tie; minimal.",
+      "location": "studio seamless (mid-grey) OR modern civic architecture — concrete, glass, strong lines, negative space.",
+      "lighting": "soft clean key + subtle rim; even, controlled; slight contrast for authority.",
+      "shotList": [
+        "classic centered headshot, direct gaze",
+        "¾ arms-folded, confident",
+        "full-body against architectural line",
+        "negative-space wide for cover/quote overlay",
+        "profile/looking-off \"vision\" frame",
+        "seated, leaning in"
+      ],
+      "poseDirection": "upright, grounded stance; shoulders open; calm direct eye contact; controlled, deliberate.",
+      "status": "pending"
+    },
+    {
+      "id": "C",
+      "title": "Technologist / AI Educator",
+      "pitch": "Contemporary, dynamic, in-context frames — tech credibility & AI-instructor register.",
+      "why": "software PM / game designer + self-described AI instructor + MFF UK informatics; tech-educator visual norms = contemporary, teaching/stage context (research: hats, gap to exploit).",
+      "mood": "sharp, modern, engaged, forward — energetic vs. A/B.",
+      "palette": [
+        "#0a0e14",
+        "#142433",
+        "#1f3a5f",
+        "#3ddc97",
+        "#e8edf2"
+      ],
+      "wardrobe": "smart-casual contemporary — clean shirt or fine knit, modern, uncluttered.",
+      "location": "teaching/stage, modern workspace, in front of screen/whiteboard; cool ambient + accent.",
+      "lighting": "modern mixed — soft key + cool practical/screen glow as accent; some motion-friendly.",
+      "shotList": [
+        "mid-gesture explaining/teaching",
+        "at laptop, focused",
+        "presenting to (implied) audience",
+        "¾ with screen/whiteboard bokeh behind",
+        "dynamic hands-in-motion",
+        "approachable smile to camera"
+      ],
+      "poseDirection": "dynamic, gestural, in-the-moment; hands active; engaged energy, not static.",
+      "status": "approved"
+    }
+  ],
+  "moodboard": [
+    {
+      "file": "0001.jpg",
+      "note": "speaker on stage, dynamic",
+      "status": "approved"
+    },
+    {
+      "file": "0002.jpg",
+      "note": "presenter gesture, engaged",
+      "status": "rejected"
+    },
+    {
+      "file": "0003.jpg",
+      "note": "conference talk energy",
+      "status": "approved"
+    },
+    {
+      "file": "0004.jpg",
+      "note": "speaker mid-explanation",
+      "status": "pending"
+    },
+    {
+      "file": "0005.jpg",
+      "note": "working at laptop, focused",
+      "status": "approved"
+    },
+    {
+      "file": "0006.jpg",
+      "note": "man laptop cool light",
+      "status": "pending"
+    },
+    {
+      "file": "0007.jpg",
+      "note": "screen glow, dark workspace",
+      "status": "pending"
+    },
+    {
+      "file": "0008.jpg",
+      "note": "focused at desk, modern",
+      "status": "pending"
+    },
+    {
+      "file": "0009.jpg",
+      "note": "laptop hands detail",
+      "status": "pending"
+    },
+    {
+      "file": "0010.jpg",
+      "note": "presenter portrait stage",
+      "status": "pending"
+    },
+    {
+      "file": "0011.jpg",
+      "note": "speaker to audience",
+      "status": "pending"
+    },
+    {
+      "file": "0012.jpg",
+      "note": "presenting, gestural",
+      "status": "pending"
+    },
+    {
+      "file": "0013.jpg",
+      "note": "teaching/explaining candid",
+      "status": "pending"
+    },
+    {
+      "file": "0014.jpg",
+      "note": "3/4 portrait modern",
+      "status": "pending"
+    },
+    {
+      "file": "0015.jpg",
+      "note": "approachable to camera",
+      "status": "pending"
+    },
+    {
+      "file": "0016.jpg",
+      "note": "dynamic hands in motion",
+      "status": "pending"
+    }
+  ],
+  "poses": [
+    {
+      "file": "0001.jpg",
+      "note": "tight headshot, direct gaze",
+      "status": "approved"
+    },
+    {
+      "file": "0002.jpg",
+      "note": "headshot, slight angle",
+      "status": "pending"
+    },
+    {
+      "file": "0003.jpg",
+      "note": "3/4 confident, arms relaxed",
+      "status": "approved"
+    },
+    {
+      "file": "0004.jpg",
+      "note": "3/4 approachable smile",
+      "status": "pending"
+    },
+    {
+      "file": "0005.jpg",
+      "note": "seated, leaning in",
+      "status": "pending"
+    },
+    {
+      "file": "0006.jpg",
+      "note": "profile / looking off",
+      "status": "pending"
+    },
+    {
+      "file": "0007.jpg",
+      "note": "full body standing, weight shift",
+      "status": "pending"
+    },
+    {
+      "file": "0008.jpg",
+      "note": "arms folded, grounded",
+      "status": "pending"
+    },
+    {
+      "file": "0009.jpg",
+      "note": "hands in pockets, casual confident",
+      "status": "pending"
+    },
+    {
+      "file": "0010.jpg",
+      "note": "gesture mid-talk",
+      "status": "pending"
+    },
+    {
+      "file": "0011.jpg",
+      "note": "seated leaning forward, engaged",
+      "status": "pending"
+    },
+    {
+      "file": "0012.jpg",
+      "note": "standing, open posture",
+      "status": "pending"
+    },
+    {
+      "file": "0013.jpg",
+      "note": "hand to chin, thoughtful",
+      "status": "pending"
+    },
+    {
+      "file": "0014.jpg",
+      "note": "three-quarter, hands expressive",
+      "status": "pending"
+    }
+  ]
+}

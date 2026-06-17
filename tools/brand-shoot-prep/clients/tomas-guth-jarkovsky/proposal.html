@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tomáš Guth Jarkovský — Shoot Proposal</title>
+<style>
+  :root{ --accent:#5b5347; }
+  html[data-theme=dark]{ --bg:#0c0d11; --surface:#15171d; --surface2:#1c1f27; --text:#e9eaee; --muted:#9aa0ab; --line:#272b34; --herotint:rgba(12,13,17,.55); --heroink:#fff; }
+  html[data-theme=light]{ --bg:#f6f7f9; --surface:#fff; --surface2:#eef0f3; --text:#1a1d23; --muted:#5f6672; --line:#e2e5ea; --herotint:rgba(20,22,28,.42); --heroink:#fff; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent)}
+  .hero{position:relative;min-height:230px;display:flex;align-items:flex-end;background-image:linear-gradient(var(--herotint),var(--herotint)),var(--cover);background-size:cover;background-position:center}
+  .hero.nohero{background:linear-gradient(135deg,var(--surface),var(--surface2))}
+  .hero-inner{max-width:1080px;margin:0 auto;width:100%;padding:28px 24px}
+  .hero .name{margin:0;font-size:34px;letter-spacing:-.02em;color:var(--heroink);text-shadow:0 2px 18px rgba(0,0,0,.45)}
+  .hero .kick{color:#eef0f3;font-size:14px;margin-top:4px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  .hero.nohero .name,.hero.nohero .kick{color:var(--text);text-shadow:none}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px}
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  nav{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .tab{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:8px 14px;border-radius:999px;font-size:14px;cursor:pointer;transition:.15s}
+  .tab:hover{color:var(--text)} .tab.active{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  #themeBtn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+  main{max-width:1080px;margin:0 auto;padding:28px 24px 80px}
+  .panel{display:none;animation:fade .2s ease} .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h1,h2,h3{line-height:1.25;letter-spacing:-.01em}
+  h1{font-size:22px;margin:.2em 0 .5em} h2{font-size:18px;margin:1.4em 0 .5em} h3{font-size:15px;margin:1.2em 0 .4em;color:var(--accent)}
+  hr{border:none;border-top:1px solid var(--line);margin:1.6em 0}
+  code{background:var(--surface2);padding:1px 6px;border-radius:6px;font-size:13px}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--surface2)}
+  ul{padding-left:20px} li{margin:.2em 0} .muted{color:var(--muted)}
+  .palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .palette .sw{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)} .palette code{background:none;color:var(--muted)}
+  .ctas{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+  .btn{display:inline-block;border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px}
+  .btn:hover{border-color:var(--accent)} .btn.primary{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  .grid{columns:4;column-gap:14px} @media(max-width:900px){.grid{columns:3}} @media(max-width:620px){.grid{columns:2}}
+  .tile{position:relative;break-inside:avoid;margin:0 0 14px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in;transition:.15s}
+  .tile:hover{border-color:var(--accent);transform:translateY(-2px)} .tile img{width:100%;display:block}
+  figcaption{padding:8px 10px;font-size:12px;color:var(--muted)}
+  .abadge{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;z-index:2}
+  .abadge.approved{background:#1f9d57} .abadge.rejected{background:#c0392b} .abadge.pending{background:#6b7280}
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:50;align-items:center;justify-content:center;flex-direction:column;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex} #lb img{max-width:92vw;max-height:84vh;border-radius:10px} #lb .cap{color:#cfd3da;margin-top:12px;font-size:14px}
+  footer{max-width:1080px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:12px}
+  @media print{
+    html[data-theme=dark]{--bg:#fff;--surface:#fff;--surface2:#f3f4f6;--text:#000;--muted:#444;--line:#ccc}
+    header,#themeBtn,#lb{display:none!important} .hero{min-height:160px}
+    .panel{display:block!important;page-break-before:always} .panel:first-of-type{page-break-before:avoid}
+    .grid{columns:3} .tile{border:1px solid #ddd} a{color:#000;text-decoration:underline}
+  }
+</style></head>
+<body>
+<div class="hero " style="--cover:url('assets/moodboard/0001.jpg')">
+      <div class="hero-inner"><h1 class="name">Tomáš Guth Jarkovský</h1>
+      <div class="kick">C — Technologist / AI Educator · Shoot Proposal</div></div></div>
+<header><div class="bar"><nav><button class="tab active" data-tab="approaches">Concept</button><button class="tab" data-tab="moodboard">Moodboard</button><button class="tab" data-tab="poses">Pose Board</button><button class="tab" data-tab="deliverables">Deck</button></nav><button id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button></div></header>
+<main>
+<section class="panel active" id="panel-approaches"><div class="palette"><span class="sw" style="background:#1c1b19" title="#1c1b19"></span><span class="sw" style="background:#5b5347" title="#5b5347"></span><span class="sw" style="background:#a8967a" title="#a8967a"></span><span class="sw" style="background:#e7e1d6" title="#e7e1d6"></span><span class="sw" style="background:#b23a2e" title="#b23a2e"></span><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#2b2f36" title="#2b2f36"></span><span class="sw" style="background:#8a9099" title="#8a9099"></span><span class="sw" style="background:#f2f3f5" title="#f2f3f5"></span><span class="sw" style="background:#1f6feb" title="#1f6feb"></span><span class="sw" style="background:#0a0e14" title="#0a0e14"></span><span class="sw" style="background:#142433" title="#142433"></span><span class="sw" style="background:#1f3a5f" title="#1f3a5f"></span><span class="sw" style="background:#3ddc97" title="#3ddc97"></span><span class="sw" style="background:#e8edf2" title="#e8edf2"></span><code>#1c1b19  #5b5347  #a8967a  #e7e1d6  #b23a2e  #0d0f12  #2b2f36  #8a9099  #f2f3f5  #1f6feb  #0a0e14  #142433  #1f3a5f  #3ddc97  #e8edf2</code></div><h1>Shoot Approaches — Tomáš Guth Jarkovský</h1>
+<p>Three distinct concepts, each mapped to one facet of his brand. Together they form a modular set usable across Amnesty / advocacy, party &amp; speaking, and AI-teaching contexts.</p>
+<hr><h2>Concept C — &quot;Technologist / AI Educator&quot;</h2>
+<p><strong>Pitch:</strong> Contemporary, dynamic, in-context frames — tech credibility &amp; AI-instructor register.</p>
+<ul><li><strong>Why it fits:</strong> software PM / game designer + self-described AI instructor + MFF UK informatics;</li></ul>
+<p>tech-educator visual norms = contemporary, teaching/stage context (research: hats, gap to exploit).</p>
+<ul><li><strong>Mood:</strong> sharp, modern, engaged, forward — energetic vs. A/B.</li><li><strong>Palette:</strong> <code>#0a0e14</code> <code>#142433</code> <code>#1f3a5f</code> <code>#3ddc97</code> <code>#e8edf2</code> (deep tech navy + cool teal/green accent, screen-glow friendly).</li><li><strong>Wardrobe:</strong> smart-casual contemporary — clean shirt or fine knit, modern, uncluttered.</li><li><strong>Location / setting:</strong> teaching/stage, modern workspace, in front of screen/whiteboard; cool ambient + accent.</li><li><strong>Lighting:</strong> modern mixed — soft key + cool practical/screen glow as accent; some motion-friendly.</li><li><strong>Shot list:</strong> (1) mid-gesture explaining/teaching; (2) at laptop, focused; (3) presenting to (implied) audience;</li></ul>
+<p>(4) ¾ with screen/whiteboard bokeh behind; (5) dynamic hands-in-motion; (6) approachable smile to camera.</p>
+<ul><li><strong>Pose direction:</strong> dynamic, gestural, in-the-moment; hands active; engaged energy, not static.</li><li><strong>Image search terms:</strong> &quot;tech speaker portrait stage&quot;, &quot;AI instructor teaching candid&quot;, &quot;modern professional with laptop cool lighting&quot;, &quot;conference presenter dynamic portrait&quot;.</li></ul>
+<hr></section>
+<section class="panel" id="panel-moodboard"><div class="palette"><span class="sw" style="background:#1c1b19" title="#1c1b19"></span><span class="sw" style="background:#5b5347" title="#5b5347"></span><span class="sw" style="background:#a8967a" title="#a8967a"></span><span class="sw" style="background:#e7e1d6" title="#e7e1d6"></span><span class="sw" style="background:#b23a2e" title="#b23a2e"></span><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#2b2f36" title="#2b2f36"></span><span class="sw" style="background:#8a9099" title="#8a9099"></span><span class="sw" style="background:#f2f3f5" title="#f2f3f5"></span><span class="sw" style="background:#1f6feb" title="#1f6feb"></span><span class="sw" style="background:#0a0e14" title="#0a0e14"></span><span class="sw" style="background:#142433" title="#142433"></span><span class="sw" style="background:#1f3a5f" title="#1f3a5f"></span><span class="sw" style="background:#3ddc97" title="#3ddc97"></span><span class="sw" style="background:#e8edf2" title="#e8edf2"></span><code>#1c1b19  #5b5347  #a8967a  #e7e1d6  #b23a2e  #0d0f12  #2b2f36  #8a9099  #f2f3f5  #1f6feb  #0a0e14  #142433  #1f3a5f  #3ddc97  #e8edf2</code></div><div class="grid"><figure class="tile" data-full="assets/moodboard/0001.jpg" data-cap="speaker on stage, dynamic">
+      <img loading="lazy" src="assets/moodboard/0001.jpg" alt="speaker on stage, dynamic">
+      <figcaption>speaker on stage, dynamic</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0003.jpg" data-cap="conference talk energy">
+      <img loading="lazy" src="assets/moodboard/0003.jpg" alt="conference talk energy">
+      <figcaption>conference talk energy</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0005.jpg" data-cap="working at laptop, focused">
+      <img loading="lazy" src="assets/moodboard/0005.jpg" alt="working at laptop, focused">
+      <figcaption>working at laptop, focused</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-poses"><div class="palette"><span class="sw" style="background:#1c1b19" title="#1c1b19"></span><span class="sw" style="background:#5b5347" title="#5b5347"></span><span class="sw" style="background:#a8967a" title="#a8967a"></span><span class="sw" style="background:#e7e1d6" title="#e7e1d6"></span><span class="sw" style="background:#b23a2e" title="#b23a2e"></span><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#2b2f36" title="#2b2f36"></span><span class="sw" style="background:#8a9099" title="#8a9099"></span><span class="sw" style="background:#f2f3f5" title="#f2f3f5"></span><span class="sw" style="background:#1f6feb" title="#1f6feb"></span><span class="sw" style="background:#0a0e14" title="#0a0e14"></span><span class="sw" style="background:#142433" title="#142433"></span><span class="sw" style="background:#1f3a5f" title="#1f3a5f"></span><span class="sw" style="background:#3ddc97" title="#3ddc97"></span><span class="sw" style="background:#e8edf2" title="#e8edf2"></span><code>#1c1b19  #5b5347  #a8967a  #e7e1d6  #b23a2e  #0d0f12  #2b2f36  #8a9099  #f2f3f5  #1f6feb  #0a0e14  #142433  #1f3a5f  #3ddc97  #e8edf2</code></div><div class="grid"><figure class="tile" data-full="assets/poses/0001.jpg" data-cap="tight headshot, direct gaze">
+      <img loading="lazy" src="assets/poses/0001.jpg" alt="tight headshot, direct gaze">
+      <figcaption>tight headshot, direct gaze</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0003.jpg" data-cap="3/4 confident, arms relaxed">
+      <img loading="lazy" src="assets/poses/0003.jpg" alt="3/4 confident, arms relaxed">
+      <figcaption>3/4 confident, arms relaxed</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-deliverables"><div class="ctas"><a class="btn primary" href="deliverables/presentation.pdf" target="_blank">📄 Open PDF deck</a><a class="btn" href="https://www.canva.com/d/mZJrEP4KNtwXSlb" target="_blank">📊 Canva deck</a></div></section>
+</main>
+<footer>Prepared proposal. · tomas-guth-jarkovsky</footer>
+<div id="lb"><img alt=""><div class="cap"></div></div>
+<script>
+  const tabs=[...document.querySelectorAll('.tab')],panels=[...document.querySelectorAll('.panel')];
+  tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');history.replaceState(null,'','#'+t.dataset.tab);}));
+  const h=location.hash.slice(1);if(h){const b=document.querySelector('.tab[data-tab="'+h+'"]');if(b)b.click();}
+  const root=document.documentElement,tb=document.getElementById('themeBtn');const saved=localStorage.getItem('bsp-theme');if(saved)root.dataset.theme=saved;
+  tb.addEventListener('click',()=>{const n=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=n;localStorage.setItem('bsp-theme',n);});
+  const lb=document.getElementById('lb'),lbi=lb.querySelector('img'),lbc=lb.querySelector('.cap');
+  document.addEventListener('click',e=>{const f=e.target.closest('.tile');if(f){lbi.src=f.dataset.full;lbc.textContent=f.dataset.cap||'';lb.classList.add('open');}});
+  lb.addEventListener('click',()=>lb.classList.remove('open'));document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open');});
+</script>
+</body></html>
