@@ -94,5 +94,30 @@
     "error": "Něco se pokazilo. Zkuste to znovu nebo napište přímo na <link>{email}</link>.",
     "notConfigured": "Kontaktní formulář není momentálně dostupný.",
     "packagePreset": "Mám zájem o balíček {package} ({service}). "
+  },
+  "brand-shoot": {
+    "gateLabel": "Návrh focení",
+    "gatePrompt": "Zadejte heslo, které jste obdrželi od fotografa.",
+    "passwordPlaceholder": "Heslo",
+    "gateSubmit": "Zobrazit návrh",
+    "wrongPassword": "Špatné heslo",
+    "serverError": "Chyba serveru",
+    "networkError": "Chyba sítě",
+    "expiredTitle": "Návrh vypršel",
+    "expiredBody": "Tento návrh již není dostupný. Kontaktujte fotografa.",
+    "heroLabel": "Návrh focení",
+    "researchTitle": "Kdo jste",
+    "conceptsTitle": "Koncepty",
+    "moodboardTitle": "Moodboard",
+    "posesTitle": "Pózy",
+    "conceptMood": "Nálada",
+    "conceptWardrobe": "Oblečení",
+    "conceptLocation": "Místo",
+    "conceptLighting": "Světlo",
+    "conceptShotList": "Záběry",
+    "conceptPoses": "Pózování",
+    "ctaTitle": "Líbí se vám návrh?",
+    "ctaBody": "Ozvěte se a domluvíme termín focení.",
+    "ctaButton": "Kontaktovat"
   }
 }

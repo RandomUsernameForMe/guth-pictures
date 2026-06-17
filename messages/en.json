@@ -94,5 +94,30 @@
     "error": "Something went wrong. Please try again or email <link>{email}</link>.",
     "notConfigured": "The contact form is not available at the moment.",
     "packagePreset": "I'm interested in the {package} package ({service}). "
+  },
+  "brand-shoot": {
+    "gateLabel": "Shoot proposal",
+    "gatePrompt": "Enter the password you received from the photographer.",
+    "passwordPlaceholder": "Password",
+    "gateSubmit": "View proposal",
+    "wrongPassword": "Wrong password",
+    "serverError": "Server error",
+    "networkError": "Network error",
+    "expiredTitle": "Proposal expired",
+    "expiredBody": "This proposal is no longer available. Please contact the photographer.",
+    "heroLabel": "Shoot proposal",
+    "researchTitle": "Who you are",
+    "conceptsTitle": "Concepts",
+    "moodboardTitle": "Moodboard",
+    "posesTitle": "Poses",
+    "conceptMood": "Mood",
+    "conceptWardrobe": "Wardrobe",
+    "conceptLocation": "Location",
+    "conceptLighting": "Lighting",
+    "conceptShotList": "Shot list",
+    "conceptPoses": "Posing",
+    "ctaTitle": "Like the proposal?",
+    "ctaBody": "Get in touch and we'll set a shoot date.",
+    "ctaButton": "Get in touch"
   }
 }
