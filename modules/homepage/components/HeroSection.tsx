@@ -212,6 +212,24 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,11,0.85) 0%, transparent 40%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(10,10,11,0.40) 0%, transparent 28%)" }} />
 
+        {/* Subtle perpendicular mesh in two opposite corners, fading toward center */}
+        <div
+          aria-hidden
+          className="gp-grid absolute top-0 left-0 w-[34%] h-[44%] pointer-events-none"
+          style={{
+            WebkitMaskImage: "linear-gradient(135deg, rgba(0,0,0,0.85), transparent 70%)",
+            maskImage: "linear-gradient(135deg, rgba(0,0,0,0.85), transparent 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="gp-grid absolute bottom-0 right-0 w-[34%] h-[44%] pointer-events-none"
+          style={{
+            WebkitMaskImage: "linear-gradient(315deg, rgba(0,0,0,0.85), transparent 70%)",
+            maskImage: "linear-gradient(315deg, rgba(0,0,0,0.85), transparent 70%)",
+          }}
+        />
+
         {/* Hero content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center">
           {/* Eyebrow */}

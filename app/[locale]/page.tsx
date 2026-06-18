@@ -61,6 +61,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
 
+      <div className="relative gp-hatch gp-hatch-faint">
       <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
@@ -146,6 +147,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <ContactForm />
         </section>
       </AnimatedSection>
+      </div>
     </main>
   );
 }

@@ -1502,9 +1502,7 @@ body::after {
 }
 .hp-eyebrow::before {
   content: ""; display: inline-block;
-  width: 2.75rem; height: 0.7rem;
-  background: repeating-linear-gradient(135deg, var(--color-accent) 0 1px, transparent 1px 6px);
-  opacity: 0.75;
+  width: 2.5rem; height: 2px; background: var(--color-accent);
 }
 
 /* Reusable diagonal hatch — the placeholder motif from the proposal deck, as a brand texture.
@@ -1517,6 +1515,16 @@ body::after {
   );
 }
 .gp-hatch-accent { --gp-hatch-color: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+.gp-hatch-faint { --gp-hatch-color: rgba(255, 255, 255, 0.022); --gp-hatch-gap: 20px; }
+
+/* Fine perpendicular mesh — for very subtle texture over photos (e.g. hero corners). */
+.gp-grid {
+  --gp-grid-color: rgba(255, 255, 255, 0.05);
+  --gp-grid-gap: 26px;
+  background-image:
+    repeating-linear-gradient(0deg, var(--gp-grid-color) 0 1px, transparent 1px var(--gp-grid-gap)),
+    repeating-linear-gradient(90deg, var(--gp-grid-color) 0 1px, transparent 1px var(--gp-grid-gap));
+}
 
 /* ============================================================================
    Editorial proposal ("living palette") — client-facing /navrh view (.bsp-ed)
