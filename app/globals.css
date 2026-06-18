@@ -1299,21 +1299,14 @@ body::after {
   opacity: 0.72;
 }
 
-/* Palette band — full-bleed strip of the active palette's raw colors. */
-.bsp-band { position: relative; z-index: 1; display: flex; height: 0.5rem; width: 100%; }
-.bsp-band span { flex: 1; }
-
 /* Keep content above the decor layer. */
 .bsp-hero, .bsp-body { position: relative; z-index: 1; }
 
 /* Palette toggle */
 .bsp-palette-toggle {
-  position: sticky; top: 0; z-index: 30;
+  position: relative; z-index: 1;
   display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
-  padding: 0.7rem clamp(1.25rem, 5vw, 2rem);
-  background: color-mix(in srgb, var(--bsp-bg) 80%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--bsp-border-sub);
+  padding: 1rem clamp(1.25rem, 5vw, 2rem);
 }
 .bsp-palette-toggle-label { margin-right: 0.25rem; color: var(--bsp-text-muted); }
 .bsp-swatch-chip {

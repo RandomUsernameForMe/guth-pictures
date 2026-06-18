@@ -29,14 +29,6 @@ export function ProposalThemer({
     <main className="bsp" style={style as CSSProperties}>
       <div className="bsp-decor" aria-hidden />
 
-      {palettes.length > 0 && (
-        <div className="bsp-band" aria-hidden>
-          {colors.map((c, i) => (
-            <span key={i} style={{ background: c }} />
-          ))}
-        </div>
-      )}
-
       {palettes.length >= 2 && (
         <div className="bsp-palette-toggle" role="group" aria-label={t("paletteToggleLabel")}>
           <span className="bsp-palette-toggle-label gp-label">{t("paletteToggleLabel")}</span>
