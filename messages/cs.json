@@ -11,8 +11,14 @@
     "light-tester": "Light Tester"
   },
   "meta": {
-    "home":      { "title": "Guth Pictures — Fotograf", "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "Výběr fotografií: portréty, eventy a larpy." }
+    "home": {
+      "title": "Guth Pictures — Fotograf",
+      "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty."
+    },
+    "portfolio": {
+      "title": "Portfolio — Guth Pictures",
+      "description": "Výběr fotografií: portréty, eventy a larpy."
+    }
   },
   "home": {
     "title": "Guth Pictures",
@@ -120,6 +126,10 @@
     "conceptPoses": "Pózování",
     "ctaTitle": "Líbí se vám návrh?",
     "ctaBody": "Ozvěte se a domluvíme termín focení.",
-    "ctaButton": "Kontaktovat"
+    "ctaButton": "Kontaktovat",
+    "heroPreparedFor": "Připraveno pro",
+    "scrollHint": "Listujte",
+    "yourPalette": "Vaše paleta",
+    "resetPalette": "obnovit automatické přepínání"
   }
 }

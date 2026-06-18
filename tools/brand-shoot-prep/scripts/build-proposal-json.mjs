@@ -112,14 +112,21 @@ function parseConcept(letter, md, paletteStatus) {
 async function imageList(dir) {
   if (!existsSync(dir)) return [];
   const files = (await readdir(dir)).filter((f) => IMG_RE.test(f)).sort();
-  let notes = {};
+  let meta = {};
   const sp = join(dir, "sources.json");
   if (existsSync(sp)) {
     try {
-      for (const s of JSON.parse(await readFile(sp, "utf8"))) if (s.file) notes[s.file] = s.note || "";
+      for (const s of JSON.parse(await readFile(sp, "utf8"))) if (s.file) meta[s.file] = s;
     } catch {}
   }
-  return files.map((f) => ({ file: f, note: notes[f] || "" }));
+  return files.map((f) => {
+    const m = meta[f] || {};
+    const out = { file: f, note: m.note || "" };
+    // concept tag ("A".."Z") + hero flag steer the per-approach layout on the web.
+    if (m.concept) out.concept = String(m.concept).toUpperCase();
+    if (m.hero) out.hero = true;
+    return out;
+  });
 }
 
 export async function buildProposalJson(dir) {

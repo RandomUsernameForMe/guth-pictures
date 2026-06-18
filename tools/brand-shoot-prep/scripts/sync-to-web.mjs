@@ -75,7 +75,13 @@ async function uploadBoard(dir, board, items) {
     }
     try {
       const up = await uploadImage(abs, folder);
-      out.push({ ...up, note: it.note || undefined, status: it.status || "pending" });
+      out.push({
+        ...up,
+        note: it.note || undefined,
+        concept: it.concept || undefined,
+        hero: it.hero || undefined,
+        status: it.status || "pending",
+      });
       process.stdout.write(`  ↑ ${board}/${it.file} → ${up.cloudinaryId}\n`);
     } catch (e) {
       console.warn(`  ! ${board}/${it.file}: ${e.message}`);

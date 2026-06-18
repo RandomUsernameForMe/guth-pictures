@@ -173,91 +173,112 @@
     {
       "file": "0001.jpg",
       "note": "Tichá důvěra — warm editorial, soft side light",
+      "concept": "A",
+      "hero": true,
       "status": "pending"
     },
     {
       "file": "0002.jpg",
       "note": "Tichá důvěra — neutral background headshot",
+      "concept": "A",
       "status": "pending"
     },
     {
       "file": "0003.jpg",
       "note": "Tichá důvěra — earthy tones, calm",
+      "concept": "A",
       "status": "pending"
     },
     {
       "file": "0004.jpg",
       "note": "Tichá důvěra — knit texture, warm grade",
+      "concept": "A",
       "status": "pending"
     },
     {
       "file": "0005.jpg",
       "note": "Tichá důvěra — 3/4 composed posture",
+      "concept": "A",
       "status": "pending"
     },
     {
       "file": "0006.jpg",
       "note": "Tichá důvěra — window soft key",
+      "concept": "A",
       "status": "pending"
     },
     {
       "file": "0007.jpg",
       "note": "Rozhovor — cozy interior daylight",
+      "concept": "B",
+      "hero": true,
       "status": "pending"
     },
     {
       "file": "0008.jpg",
       "note": "Rozhovor — candid conversation warmth",
+      "concept": "B",
       "status": "pending"
     },
     {
       "file": "0009.jpg",
       "note": "Rozhovor — seated by window",
+      "concept": "B",
       "status": "pending"
     },
     {
       "file": "0010.jpg",
       "note": "Rozhovor — plants, daylight, human",
+      "concept": "B",
       "status": "pending"
     },
     {
       "file": "0011.jpg",
       "note": "Rozhovor — soft ambient interior",
+      "concept": "B",
       "status": "pending"
     },
     {
       "file": "0012.jpg",
       "note": "Rozhovor — present, empathic register",
+      "concept": "B",
       "status": "pending"
     },
     {
       "file": "0013.jpg",
       "note": "Otevřeno — bright high-key portrait",
+      "concept": "C",
+      "hero": true,
       "status": "pending"
     },
     {
       "file": "0014.jpg",
       "note": "Otevřeno — clean minimal white space",
+      "concept": "C",
       "status": "pending"
     },
     {
       "file": "0015.jpg",
       "note": "Otevřeno — confident open posture",
+      "concept": "C",
       "status": "pending"
     },
     {
       "file": "0016.jpg",
       "note": "Otevřeno — architectural lines, airy",
+      "concept": "C",
       "status": "pending"
     },
     {
       "file": "0017.jpg",
       "note": "Otevřeno — daylight diffuse, forward",
+      "concept": "C",
       "status": "pending"
     },
     {
       "file": "0018.jpg",
       "note": "Otevřeno — colorful subtle accent minimal",
+      "concept": "C",
       "status": "pending"
     }
   ],

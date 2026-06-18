@@ -35,6 +35,8 @@ export interface ProposalImage {
   width: number;
   height: number;
   note?: string;
+  concept?: string; // approach this image belongs to ("A" | "B" | …); absent = unassigned/shared
+  hero?: boolean; // the concept's lead/stage portrait (one per concept)
   status: ProposalStatus;
 }
 

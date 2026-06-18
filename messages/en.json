@@ -11,8 +11,14 @@
     "light-tester": "Light Tester"
   },
   "meta": {
-    "home":      { "title": "Guth Pictures — Photographer", "description": "Professional photographer. Strong atmosphere, distinctive creative portraits." },
-    "portfolio": { "title": "Portfolio — Guth Pictures", "description": "A selection of photographs: portraits, events and larps." }
+    "home": {
+      "title": "Guth Pictures — Photographer",
+      "description": "Professional photographer. Strong atmosphere, distinctive creative portraits."
+    },
+    "portfolio": {
+      "title": "Portfolio — Guth Pictures",
+      "description": "A selection of photographs: portraits, events and larps."
+    }
   },
   "home": {
     "title": "Guth Pictures",
@@ -120,6 +126,10 @@
     "conceptPoses": "Posing",
     "ctaTitle": "Like the proposal?",
     "ctaBody": "Get in touch and we'll set a shoot date.",
-    "ctaButton": "Get in touch"
+    "ctaButton": "Get in touch",
+    "heroPreparedFor": "Prepared for",
+    "scrollHint": "Scroll",
+    "yourPalette": "Your palette",
+    "resetPalette": "reset automatic switching"
   }
 }

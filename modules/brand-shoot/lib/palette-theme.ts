@@ -96,3 +96,43 @@ export function paletteToTheme(colors: string[]): Record<string, string> {
     "--bsp-duo-light": toHex(lightest),
   };
 }
+
+export interface PaletteAmbient {
+  accent: string; // chromatic highlight (buttons, rules, glow core)
+  glowA: string; // warm-dark ambient blob A
+  glowB: string; // darker ambient blob B
+  tint: string; // page background wash
+}
+
+/**
+ * Derive the Editorial "living palette" ambient colors from a palette's raw hex list — the
+ * accent + two glow tones + a background tint that drive `--p-*` vars (scroll-spy recolor).
+ * Returns null when the palette is too small to theme from.
+ */
+export function paletteToAmbient(colors: string[]): PaletteAmbient | null {
+  const rgb = colors.map(parseHex).filter(Boolean) as Rgb[];
+  if (rgb.length < 2) return null;
+
+  const sorted = [...rgb].sort((a, b) => luminance(a) - luminance(b));
+  const darkest = sorted[0];
+
+  const candidates = rgb.filter((c) => c !== darkest);
+  const pool = candidates.length ? candidates : rgb;
+  let accent = pool.reduce((best, c) => (saturation(c) > saturation(best) ? c : best), pool[0]);
+  if (saturation(accent) < 0.12) {
+    accent = pool.reduce(
+      (best, c) =>
+        Math.abs(luminance(c) - luminance(darkest)) > Math.abs(luminance(best) - luminance(darkest)) ? c : best,
+      pool[0]
+    );
+  }
+
+  return {
+    accent: toHex(accent),
+    // Warm-dark blobs: the darkest color nudged toward the accent (a little / barely).
+    glowA: toHex(mix(darkest, accent, 0.22)),
+    glowB: toHex(mix(darkest, accent, 0.1)),
+    // Tint = the darkest color itself (the page wash stays near-black, palette-shifted).
+    tint: toHex(darkest),
+  };
+}

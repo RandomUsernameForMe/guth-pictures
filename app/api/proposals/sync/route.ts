@@ -67,6 +67,8 @@ function parseImage(v: unknown): ProposalImage | null {
     width: i.width,
     height: i.height,
     note: isStr(i.note) ? i.note : undefined,
+    concept: isStr(i.concept) ? i.concept : undefined,
+    hero: typeof i.hero === "boolean" ? i.hero : undefined,
     status: isStatus(i.status) ? i.status : "pending",
   };
 }
