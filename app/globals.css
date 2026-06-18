@@ -1648,3 +1648,25 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .bsp-ed *, .bsp-ed { animation: none !important; }
 }
+
+/* who-you-are intro section */
+.bsp-ed-intro-sec { padding: clamp(4rem,12vh,9rem) clamp(1.5rem,6vw,7rem); }
+.bsp-ed-intro-inner { max-width: 46rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.8rem; }
+.bsp-ed-intro-h { margin: 0; font-weight: 700; letter-spacing: -.02em; line-height: 1.08; font-size: clamp(2rem,5.5vw,3.4rem); color: var(--color-text, #F2F0EB); text-wrap: balance; }
+.bsp-ed-intro-p { margin: 0; font-size: clamp(1.05rem,2.2vw,1.25rem); line-height: 1.7; color: var(--color-text-muted, #9B9899); }
+.bsp-ed-quote { margin: .6rem 0; padding-left: 1.4rem; border-left: 2px solid var(--p-accent, #C8A96E);
+  font-weight: 500; letter-spacing: -.01em; line-height: 1.3; font-size: clamp(1.5rem,3.6vw,2.2rem);
+  color: var(--color-text, #F2F0EB); text-wrap: balance; }
+
+/* live photo duotone: subtle accent-tinted shadows → palette highlights (recolors with palette) */
+.bsp-ed-stage, .bsp-ed-mood-fig { position: relative; }
+.bsp-ed-mood-fig::before, .bsp-ed-mood-fig::after,
+.bsp-ed-stage-img-wrap::before, .bsp-ed-stage-img-wrap::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+}
+.bsp-ed-mood-fig::before { background: var(--bsp-duo-shadow, #2A1C12); mix-blend-mode: lighten; opacity: .35; }
+.bsp-ed-mood-fig::after { background: var(--bsp-duo-light, #E8DFCF); mix-blend-mode: multiply; opacity: .22; }
+.bsp-ed-stage-img-wrap { position: absolute; inset: clamp(14px,3vw,42px); overflow: hidden; border: 1px solid rgba(255,255,255,.12); }
+.bsp-ed-stage-img-wrap::before { background: var(--bsp-duo-shadow, #2A1C12); mix-blend-mode: lighten; opacity: .28; }
+.bsp-ed-stage-img-wrap::after { background: var(--bsp-duo-light, #E8DFCF); mix-blend-mode: multiply; opacity: .16; }
+.bsp-ed-stage-img-wrap .bsp-ed-stage-img { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }

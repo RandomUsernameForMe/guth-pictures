@@ -102,6 +102,8 @@ export interface PaletteAmbient {
   glowA: string; // warm-dark ambient blob A
   glowB: string; // darker ambient blob B
   tint: string; // page background wash
+  duoShadow: string; // photo duotone — accent-tinted shadows (lighten blend)
+  duoLight: string; // photo duotone — light highlights (multiply blend)
 }
 
 /**
@@ -127,6 +129,7 @@ export function paletteToAmbient(colors: string[]): PaletteAmbient | null {
     );
   }
 
+  const lightest = sorted[sorted.length - 1];
   return {
     accent: toHex(accent),
     // Warm-dark blobs: the darkest color nudged toward the accent (a little / barely).
@@ -134,5 +137,8 @@ export function paletteToAmbient(colors: string[]): PaletteAmbient | null {
     glowB: toHex(mix(darkest, accent, 0.1)),
     // Tint = the darkest color itself (the page wash stays near-black, palette-shifted).
     tint: toHex(darkest),
+    // Subtle photo duotone: accent-tinted shadows → palette highlights.
+    duoShadow: toHex(mix(darkest, accent, 0.45)),
+    duoLight: toHex(lightest),
   };
 }

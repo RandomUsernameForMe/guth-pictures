@@ -5,7 +5,10 @@ import type { ProposalPublic, ProposalConcept, ProposalImage, ProposalPalette } 
 import { LivingPalette } from "./LivingPalette";
 import { ProposalGallery } from "./ProposalGallery";
 
-const FALLBACK = { accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B" };
+const FALLBACK = {
+  accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B",
+  duoShadow: "#3A2A1A", duoLight: "#E8DFCF",
+};
 
 // Build the `data-pal-*` attribute bag a section/button needs for the living-palette scroll-spy.
 function palData(name: string, colors: string[]) {
@@ -16,6 +19,8 @@ function palData(name: string, colors: string[]) {
     "data-pal-glowa": amb.glowA,
     "data-pal-glowb": amb.glowB,
     "data-pal-tint": amb.tint,
+    "data-pal-duoa": amb.duoShadow,
+    "data-pal-duob": amb.duoLight,
     "data-pal-name": name,
     "data-pal-sw": colors.join(","),
   } as const;
@@ -54,16 +59,17 @@ function ConceptSection({
     <section className="bsp-ed-concept" {...pal}>
       <div className="bsp-ed-stage" data-reveal>
         {hero ? (
-          <img className="bsp-ed-stage-img" src={img(hero.cloudinaryId, 1600)} alt={hero.note ?? concept.title} />
+          <div className="bsp-ed-stage-img-wrap" aria-hidden>
+            <img className="bsp-ed-stage-img" src={img(hero.cloudinaryId, 1600)} alt={hero.note ?? concept.title} />
+          </div>
         ) : (
           <div className="bsp-ed-stage-ph" aria-hidden />
         )}
         <div className="bsp-ed-stage-scrim" aria-hidden />
         <header className="bsp-ed-stage-head">
           <div className="bsp-ed-eyebrow">
-            <span>Koncept № {no}</span>
+            <span>{labels.conceptWord} № {no}</span>
             <span className="bsp-ed-rule" aria-hidden />
-            <span className="bsp-ed-eyebrow-muted">{primary?.name ?? concept.title}</span>
           </div>
           <h2 className="bsp-ed-display">{concept.title}</h2>
           {concept.pitch && <p className="bsp-ed-stage-pitch">{concept.pitch}</p>}
@@ -132,21 +138,28 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
     lighting: t("conceptLighting"),
     poses: t("conceptPoses"),
     palette: t("paletteToggleLabel"),
+    conceptWord: t("conceptWord"),
   };
 
   const concepts = proposal.concepts;
   const heroOf = (id: string) =>
     proposal.moodboard.find((i) => i.concept === id && i.hero) ??
     proposal.moodboard.find((i) => i.concept === id);
-  const moodOf = (id: string) => proposal.moodboard.filter((i) => i.concept === id && !i.hero).slice(0, 3);
+  // Per-concept image set: that concept's non-hero moodboard refs + its poses (merged, capped).
+  const imagesOf = (id: string) =>
+    [
+      ...proposal.moodboard.filter((i) => i.concept === id && !i.hero),
+      ...proposal.poses.filter((i) => i.concept === id),
+    ].slice(0, 6);
 
   // Brand/opening palette = first concept's first palette (fallback to neutral).
   const brandPalette = concepts.find((c) => c.palettes.length > 0)?.palettes[0];
   const brandPal = brandPalette ? palData(brandPalette.name, brandPalette.colors) : palData("Úvod", []);
   const initial = (brandPalette && paletteToAmbient(brandPalette.colors)) || FALLBACK;
 
-  // Poses stay a shared gallery (not concept-scoped).
-  const sharedPoses = proposal.poses;
+  // Any poses NOT assigned to a concept fall back to a shared gallery at the end.
+  const sharedPoses = proposal.poses.filter((i) => !i.concept);
+  const intro = proposal.intro?.trim();
 
   return (
     <LivingPalette initial={initial} resetLabel={t("paletteToggleLabel")}>
@@ -170,9 +183,30 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
         </div>
       </section>
 
+      {/* WHO YOU ARE */}
+      {intro && (
+        <section className="bsp-ed-intro-sec" {...brandPal}>
+          <div className="bsp-ed-intro-inner" data-reveal>
+            <span className="gp-label bsp-ed-eyebrow-accent">{t("whoYouAreKicker")}</span>
+            <h2 className="bsp-ed-intro-h">{t("whoYouAreTitle")}</h2>
+            {intro.split(/\n{2,}/).map((para, i) =>
+              para.trim().startsWith(">") ? (
+                <blockquote key={i} className="bsp-ed-quote">
+                  {para.replace(/^>\s?/gm, "").trim()}
+                </blockquote>
+              ) : (
+                <p key={i} className="bsp-ed-intro-p">
+                  {para.trim()}
+                </p>
+              )
+            )}
+          </div>
+        </section>
+      )}
+
       {/* CONCEPTS */}
       {concepts.map((c, i) => (
-        <ConceptSection key={c.id} concept={c} index={i} hero={heroOf(c.id)} mood={moodOf(c.id)} labels={labels} />
+        <ConceptSection key={c.id} concept={c} index={i} hero={heroOf(c.id)} mood={imagesOf(c.id)} labels={labels} />
       ))}
 
       {/* SHARED POSES */}

@@ -113,6 +113,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     },
     research: isStr(raw.research) ? raw.research : "",
     summary: isStr(raw.summary) ? raw.summary : undefined,
+    intro: isStr(raw.intro) ? raw.intro : undefined,
     concepts,
     moodboard,
     poses,

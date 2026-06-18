@@ -150,6 +150,21 @@ export async function buildProposalJson(dir) {
   };
   const dateMatch = briefMd.match(/\*\*Date:\*\*\s*([\d-]+)/i);
 
+  // Client-facing "Kdo jste" / "Who you are" narrative — a `## Kdo jste` (or `## Who you are`)
+  // section in brief.md, taken verbatim (blank-line paragraphs) until the next heading.
+  const introSection = (() => {
+    const lines = briefMd.split("\n");
+    let i = lines.findIndex((l) => /^##\s+(kdo jste|who you are|intro)\b/i.test(l));
+    if (i < 0) return undefined;
+    const body = [];
+    for (i = i + 1; i < lines.length; i++) {
+      if (/^#{1,2}\s/.test(lines[i])) break;
+      body.push(lines[i]);
+    }
+    const txt = body.join("\n").trim();
+    return txt || undefined;
+  })();
+
   const { concepts } = splitConcepts(approachesMd);
   const parsedConcepts = concepts.map((c) => {
     const concept = parseConcept(c.letter, c.md, approvals?.palettes);
@@ -175,6 +190,7 @@ export async function buildProposalJson(dir) {
     },
     research: researchMd,
     summary: grab("Summary"),
+    intro: introSection,
     concepts: parsedConcepts,
     moodboard,
     poses,

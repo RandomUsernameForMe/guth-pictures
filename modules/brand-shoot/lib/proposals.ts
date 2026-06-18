@@ -73,6 +73,7 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
     brief: payload.brief,
     research: payload.research,
     summary: payload.summary,
+    intro: payload.intro,
     concepts: payload.concepts.map((c) => ({
       ...c,
       status: conceptStatus.get(c.id) ?? c.status,
@@ -195,6 +196,7 @@ export function toPublicProposal(record: ProposalRecord): ProposalPublic {
     name: record.name,
     locale: record.locale,
     summary: record.summary,
+    intro: record.intro,
     // Approved concepts only, each with its palettes filtered to approved.
     concepts: approved(record.concepts).map((c) => ({
       ...c,

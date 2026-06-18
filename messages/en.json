@@ -130,6 +130,9 @@
     "heroPreparedFor": "Prepared for",
     "scrollHint": "Scroll",
     "yourPalette": "Your palette",
-    "resetPalette": "reset automatic switching"
+    "resetPalette": "reset automatic switching",
+    "conceptWord": "Concept",
+    "whoYouAreKicker": "Who you are",
+    "whoYouAreTitle": "We start with you, not the lens."
   }
 }

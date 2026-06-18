@@ -54,6 +54,7 @@ export interface ProposalRecord {
   brief: ProposalBrief;
   research: string; // markdown — internal only
   summary?: string; // one client-facing sentence ("we understand you"), shown in the hero
+  intro?: string; // client-facing "who you are" narrative (markdown-ish, blank-line paragraphs)
   concepts: ProposalConcept[]; // each carries its own palettes
   moodboard: ProposalImage[];
   poses: ProposalImage[];
@@ -76,6 +77,7 @@ export interface ProposalSyncPayload {
   brief: ProposalBrief;
   research: string;
   summary?: string;
+  intro?: string;
   concepts: ProposalConcept[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
@@ -89,6 +91,7 @@ export interface ProposalPublic {
   name: string;
   locale: ProposalLocale;
   summary?: string;
+  intro?: string;
   concepts: ProposalConcept[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];

@@ -12,23 +12,28 @@ export function LivingPalette({
   resetLabel,
   children,
 }: {
-  initial: { accent: string; glowA: string; glowB: string; tint: string };
+  initial: { accent: string; glowA: string; glowB: string; tint: string; duoShadow: string; duoLight: string };
   resetLabel: string;
   children: React.ReactNode;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const docEl = document.documentElement;
     const root = rootRef.current;
     if (!root) return;
     let locked: DOMStringMap | null = null;
 
     function setPalette(ds: DOMStringMap) {
-      if (ds.palAccent) docEl.style.setProperty("--p-accent", ds.palAccent);
-      if (ds.palGlowa) docEl.style.setProperty("--p-glow-a", ds.palGlowa);
-      if (ds.palGlowb) docEl.style.setProperty("--p-glow-b", ds.palGlowb);
-      if (ds.palTint) docEl.style.setProperty("--p-tint", ds.palTint);
+      // Set vars on the .bsp-ed root itself — NOT documentElement. The root carries inline
+      // --p-* defaults, and a nearer ancestor's custom property shadows :root for its subtree,
+      // so writing to documentElement would never take effect inside .bsp-ed.
+      const s = root!.style;
+      if (ds.palAccent) s.setProperty("--p-accent", ds.palAccent);
+      if (ds.palGlowa) s.setProperty("--p-glow-a", ds.palGlowa);
+      if (ds.palGlowb) s.setProperty("--p-glow-b", ds.palGlowb);
+      if (ds.palTint) s.setProperty("--p-tint", ds.palTint);
+      if (ds.palDuoa) s.setProperty("--bsp-duo-shadow", ds.palDuoa);
+      if (ds.palDuob) s.setProperty("--bsp-duo-light", ds.palDuob);
       // Palette names stay internal — show swatches only. Colors are our own server-derived
       // hexes (data-pal-sw), not user input.
       const colors = (ds.palSw || "")
@@ -123,6 +128,8 @@ export function LivingPalette({
     "--p-glow-a": initial.glowA,
     "--p-glow-b": initial.glowB,
     "--p-tint": initial.tint,
+    "--bsp-duo-shadow": initial.duoShadow,
+    "--bsp-duo-light": initial.duoLight,
   } as CSSProperties;
 
   return (
