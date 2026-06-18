@@ -78,6 +78,10 @@ export function paletteToTheme(colors: string[]): Record<string, string> {
   // Contrast guard: force a safe text color if the palette can't carry legible text.
   if (contrast(text, bg) < 4.5) text = contrast(LIGHT, bg) >= contrast(DARK, bg) ? LIGHT : DARK;
 
+  // Muted text: as faint as possible while staying ≥4.5:1 against the bg.
+  let muted = mix(text, bg, 0.42);
+  for (let t = 0.42; t > 0.05 && contrast(muted, bg) < 4.5; t -= 0.04) muted = mix(text, bg, t);
+
   const accentContrast = luminance(accent) > 0.5 ? DARK : LIGHT;
 
   return {
@@ -85,7 +89,7 @@ export function paletteToTheme(colors: string[]): Record<string, string> {
     "--bsp-bg-elevated": toHex(mix(bg, text, 0.05)),
     "--bsp-surface": toHex(mix(bg, text, 0.08)),
     "--bsp-text": toHex(text),
-    "--bsp-text-muted": toHex(mix(text, bg, 0.38)),
+    "--bsp-text-muted": toHex(muted),
     "--bsp-border": toHex(mix(bg, text, 0.16)),
     "--bsp-border-sub": toHex(mix(bg, text, 0.09)),
     "--bsp-accent": toHex(accent),

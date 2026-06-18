@@ -1276,7 +1276,35 @@ body::after {
   min-height: 100vh;
   background: var(--bsp-bg);
   color: var(--bsp-text);
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
 }
+
+/* All proposal typography follows the palette (not the global dark tokens) so light
+   palettes stay legible. */
+.bsp .gp-h1, .bsp .gp-h2, .bsp .gp-h3 { color: var(--bsp-text); }
+.bsp .gp-subtitle, .bsp .gp-body-md, .bsp .gp-body-sm { color: var(--bsp-text-muted); }
+.bsp .gp-label { color: var(--bsp-text-muted); }
+
+/* Decorative palette-colored blobs — large, blurred, behind content. Recolor per palette
+   (raw --bsp-c* with role fallbacks) so switching transforms the whole page mood. */
+.bsp-decor {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(38vw 38vw at 12% 6%, color-mix(in srgb, var(--bsp-c4, var(--bsp-accent)) 60%, transparent), transparent 70%),
+    radial-gradient(42vw 42vw at 90% 16%, color-mix(in srgb, var(--bsp-c2, var(--bsp-surface)) 55%, transparent), transparent 70%),
+    radial-gradient(48vw 48vw at 72% 96%, color-mix(in srgb, var(--bsp-accent) 50%, transparent), transparent 72%);
+  filter: blur(46px) saturate(1.15);
+  opacity: 0.72;
+}
+
+/* Palette band — full-bleed strip of the active palette's raw colors. */
+.bsp-band { position: relative; z-index: 1; display: flex; height: 0.5rem; width: 100%; }
+.bsp-band span { flex: 1; }
+
+/* Keep content above the decor layer. */
+.bsp-hero, .bsp-body { position: relative; z-index: 1; }
 
 /* Palette toggle */
 .bsp-palette-toggle {
@@ -1346,10 +1374,11 @@ body::after {
   width: 100%;
   padding: 3rem clamp(1.25rem, 5vw, 4rem);
   background: linear-gradient(to top,
-    color-mix(in srgb, var(--bsp-bg) 92%, transparent),
-    color-mix(in srgb, var(--bsp-bg) 20%, transparent) 60%,
-    transparent);
+    var(--bsp-bg),
+    color-mix(in srgb, var(--bsp-bg) 55%, transparent) 50%,
+    color-mix(in srgb, var(--bsp-accent) 22%, transparent));
 }
+.bsp-hero-overlay .gp-h1 { color: var(--bsp-text); }
 
 /* Body + sections */
 .bsp-body {
@@ -1366,12 +1395,15 @@ body::after {
 .bsp-concepts { display: flex; flex-direction: column; gap: 3rem; }
 .bsp-concept {
   border: 1px solid var(--bsp-border-sub);
+  border-left: 3px solid var(--bsp-accent);
   border-radius: var(--radius-xl);
-  background: var(--bsp-bg-elevated);
+  background: color-mix(in srgb, var(--bsp-bg-elevated) 82%, transparent);
+  backdrop-filter: blur(6px);
   padding: clamp(1.5rem, 4vw, 2.5rem);
   display: flex; flex-direction: column; gap: 1.25rem;
 }
 .bsp-concept-head { display: flex; flex-direction: column; gap: 0.5rem; }
+.bsp-concept-head .gp-label { color: var(--bsp-accent); font-weight: var(--weight-bold); font-size: var(--text-sm); }
 .bsp-palette { display: flex; gap: 0; border-radius: var(--radius-md); overflow: hidden; height: 2.5rem; }
 .bsp-swatch { flex: 1; }
 .bsp-concept-why { color: var(--bsp-text-muted); }
@@ -1433,8 +1465,10 @@ body::after {
 /* CTA */
 .bsp-cta {
   display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;
-  border-top: 1px solid var(--bsp-border-sub);
-  padding-top: clamp(2rem, 5vw, 3rem);
+  border: 1px solid var(--bsp-border-sub);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--bsp-accent) 12%, transparent);
+  padding: clamp(2rem, 5vw, 3rem);
 }
 
 @media (max-width: 640px) {
