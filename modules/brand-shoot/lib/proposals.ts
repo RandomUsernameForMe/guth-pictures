@@ -19,21 +19,32 @@ function key(slug: string) {
   return `proposal:${slug}`;
 }
 
+// Back-compat: records synced before palettes moved under concepts lack `concept.palettes`
+// (they had a brand-level `palettes[]` + a single `concept.palette`). Guarantee every concept
+// carries a palettes array so all consumers (admin reads the raw record) can't hit undefined.
+function normalize(record: ProposalRecord | null): ProposalRecord | null {
+  if (!record) return null;
+  return {
+    ...record,
+    concepts: record.concepts.map((c) => ({ ...c, palettes: c.palettes ?? [] })),
+  };
+}
+
 export async function listProposals(): Promise<ProposalRecord[]> {
   const kv = await getKv();
   if (!kv) return [];
   const slugs = (await kv.smembers("proposals:index")) as string[];
   if (!slugs.length) return [];
   const records = await Promise.all(slugs.map((s) => kv.get<ProposalRecord>(key(s))));
-  return (records.filter(Boolean) as ProposalRecord[]).sort((a, b) =>
-    b.createdAt.localeCompare(a.createdAt)
-  );
+  return (records.filter(Boolean) as ProposalRecord[])
+    .map((r) => normalize(r) as ProposalRecord)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 export async function getProposal(slug: string): Promise<ProposalRecord | null> {
   const kv = await getKv();
   if (!kv) return null;
-  return kv.get<ProposalRecord>(key(slug));
+  return normalize(await kv.get<ProposalRecord>(key(slug)));
 }
 
 // Ingest from the local sync script. Content (brief/research/concepts/images) comes
