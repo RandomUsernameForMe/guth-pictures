@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markéta Matějová — Shoot Proposal</title>
+<style>
+  :root{ --accent:#6b5d4f; }
+  html[data-theme=dark]{ --bg:#0c0d11; --surface:#15171d; --surface2:#1c1f27; --text:#e9eaee; --muted:#9aa0ab; --line:#272b34; --herotint:rgba(12,13,17,.55); --heroink:#fff; }
+  html[data-theme=light]{ --bg:#f6f7f9; --surface:#fff; --surface2:#eef0f3; --text:#1a1d23; --muted:#5f6672; --line:#e2e5ea; --herotint:rgba(20,22,28,.42); --heroink:#fff; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent)}
+  .hero{position:relative;min-height:230px;display:flex;align-items:flex-end;background-image:linear-gradient(var(--herotint),var(--herotint)),var(--cover);background-size:cover;background-position:center}
+  .hero.nohero{background:linear-gradient(135deg,var(--surface),var(--surface2))}
+  .hero-inner{max-width:1080px;margin:0 auto;width:100%;padding:28px 24px}
+  .hero .name{margin:0;font-size:34px;letter-spacing:-.02em;color:var(--heroink);text-shadow:0 2px 18px rgba(0,0,0,.45)}
+  .hero .kick{color:#eef0f3;font-size:14px;margin-top:4px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  .hero.nohero .name,.hero.nohero .kick{color:var(--text);text-shadow:none}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px}
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  nav{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .tab{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:8px 14px;border-radius:999px;font-size:14px;cursor:pointer;transition:.15s}
+  .tab:hover{color:var(--text)} .tab.active{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  #themeBtn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+  main{max-width:1080px;margin:0 auto;padding:28px 24px 80px}
+  .panel{display:none;animation:fade .2s ease} .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h1,h2,h3{line-height:1.25;letter-spacing:-.01em}
+  h1{font-size:22px;margin:.2em 0 .5em} h2{font-size:18px;margin:1.4em 0 .5em} h3{font-size:15px;margin:1.2em 0 .4em;color:var(--accent)}
+  hr{border:none;border-top:1px solid var(--line);margin:1.6em 0}
+  code{background:var(--surface2);padding:1px 6px;border-radius:6px;font-size:13px}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--surface2)}
+  ul{padding-left:20px} li{margin:.2em 0} .muted{color:var(--muted)}
+  .palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .palette .sw{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)} .palette code{background:none;color:var(--muted)}
+  .ctas{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+  .btn{display:inline-block;border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px}
+  .btn:hover{border-color:var(--accent)} .btn.primary{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  .grid{columns:4;column-gap:14px} @media(max-width:900px){.grid{columns:3}} @media(max-width:620px){.grid{columns:2}}
+  .tile{position:relative;break-inside:avoid;margin:0 0 14px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in;transition:.15s}
+  .tile:hover{border-color:var(--accent);transform:translateY(-2px)} .tile img{width:100%;display:block}
+  figcaption{padding:8px 10px;font-size:12px;color:var(--muted)}
+  .abadge{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;z-index:2}
+  .abadge.approved{background:#1f9d57} .abadge.rejected{background:#c0392b} .abadge.pending{background:#6b7280}
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:50;align-items:center;justify-content:center;flex-direction:column;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex} #lb img{max-width:92vw;max-height:84vh;border-radius:10px} #lb .cap{color:#cfd3da;margin-top:12px;font-size:14px}
+  footer{max-width:1080px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:12px}
+  @media print{
+    html[data-theme=dark]{--bg:#fff;--surface:#fff;--surface2:#f3f4f6;--text:#000;--muted:#444;--line:#ccc}
+    header,#themeBtn,#lb{display:none!important} .hero{min-height:160px}
+    .panel{display:block!important;page-break-before:always} .panel:first-of-type{page-break-before:avoid}
+    .grid{columns:3} .tile{border:1px solid #ddd} a{color:#000;text-decoration:underline}
+  }
+</style></head>
+<body>
+<div class="hero " style="--cover:url('assets/moodboard/0001.jpg')">
+      <div class="hero-inner"><h1 class="name">Markéta Matějová</h1>
+      <div class="kick">Shoot Proposal</div></div></div>
+<header><div class="bar"><nav><button class="tab active" data-tab="approaches">Concept</button><button class="tab" data-tab="moodboard">Moodboard</button><button class="tab" data-tab="poses">Pose Board</button><button class="tab" data-tab="deliverables">Deck</button></nav><button id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button></div></header>
+<main>
+<section class="panel active" id="panel-approaches"><div class="palette"><span class="sw" style="background:#1f1d1b" title="#1f1d1b"></span><span class="sw" style="background:#6b5d4f" title="#6b5d4f"></span><span class="sw" style="background:#b9a88f" title="#b9a88f"></span><span class="sw" style="background:#e8e2d8" title="#e8e2d8"></span><span class="sw" style="background:#a8412f" title="#a8412f"></span><span class="sw" style="background:#23211d" title="#23211d"></span><span class="sw" style="background:#7a6a55" title="#7a6a55"></span><span class="sw" style="background:#c9b79c" title="#c9b79c"></span><span class="sw" style="background:#efe9dd" title="#efe9dd"></span><span class="sw" style="background:#3f6f63" title="#3f6f63"></span><span class="sw" style="background:#2b2b30" title="#2b2b30"></span><span class="sw" style="background:#5566a8" title="#5566a8"></span><span class="sw" style="background:#d98c5f" title="#d98c5f"></span><span class="sw" style="background:#f2efe9" title="#f2efe9"></span><span class="sw" style="background:#e7c24b" title="#e7c24b"></span><span class="sw" style="background:#0e0f12" title="#0e0f12"></span><span class="sw" style="background:#33373e" title="#33373e"></span><span class="sw" style="background:#8a8d92" title="#8a8d92"></span><span class="sw" style="background:#c87f3a" title="#c87f3a"></span><span class="sw" style="background:#e6e4df" title="#e6e4df"></span><span class="sw" style="background:#201f24" title="#201f24"></span><span class="sw" style="background:#7b4ea8" title="#7b4ea8"></span><span class="sw" style="background:#3f8f86" title="#3f8f86"></span><span class="sw" style="background:#f1ede6" title="#f1ede6"></span><span class="sw" style="background:#1a1a1a" title="#1a1a1a"></span><span class="sw" style="background:#4a4a4a" title="#4a4a4a"></span><span class="sw" style="background:#9a9488" title="#9a9488"></span><span class="sw" style="background:#efece4" title="#efece4"></span><span class="sw" style="background:#b5452f" title="#b5452f"></span><code>#1f1d1b  #6b5d4f  #b9a88f  #e8e2d8  #a8412f  #23211d  #7a6a55  #c9b79c  #efe9dd  #3f6f63  #2b2b30  #5566a8  #d98c5f  #f2efe9  #e7c24b  #0e0f12  #33373e  #8a8d92  #c87f3a  #e6e4df  #201f24  #7b4ea8  #3f8f86  #f1ede6  #1a1a1a  #4a4a4a  #9a9488  #efece4  #b5452f</code></div><h1>Shoot Approaches — Markéta Matějová</h1>
+<p>Tři odlišné koncepty pro osobní značku psycholožky působící v HR / DE&amp;I / LGBTQ+ výzkumu. Společný cíl: <strong>odbornost + lidskost</strong> — ani chladný korporát, ani aktivistická momentka.</p>
+<hr><h2>Concept A — &quot;Tichá důvěra&quot; (Warm Editorial Authority)</h2>
+<p><strong>Pitch:</strong> Klidný, editorial portrét, který říká „rozumím a stojím na datech&quot; — kompetence bez chladu.</p>
+<ul><li><strong>Why it fits:</strong> Publikum má cítit <em>bezpečí + kompetenci</em> (research → cílové publikum). Mezera v</li></ul>
+<p>kategorii = teplý důvěryhodný editorial místo modrého korporát-headshotu.</p>
+<ul><li><strong>Mood:</strong> klidné, fundované, soustředěné, lidské, nadčasové</li><li><strong>Color palette:</strong> <code>#1f1d1b</code> <code>#6b5d4f</code> <code>#b9a88f</code> <code>#e8e2d8</code> <code>#a8412f</code></li><li><strong>Wardrobe:</strong> jemné struktury — vlna, len, pletenina v zemitých/krémových tónech; jeden tlumený</li></ul>
+<p>akcent (terakota/rezavá). <em>Don't:</em> křiklavé vzory, lesklé materiály, čistě firemní oblek.</p>
+<ul><li><strong>Location / setting:</strong> neutrální světlý interiér / plátno v krémové; backup — čistá stěna u okna.</li><li><strong>Lighting:</strong> velký měkký key z boku (okno / softbox), jemné fill, lehký rim pro oddělení;</li></ul>
+<p>nízký kontrast, teplý grade.</p>
+<ul><li><strong>Shot list:</strong></li></ul>
+<p>1. Těsný headshot, oční kontakt — LinkedIn 2. 3/4 portrét, ruce klidně složené — web / press 3. Profil s pohledem stranou, zamyšlení — texty/blog 4. Polocelek vsedě, otevřené držení — about 5. Detail rukou / gesto klidu — doplněk 6. Lehký úsměv, vřelost — kontaktní strana</p>
+<ul><li><strong>Pose direction:</strong> vzpřímené, uvolněná ramena, brada lehce dolů; ruce klidné; pohled přímý,</li></ul>
+<p>vlídný. Energie: ztišená jistota.</p>
+<ul><li><strong>Image search terms:</strong> &quot;warm editorial portrait soft window light&quot;, &quot;natural light headshot</li></ul>
+<p>earthy tones neutral background&quot;, &quot;approachable professional portrait beige knit&quot;.</p>
+<hr>
+<h2>Concept B — &quot;Rozhovor&quot; (Approachable / In Context)</h2>
+<p><strong>Pitch:</strong> Člověk, kterému se dá svěřit — portrét v prostředí rozhovoru a naslouchání.</p>
+<ul><li><strong>Why it fits:</strong> Témata citlivá (duševní zdraví, minoritní stres) → tón klidný, bezpečný; práce</li></ul>
+<p>je o rozhovoru, diagnostice, naslouchání (research → brand voice).</p>
+<ul><li><strong>Mood:</strong> vřelé, otevřené, přítomné, empatické, autentické</li><li><strong>Color palette:</strong> <code>#23211d</code> <code>#7a6a55</code> <code>#c9b79c</code> <code>#efe9dd</code> <code>#3f6f63</code></li><li><strong>Wardrobe:</strong> měkké civilní vrstvy, košile/svetr, přírodní barvy se zelenkavým akcentem; přátelské,</li></ul>
+<p>nikoli formální. <em>Don't:</em> sako „na pohovor&quot;, logomanie.</p>
+<ul><li><strong>Location / setting:</strong> útulný interiér s denním světlem — křeslo, kniha, rostlina, dřevo; evokace</li></ul>
+<p>bezpečného prostoru / poradny. Backup — kavárna/knihovna u okna.</p>
+<ul><li><strong>Lighting:</strong> přírodní okenní světlo, ambientní, jemné stíny; bez tvrdých zdrojů.</li><li><strong>Shot list:</strong></li></ul>
+<p>1. Portrét vsedě, mírný náklon k objektivu — about / web 2. Candid při „rozhovoru&quot; mimo kameru — reportážní teplo 3. Detail u okna, světlo na tváři — atmosféra 4. Ruce s šálkem / knihou — kontext 5. Polocelek v prostoru, negativní prostor — press 6. Vřelý smích, přirozenost — social</p>
+<ul><li><strong>Pose direction:</strong> uvolněné, předklonění naznačující zájem; ruce v gestu naslouchání; pohled</li></ul>
+<p>měkký. Energie: blízkost, přítomnost.</p>
+<ul><li><strong>Image search terms:</strong> &quot;candid portrait sitting natural window light cozy interior&quot;, &quot;psychologist</li></ul>
+<p>warm approachable portrait&quot;, &quot;lifestyle editorial conversation daylight plants&quot;.</p>
+<hr>
+<h2>Concept C — &quot;Otevřeno&quot; (Light &amp; Forward)</h2>
+<p><strong>Pitch:</strong> Světlý, vzdušný, mírně graficky pojatý portrét — věda, otevřenost, pohyb vpřed; inkluze v jemném tónu, ne doslova.</p>
+<ul><li><strong>Why it fits:</strong> DE&amp;I étos + akademická angažovanost; příležitost nést inkluzivní vzkaz jemným</li></ul>
+<p>akcentem (research → mezery &amp; příležitosti, queer paleta v odborném podání).</p>
+<ul><li><strong>Mood:</strong> světlé, vzdušné, otevřené, sebevědomé, současné</li><li><strong>Color palette:</strong> <code>#2b2b30</code> <code>#5566a8</code> <code>#d98c5f</code> <code>#f2efe9</code> <code>#e7c24b</code></li><li><strong>Wardrobe:</strong> čisté linie, jednobarevné s jedním živějším (ne křiklavým) akcentem — okrová,</li></ul>
+<p>pavoučí modř; moderní střih. <em>Don't:</em> duhové klišé, příliš formální.</p>
+<ul><li><strong>Location / setting:</strong> světlá místnost s grafickými prvky (okna, linie, čistá architektura),</li></ul>
+<p>hodně bílé/denního světla; backup — světlé schodiště / minimalistická chodba.</p>
+<ul><li><strong>Lighting:</strong> jasné difuzní denní světlo, high-key, čisté; volitelně jeden barevný akcent v pozadí.</li><li><strong>Shot list:</strong></li></ul>
+<p>1. Headshot na světlém pozadí, sebevědomý — LinkedIn alt 2. Polocelek s architektonickou linií — web hero 3. Pohyb / krok, lehká dynamika — „forward&quot; 4. Gesto při řeči (jakoby přednáší) — konference/press 5. Detail s barevným akcentem v rámu — brand prvek 6. Otevřený postoj, úsměv — aspirační</p>
+<ul><li><strong>Pose direction:</strong> otevřené, vzpřímené, lehký pohyb; ruce v gestu řeči; pohled přímý,</li></ul>
+<p>energický. Energie: optimismus, posun vpřed.</p>
+<ul><li><strong>Image search terms:</strong> &quot;bright airy editorial portrait high key daylight&quot;, &quot;modern professional</li></ul>
+<p>portrait clean architecture white space&quot;, &quot;confident woman portrait colorful accent minimal&quot;.</p>
+<hr>
+<h2>Color Palettes</h2>
+<ul><li><strong>Hřejivá:</strong> <code>#1f1d1b</code> <code>#6b5d4f</code> <code>#b9a88f</code> <code>#e8e2d8</code> <code>#a8412f</code></li><li><strong>Naslouchání:</strong> <code>#23211d</code> <code>#7a6a55</code> <code>#c9b79c</code> <code>#efe9dd</code> <code>#3f6f63</code></li><li><strong>Denní světlo:</strong> <code>#2b2b30</code> <code>#5566a8</code> <code>#d98c5f</code> <code>#f2efe9</code> <code>#e7c24b</code></li><li><strong>Nokturno:</strong> <code>#0e0f12</code> <code>#33373e</code> <code>#8a8d92</code> <code>#c87f3a</code> <code>#e6e4df</code></li><li><strong>Inkluze (tlumená):</strong> <code>#201f24</code> <code>#7b4ea8</code> <code>#3f8f86</code> <code>#d98c5f</code> <code>#f1ede6</code></li><li><strong>Papír &amp; inkoust:</strong> <code>#1a1a1a</code> <code>#4a4a4a</code> <code>#9a9488</code> <code>#efece4</code> <code>#b5452f</code></li></ul></section>
+<section class="panel" id="panel-moodboard"><div class="palette"><span class="sw" style="background:#1f1d1b" title="#1f1d1b"></span><span class="sw" style="background:#6b5d4f" title="#6b5d4f"></span><span class="sw" style="background:#b9a88f" title="#b9a88f"></span><span class="sw" style="background:#e8e2d8" title="#e8e2d8"></span><span class="sw" style="background:#a8412f" title="#a8412f"></span><span class="sw" style="background:#23211d" title="#23211d"></span><span class="sw" style="background:#7a6a55" title="#7a6a55"></span><span class="sw" style="background:#c9b79c" title="#c9b79c"></span><span class="sw" style="background:#efe9dd" title="#efe9dd"></span><span class="sw" style="background:#3f6f63" title="#3f6f63"></span><span class="sw" style="background:#2b2b30" title="#2b2b30"></span><span class="sw" style="background:#5566a8" title="#5566a8"></span><span class="sw" style="background:#d98c5f" title="#d98c5f"></span><span class="sw" style="background:#f2efe9" title="#f2efe9"></span><span class="sw" style="background:#e7c24b" title="#e7c24b"></span><span class="sw" style="background:#0e0f12" title="#0e0f12"></span><span class="sw" style="background:#33373e" title="#33373e"></span><span class="sw" style="background:#8a8d92" title="#8a8d92"></span><span class="sw" style="background:#c87f3a" title="#c87f3a"></span><span class="sw" style="background:#e6e4df" title="#e6e4df"></span><span class="sw" style="background:#201f24" title="#201f24"></span><span class="sw" style="background:#7b4ea8" title="#7b4ea8"></span><span class="sw" style="background:#3f8f86" title="#3f8f86"></span><span class="sw" style="background:#f1ede6" title="#f1ede6"></span><span class="sw" style="background:#1a1a1a" title="#1a1a1a"></span><span class="sw" style="background:#4a4a4a" title="#4a4a4a"></span><span class="sw" style="background:#9a9488" title="#9a9488"></span><span class="sw" style="background:#efece4" title="#efece4"></span><span class="sw" style="background:#b5452f" title="#b5452f"></span><code>#1f1d1b  #6b5d4f  #b9a88f  #e8e2d8  #a8412f  #23211d  #7a6a55  #c9b79c  #efe9dd  #3f6f63  #2b2b30  #5566a8  #d98c5f  #f2efe9  #e7c24b  #0e0f12  #33373e  #8a8d92  #c87f3a  #e6e4df  #201f24  #7b4ea8  #3f8f86  #f1ede6  #1a1a1a  #4a4a4a  #9a9488  #efece4  #b5452f</code></div><div class="grid"><figure class="tile" data-full="assets/moodboard/0001.jpg" data-cap="Tichá důvěra — warm editorial, soft side light">
+      <img loading="lazy" src="assets/moodboard/0001.jpg" alt="Tichá důvěra — warm editorial, soft side light">
+      <figcaption>Tichá důvěra — warm editorial, soft side light</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0002.jpg" data-cap="Tichá důvěra — neutral background headshot">
+      <img loading="lazy" src="assets/moodboard/0002.jpg" alt="Tichá důvěra — neutral background headshot">
+      <figcaption>Tichá důvěra — neutral background headshot</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0003.jpg" data-cap="Tichá důvěra — earthy tones, calm">
+      <img loading="lazy" src="assets/moodboard/0003.jpg" alt="Tichá důvěra — earthy tones, calm">
+      <figcaption>Tichá důvěra — earthy tones, calm</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0004.jpg" data-cap="Tichá důvěra — knit texture, warm grade">
+      <img loading="lazy" src="assets/moodboard/0004.jpg" alt="Tichá důvěra — knit texture, warm grade">
+      <figcaption>Tichá důvěra — knit texture, warm grade</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0005.jpg" data-cap="Tichá důvěra — 3/4 composed posture">
+      <img loading="lazy" src="assets/moodboard/0005.jpg" alt="Tichá důvěra — 3/4 composed posture">
+      <figcaption>Tichá důvěra — 3/4 composed posture</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0006.jpg" data-cap="Tichá důvěra — window soft key">
+      <img loading="lazy" src="assets/moodboard/0006.jpg" alt="Tichá důvěra — window soft key">
+      <figcaption>Tichá důvěra — window soft key</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0007.jpg" data-cap="Rozhovor — cozy interior daylight">
+      <img loading="lazy" src="assets/moodboard/0007.jpg" alt="Rozhovor — cozy interior daylight">
+      <figcaption>Rozhovor — cozy interior daylight</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0008.jpg" data-cap="Rozhovor — candid conversation warmth">
+      <img loading="lazy" src="assets/moodboard/0008.jpg" alt="Rozhovor — candid conversation warmth">
+      <figcaption>Rozhovor — candid conversation warmth</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0009.jpg" data-cap="Rozhovor — seated by window">
+      <img loading="lazy" src="assets/moodboard/0009.jpg" alt="Rozhovor — seated by window">
+      <figcaption>Rozhovor — seated by window</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0010.jpg" data-cap="Rozhovor — plants, daylight, human">
+      <img loading="lazy" src="assets/moodboard/0010.jpg" alt="Rozhovor — plants, daylight, human">
+      <figcaption>Rozhovor — plants, daylight, human</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0011.jpg" data-cap="Rozhovor — soft ambient interior">
+      <img loading="lazy" src="assets/moodboard/0011.jpg" alt="Rozhovor — soft ambient interior">
+      <figcaption>Rozhovor — soft ambient interior</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0012.jpg" data-cap="Rozhovor — present, empathic register">
+      <img loading="lazy" src="assets/moodboard/0012.jpg" alt="Rozhovor — present, empathic register">
+      <figcaption>Rozhovor — present, empathic register</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0013.jpg" data-cap="Otevřeno — bright high-key portrait">
+      <img loading="lazy" src="assets/moodboard/0013.jpg" alt="Otevřeno — bright high-key portrait">
+      <figcaption>Otevřeno — bright high-key portrait</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0014.jpg" data-cap="Otevřeno — clean minimal white space">
+      <img loading="lazy" src="assets/moodboard/0014.jpg" alt="Otevřeno — clean minimal white space">
+      <figcaption>Otevřeno — clean minimal white space</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0015.jpg" data-cap="Otevřeno — confident open posture">
+      <img loading="lazy" src="assets/moodboard/0015.jpg" alt="Otevřeno — confident open posture">
+      <figcaption>Otevřeno — confident open posture</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0016.jpg" data-cap="Otevřeno — architectural lines, airy">
+      <img loading="lazy" src="assets/moodboard/0016.jpg" alt="Otevřeno — architectural lines, airy">
+      <figcaption>Otevřeno — architectural lines, airy</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0017.jpg" data-cap="Otevřeno — daylight diffuse, forward">
+      <img loading="lazy" src="assets/moodboard/0017.jpg" alt="Otevřeno — daylight diffuse, forward">
+      <figcaption>Otevřeno — daylight diffuse, forward</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0018.jpg" data-cap="Otevřeno — colorful subtle accent minimal">
+      <img loading="lazy" src="assets/moodboard/0018.jpg" alt="Otevřeno — colorful subtle accent minimal">
+      <figcaption>Otevřeno — colorful subtle accent minimal</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-poses"><div class="palette"><span class="sw" style="background:#1f1d1b" title="#1f1d1b"></span><span class="sw" style="background:#6b5d4f" title="#6b5d4f"></span><span class="sw" style="background:#b9a88f" title="#b9a88f"></span><span class="sw" style="background:#e8e2d8" title="#e8e2d8"></span><span class="sw" style="background:#a8412f" title="#a8412f"></span><span class="sw" style="background:#23211d" title="#23211d"></span><span class="sw" style="background:#7a6a55" title="#7a6a55"></span><span class="sw" style="background:#c9b79c" title="#c9b79c"></span><span class="sw" style="background:#efe9dd" title="#efe9dd"></span><span class="sw" style="background:#3f6f63" title="#3f6f63"></span><span class="sw" style="background:#2b2b30" title="#2b2b30"></span><span class="sw" style="background:#5566a8" title="#5566a8"></span><span class="sw" style="background:#d98c5f" title="#d98c5f"></span><span class="sw" style="background:#f2efe9" title="#f2efe9"></span><span class="sw" style="background:#e7c24b" title="#e7c24b"></span><span class="sw" style="background:#0e0f12" title="#0e0f12"></span><span class="sw" style="background:#33373e" title="#33373e"></span><span class="sw" style="background:#8a8d92" title="#8a8d92"></span><span class="sw" style="background:#c87f3a" title="#c87f3a"></span><span class="sw" style="background:#e6e4df" title="#e6e4df"></span><span class="sw" style="background:#201f24" title="#201f24"></span><span class="sw" style="background:#7b4ea8" title="#7b4ea8"></span><span class="sw" style="background:#3f8f86" title="#3f8f86"></span><span class="sw" style="background:#f1ede6" title="#f1ede6"></span><span class="sw" style="background:#1a1a1a" title="#1a1a1a"></span><span class="sw" style="background:#4a4a4a" title="#4a4a4a"></span><span class="sw" style="background:#9a9488" title="#9a9488"></span><span class="sw" style="background:#efece4" title="#efece4"></span><span class="sw" style="background:#b5452f" title="#b5452f"></span><code>#1f1d1b  #6b5d4f  #b9a88f  #e8e2d8  #a8412f  #23211d  #7a6a55  #c9b79c  #efe9dd  #3f6f63  #2b2b30  #5566a8  #d98c5f  #f2efe9  #e7c24b  #0e0f12  #33373e  #8a8d92  #c87f3a  #e6e4df  #201f24  #7b4ea8  #3f8f86  #f1ede6  #1a1a1a  #4a4a4a  #9a9488  #efece4  #b5452f</code></div><div class="grid"><figure class="tile" data-full="assets/poses/0001.jpg" data-cap="tight headshot — brada lehce dolů, vřelý pohled">
+      <img loading="lazy" src="assets/poses/0001.jpg" alt="tight headshot — brada lehce dolů, vřelý pohled">
+      <figcaption>tight headshot — brada lehce dolů, vřelý pohled</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0002.jpg" data-cap="3/4 — ramena uvolněná, mírný náklon">
+      <img loading="lazy" src="assets/poses/0002.jpg" alt="3/4 — ramena uvolněná, mírný náklon">
+      <figcaption>3/4 — ramena uvolněná, mírný náklon</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0003.jpg" data-cap="vsedě — předklon, naslouchání">
+      <img loading="lazy" src="assets/poses/0003.jpg" alt="vsedě — předklon, naslouchání">
+      <figcaption>vsedě — předklon, naslouchání</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0004.jpg" data-cap="ruce — klidné gesto, detail">
+      <img loading="lazy" src="assets/poses/0004.jpg" alt="ruce — klidné gesto, detail">
+      <figcaption>ruce — klidné gesto, detail</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0005.jpg" data-cap="u okna — světlo na tváři, profil">
+      <img loading="lazy" src="assets/poses/0005.jpg" alt="u okna — světlo na tváři, profil">
+      <figcaption>u okna — světlo na tváři, profil</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0006.jpg" data-cap="vsedě v křesle, otevřené držení">
+      <img loading="lazy" src="assets/poses/0006.jpg" alt="vsedě v křesle, otevřené držení">
+      <figcaption>vsedě v křesle, otevřené držení</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0007.jpg" data-cap="gesto při řeči — jakoby vysvětluje">
+      <img loading="lazy" src="assets/poses/0007.jpg" alt="gesto při řeči — jakoby vysvětluje">
+      <figcaption>gesto při řeči — jakoby vysvětluje</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0008.jpg" data-cap="3/4 vstoje, váha na zadní noze">
+      <img loading="lazy" src="assets/poses/0008.jpg" alt="3/4 vstoje, váha na zadní noze">
+      <figcaption>3/4 vstoje, váha na zadní noze</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0009.jpg" data-cap="celá postava, sebevědomý postoj">
+      <img loading="lazy" src="assets/poses/0009.jpg" alt="celá postava, sebevědomý postoj">
+      <figcaption>celá postava, sebevědomý postoj</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0010.jpg" data-cap="vstoje opřená o stěnu, uvolnění">
+      <img loading="lazy" src="assets/poses/0010.jpg" alt="vstoje opřená o stěnu, uvolnění">
+      <figcaption>vstoje opřená o stěnu, uvolnění</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0011.jpg" data-cap="celá postava, krok / lehký pohyb">
+      <img loading="lazy" src="assets/poses/0011.jpg" alt="celá postava, krok / lehký pohyb">
+      <figcaption>celá postava, krok / lehký pohyb</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0012.jpg" data-cap="ruce v kapsách, otevřený úsměv">
+      <img loading="lazy" src="assets/poses/0012.jpg" alt="ruce v kapsách, otevřený úsměv">
+      <figcaption>ruce v kapsách, otevřený úsměv</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0013.jpg" data-cap="polocelek, ruce složené před tělem">
+      <img loading="lazy" src="assets/poses/0013.jpg" alt="polocelek, ruce složené před tělem">
+      <figcaption>polocelek, ruce složené před tělem</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0014.jpg" data-cap="vstoje, pohled stranou, zamyšlení">
+      <img loading="lazy" src="assets/poses/0014.jpg" alt="vstoje, pohled stranou, zamyšlení">
+      <figcaption>vstoje, pohled stranou, zamyšlení</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0015.jpg" data-cap="dynamický postoj, energie vpřed">
+      <img loading="lazy" src="assets/poses/0015.jpg" alt="dynamický postoj, energie vpřed">
+      <figcaption>dynamický postoj, energie vpřed</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-deliverables"></section>
+</main>
+<footer>Prepared proposal. · marketa-matejova</footer>
+<div id="lb"><img alt=""><div class="cap"></div></div>
+<script>
+  const tabs=[...document.querySelectorAll('.tab')],panels=[...document.querySelectorAll('.panel')];
+  tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');history.replaceState(null,'','#'+t.dataset.tab);}));
+  const h=location.hash.slice(1);if(h){const b=document.querySelector('.tab[data-tab="'+h+'"]');if(b)b.click();}
+  const root=document.documentElement,tb=document.getElementById('themeBtn');const saved=localStorage.getItem('bsp-theme');if(saved)root.dataset.theme=saved;
+  tb.addEventListener('click',()=>{const n=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=n;localStorage.setItem('bsp-theme',n);});
+  const lb=document.getElementById('lb'),lbi=lb.querySelector('img'),lbc=lb.querySelector('.cap');
+  document.addEventListener('click',e=>{const f=e.target.closest('.tile');if(f){lbi.src=f.dataset.full;lbc.textContent=f.dataset.cap||'';lb.classList.add('open');}});
+  lb.addEventListener('click',()=>lb.classList.remove('open'));document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open');});
+</script>
+</body></html>

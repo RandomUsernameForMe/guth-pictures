@@ -37,7 +37,6 @@ export function AdminProposalReview({
 }) {
   const router = useRouter();
   const [concepts, setConcepts] = useState(proposal.concepts);
-  const [palettes, setPalettes] = useState(proposal.palettes ?? []);
   const [moodboard, setMoodboard] = useState(proposal.moodboard);
   const [poses, setPoses] = useState(proposal.poses);
   const [finalized, setFinalized] = useState(proposal.finalized);
@@ -77,7 +76,12 @@ export function AdminProposalReview({
 
   async function togglePalette(p: ProposalPalette) {
     const status = next[p.status];
-    setPalettes((prev) => prev.map((x) => (x.id === p.id ? { ...x, status } : x)));
+    setConcepts((prev) =>
+      prev.map((c) => ({
+        ...c,
+        palettes: c.palettes.map((x) => (x.id === p.id ? { ...x, status } : x)),
+      }))
+    );
     await patch({ action: "approvals", patch: { palettes: { [p.id]: status } } });
   }
 
@@ -208,58 +212,54 @@ export function AdminProposalReview({
         </form>
       </section>
 
-      {/* Concepts */}
+      {/* Concepts (each with its own palettes) */}
       <section className="space-y-3">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Koncepty</h2>
-        <div className="space-y-2">
+        <div className="space-y-4">
           {concepts.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => toggleConcept(c)}
-              disabled={busy}
-              className={`w-full text-left border px-4 py-3 transition-colors ${badge[c.status]}`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-medium">
-                  {mark[c.status]} {c.id} — {c.title}
-                </span>
-                <span className="text-xs uppercase">{c.status}</span>
-              </div>
-              {c.pitch && <p className="text-xs opacity-80 mt-1">{c.pitch}</p>}
-            </button>
+            <div key={c.id} className="space-y-2">
+              <button
+                onClick={() => toggleConcept(c)}
+                disabled={busy}
+                className={`w-full text-left border px-4 py-3 transition-colors ${badge[c.status]}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">
+                    {mark[c.status]} {c.id} — {c.title}
+                  </span>
+                  <span className="text-xs uppercase">{c.status}</span>
+                </div>
+                {c.pitch && <p className="text-xs opacity-80 mt-1">{c.pitch}</p>}
+              </button>
+
+              {c.palettes.length > 0 && (
+                <div className="ml-4 space-y-2 border-l border-zinc-800 pl-4">
+                  <p className="text-xs uppercase tracking-wide text-gray-500">Palety</p>
+                  {c.palettes.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => togglePalette(p)}
+                      disabled={busy}
+                      className={`w-full text-left border px-4 py-2 transition-colors ${badge[p.status]}`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-medium flex items-center gap-2">
+                          <span className="inline-flex rounded overflow-hidden border border-white/10">
+                            {p.colors.slice(0, 6).map((col, i) => (
+                              <span key={i} style={{ background: col, width: 18, height: 18 }} />
+                            ))}
+                          </span>
+                          {mark[p.status]} {p.name}
+                        </span>
+                        <span className="text-xs uppercase">{p.status}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
-      </section>
-
-      {/* Palettes */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Palety</h2>
-        {palettes.length === 0 ? (
-          <p className="text-sm text-gray-600">Žádné palety.</p>
-        ) : (
-          <div className="space-y-2">
-            {palettes.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => togglePalette(p)}
-                disabled={busy}
-                className={`w-full text-left border px-4 py-3 transition-colors ${badge[p.status]}`}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span className="font-medium flex items-center gap-2">
-                    <span className="inline-flex rounded overflow-hidden border border-white/10">
-                      {p.colors.slice(0, 6).map((c, i) => (
-                        <span key={i} style={{ background: c, width: 18, height: 18 }} />
-                      ))}
-                    </span>
-                    {mark[p.status]} {p.name}
-                  </span>
-                  <span className="text-xs uppercase">{p.status}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
       </section>
 
       {/* Moodboard */}

@@ -74,28 +74,35 @@ human, not generic marketing.
 
 Using `references/approaches-framework.md`, generate **three distinct concepts** grounded in
 the research (don't reuse generic templates — tie each to specific findings). For each:
-rationale (why it fits this client), mood, **color palette (hex)**, wardrobe, location /
-setting, lighting setup, shot list, and pose direction.
+rationale (why it fits this client), mood, wardrobe, location / setting, lighting setup, shot
+list, pose direction, and **its own set of color palettes**.
 
-Then add a **`## Color Palettes`** section to the same file: **4–6 distinct named palettes**
-(brand-level, 4–6 hex each), grounded in the research and reconciling the client's existing brand
-colors. These are the **client-toggle palettes** — on the web the client switches between the
-*approved* ones and the proposal page recolors live (background/surfaces/text/accent derived from
-the palette). So make them genuinely different in mood (e.g. a dark editorial, a warm light, a
-high-contrast graphic). Format each line exactly:
+**Palettes belong to the approach, not the brand.** Under each concept add a `- **Palety:**`
+bullet followed by an **indented sub-list of 2–4 named palettes** (4–6 hex each), grounded in
+that concept's mood. On the web these become the **client-toggle palettes** scoped to that
+approach: the client switches between the *approved* ones and the proposal page recolors live
+(background/surfaces/text/accent derived from the palette). Make a concept's palettes genuinely
+different in mood (e.g. a dark editorial, a warm light, a graphic variant). Format exactly — the
+sub-bullets **must be indented** under `**Palety:**`:
 
 ```
-## Color Palettes
-- **Nokturno:** `#0c0d0f` `#3a3d42` `#8a8d92` `#c0392b` `#e6e4df`
-- **Sépie:** `#1c1b19` `#5b5347` `#a8967a` `#e7e1d6` `#b23a2e`
+- **Mood:** klidné, fundované, lidské
+- **Palety:**
+  - **Hřejivá:** `#1f1d1b` `#6b5d4f` `#b9a88f` `#e8e2d8` `#a8412f`
+  - **Nokturno:** `#0e0f12` `#33373e` `#8a8d92` `#c87f3a` `#e6e4df`
+- **Wardrobe:** …
 ```
 
-Write `clients/<slug>/approaches.md` (concepts + the Color Palettes section).
+`build-proposal-json.mjs` derives each palette's id as `<concept-letter>-<kebab-name>` (e.g.
+`a-hrejiva`), unique across the proposal. There is **no** brand-level `## Color Palettes` section
+anymore.
 
-**Decision point 1:** present the three concepts + the palettes briefly and ask which to board
+Write `clients/<slug>/approaches.md` (concepts, each with its own `**Palety:**` sub-list).
+
+**Decision point 1:** present the three concepts + their palettes briefly and ask which to board
 and which palettes to keep. Default to all three concepts if the user doesn't pick. Palette
 approval (like concept/image approval) ultimately happens in the web admin; `approvals.json` may
-carry a `palettes: { <palette-id>: "approved" }` map (id = kebab-case of the palette name).
+carry a `palettes: { <palette-id>: "approved" }` map (concept-prefixed id).
 
 ## Phase 4 — Moodboard (web refs + AI originals)
 

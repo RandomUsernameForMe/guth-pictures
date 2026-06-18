@@ -1306,12 +1306,12 @@ body::after {
 .bsp-palette-toggle {
   position: relative; z-index: 1;
   display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
-  padding: 1rem clamp(1.25rem, 5vw, 2rem);
+  margin: 0.25rem 0 1rem;
 }
 .bsp-palette-toggle-label { margin-right: 0.25rem; color: var(--bsp-text-muted); }
 .bsp-swatch-chip {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+  padding: 0.35rem;
   border: 1px solid var(--bsp-border);
   border-radius: var(--radius-full);
   background: var(--bsp-surface);
@@ -1324,7 +1324,6 @@ body::after {
 .bsp-swatch-chip.is-active { border-color: var(--bsp-accent); box-shadow: 0 0 0 1px var(--bsp-accent); }
 .bsp-chip-swatches { display: inline-flex; border-radius: var(--radius-full); overflow: hidden; }
 .bsp-chip-swatches span { width: 0.85rem; height: 0.85rem; }
-.bsp-chip-name { white-space: nowrap; }
 
 /* Password gate */
 .bsp-gate {
@@ -1400,8 +1399,6 @@ body::after {
 }
 .bsp-concept-head { display: flex; flex-direction: column; gap: 0.5rem; }
 .bsp-concept-head .gp-label { color: var(--bsp-accent); font-weight: var(--weight-bold); font-size: var(--text-sm); }
-.bsp-palette { display: flex; gap: 0; border-radius: var(--radius-md); overflow: hidden; height: 2.5rem; }
-.bsp-swatch { flex: 1; }
 .bsp-concept-why { color: var(--bsp-text-muted); }
 .bsp-spec { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
 .bsp-spec-row { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; align-items: baseline; }

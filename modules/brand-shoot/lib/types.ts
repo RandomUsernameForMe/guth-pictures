@@ -5,13 +5,23 @@ export type ProposalStatus = "approved" | "rejected" | "pending";
 
 export type ProposalLocale = "cs" | "en";
 
+// A color palette option belonging to an approach. Approved palettes drive the client-page
+// theme via the per-concept palette toggle (see palette-theme.ts). Ids are unique across the
+// whole proposal (concept-prefixed, e.g. "a-hrejiva").
+export interface ProposalPalette {
+  id: string; // stable slug, concept-prefixed, e.g. "a-hrejiva"
+  name: string;
+  colors: string[]; // 4–6 hex
+  status: ProposalStatus;
+}
+
 export interface ProposalConcept {
   id: string; // "A" | "B" | "C" — stable per proposal
   title: string;
   pitch: string;
   why: string;
   mood: string;
-  palette: string[]; // hex strings
+  palettes: ProposalPalette[]; // this approach's color palette options (client-toggleable)
   wardrobe: string;
   location: string;
   lighting: string;
@@ -25,15 +35,6 @@ export interface ProposalImage {
   width: number;
   height: number;
   note?: string;
-  status: ProposalStatus;
-}
-
-// Proposal-level color palette option. Approved palettes drive the client-page
-// theme + the palette toggle (see palette-theme.ts).
-export interface ProposalPalette {
-  id: string; // stable slug, e.g. "nokturno"
-  name: string;
-  colors: string[]; // 4–6 hex
   status: ProposalStatus;
 }
 
@@ -51,8 +52,7 @@ export interface ProposalRecord {
   brief: ProposalBrief;
   research: string; // markdown — internal only
   summary?: string; // one client-facing sentence ("we understand you"), shown in the hero
-  concepts: ProposalConcept[];
-  palettes: ProposalPalette[];
+  concepts: ProposalConcept[]; // each carries its own palettes
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;
@@ -75,7 +75,6 @@ export interface ProposalSyncPayload {
   research: string;
   summary?: string;
   concepts: ProposalConcept[];
-  palettes: ProposalPalette[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;
@@ -89,7 +88,6 @@ export interface ProposalPublic {
   locale: ProposalLocale;
   summary?: string;
   concepts: ProposalConcept[];
-  palettes: ProposalPalette[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;

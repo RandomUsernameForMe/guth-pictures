@@ -63,19 +63,43 @@ function parseShotList(text) {
     .filter(Boolean);
 }
 
-function parseConcept(letter, md) {
+// Parse an approach's own palettes from an indented sub-list under a "- **Palety:**" (or
+// "**Palettes:**") bullet. Each sub-bullet: `  - **Name:** `#hex` `#hex` …`. Ids are
+// concept-prefixed (e.g. "a-hrejiva") so they're unique across the whole proposal.
+function parseConceptPalettes(letter, md, statusMap) {
+  const lines = md.split("\n");
+  const out = [];
+  let inSec = false;
+  for (const line of lines) {
+    if (/^\s*-?\s*\*\*Palet(?:y|tes?)?\b[^:*]*:\*\*\s*$/i.test(line)) { inSec = true; continue; }
+    if (!inSec) continue;
+    if (/^#{1,6}\s/.test(line)) break;
+    const sub = line.match(/^\s+-\s*\*\*([^:*]+):\*\*\s*(.+)$/); // indented sub-bullet
+    if (sub) {
+      const colors = (sub[2].match(/#[0-9a-fA-F]{6}/g) || []).map((c) => c.toLowerCase());
+      if (!colors.length) continue;
+      const name = clean(sub[1]);
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const id = `${letter.toLowerCase()}-${slug || out.length + 1}`;
+      out.push({ id, name, colors, status: statusMap?.[id] || "pending" });
+      continue;
+    }
+    if (/^\s*-\s*\*\*/.test(line)) break; // a non-indented concept bullet ends the palette list
+  }
+  return out;
+}
+
+function parseConcept(letter, md, paletteStatus) {
   const titleMatch = md.match(/^##\s+Concept\s+[A-Z]\s*[—–-]\s*"?([^"\n]+)"?/m);
   const title = titleMatch ? clean(titleMatch[1].replace(/"$/, "")) : `Concept ${letter}`;
   const pitch = clean(field(md, "Pitch"));
-  const paletteField = field(md, "Palette");
-  const palette = [...new Set((paletteField.match(/#[0-9a-fA-F]{6}/g) || []).map((h) => h.toLowerCase()))];
   return {
     id: letter,
     title,
     pitch,
     why: clean(field(md, "Why it fits") || field(md, "Why")),
     mood: clean(field(md, "Mood")),
-    palette,
+    palettes: parseConceptPalettes(letter, md, paletteStatus),
     wardrobe: clean(field(md, "Wardrobe")),
     location: clean(field(md, "Location")),
     lighting: clean(field(md, "Lighting")),
@@ -96,30 +120,6 @@ async function imageList(dir) {
     } catch {}
   }
   return files.map((f) => ({ file: f, note: notes[f] || "" }));
-}
-
-// Parse a "## Color Palettes" (or "## Palety") section: lines like
-//   - **Nokturno:** `#0c0d0f` `#3a3d42` `#8a8d92` `#c0392b` `#e6e4df`
-function parsePalettes(md, statusMap) {
-  const lines = (md || "").split("\n");
-  let inSec = false;
-  const out = [];
-  for (const line of lines) {
-    const h = line.match(/^##\s+(.*)$/);
-    if (h) {
-      inSec = /color palettes|palety|barevn/i.test(h[1]);
-      continue;
-    }
-    if (!inSec) continue;
-    const m = line.match(/^\s*-\s*\*\*([^:*]+):\*\*\s*(.+)$/);
-    if (!m) continue;
-    const colors = (m[2].match(/#[0-9a-fA-F]{6}/g) || []).map((c) => c.toLowerCase());
-    if (!colors.length) continue;
-    const name = clean(m[1]);
-    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `palette-${out.length + 1}`;
-    out.push({ id, name, colors, status: statusMap?.[id] || "pending" });
-  }
-  return out;
 }
 
 export async function buildProposalJson(dir) {
@@ -145,15 +145,13 @@ export async function buildProposalJson(dir) {
 
   const { concepts } = splitConcepts(approachesMd);
   const parsedConcepts = concepts.map((c) => {
-    const concept = parseConcept(c.letter, c.md);
+    const concept = parseConcept(c.letter, c.md, approvals?.palettes);
     concept.status = approvals?.concepts?.[c.letter] || "pending";
     return concept;
   });
 
   const applyStatus = (items, statusMap) =>
     items.map((it) => ({ ...it, status: statusMap?.[it.file] || "pending" }));
-
-  const palettes = parsePalettes(approachesMd, approvals?.palettes);
 
   const moodboard = applyStatus(await imageList(join(dir, "assets", "moodboard")), approvals?.moodboard);
   const poses = applyStatus(await imageList(join(dir, "assets", "poses")), approvals?.poses);
@@ -171,7 +169,6 @@ export async function buildProposalJson(dir) {
     research: researchMd,
     summary: grab("Summary"),
     concepts: parsedConcepts,
-    palettes,
     moodboard,
     poses,
   };
@@ -187,8 +184,9 @@ async function cli() {
   const outPath = join(resolve(dir), "proposal.json");
   await writeFile(outPath, JSON.stringify(proposal, null, 2));
   console.log(`✓ proposal.json written: ${outPath}`);
+  const paletteCount = proposal.concepts.reduce((n, c) => n + c.palettes.length, 0);
   console.log(
-    `  concepts ${proposal.concepts.length} · palettes ${proposal.palettes.length} · moodboard ${proposal.moodboard.length} · poses ${proposal.poses.length} · locale ${proposal.locale}`
+    `  concepts ${proposal.concepts.length} · palettes ${paletteCount} · moodboard ${proposal.moodboard.length} · poses ${proposal.poses.length} · locale ${proposal.locale}`
   );
 }
 

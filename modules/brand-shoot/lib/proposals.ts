@@ -48,7 +48,10 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
   const now = new Date().toISOString();
 
   const conceptStatus = new Map(existing?.concepts.map((c) => [c.id, c.status]));
-  const paletteStatus = new Map(existing?.palettes?.map((p) => [p.id, p.status]));
+  // Palettes now live under concepts; flatten existing ones to preserve their approval state by id.
+  const paletteStatus = new Map(
+    existing?.concepts.flatMap((c) => (c.palettes ?? []).map((p) => [p.id, p.status] as const))
+  );
   const moodStatus = new Map(existing?.moodboard.map((i) => [i.cloudinaryId, i.status]));
   const poseStatus = new Map(existing?.poses.map((i) => [i.cloudinaryId, i.status]));
 
@@ -62,10 +65,10 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
     concepts: payload.concepts.map((c) => ({
       ...c,
       status: conceptStatus.get(c.id) ?? c.status,
-    })),
-    palettes: (payload.palettes ?? []).map((p) => ({
-      ...p,
-      status: paletteStatus.get(p.id) ?? p.status,
+      palettes: (c.palettes ?? []).map((p) => ({
+        ...p,
+        status: paletteStatus.get(p.id) ?? p.status,
+      })),
     })),
     moodboard: payload.moodboard.map((i) => ({
       ...i,
@@ -110,8 +113,10 @@ export async function setApprovals(slug: string, patch: ApprovalPatch): Promise<
 
   const updated: ProposalRecord = {
     ...record,
-    concepts: apply(record.concepts, (c) => c.id, patch.concepts),
-    palettes: apply(record.palettes ?? [], (p) => p.id, patch.palettes),
+    concepts: apply(record.concepts, (c) => c.id, patch.concepts).map((c) => ({
+      ...c,
+      palettes: apply(c.palettes ?? [], (p) => p.id, patch.palettes),
+    })),
     moodboard: apply(record.moodboard, (i) => i.cloudinaryId, patch.moodboard),
     poses: apply(record.poses, (i) => i.cloudinaryId, patch.poses),
   };
@@ -179,8 +184,11 @@ export function toPublicProposal(record: ProposalRecord): ProposalPublic {
     name: record.name,
     locale: record.locale,
     summary: record.summary,
-    concepts: approved(record.concepts),
-    palettes: approved(record.palettes ?? []),
+    // Approved concepts only, each with its palettes filtered to approved.
+    concepts: approved(record.concepts).map((c) => ({
+      ...c,
+      palettes: approved(c.palettes ?? []),
+    })),
     moodboard: approved(record.moodboard),
     poses: approved(record.poses),
     coverImageId: record.coverImageId,

@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { ProposalPublic, ProposalConcept } from "@/modules/brand-shoot/lib/types";
 import { ProposalGallery } from "./ProposalGallery";
-import { ProposalThemer } from "./ProposalThemer";
+import { ProposalThemer, ConceptPaletteToggle } from "./ProposalThemer";
 
 function ConceptBlock({
   concept,
@@ -27,13 +27,7 @@ function ConceptBlock({
         {concept.pitch && <p className="gp-subtitle">{concept.pitch}</p>}
       </header>
 
-      {concept.palette.length > 0 && (
-        <div className="bsp-palette" aria-hidden>
-          {concept.palette.map((hex) => (
-            <span key={hex} className="bsp-swatch" style={{ background: hex }} title={hex} />
-          ))}
-        </div>
-      )}
+      <ConceptPaletteToggle palettes={concept.palettes} />
 
       {concept.why && <p className="bsp-concept-why gp-body-md">{concept.why}</p>}
 
@@ -74,8 +68,12 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
     poses: t("conceptPoses"),
   };
 
+  // Default theme = first palette of the first approach that has one.
+  const firstWithPalette = proposal.concepts.find((c) => c.palettes.length > 0);
+  const defaultPalette = firstWithPalette?.palettes[0];
+
   return (
-    <ProposalThemer palettes={proposal.palettes}>
+    <ProposalThemer initialId={defaultPalette?.id ?? null} initialColors={defaultPalette?.colors ?? []}>
       <header className="bsp-hero">
         <div className="bsp-hero-inner">
           <p className="gp-label">{t("heroLabel")}</p>

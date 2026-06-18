@@ -23,26 +23,6 @@ const isStatus = (v: unknown): v is ProposalStatus => STATUSES.includes(v as Pro
 const isStr = (v: unknown): v is string => typeof v === "string";
 const isStrArr = (v: unknown): v is string[] => Array.isArray(v) && v.every(isStr);
 
-function parseConcept(v: unknown): ProposalConcept | null {
-  if (!v || typeof v !== "object") return null;
-  const c = v as Record<string, unknown>;
-  if (!isStr(c.id) || !isStr(c.title) || !isStrArr(c.palette) || !isStrArr(c.shotList)) return null;
-  return {
-    id: c.id,
-    title: c.title,
-    pitch: isStr(c.pitch) ? c.pitch : "",
-    why: isStr(c.why) ? c.why : "",
-    mood: isStr(c.mood) ? c.mood : "",
-    palette: c.palette,
-    wardrobe: isStr(c.wardrobe) ? c.wardrobe : "",
-    location: isStr(c.location) ? c.location : "",
-    lighting: isStr(c.lighting) ? c.lighting : "",
-    shotList: c.shotList,
-    poseDirection: isStr(c.poseDirection) ? c.poseDirection : "",
-    status: isStatus(c.status) ? c.status : "pending",
-  };
-}
-
 function parsePalette(v: unknown): ProposalPalette | null {
   if (!v || typeof v !== "object") return null;
   const p = v as Record<string, unknown>;
@@ -52,6 +32,29 @@ function parsePalette(v: unknown): ProposalPalette | null {
     name: isStr(p.name) ? p.name : p.id,
     colors: p.colors,
     status: isStatus(p.status) ? p.status : "pending",
+  };
+}
+
+function parseConcept(v: unknown): ProposalConcept | null {
+  if (!v || typeof v !== "object") return null;
+  const c = v as Record<string, unknown>;
+  if (!isStr(c.id) || !isStr(c.title) || !isStrArr(c.shotList)) return null;
+  const palettes = (Array.isArray(c.palettes) ? c.palettes : [])
+    .map(parsePalette)
+    .filter(Boolean) as ProposalPalette[];
+  return {
+    id: c.id,
+    title: c.title,
+    pitch: isStr(c.pitch) ? c.pitch : "",
+    why: isStr(c.why) ? c.why : "",
+    mood: isStr(c.mood) ? c.mood : "",
+    palettes,
+    wardrobe: isStr(c.wardrobe) ? c.wardrobe : "",
+    location: isStr(c.location) ? c.location : "",
+    lighting: isStr(c.lighting) ? c.lighting : "",
+    shotList: c.shotList,
+    poseDirection: isStr(c.poseDirection) ? c.poseDirection : "",
+    status: isStatus(c.status) ? c.status : "pending",
   };
 }
 
@@ -89,9 +92,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const concepts = (Array.isArray(raw.concepts) ? raw.concepts : [])
     .map(parseConcept)
     .filter(Boolean) as ProposalConcept[];
-  const palettes = (Array.isArray(raw.palettes) ? raw.palettes : [])
-    .map(parsePalette)
-    .filter(Boolean) as ProposalPalette[];
   const moodboard = (Array.isArray(raw.moodboard) ? raw.moodboard : [])
     .map(parseImage)
     .filter(Boolean) as ProposalImage[];
@@ -112,7 +112,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     research: isStr(raw.research) ? raw.research : "",
     summary: isStr(raw.summary) ? raw.summary : undefined,
     concepts,
-    palettes,
     moodboard,
     poses,
     coverImageId: isStr(raw.coverImageId) ? raw.coverImageId : undefined,
