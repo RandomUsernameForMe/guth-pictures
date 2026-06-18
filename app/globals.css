@@ -1424,10 +1424,12 @@ body::after {
   border-radius: var(--radius-md); overflow: hidden;
   background: var(--bsp-surface);
 }
-.bsp-tile-img { object-fit: cover; filter: grayscale(1) contrast(1.05); transition: filter var(--duration-base) var(--ease-standard); }
-/* Live CSS duotone: shadows → palette dark-accent, highlights → palette light. */
+.bsp-tile-img { object-fit: cover; filter: grayscale(0.6) contrast(1.03); transition: filter var(--duration-base) var(--ease-standard); }
+/* Live CSS duotone (partial — keeps some of the real photo): shadows → palette
+   dark-accent, highlights → palette light. */
 .bsp-tile::before, .bsp-tile::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: 0.5;
   transition: opacity var(--duration-base) var(--ease-standard);
 }
 .bsp-tile::before { background: var(--bsp-duo-shadow); mix-blend-mode: lighten; }
