@@ -54,14 +54,11 @@ export function paletteToTheme(colors: string[]): Record<string, string> {
   const sorted = [...rgb].sort((a, b) => luminance(a) - luminance(b));
   const darkest = sorted[0];
   const lightest = sorted[sorted.length - 1];
-  // Light base only when the palette has a genuine light region to sit on (a very light color
-  // + at least two light-ish colors) — otherwise a single light accent shouldn't flip a dark
-  // palette. A near-black color present in a light palette becomes the text instead of the bg.
-  const lightCount = rgb.filter((c) => luminance(c) > 0.5).length;
-  const darkBase = !(luminance(lightest) > 0.75 && lightCount >= 2);
-
-  let bg = darkBase ? darkest : lightest;
-  let text = darkBase ? lightest : darkest;
+  // Always a dark theme — the page bg is the palette's darkest color, text its lightest.
+  // (Light-dominant palettes become dark, warm/tinted variants rather than flipping to a
+  // light background.)
+  const bg = darkest;
+  let text = lightest;
 
   // Accent = most saturated color that isn't the bg/text pick; fallback handles mono palettes.
   const candidates = rgb.filter((c) => c !== bg && c !== text);
@@ -94,5 +91,8 @@ export function paletteToTheme(colors: string[]): Record<string, string> {
     "--bsp-border-sub": toHex(mix(bg, text, 0.09)),
     "--bsp-accent": toHex(accent),
     "--bsp-accent-contrast": toHex(accentContrast),
+    // Duotone endpoints for photos: accent-tinted dark shadows → light highlights.
+    "--bsp-duo-shadow": toHex(mix(bg, accent, 0.45)),
+    "--bsp-duo-light": toHex(lightest),
   };
 }
