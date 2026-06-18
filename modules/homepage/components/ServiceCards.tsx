@@ -48,7 +48,7 @@ export function ServiceCards({ services, selectLabel }: Props) {
             className={`group relative border p-8 flex flex-col transition-all duration-300 cursor-pointer
               ${isOpen
                 ? "border-[var(--color-border-sub)] bg-[var(--color-bg-elevated)]"
-                : "border-[var(--color-border)] hover:border-[var(--color-border-sub)] hover:bg-[var(--color-bg-overlay)]"
+                : "border-[var(--color-border)] bg-[var(--color-bg-elevated)] hover:border-[var(--color-border-sub)] hover:bg-[var(--color-bg-overlay)]"
               }`}
           >
             <span className="font-mono text-xs text-[var(--color-text-ghost)] tracking-widest mb-6">

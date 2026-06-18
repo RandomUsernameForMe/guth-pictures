@@ -1490,7 +1490,7 @@ body::after {
     radial-gradient(46vw 46vw at 85% 55%, color-mix(in srgb, #8a5a2b 18%, transparent), transparent 68%),
     radial-gradient(55vw 55vw at 60% 90%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 70%);
   filter: blur(60px) saturate(1.05);
-  opacity: 0.5;
+  opacity: 0.32;
 }
 
 /* ── Homepage editorial accents ───────────────────────────────────── */
