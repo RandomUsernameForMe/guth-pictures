@@ -96,7 +96,7 @@
     "packagePreset": "Mám zájem o balíček {package} ({service}). "
   },
   "brand-shoot": {
-    "gateLabel": "Návrh focení",
+    "gateLabel": "Personal brand concept",
     "gatePrompt": "Zadejte heslo, které jste obdrželi od fotografa.",
     "passwordPlaceholder": "Heslo",
     "gateSubmit": "Zobrazit návrh",
@@ -105,7 +105,7 @@
     "networkError": "Chyba sítě",
     "expiredTitle": "Návrh vypršel",
     "expiredBody": "Tento návrh již není dostupný. Kontaktujte fotografa.",
-    "heroLabel": "Návrh focení",
+    "heroLabel": "Personal brand concept",
     "researchTitle": "Kdo jste",
     "conceptsTitle": "Koncepty",
     "moodboardTitle": "Moodboard",

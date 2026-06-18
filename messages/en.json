@@ -96,7 +96,7 @@
     "packagePreset": "I'm interested in the {package} package ({service}). "
   },
   "brand-shoot": {
-    "gateLabel": "Shoot proposal",
+    "gateLabel": "Personal brand concept",
     "gatePrompt": "Enter the password you received from the photographer.",
     "passwordPlaceholder": "Password",
     "gateSubmit": "View proposal",
@@ -105,7 +105,7 @@
     "networkError": "Network error",
     "expiredTitle": "Proposal expired",
     "expiredBody": "This proposal is no longer available. Please contact the photographer.",
-    "heroLabel": "Shoot proposal",
+    "heroLabel": "Personal brand concept",
     "researchTitle": "Who you are",
     "conceptsTitle": "Concepts",
     "moodboardTitle": "Moodboard",
