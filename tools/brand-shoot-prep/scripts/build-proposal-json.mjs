@@ -169,6 +169,7 @@ export async function buildProposalJson(dir) {
       date: dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10),
     },
     research: researchMd,
+    summary: grab("Summary"),
     concepts: parsedConcepts,
     palettes,
     moodboard,

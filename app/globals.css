@@ -1376,6 +1376,12 @@ body::after {
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-widest);
 }
+.bsp-hero-sub {
+  max-width: 42rem;
+  margin-top: 0.35rem;
+  color: var(--bsp-text);
+  text-wrap: balance;
+}
 
 /* Body + sections */
 .bsp-body {

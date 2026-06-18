@@ -110,6 +110,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       date: isStr(brief.date) ? brief.date : new Date().toISOString().slice(0, 10),
     },
     research: isStr(raw.research) ? raw.research : "",
+    summary: isStr(raw.summary) ? raw.summary : undefined,
     concepts,
     palettes,
     moodboard,

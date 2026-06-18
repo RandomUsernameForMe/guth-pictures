@@ -65,6 +65,11 @@ Write `clients/<slug>/research.md`: who they are, target audience, brand voice, 
 visual identity (palette / fonts / photo style), competitor visual landscape, gaps &
 opportunities, and **3–5 visual keywords** that will steer the boards.
 
+Also add a **`**Summary:**` line to `brief.md`** — ONE warm, client-facing sentence (in the
+client's locale) that distils who they are and what they're about, proving "we understand you."
+This is shown in the proposal hero (research.md itself stays internal). Keep it specific and
+human, not generic marketing.
+
 ## Phase 3 — Shoot approaches
 
 Using `references/approaches-framework.md`, generate **three distinct concepts** grounded in

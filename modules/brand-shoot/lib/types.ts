@@ -49,7 +49,8 @@ export interface ProposalRecord {
   name: string;
   locale: ProposalLocale;
   brief: ProposalBrief;
-  research: string; // markdown
+  research: string; // markdown — internal only
+  summary?: string; // one client-facing sentence ("we understand you"), shown in the hero
   concepts: ProposalConcept[];
   palettes: ProposalPalette[];
   moodboard: ProposalImage[];
@@ -72,6 +73,7 @@ export interface ProposalSyncPayload {
   locale: ProposalLocale;
   brief: ProposalBrief;
   research: string;
+  summary?: string;
   concepts: ProposalConcept[];
   palettes: ProposalPalette[];
   moodboard: ProposalImage[];
@@ -85,6 +87,7 @@ export interface ProposalPublic {
   slug: string;
   name: string;
   locale: ProposalLocale;
+  summary?: string;
   concepts: ProposalConcept[];
   palettes: ProposalPalette[];
   moodboard: ProposalImage[];

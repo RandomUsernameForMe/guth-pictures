@@ -80,6 +80,7 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
         <div className="bsp-hero-inner">
           <p className="gp-label">{t("heroLabel")}</p>
           <h1 className="gp-h1 bsp-hero-name">{proposal.name}</h1>
+          {proposal.summary && <p className="bsp-hero-sub gp-subtitle">{proposal.summary}</p>}
         </div>
       </header>
 

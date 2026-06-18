@@ -119,6 +119,7 @@ async function main() {
     locale: proposal.locale,
     brief: proposal.brief,
     research: proposal.research,
+    summary: proposal.summary,
     concepts: proposal.concepts,
     palettes: proposal.palettes ?? [],
     moodboard,
