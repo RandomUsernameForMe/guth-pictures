@@ -1612,16 +1612,17 @@ body::after {
 .bsp-ed-mood-fig { margin: 0; position: relative; aspect-ratio: 4/5; overflow: hidden; border: 1px solid rgba(255,255,255,.12); }
 .bsp-ed-mood-fig img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .bsp-ed-palrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; padding-top: .5rem; }
-.bsp-ed-palrow-meta { display: flex; align-items: center; gap: .9rem; }
-.bsp-ed-palrow-meta .gp-label { color: var(--ed-ghost); }
-.bsp-ed-swatches { display: flex; border: 1px solid var(--color-border, rgba(255,255,255,.1)); border-radius: 9999px; overflow: hidden; }
+.bsp-ed-palrow-label { color: var(--ed-ghost); }
+.bsp-ed-swatches { display: flex; border-radius: 9999px; overflow: hidden; }
 .bsp-ed-swatches span { width: 18px; height: 18px; }
 .bsp-ed-palbtns { display: flex; flex-wrap: wrap; gap: .5rem; }
-.bsp-ed-select { border: 1px solid var(--p-accent, #C8A96E); background: transparent; color: var(--p-accent, #C8A96E);
-  padding: .55rem 1.1rem; border-radius: 9999px; cursor: pointer; font-family: var(--font-mono, monospace);
-  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; transition: background .25s, color .25s; }
-.bsp-ed-select:hover { background: color-mix(in srgb, var(--p-accent, #C8A96E) 14%, transparent); }
-.bsp-ed-select[data-active="true"] { background: var(--p-accent, #C8A96E); color: #0A0A0B; }
+.bsp-ed-select { display: inline-flex; align-items: center; border: 1px solid var(--color-border, rgba(255,255,255,.12));
+  background: transparent; padding: .3rem; border-radius: 9999px; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+.bsp-ed-select .bsp-ed-swatches span { width: 16px; height: 16px; }
+.bsp-ed-select:hover { border-color: var(--p-accent, #C8A96E); }
+.bsp-ed-select[data-active="true"] { border-color: var(--p-accent, #C8A96E); box-shadow: 0 0 0 1px var(--p-accent, #C8A96E); }
+.bsp-ed-choice-sw { display: inline-flex; border-radius: 4px; overflow: hidden; }
+.bsp-ed-choice-sw span { width: 14px; height: 14px; }
 
 /* POSES */
 .bsp-ed-poses { padding: clamp(4rem,12vh,9rem) clamp(1.5rem,6vw,7rem); }

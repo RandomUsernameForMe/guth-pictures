@@ -95,27 +95,23 @@ function ConceptSection({
         )}
 
         <div className="bsp-ed-palrow">
-          <div className="bsp-ed-palrow-meta">
-            <span className="bsp-ed-swatches" aria-hidden>
-              {(primary?.colors ?? []).slice(0, 5).map((c, i) => (
-                <span key={i} style={{ background: c }} />
-              ))}
-            </span>
-            <span className="gp-label">
-              {labels.palette} — {primary?.name}
-            </span>
-          </div>
+          <span className="gp-label bsp-ed-palrow-label">{labels.palette}</span>
           <div className="bsp-ed-palbtns">
-            {concept.palettes.map((p: ProposalPalette) => (
+            {concept.palettes.map((p: ProposalPalette, i: number) => (
               <button
                 key={p.id}
                 type="button"
                 className="bsp-ed-select"
                 data-select=""
                 data-active="false"
+                aria-label={`${labels.palette} ${i + 1}`}
                 {...palData(p.name, p.colors)}
               >
-                {p.name}
+                <span className="bsp-ed-swatches" aria-hidden>
+                  {p.colors.slice(0, 5).map((c, j) => (
+                    <span key={j} style={{ background: c }} />
+                  ))}
+                </span>
               </button>
             ))}
           </div>
@@ -195,10 +191,8 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
           <span className="bsp-ed-eyebrow-accent">{t("ctaTitle")}</span>
           <h2 className="bsp-ed-close-h">{t("ctaBody")}</h2>
           <div className="bsp-ed-choice">
-            <span>{t("yourPalette")} —</span>
-            <span data-choice className="bsp-ed-choice-val">
-              —
-            </span>
+            <span>{t("yourPalette")}</span>
+            <span data-pal-swatches className="bsp-ed-choice-sw" aria-hidden />
             <a href="#" data-reset-pal className="bsp-ed-reset" style={{ display: "none" }}>
               ({t("resetPalette")})
             </a>

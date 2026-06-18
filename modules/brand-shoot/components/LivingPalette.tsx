@@ -29,22 +29,21 @@ export function LivingPalette({
       if (ds.palGlowa) docEl.style.setProperty("--p-glow-a", ds.palGlowa);
       if (ds.palGlowb) docEl.style.setProperty("--p-glow-b", ds.palGlowb);
       if (ds.palTint) docEl.style.setProperty("--p-tint", ds.palTint);
-      const name = root!.querySelector<HTMLElement>("[data-ind-name]");
-      if (name) name.textContent = ds.palName || "";
-      const sw = root!.querySelector<HTMLElement>("[data-ind-sw]");
-      if (sw) {
-        // Colors come from our own server-derived palette hexes (data-pal-sw), not user input.
-        const swatches = (ds.palSw || "")
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean)
-          .map((c) => {
+      // Palette names stay internal — show swatches only. Colors are our own server-derived
+      // hexes (data-pal-sw), not user input.
+      const colors = (ds.palSw || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      root!.querySelectorAll<HTMLElement>("[data-pal-swatches]").forEach((sw) => {
+        sw.replaceChildren(
+          ...colors.map((c) => {
             const el = document.createElement("span");
             el.style.cssText = `display:block;width:14px;height:14px;background:${c}`;
             return el;
-          });
-        sw.replaceChildren(...swatches);
-      }
+          })
+        );
+      });
     }
 
     const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-pal]"));
@@ -82,7 +81,6 @@ export function LivingPalette({
 
     const btns = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-select]"));
     const reset = root.querySelector<HTMLElement>("[data-reset-pal]");
-    const choice = root.querySelector<HTMLElement>("[data-choice]");
     function clearBtns() {
       btns.forEach((x) => {
         x.dataset.active = "false";
@@ -94,7 +92,6 @@ export function LivingPalette({
       setPalette(ds);
       clearBtns();
       b.dataset.active = "true";
-      if (choice) choice.textContent = ds.palName || "";
       if (reset) reset.style.display = "inline";
     };
     const handlers = btns.map((b) => {
@@ -106,7 +103,6 @@ export function LivingPalette({
       e.preventDefault();
       locked = null;
       clearBtns();
-      if (choice) choice.textContent = "—";
       if (reset) reset.style.display = "none";
       pickNow();
     };
@@ -139,8 +135,7 @@ export function LivingPalette({
       <div className="bsp-ed-grain" aria-hidden />
       <div className="bsp-ed-indicator" data-pal-indicator>
         <span className="bsp-ed-ind-label gp-label">{resetLabel}</span>
-        <span data-ind-name className="bsp-ed-ind-name" />
-        <span data-ind-sw className="bsp-ed-ind-sw" />
+        <span data-pal-swatches className="bsp-ed-ind-sw" />
       </div>
     </div>
   );
