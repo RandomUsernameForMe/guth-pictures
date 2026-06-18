@@ -64,18 +64,24 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
-            {/* Profilová fotka */}
+            {/* Profilová fotka + šrafovaný rámeček za ní */}
             {images.profile && (
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <Image
-                  src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
-                  alt={content["o-mne"].subtitle}
-                  fill
-                  placeholder="blur"
-                  blurDataURL={blurUrl(images.profile)}
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 280px"
+              <div className="relative isolate">
+                <div
+                  aria-hidden
+                  className="gp-hatch gp-hatch-accent absolute -bottom-5 -right-5 -z-10 w-28 h-40 border border-[var(--color-border-sub)]"
                 />
+                <div className="aspect-[4/5] relative overflow-hidden">
+                  <Image
+                    src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
+                    alt={content["o-mne"].subtitle}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={blurUrl(images.profile)}
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 280px"
+                  />
+                </div>
               </div>
             )}
             {/* Bio */}

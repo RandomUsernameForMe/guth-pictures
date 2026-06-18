@@ -1502,8 +1502,21 @@ body::after {
 }
 .hp-eyebrow::before {
   content: ""; display: inline-block;
-  width: 2.5rem; height: 2px; background: var(--color-accent);
+  width: 2.75rem; height: 0.7rem;
+  background: repeating-linear-gradient(135deg, var(--color-accent) 0 1px, transparent 1px 6px);
+  opacity: 0.75;
 }
+
+/* Reusable diagonal hatch — the placeholder motif from the proposal deck, as a brand texture.
+   Tune density/contrast per use via the custom props. */
+.gp-hatch {
+  --gp-hatch-color: rgba(255, 255, 255, 0.06);
+  --gp-hatch-gap: 11px;
+  background-image: repeating-linear-gradient(
+    135deg, var(--gp-hatch-color) 0 1px, transparent 1px var(--gp-hatch-gap)
+  );
+}
+.gp-hatch-accent { --gp-hatch-color: color-mix(in srgb, var(--color-accent) 22%, transparent); }
 
 /* ============================================================================
    Editorial proposal ("living palette") — client-facing /navrh view (.bsp-ed)
