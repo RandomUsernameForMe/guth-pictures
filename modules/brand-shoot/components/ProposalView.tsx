@@ -1,7 +1,5 @@
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 import type { ProposalPublic, ProposalConcept } from "@/modules/brand-shoot/lib/types";
 import { ProposalGallery } from "./ProposalGallery";
 import { ProposalThemer } from "./ProposalThemer";
@@ -66,7 +64,6 @@ function ConceptBlock({
 
 export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
   const t = await getTranslations({ locale: proposal.locale, namespace: "brand-shoot" });
-  const cover = proposal.coverImageId ?? proposal.moodboard[0]?.cloudinaryId;
 
   const conceptLabels = {
     mood: t("conceptMood"),
@@ -80,19 +77,9 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
   return (
     <ProposalThemer palettes={proposal.palettes}>
       <header className="bsp-hero">
-        {cover && (
-          <Image
-            src={cloudinaryUrl(cover, "c_fill,w_1920,h_1080,q_auto,f_auto")}
-            alt=""
-            fill
-            priority
-            className="bsp-hero-img"
-            sizes="100vw"
-          />
-        )}
-        <div className="bsp-hero-overlay">
+        <div className="bsp-hero-inner">
           <p className="gp-label">{t("heroLabel")}</p>
-          <h1 className="gp-h1">{proposal.name}</h1>
+          <h1 className="gp-h1 bsp-hero-name">{proposal.name}</h1>
         </div>
       </header>
 

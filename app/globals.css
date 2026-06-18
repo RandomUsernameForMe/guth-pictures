@@ -1361,24 +1361,21 @@ body::after {
 .bsp-btn-primary:hover { filter: brightness(1.08); }
 .bsp-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* Hero */
+/* Hero — typographic (no photo); sits over the palette glow, with a bg floor for legibility */
 .bsp-hero {
-  position: relative;
-  min-height: 56vh;
-  display: flex; align-items: flex-end;
-  overflow: hidden;
-}
-.bsp-hero-img { object-fit: cover; z-index: 0; filter: grayscale(0.65) contrast(1.05); }
-.bsp-hero-overlay {
   position: relative; z-index: 1;
-  width: 100%;
-  padding: 3rem clamp(1.25rem, 5vw, 4rem);
-  background: linear-gradient(to top,
-    var(--bsp-bg),
-    color-mix(in srgb, var(--bsp-bg) 55%, transparent) 50%,
-    color-mix(in srgb, var(--bsp-accent) 22%, transparent));
+  min-height: 58vh;
+  display: flex; align-items: flex-end;
+  padding: clamp(4rem, 14vh, 9rem) clamp(1.25rem, 5vw, 4rem) clamp(2.5rem, 6vh, 4rem);
+  background: linear-gradient(to top, var(--bsp-bg) 12%, transparent 65%);
 }
-.bsp-hero-overlay .gp-h1 { color: var(--bsp-text); }
+.bsp-hero-inner { display: flex; flex-direction: column; gap: 0.9rem; max-width: 56rem; width: 100%; }
+.bsp-hero-name { font-size: clamp(2.75rem, 9vw, 6rem); line-height: 0.96; color: var(--bsp-text); }
+.bsp-hero-inner .gp-label {
+  color: var(--bsp-accent);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-widest);
+}
 
 /* Body + sections */
 .bsp-body {
