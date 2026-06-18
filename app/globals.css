@@ -1491,6 +1491,10 @@ body::after {
     radial-gradient(52vw 52vw at 68% 96%, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent 72%);
   filter: blur(52px) saturate(1.1);
   opacity: 0.5;
+  /* Fade the glow out at the top/bottom of each section so neighbouring sections blend
+     seamlessly (no hard clip line where the glow meets the section edge). */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%);
 }
 @media (prefers-reduced-motion: reduce) { .glow-field { opacity: 0.4; } }
 
