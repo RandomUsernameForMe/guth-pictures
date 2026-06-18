@@ -42,7 +42,7 @@ export function ProposalGate({ slug, clientName }: { slug: string; clientName: s
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
+    <main className="bsp min-h-screen flex items-center justify-center px-4">
       <form onSubmit={handleSubmit} className="bsp-gate">
         <p className="gp-label">{t("gateLabel")}</p>
         <h1 className="gp-h2">{clientName}</h1>

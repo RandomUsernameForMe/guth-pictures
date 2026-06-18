@@ -1261,7 +1261,49 @@ body::after {
 }
 
 /* ── Brand shoot proposals (.bsp-*) ───────────────────────────────── */
-.bsp { min-height: 100vh; background: var(--color-bg); color: var(--color-text); }
+/* Local themeable tokens — default to the global dark tokens; ProposalThemer overrides
+   these inline from the selected palette (palette-theme.ts). */
+.bsp {
+  --bsp-bg: var(--color-bg);
+  --bsp-bg-elevated: var(--color-bg-elevated);
+  --bsp-surface: var(--color-surface);
+  --bsp-text: var(--color-text);
+  --bsp-text-muted: var(--color-text-muted);
+  --bsp-border: var(--color-border);
+  --bsp-border-sub: var(--color-border-sub);
+  --bsp-accent: var(--color-accent);
+  --bsp-accent-contrast: var(--color-bg);
+  min-height: 100vh;
+  background: var(--bsp-bg);
+  color: var(--bsp-text);
+}
+
+/* Palette toggle */
+.bsp-palette-toggle {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  padding: 0.7rem clamp(1.25rem, 5vw, 2rem);
+  background: color-mix(in srgb, var(--bsp-bg) 80%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--bsp-border-sub);
+}
+.bsp-palette-toggle-label { margin-right: 0.25rem; color: var(--bsp-text-muted); }
+.bsp-swatch-chip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+  border: 1px solid var(--bsp-border);
+  border-radius: var(--radius-full);
+  background: var(--bsp-surface);
+  color: var(--bsp-text);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
+}
+.bsp-swatch-chip:hover { border-color: var(--bsp-accent); }
+.bsp-swatch-chip.is-active { border-color: var(--bsp-accent); box-shadow: 0 0 0 1px var(--bsp-accent); }
+.bsp-chip-swatches { display: inline-flex; border-radius: var(--radius-full); overflow: hidden; }
+.bsp-chip-swatches span { width: 0.85rem; height: 0.85rem; }
+.bsp-chip-name { white-space: nowrap; }
 
 /* Password gate */
 .bsp-gate {
@@ -1270,25 +1312,25 @@ body::after {
 }
 .bsp-input {
   width: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--bsp-surface);
+  border: 1px solid var(--bsp-border);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
-  color: var(--color-text);
+  color: var(--bsp-text);
   font-size: var(--text-sm);
 }
-.bsp-input:focus { outline: none; border-color: var(--color-accent); }
+.bsp-input:focus { outline: none; border-color: var(--bsp-accent); }
 .bsp-error { color: var(--color-error-fg); font-size: var(--text-sm); }
 .bsp-btn-primary {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 0.75rem 1.5rem;
-  background: var(--color-accent);
-  color: var(--color-bg);
+  background: var(--bsp-accent);
+  color: var(--bsp-accent-contrast);
   font-weight: var(--weight-medium);
   border-radius: var(--radius-md);
-  transition: background var(--duration-fast) var(--ease-standard);
+  transition: filter var(--duration-fast) var(--ease-standard);
 }
-.bsp-btn-primary:hover { background: var(--color-accent-hover); }
+.bsp-btn-primary:hover { filter: brightness(1.08); }
 .bsp-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Hero */
@@ -1303,7 +1345,10 @@ body::after {
   position: relative; z-index: 1;
   width: 100%;
   padding: 3rem clamp(1.25rem, 5vw, 4rem);
-  background: linear-gradient(to top, rgba(10,10,11,0.92), rgba(10,10,11,0.2) 60%, transparent);
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--bsp-bg) 92%, transparent),
+    color-mix(in srgb, var(--bsp-bg) 20%, transparent) 60%,
+    transparent);
 }
 
 /* Body + sections */
@@ -1315,21 +1360,21 @@ body::after {
   gap: clamp(3rem, 7vw, 5rem);
 }
 .bsp-section { display: flex; flex-direction: column; gap: 1.5rem; }
-.bsp-research { color: var(--color-text-muted); }
+.bsp-research { color: var(--bsp-text-muted); }
 
 /* Concepts */
 .bsp-concepts { display: flex; flex-direction: column; gap: 3rem; }
 .bsp-concept {
-  border: 1px solid var(--color-border-sub);
+  border: 1px solid var(--bsp-border-sub);
   border-radius: var(--radius-xl);
-  background: var(--color-bg-elevated);
+  background: var(--bsp-bg-elevated);
   padding: clamp(1.5rem, 4vw, 2.5rem);
   display: flex; flex-direction: column; gap: 1.25rem;
 }
 .bsp-concept-head { display: flex; flex-direction: column; gap: 0.5rem; }
 .bsp-palette { display: flex; gap: 0; border-radius: var(--radius-md); overflow: hidden; height: 2.5rem; }
 .bsp-swatch { flex: 1; }
-.bsp-concept-why { color: var(--color-text-muted); }
+.bsp-concept-why { color: var(--bsp-text-muted); }
 .bsp-spec { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
 .bsp-spec-row { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; align-items: baseline; }
 .bsp-shotlist ul { margin-top: 0.5rem; padding-left: 1.1rem; list-style: disc; display: flex; flex-direction: column; gap: 0.35rem; }
@@ -1345,7 +1390,7 @@ body::after {
 .bsp-tile {
   position: relative; aspect-ratio: 1 / 1;
   border-radius: var(--radius-md); overflow: hidden;
-  background: var(--color-surface);
+  background: var(--bsp-surface);
 }
 .bsp-tile-img { object-fit: cover; transition: opacity var(--duration-fast) var(--ease-standard); }
 .bsp-tile:hover .bsp-tile-img { opacity: 0.85; }
@@ -1353,8 +1398,8 @@ body::after {
   position: absolute; left: 0; right: 0; bottom: 0;
   padding: 0.4rem 0.6rem;
   font-size: var(--text-xs);
-  color: var(--color-text);
-  background: linear-gradient(to top, rgba(10,10,11,0.85), transparent);
+  color: var(--bsp-text);
+  background: linear-gradient(to top, color-mix(in srgb, var(--bsp-bg) 85%, transparent), transparent);
   text-align: left;
   opacity: 0; transition: opacity var(--duration-fast) var(--ease-standard);
 }
@@ -1388,7 +1433,7 @@ body::after {
 /* CTA */
 .bsp-cta {
   display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;
-  border-top: 1px solid var(--color-border-sub);
+  border-top: 1px solid var(--bsp-border-sub);
   padding-top: clamp(2rem, 5vw, 3rem);
 }
 

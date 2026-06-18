@@ -28,6 +28,15 @@ export interface ProposalImage {
   status: ProposalStatus;
 }
 
+// Proposal-level color palette option. Approved palettes drive the client-page
+// theme + the palette toggle (see palette-theme.ts).
+export interface ProposalPalette {
+  id: string; // stable slug, e.g. "nokturno"
+  name: string;
+  colors: string[]; // 4–6 hex
+  status: ProposalStatus;
+}
+
 export interface ProposalBrief {
   linkedin?: string;
   website?: string;
@@ -42,6 +51,7 @@ export interface ProposalRecord {
   brief: ProposalBrief;
   research: string; // markdown
   concepts: ProposalConcept[];
+  palettes: ProposalPalette[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;
@@ -63,6 +73,7 @@ export interface ProposalSyncPayload {
   brief: ProposalBrief;
   research: string;
   concepts: ProposalConcept[];
+  palettes: ProposalPalette[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;
@@ -75,6 +86,7 @@ export interface ProposalPublic {
   name: string;
   locale: ProposalLocale;
   concepts: ProposalConcept[];
+  palettes: ProposalPalette[];
   moodboard: ProposalImage[];
   poses: ProposalImage[];
   coverImageId?: string;

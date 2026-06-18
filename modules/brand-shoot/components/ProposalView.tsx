@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 import type { ProposalPublic, ProposalConcept } from "@/modules/brand-shoot/lib/types";
 import { ProposalGallery } from "./ProposalGallery";
+import { ProposalThemer } from "./ProposalThemer";
 
 function ConceptBlock({
   concept,
@@ -77,7 +78,7 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
   };
 
   return (
-    <main className="bsp">
+    <ProposalThemer palettes={proposal.palettes}>
       <header className="bsp-hero">
         {cover && (
           <Image
@@ -129,6 +130,6 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
           </Link>
         </section>
       </div>
-    </main>
+    </ProposalThemer>
   );
 }

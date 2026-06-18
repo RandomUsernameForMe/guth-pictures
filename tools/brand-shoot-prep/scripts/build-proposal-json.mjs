@@ -98,6 +98,30 @@ async function imageList(dir) {
   return files.map((f) => ({ file: f, note: notes[f] || "" }));
 }
 
+// Parse a "## Color Palettes" (or "## Palety") section: lines like
+//   - **Nokturno:** `#0c0d0f` `#3a3d42` `#8a8d92` `#c0392b` `#e6e4df`
+function parsePalettes(md, statusMap) {
+  const lines = (md || "").split("\n");
+  let inSec = false;
+  const out = [];
+  for (const line of lines) {
+    const h = line.match(/^##\s+(.*)$/);
+    if (h) {
+      inSec = /color palettes|palety|barevn/i.test(h[1]);
+      continue;
+    }
+    if (!inSec) continue;
+    const m = line.match(/^\s*-\s*\*\*([^:*]+):\*\*\s*(.+)$/);
+    if (!m) continue;
+    const colors = (m[2].match(/#[0-9a-fA-F]{6}/g) || []).map((c) => c.toLowerCase());
+    if (!colors.length) continue;
+    const name = clean(m[1]);
+    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `palette-${out.length + 1}`;
+    out.push({ id, name, colors, status: statusMap?.[id] || "pending" });
+  }
+  return out;
+}
+
 export async function buildProposalJson(dir) {
   dir = resolve(dir);
   const slug = basename(dir);
@@ -129,6 +153,8 @@ export async function buildProposalJson(dir) {
   const applyStatus = (items, statusMap) =>
     items.map((it) => ({ ...it, status: statusMap?.[it.file] || "pending" }));
 
+  const palettes = parsePalettes(approachesMd, approvals?.palettes);
+
   const moodboard = applyStatus(await imageList(join(dir, "assets", "moodboard")), approvals?.moodboard);
   const poses = applyStatus(await imageList(join(dir, "assets", "poses")), approvals?.poses);
 
@@ -144,6 +170,7 @@ export async function buildProposalJson(dir) {
     },
     research: researchMd,
     concepts: parsedConcepts,
+    palettes,
     moodboard,
     poses,
   };
@@ -160,7 +187,7 @@ async function cli() {
   await writeFile(outPath, JSON.stringify(proposal, null, 2));
   console.log(`✓ proposal.json written: ${outPath}`);
   console.log(
-    `  concepts ${proposal.concepts.length} · moodboard ${proposal.moodboard.length} · poses ${proposal.poses.length} · locale ${proposal.locale}`
+    `  concepts ${proposal.concepts.length} · palettes ${proposal.palettes.length} · moodboard ${proposal.moodboard.length} · poses ${proposal.poses.length} · locale ${proposal.locale}`
   );
 }
 

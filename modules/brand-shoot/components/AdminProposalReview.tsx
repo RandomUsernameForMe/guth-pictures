@@ -9,6 +9,7 @@ import type {
   ProposalStatus,
   ProposalImage,
   ProposalConcept,
+  ProposalPalette,
 } from "@/modules/brand-shoot/lib/types";
 
 type SafeProposal = Omit<ProposalRecord, "passwordHash">;
@@ -36,6 +37,7 @@ export function AdminProposalReview({
 }) {
   const router = useRouter();
   const [concepts, setConcepts] = useState(proposal.concepts);
+  const [palettes, setPalettes] = useState(proposal.palettes ?? []);
   const [moodboard, setMoodboard] = useState(proposal.moodboard);
   const [poses, setPoses] = useState(proposal.poses);
   const [finalized, setFinalized] = useState(proposal.finalized);
@@ -71,6 +73,12 @@ export function AdminProposalReview({
     const status = next[c.status];
     setConcepts((prev) => prev.map((x) => (x.id === c.id ? { ...x, status } : x)));
     await patch({ action: "approvals", patch: { concepts: { [c.id]: status } } });
+  }
+
+  async function togglePalette(p: ProposalPalette) {
+    const status = next[p.status];
+    setPalettes((prev) => prev.map((x) => (x.id === p.id ? { ...x, status } : x)));
+    await patch({ action: "approvals", patch: { palettes: { [p.id]: status } } });
   }
 
   async function toggleImage(
@@ -221,6 +229,37 @@ export function AdminProposalReview({
             </button>
           ))}
         </div>
+      </section>
+
+      {/* Palettes */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Palety</h2>
+        {palettes.length === 0 ? (
+          <p className="text-sm text-gray-600">Žádné palety.</p>
+        ) : (
+          <div className="space-y-2">
+            {palettes.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => togglePalette(p)}
+                disabled={busy}
+                className={`w-full text-left border px-4 py-3 transition-colors ${badge[p.status]}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-medium flex items-center gap-2">
+                    <span className="inline-flex rounded overflow-hidden border border-white/10">
+                      {p.colors.slice(0, 6).map((c, i) => (
+                        <span key={i} style={{ background: c, width: 18, height: 18 }} />
+                      ))}
+                    </span>
+                    {mark[p.status]} {p.name}
+                  </span>
+                  <span className="text-xs uppercase">{p.status}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Moodboard */}

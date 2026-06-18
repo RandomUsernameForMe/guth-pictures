@@ -72,10 +72,25 @@ the research (don't reuse generic templates — tie each to specific findings). 
 rationale (why it fits this client), mood, **color palette (hex)**, wardrobe, location /
 setting, lighting setup, shot list, and pose direction.
 
-Write `clients/<slug>/approaches.md`.
+Then add a **`## Color Palettes`** section to the same file: **4–6 distinct named palettes**
+(brand-level, 4–6 hex each), grounded in the research and reconciling the client's existing brand
+colors. These are the **client-toggle palettes** — on the web the client switches between the
+*approved* ones and the proposal page recolors live (background/surfaces/text/accent derived from
+the palette). So make them genuinely different in mood (e.g. a dark editorial, a warm light, a
+high-contrast graphic). Format each line exactly:
 
-**Decision point 1:** present the three concepts briefly and ask which to board.
-Default to all three if the user doesn't pick.
+```
+## Color Palettes
+- **Nokturno:** `#0c0d0f` `#3a3d42` `#8a8d92` `#c0392b` `#e6e4df`
+- **Sépie:** `#1c1b19` `#5b5347` `#a8967a` `#e7e1d6` `#b23a2e`
+```
+
+Write `clients/<slug>/approaches.md` (concepts + the Color Palettes section).
+
+**Decision point 1:** present the three concepts + the palettes briefly and ask which to board
+and which palettes to keep. Default to all three concepts if the user doesn't pick. Palette
+approval (like concept/image approval) ultimately happens in the web admin; `approvals.json` may
+carry a `palettes: { <palette-id>: "approved" }` map (id = kebab-case of the palette name).
 
 ## Phase 4 — Moodboard (web refs + AI originals)
 

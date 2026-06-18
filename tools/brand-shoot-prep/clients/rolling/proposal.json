@@ -1,0 +1,290 @@
+{
+  "slug": "rolling",
+  "name": "Rolling",
+  "locale": "cs",
+  "brief": {
+    "website": "https://rolling.cz",
+    "notes": "Brand / promo shoot prep pro spolek pořádající larpy a zážitkové",
+    "date": "2026-06-18"
+  },
+  "research": "# Research — Rolling\n\n_Datum: 2026-06-18 · Zdroje: rolling.cz, Litoměřický deník, weby jednotlivých larpů. LinkedIn neuveden._\n\n## Kdo jsou (2–3 věty)\nRolling je **spolek pro rozvoj zážitkových vzdělávacích her** založený v listopadu 2013.\nPořádá larpy (live-action role-play) a zážitkové akce, které účastníkům umožní prožít situace,\nhistorické i fikční, jež v běžném životě zažít nelze. Sídlí v **Terezíně** v části bývalého\nvojenského špitálu, který slouží jako sklad i herní prostor.\n\n## Profil\n- **Typ:** neziskový spolek / komunita nadšenců (ne komerční firma).\n- **Sídlo / prostředí:** Terezín, bývalý vojenský špitál — syrové historické interiéry,\n  chodby, sály, cihla, omítka. Silné „place identity\".\n- **Rozsah:** ~1 500 hráčů ročně, z toho ~300 ze zahraničí (mezinárodní přesah).\n- **Historie:** 10 let činnosti (výročí 2024), stabilní autorská scéna.\n\n## Co dělají a pro koho\n- Výpravné larpy (např. **Čistky** — běhy CZ i mezinárodní, duben 2027; **Cave Canem** — 91\n  hráčů; **Belle Epoque**; **Génie noci**; **Zpěvy rytířské**).\n- Vzdělávací hry do škol, půjčování vybavení a podpora dalších autorů.\n- Festival **Vizita** — divadlo, performance, punk-rock koncerty v prostorách špitálu.\n- **Publikum:** hráči (CZ i zahraniční), školy a instituce, grantoví partneři, nově příchozí\n  zvědavci. Komunitní, nadšenecký tón — ne korporát.\n\n## Hlasitost značky / tón\n- Sebepopis: „skupina nadšenců\", „zážitky, co se v běžném životě zažít nedají\".\n- Tón: nadšený, otevřený, vzdělávací, lidský; ne uhlazený marketing.\n\n## Současná vizuální identita\n- **Logo / barvy:** černobílé, monochromatické; čistý sans-serif.\n- **Fotky na webu:** dokumentární záběry hráčů v kostýmech a v charakteru — atmosférické,\n  immerzivní, situační. Funguje autenticita; chybí jednotná, „hero\" kvalita pro web/granty.\n- **Co jde / co drhne:** silná atmosféra a prostředí = aktivum; nejednotnost a chybějící\n  reprezentativní portréty komunity i jasné „brand\" záběry = mezera.\n\n## Konkurenční / kategoriální krajina\n- Larpová fotoscéna v ČR (vč. Guth Pictures) = rychlé světlo, pohyb, atmosféra, reportáž.\n- Vizuální normy kategorie: tmavé, atmosférické, filmové; riziko = chaotické, špatně\n  nasvícené záběry. **Mezera k využití:** kombinace syrové dokumentární energie s\n  promyšlenou kompozicí a světlem → použitelné hero/PR vizuály bez ztráty autenticity.\n\n## Signály a recency\n- 10 let (2024), festival Vizita v terezínském špitále; Čistky naplánované na duben 2027 →\n  prostor připravit reprezentativní vizuál včas (web, granty, nábor hráčů a dobrovolníků).\n\n## Vizuální klíčová slova (pro boardy)\n**syrové · atmosférické · filmové · komunitní · historické prostředí**\n",
+  "concepts": [
+    {
+      "id": "A",
+      "title": "Uvnitř hry",
+      "pitch": "Filmová dokumentaristika přímo z běhu larpu — hráči v charakteru, plná atmosféra.",
+      "why": "Rolling staví na zážitku, „co se v běžném životě zažít nedá\" (research: hlas značky); nejsilnějším aktivem jsou immerzivní momenty v kostýmech a syrovém prostředí špitálu.",
+      "mood": "syrové, filmové, napjaté, opravdové.",
+      "palette": [
+        "#0e0d0c",
+        "#2a2622",
+        "#6b5b4a",
+        "#b08d57",
+        "#e8e2d6"
+      ],
+      "wardrobe": "vlastní herní kostýmy hráčů — dobové, obnošené, autentické; žádné moderní logo.",
+      "location": "interiéry bývalého terezínského špitálu během hry — chodby, sály, cihla a omítka. Záloha: nasvícený zákoutí/sklad s rekvizitami.",
+      "lighting": "dostupné a praktické světlo (svíčky, lampy, okna), jemně doplněné; tmavé, kontrastní, filmové — ne plochý blesk.",
+      "shotList": [
+        "detail tváře v charakteru, oční kontakt",
+        "¾ postava v akci/gestu",
+        "skupinová scéna u stolu/ohně",
+        "ruce + rekvizita (dopis, zbraň, mince)",
+        "silueta v chodbě proti světlu",
+        "široký atmosférický záběr sálu s hráči"
+      ],
+      "poseDirection": "nehrané, v charakteru; přirozená gesta, mikrovýrazy nad pózováním; pohyb a interakce, ne strnulost.",
+      "status": "pending"
+    },
+    {
+      "id": "B",
+      "title": "Tváře komunity",
+      "pitch": "Reprezentativní portréty hráčů, autorů a dobrovolníků — lidská tvář spolku.",
+      "why": "publikum tvoří komunita (CZ i ~300 zahraničních hráčů ročně) + grantoví partneři a noví zájemci (research: publikum); chybí jednotné portréty „o nás\" pro web a granty.",
+      "mood": "lidské, hrdé, otevřené, soudržné.",
+      "palette": [
+        "#121316",
+        "#2c2f36",
+        "#7d828c",
+        "#c9b48a",
+        "#eceae6"
+      ],
+      "wardrobe": "mix — část v kostýmu, část civilně ale jednotně (tmavé, jednoduché); důraz na výraz.",
+      "location": "prostředí špitálu jako pozadí (cihla, okna, chodby) — kontext bez rušení.",
+      "lighting": "měkký řízený klíč od okna nebo softboxu + jemný rim; čisté, vyrovnané, s mírným kontrastem pro důstojnost.",
+      "shotList": [
+        "klasický portrét, přímý pohled",
+        "¾ s rukama, sebejisté",
+        "dvojice/triáda organizátorů",
+        "skupinový portrét komunity",
+        "portrét „v rolích\" vs. „civilně\" (diptych)",
+        "hráč v prostředí špitálu, prostor kolem"
+      ],
+      "poseDirection": "vzpřímené, uvolněné držení; otevřená ramena, klidný přímý kontakt; opravdový výraz místo nucených úsměvů.",
+      "status": "approved"
+    },
+    {
+      "id": "C",
+      "title": "Místo a zákulisí",
+      "pitch": "Bývalý špitál jako kulisa — architektura, rekvizity, příprava a značka Rolling.",
+      "why": "Terezínský špitál je silné „place identity\" a dějiště festivalu Vizita (research: prostředí, signály); záběry místa, příprav a detailů tvoří značku a brand-world pro web i propagaci.",
+      "mood": "atmosférické, výpravné, tajemné, řemeslné.",
+      "palette": [
+        "#0c0d0f",
+        "#3a3d42",
+        "#8a8d92",
+        "#c0392b",
+        "#e6e4df"
+      ],
+      "wardrobe": "spíš bez lidí nebo s figurou jako škálou; rekvizity, kostýmy na ramínkách, detaily.",
+      "location": "architektura špitálu — chodby, světlo z oken, sklad rekvizit, zákulisí příprav scény. Negativní prostor pro text/overlay.",
+      "lighting": "přirozené ambientní + jeden praktický akcent; filmové, s mlhou/prachem ve světle.",
+      "shotList": [
+        "široká architektura chodby s linkami a negativním prostorem",
+        "detail rekvizit a kostýmů",
+        "příprava scény / ruce v práci",
+        "okno se světlem a prachem",
+        "figura v měřítku prostoru (silueta)",
+        "brandový záběr s místem pro logo/quote"
+      ],
+      "poseDirection": "pokud figura, pak jako prvek kompozice — silueta, pohyb, měřítko; jinak zátiší a prostor.",
+      "status": "pending"
+    }
+  ],
+  "palettes": [
+    {
+      "id": "nokturno",
+      "name": "Nokturno",
+      "colors": [
+        "#0c0d0f",
+        "#26282d",
+        "#7c7f86",
+        "#b08d57",
+        "#e6e4df"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "cihla-a-v-pno",
+      "name": "Cihla a vápno",
+      "colors": [
+        "#1c1714",
+        "#6e4a3a",
+        "#a8967a",
+        "#d9ccb8",
+        "#f0ebe2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "punk",
+      "name": "Punk",
+      "colors": [
+        "#0a0a0b",
+        "#2b2b2e",
+        "#9a9a9e",
+        "#c0392b",
+        "#f2f0eb"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "mlha",
+      "name": "Mlha",
+      "colors": [
+        "#10141a",
+        "#2c3742",
+        "#6b7a86",
+        "#9fb2bd",
+        "#e8eef2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "pergamen",
+      "name": "Pergamen",
+      "colors": [
+        "#2a2620",
+        "#6b5d45",
+        "#a89878",
+        "#d8cdb4",
+        "#f5f0e4"
+      ],
+      "status": "approved"
+    }
+  ],
+  "moodboard": [
+    {
+      "file": "0001.jpg",
+      "note": "prostředí, tlumené světlo od okna",
+      "status": "pending"
+    },
+    {
+      "file": "0002.jpg",
+      "note": "tmavý interiér, atmosféra",
+      "status": "pending"
+    },
+    {
+      "file": "0003.jpg",
+      "note": "portrét v šeru, kontext prostoru",
+      "status": "pending"
+    },
+    {
+      "file": "0004.jpg",
+      "note": "okno + měkké směrové světlo",
+      "status": "pending"
+    },
+    {
+      "file": "0005.jpg",
+      "note": "environmentální portrét, syrový prostor",
+      "status": "pending"
+    },
+    {
+      "file": "0006.jpg",
+      "note": "kostým + přirozené světlo",
+      "status": "pending"
+    },
+    {
+      "file": "0007.jpg",
+      "note": "dobový portrét u okna",
+      "status": "pending"
+    },
+    {
+      "file": "0008.jpg",
+      "note": "výraz v kostýmu, detail",
+      "status": "pending"
+    },
+    {
+      "file": "0009.jpg",
+      "note": "role vs. civil, charakter",
+      "status": "pending"
+    },
+    {
+      "file": "0010.jpg",
+      "note": "skupina komunity, candid",
+      "status": "pending"
+    },
+    {
+      "file": "0011.jpg",
+      "note": "interakce komunity",
+      "status": "pending"
+    },
+    {
+      "file": "0012.jpg",
+      "note": "skupinový portrét v interiéru",
+      "status": "pending"
+    },
+    {
+      "file": "0013.jpg",
+      "note": "dvojice, blízkost",
+      "status": "pending"
+    },
+    {
+      "file": "0014.jpg",
+      "note": "skupina, společná energie",
+      "status": "pending"
+    }
+  ],
+  "poses": [
+    {
+      "file": "0001.jpg",
+      "note": "polopostava, sebejisté, u zdi",
+      "status": "pending"
+    },
+    {
+      "file": "0002.jpg",
+      "note": "přímý pohled, ruce v bok",
+      "status": "pending"
+    },
+    {
+      "file": "0003.jpg",
+      "note": "¾ postava, klidná jistota",
+      "status": "pending"
+    },
+    {
+      "file": "0004.jpg",
+      "note": "ramena otevřená, přímý kontakt",
+      "status": "pending"
+    },
+    {
+      "file": "0005.jpg",
+      "note": "opřený o cihlovou zeď",
+      "status": "pending"
+    },
+    {
+      "file": "0006.jpg",
+      "note": "civilní jistota, půlportrét",
+      "status": "pending"
+    },
+    {
+      "file": "0007.jpg",
+      "note": "opřený o zeď, uvolněně",
+      "status": "pending"
+    },
+    {
+      "file": "0008.jpg",
+      "note": "stoj, váha na jedné noze",
+      "status": "pending"
+    },
+    {
+      "file": "0009.jpg",
+      "note": "ruce v kapsách, klid",
+      "status": "pending"
+    },
+    {
+      "file": "0010.jpg",
+      "note": "pohled stranou, přemýšlivý",
+      "status": "pending"
+    },
+    {
+      "file": "0011.jpg",
+      "note": "postava v prostoru, měřítko",
+      "status": "pending"
+    },
+    {
+      "file": "0012.jpg",
+      "note": "opřený, klidná energie",
+      "status": "pending"
+    }
+  ]
+}

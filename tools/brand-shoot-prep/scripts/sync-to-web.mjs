@@ -120,6 +120,7 @@ async function main() {
     brief: proposal.brief,
     research: proposal.research,
     concepts: proposal.concepts,
+    palettes: proposal.palettes ?? [],
     moodboard,
     poses,
     coverImageId: cover,

@@ -3,6 +3,7 @@ import type {
   ProposalSyncPayload,
   ProposalConcept,
   ProposalImage,
+  ProposalPalette,
   ProposalStatus,
 } from "@/modules/brand-shoot/lib/types";
 import { NextRequest, NextResponse } from "next/server";
@@ -42,6 +43,18 @@ function parseConcept(v: unknown): ProposalConcept | null {
   };
 }
 
+function parsePalette(v: unknown): ProposalPalette | null {
+  if (!v || typeof v !== "object") return null;
+  const p = v as Record<string, unknown>;
+  if (!isStr(p.id) || !isStrArr(p.colors) || !p.colors.length) return null;
+  return {
+    id: p.id,
+    name: isStr(p.name) ? p.name : p.id,
+    colors: p.colors,
+    status: isStatus(p.status) ? p.status : "pending",
+  };
+}
+
 function parseImage(v: unknown): ProposalImage | null {
   if (!v || typeof v !== "object") return null;
   const i = v as Record<string, unknown>;
@@ -76,6 +89,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const concepts = (Array.isArray(raw.concepts) ? raw.concepts : [])
     .map(parseConcept)
     .filter(Boolean) as ProposalConcept[];
+  const palettes = (Array.isArray(raw.palettes) ? raw.palettes : [])
+    .map(parsePalette)
+    .filter(Boolean) as ProposalPalette[];
   const moodboard = (Array.isArray(raw.moodboard) ? raw.moodboard : [])
     .map(parseImage)
     .filter(Boolean) as ProposalImage[];
@@ -95,6 +111,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     },
     research: isStr(raw.research) ? raw.research : "",
     concepts,
+    palettes,
     moodboard,
     poses,
     coverImageId: isStr(raw.coverImageId) ? raw.coverImageId : undefined,
