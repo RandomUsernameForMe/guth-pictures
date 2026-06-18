@@ -59,9 +59,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
 
-      <AnimatedSection glow className="bg-[var(--color-bg)]">
+      <AnimatedSection className="bg-[var(--color-bg)]">
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
-          <div className="hp-card grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
             {/* Profilová fotka */}
             {images.profile && (
               <div className="aspect-[4/5] relative overflow-hidden">
@@ -78,6 +78,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             )}
             {/* Bio */}
             <div>
+              <div className="hp-eyebrow">01</div>
               <h2 className="text-4xl font-bold">{content["o-mne"].title}</h2>
               <p className="mt-2 text-lg text-[var(--color-text-muted)]">{content["o-mne"].subtitle}</p>
               <p className="mt-8 text-[var(--color-text-muted)] text-lg leading-relaxed">{content["o-mne"].bio}</p>
@@ -92,8 +93,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       </AnimatedSection>
 
-      <AnimatedSection glow className="bg-[var(--color-bg)]">
+      <AnimatedSection className="bg-[var(--color-bg)]">
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
+          <div className="hp-eyebrow">02</div>
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <ServiceCards
@@ -118,7 +120,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       </AnimatedSection>
 
-      <AnimatedSection glow className="bg-[var(--color-bg)]">
+      <AnimatedSection className="bg-[var(--color-bg)]">
         <LightTesterPromo
           label={t("light-tester-promo.label")}
           title={content.lightTesterPromo.title}
@@ -128,8 +130,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
       </AnimatedSection>
 
-      <AnimatedSection glow className="bg-[var(--color-bg)]">
+      <AnimatedSection className="bg-[var(--color-bg)]">
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
+          <div className="hp-eyebrow">03</div>
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
           <ContactForm />
