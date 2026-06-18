@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/modules/homepage/components/HeroSection";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { HomeAurora } from "@/components/HomeAurora";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { LightTesterPromo } from "@/modules/homepage/components/LightTesterPromo";
@@ -49,6 +50,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <main className="-mt-16">
+      <HomeAurora />
       <HeroSection
         title={content.home.title}
         subtitle={content.home.subtitle}
@@ -59,7 +61,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
 
-      <AnimatedSection className="bg-[var(--color-bg)]">
+      <AnimatedSection>
         <section id="o-mne" className="max-w-4xl mx-auto px-6 py-32">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
             {/* Profilová fotka */}
@@ -93,7 +95,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       </AnimatedSection>
 
-      <AnimatedSection className="bg-[var(--color-bg)]">
+      <AnimatedSection>
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <div className="hp-eyebrow">02</div>
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
@@ -120,7 +122,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       </AnimatedSection>
 
-      <AnimatedSection className="bg-[var(--color-bg)]">
+      <AnimatedSection>
         <LightTesterPromo
           label={t("light-tester-promo.label")}
           title={content.lightTesterPromo.title}
@@ -130,7 +132,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
       </AnimatedSection>
 
-      <AnimatedSection className="bg-[var(--color-bg)]">
+      <AnimatedSection>
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
           <div className="hp-eyebrow">03</div>
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>

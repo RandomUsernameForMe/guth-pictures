@@ -1482,6 +1482,17 @@ body::after {
   .bsp-spec-row { grid-template-columns: 1fr; gap: 0.15rem; }
 }
 
+/* ── Homepage continuous aurora (one fixed layer, no per-section seams) ── */
+.home-aurora {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(50vw 50vw at 18% 22%, color-mix(in srgb, var(--color-accent) 20%, transparent), transparent 68%),
+    radial-gradient(46vw 46vw at 85% 55%, color-mix(in srgb, #8a5a2b 18%, transparent), transparent 68%),
+    radial-gradient(55vw 55vw at 60% 90%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 70%);
+  filter: blur(60px) saturate(1.05);
+  opacity: 0.5;
+}
+
 /* ── Homepage editorial accents ───────────────────────────────────── */
 .hp-eyebrow {
   display: flex; align-items: center; gap: 0.75rem;
