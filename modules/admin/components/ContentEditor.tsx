@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { cloudinaryUrl, type GalleryPhoto } from "@/lib/cloudinary-utils";
 import type { ContentData, SiteImages, Testimonial } from "@/modules/admin/lib/content";
 import type { PricingPackage } from "@/lib/types";
 
@@ -22,7 +22,7 @@ const emptyContent = (): ContentData => ({
   testimonials: [],
 });
 
-export function ContentEditor() {
+export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
   const router = useRouter();
   const [locale, setLocale] = useState<Locale>("cs");
   const [data, setData] = useState<Record<Locale, ContentData>>({
@@ -320,6 +320,7 @@ export function ContentEditor() {
           <TestimonialEditor
             testimonials={current.testimonials ?? []}
             onChange={(items) => patch((d) => { d.testimonials = items; })}
+            photos={photos}
           />
         </Section>
 
@@ -467,12 +468,15 @@ function PackageEditor({
 function TestimonialEditor({
   testimonials,
   onChange,
+  photos,
 }: {
   testimonials: Testimonial[];
   onChange: (items: Testimonial[]) => void;
+  photos: GalleryPhoto[];
 }) {
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [errorId, setErrorId] = useState<string | null>(null);
+  const [pickerOpenId, setPickerOpenId] = useState<string | null>(null);
 
   function update(i: number, updater: (t: Testimonial) => void) {
     const next = testimonials.map((t, idx) => {
@@ -555,8 +559,17 @@ function TestimonialEditor({
             ) : (
               <span className="text-xs text-gray-500">Bez fotky</span>
             )}
+            {photos.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setPickerOpenId((cur) => (cur === (t.id ?? String(i)) ? null : (t.id ?? String(i))))}
+                className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30"
+              >
+                {pickerOpenId === (t.id ?? String(i)) ? "Zavřít výběr" : "Vybrat z fotek"}
+              </button>
+            )}
             <label className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30 cursor-pointer">
-              {uploadingId === (t.id ?? String(i)) ? "Nahrávám…" : "Vybrat fotku"}
+              {uploadingId === (t.id ?? String(i)) ? "Nahrávám…" : "Nahrát novou"}
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
@@ -582,6 +595,23 @@ function TestimonialEditor({
               <span className="text-xs text-red-400">Nahrávání selhalo</span>
             )}
           </div>
+          {pickerOpenId === (t.id ?? String(i)) && photos.length > 0 && (
+            <div className="grid grid-cols-6 sm:grid-cols-8 gap-2 mt-2 max-h-64 overflow-y-auto border border-white/10 p-2">
+              {photos.map((p) => {
+                const selected = t.photo === p.publicId;
+                return (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={p.publicId}
+                    src={cloudinaryUrl(p.publicId, "w_80,h_80,c_fill,g_face,q_auto,f_auto")}
+                    alt=""
+                    onClick={() => { update(i, (x) => { x.photo = p.publicId; }); setPickerOpenId(null); }}
+                    className={`w-full aspect-square object-cover cursor-pointer transition-opacity hover:opacity-100 ${selected ? "ring-2 ring-white opacity-100" : "opacity-70"}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       ))}
       <button
