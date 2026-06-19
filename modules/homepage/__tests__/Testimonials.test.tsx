@@ -43,4 +43,16 @@ describe("Testimonials", () => {
     expect(imgs).toHaveLength(1);
     expect(imgs[0]).toHaveAttribute("alt", "Jana");
   });
+
+  it("renders role only when present", () => {
+    const { rerender } = render(
+      <Testimonials testimonials={[withPhoto]} locale="cs" eyebrow="Reference" title="Co říkají klienti" />
+    );
+    expect(screen.getByText("Svatba")).toBeInTheDocument();
+
+    rerender(
+      <Testimonials testimonials={[noPhoto]} locale="cs" eyebrow="Reference" title="Co říkají klienti" />
+    );
+    expect(screen.queryByText("Svatba")).not.toBeInTheDocument();
+  });
 });

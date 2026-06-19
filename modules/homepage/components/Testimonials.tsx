@@ -16,7 +16,7 @@ export function Testimonials({ testimonials, locale, eyebrow, title }: Props) {
   return (
     <section id="reference" className="max-w-4xl mx-auto px-6 py-32">
       <div className="hp-eyebrow">{eyebrow}</div>
-      <h2 className="text-4xl font-bold">{title}</h2>
+      <h2 className="text-4xl font-bold text-[var(--color-text)]">{title}</h2>
 
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8">
         {testimonials.map((t) => (
@@ -25,7 +25,9 @@ export function Testimonials({ testimonials, locale, eyebrow, title }: Props) {
             className="relative border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 flex flex-col"
           >
             <blockquote className="text-[var(--color-text-muted)] text-lg leading-relaxed">
+              <span aria-hidden="true" className="text-[var(--color-text-ghost)]">&#8220;</span>
               {t.quote}
+              <span aria-hidden="true" className="text-[var(--color-text-ghost)]">&#8221;</span>
             </blockquote>
             <figcaption className="mt-6 flex items-center gap-4">
               {t.photo && (
