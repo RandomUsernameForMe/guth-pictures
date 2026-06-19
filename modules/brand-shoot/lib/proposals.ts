@@ -279,10 +279,12 @@ export function toPublicProposal(record: ProposalRecord): ProposalPublic {
     locale: record.locale,
     summary: record.summary,
     intro: record.intro,
-    // Approved concepts only; ship just the one admin-chosen palette (fallback: first approved).
+    // Approved concepts only; ship just the one admin-chosen palette. The admin's pick IS the
+    // approval signal (there's no separate palette-approve UI), so honor chosenPaletteId
+    // regardless of palette status; fall back to first approved, then first available.
     concepts: approved(record.concepts).map((c) => {
-      const pals = approved(c.palettes ?? []);
-      const chosen = pals.find((p) => p.id === c.chosenPaletteId) ?? pals[0];
+      const all = c.palettes ?? [];
+      const chosen = all.find((p) => p.id === c.chosenPaletteId) ?? approved(all)[0] ?? all[0];
       return {
         ...c,
         palettes: chosen ? [chosen] : [],
