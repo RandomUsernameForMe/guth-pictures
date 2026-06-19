@@ -84,6 +84,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 280px"
                   />
+                  {/* Accent duotone — matches hero triptych panels */}
+                  <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
+                  <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "soft-light", opacity: 0.24 }} />
                 </div>
               </div>
             )}
