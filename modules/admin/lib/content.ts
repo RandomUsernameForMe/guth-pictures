@@ -11,6 +11,14 @@ export type ServiceContent = {
   note?: string;
 };
 
+export type Testimonial = {
+  id: string;
+  quote: string;
+  author: string;
+  role?: string;   // optional — e.g. "Svatba, Praha" / job title
+  photo?: string;  // optional — Cloudinary public ID
+};
+
 export type ContentData = {
   home: { title: string; subtitle: string };
   "o-mne": { title: string; subtitle: string; bio: string };
@@ -19,6 +27,7 @@ export type ContentData = {
     weddings: ServiceContent;
   };
   lightTesterPromo: { title: string; desc: string };
+  testimonials: Testimonial[];
 };
 
 export type SiteImages = {
@@ -61,6 +70,7 @@ const defaults: Record<string, ContentData> = {
         note: "Možná záloha 30 % při rezervaci termínu.",
       },
     },
+    testimonials: [],
   },
   en: {
     home: {
@@ -96,10 +106,11 @@ const defaults: Record<string, ContentData> = {
         note: "30% deposit available when booking.",
       },
     },
+    testimonials: [],
   },
 };
 
-function normalizeContent(data: ContentData): ContentData {
+export function normalizeContent(data: ContentData): ContentData {
   const normalizeService = (svc: ServiceContent): ServiceContent => ({
     ...svc,
     packages: (svc.packages ?? []).map((pkg) => ({
@@ -114,6 +125,10 @@ function normalizeContent(data: ContentData): ContentData {
       portraits: normalizeService(data.sluzby.portraits),
       weddings: normalizeService(data.sluzby.weddings),
     },
+    testimonials: (data.testimonials ?? []).map((t) => ({
+      ...t,
+      id: t.id ?? crypto.randomUUID(),
+    })),
   };
 }
 
