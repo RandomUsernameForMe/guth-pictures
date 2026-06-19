@@ -156,7 +156,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text)]">{t("midCta.title")}</h2>
             <a
               href="#kontakt"
-              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity inline-flex items-center gap-2"
+              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
             >
               {t("midCta.cta")} <span aria-hidden="true">→</span>
             </a>
