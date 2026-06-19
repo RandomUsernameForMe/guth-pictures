@@ -43,7 +43,7 @@ function isTestimonials(v: unknown): boolean {
     const o = t as Record<string, unknown>;
     if (typeof o.quote !== "string" || o.quote.length === 0 || o.quote.length > MAX_LONG) return false;
     if (typeof o.author !== "string" || o.author.length === 0 || o.author.length > MAX_SHORT) return false;
-    if (o.id !== undefined && typeof o.id !== "string") return false;
+    if (o.id !== undefined && (typeof o.id !== "string" || o.id.length > MAX_SHORT)) return false;
     if (o.role !== undefined && (typeof o.role !== "string" || o.role.length > MAX_SHORT)) return false;
     if (o.photo !== undefined && (typeof o.photo !== "string" || o.photo.length > MAX_SHORT)) return false;
     return true;
@@ -55,6 +55,7 @@ export function isValidContentData(d: unknown): d is ContentData {
   const o = d as Record<string, unknown>;
   if (!o.home || typeof o.home !== "object") return false;
   if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
+  if (!o.lightTesterPromo || typeof o.lightTesterPromo !== "object") return false;
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   if (!isTestimonials(o.testimonials)) return false;
   const s = o.sluzby as Record<string, unknown>;

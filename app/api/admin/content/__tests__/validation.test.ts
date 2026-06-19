@@ -38,4 +38,28 @@ describe("isValidContentData — testimonials", () => {
     d.testimonials = "nope";
     expect(isValidContentData(d)).toBe(false);
   });
+
+  it("rejects a quote over the length limit", () => {
+    const d = valid() as Record<string, unknown>;
+    d.testimonials = [{ id: "1", quote: "x".repeat(2001), author: "Jana" }];
+    expect(isValidContentData(d)).toBe(false);
+  });
+
+  it("rejects an empty author", () => {
+    const d = valid() as Record<string, unknown>;
+    d.testimonials = [{ id: "1", quote: "ok", author: "" }];
+    expect(isValidContentData(d)).toBe(false);
+  });
+
+  it("rejects an oversized id", () => {
+    const d = valid() as Record<string, unknown>;
+    d.testimonials = [{ id: "x".repeat(201), quote: "ok", author: "Jana" }];
+    expect(isValidContentData(d)).toBe(false);
+  });
+
+  it("rejects data missing lightTesterPromo", () => {
+    const d = valid() as Record<string, unknown>;
+    delete d.lightTesterPromo;
+    expect(isValidContentData(d)).toBe(false);
+  });
 });
