@@ -72,6 +72,14 @@
     "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
     "cta": "Pojďme se domluvit"
   },
+  "testimonials": {
+    "eyebrow": "Reference",
+    "title": "Co říkají klienti"
+  },
+  "midCta": {
+    "title": "Máte v hlavě focení?",
+    "cta": "Ozvěte se"
+  },
   "blog": {
     "title": "Blog",
     "subtitle": "Zápisky z fotografického světa",
