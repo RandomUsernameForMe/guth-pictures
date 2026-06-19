@@ -135,6 +135,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </AnimatedSection>
 
       <AnimatedSection>
+        <section className="gp-hatch gp-hatch-accent border-y border-[var(--color-border-sub)]">
+          <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center gap-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text)]">{t("midCta.title")}</h2>
+            <a
+              href="#kontakt"
+              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
+            >
+              {t("midCta.cta")} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      <AnimatedSection>
         <Testimonials
           testimonials={content.testimonials}
           locale={locale}
@@ -151,20 +165,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           cta={t("light-tester-promo.cta")}
           locale={locale}
         />
-      </AnimatedSection>
-
-      <AnimatedSection>
-        <section className="gp-hatch gp-hatch-accent border-y border-[var(--color-border-sub)]">
-          <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center gap-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text)]">{t("midCta.title")}</h2>
-            <a
-              href="#kontakt"
-              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
-            >
-              {t("midCta.cta")} <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </section>
       </AnimatedSection>
 
       <AnimatedSection>
