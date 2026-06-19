@@ -1,0 +1,2780 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "mood-0001",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0001.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "calm"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "warm"
+        ]
+      },
+      "hash": "389b0efd397be5c2",
+      "note": "Tichá důvěra — warm editorial, soft side light",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1636486183541-83634a8dc9a7?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0001.jpg"
+    },
+    {
+      "id": "mood-0002",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0002.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "neutral-bg",
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "66d1e83db29a6c62",
+      "note": "Tichá důvěra — neutral background headshot",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1622556606088-bc1efb0aa588?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0002.jpg"
+    },
+    {
+      "id": "mood-0003",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0003.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "grounded"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "earthy"
+        ]
+      },
+      "hash": "81e1efee76b2bde3",
+      "note": "Tichá důvěra — earthy tones, calm",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1581961734938-c9c9e23da4c8?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0003.jpg"
+    },
+    {
+      "id": "mood-0004",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0004.jpg",
+      "tags": {
+        "emotion": [
+          "warm"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "warm",
+          "earthy"
+        ]
+      },
+      "hash": "b398c5322bd5b317",
+      "note": "Tichá důvěra — knit texture, warm grade",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1626311037561-45211047c991?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0004.jpg"
+    },
+    {
+      "id": "mood-0005",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0005.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "b97113f28191ef0c",
+      "note": "Tichá důvěra — 3/4 composed posture",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1532071596278-a2d5727ca1e4?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0005.jpg"
+    },
+    {
+      "id": "mood-0006",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0006.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "home",
+          "studio"
+        ],
+        "lighting": [
+          "soft",
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ]
+      },
+      "hash": "6f8e14e85ebcda5a",
+      "note": "Tichá důvěra — window soft key",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1558024827-77d9c45b783b?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0006.jpg"
+    },
+    {
+      "id": "mood-0007",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0007.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "relaxed"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "warm"
+        ]
+      },
+      "hash": "fdaaa6c6346cdd50",
+      "note": "Rozhovor — cozy interior daylight",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1700217300042-0e6cd2371d32?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0007.jpg"
+    },
+    {
+      "id": "mood-0008",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0008.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "friendly",
+          "engaged"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "warm"
+        ]
+      },
+      "hash": "cd5920769bf88e24",
+      "note": "Rozhovor — candid conversation warmth",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1722929606674-73c6e0bf7b17?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0008.jpg"
+    },
+    {
+      "id": "mood-0009",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0009.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "thoughtful"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural",
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "seated"
+      },
+      "hash": "ad97970ecbb979bc",
+      "note": "Rozhovor — seated by window",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1584527597654-4313b620f673?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0009.jpg"
+    },
+    {
+      "id": "mood-0010",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0010.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "relaxed"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural",
+          "bright"
+        ],
+        "palette": [
+          "earthy"
+        ]
+      },
+      "hash": "259d04e8f706f11c",
+      "note": "Rozhovor — plants, daylight, human",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1541508163021-1c718b1b0556?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0010.jpg"
+    },
+    {
+      "id": "mood-0011",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0011.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "53971bef70122c33",
+      "note": "Rozhovor — soft ambient interior",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1762552280778-11412eb10e96?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0011.jpg"
+    },
+    {
+      "id": "mood-0012",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0012.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "engaged",
+          "thoughtful"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "warm"
+        ]
+      },
+      "hash": "6404b96131e74069",
+      "note": "Rozhovor — present, empathic register",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1763477899299-912835fff556?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0012.jpg"
+    },
+    {
+      "id": "mood-0013",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0013.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "friendly"
+        ],
+        "lighting": [
+          "high-key",
+          "bright"
+        ],
+        "palette": [
+          "bright"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "676b0c50229effd8",
+      "note": "Otevřeno — bright high-key portrait",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1637153937988-48ed7d6ade32?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0013.jpg"
+    },
+    {
+      "id": "mood-0014",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0014.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "studio",
+          "neutral-bg"
+        ],
+        "lighting": [
+          "bright",
+          "high-key"
+        ],
+        "palette": [
+          "bright",
+          "monochrome"
+        ]
+      },
+      "hash": "a851fe4ad13d7594",
+      "note": "Otevřeno — clean minimal white space",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1649355422617-df9957b853a8?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0014.jpg"
+    },
+    {
+      "id": "mood-0015",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0015.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "approachable"
+        ],
+        "lighting": [
+          "bright"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "1625856d099ffe09",
+      "note": "Otevřeno — confident open posture",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1604772659841-a1612db7000f?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0015.jpg"
+    },
+    {
+      "id": "mood-0016",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0016.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "bright",
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ]
+      },
+      "hash": "6554ad33d947a69d",
+      "note": "Otevřeno — architectural lines, airy",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1543117309-70193586422c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0016.jpg"
+    },
+    {
+      "id": "mood-0017",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0017.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "engaged"
+        ],
+        "lighting": [
+          "natural",
+          "soft",
+          "bright"
+        ],
+        "palette": [
+          "neutral"
+        ]
+      },
+      "hash": "a2a5abe17dd8cded",
+      "note": "Otevřeno — daylight diffuse, forward",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1707374968449-09f6797cc283?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0017.jpg"
+    },
+    {
+      "id": "mood-0018",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0018.jpg",
+      "tags": {
+        "emotion": [
+          "playful"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "bright"
+        ],
+        "palette": [
+          "vibrant",
+          "bright"
+        ]
+      },
+      "hash": "85ecbb7f05f1e3c5",
+      "note": "Otevřeno — colorful subtle accent minimal",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1625570013648-c6db6905993d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/moodboard/0018.jpg"
+    },
+    {
+      "id": "pose-0001",
+      "kind": "pose",
+      "file": "poses/pose-0001.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "warm"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "068c5d0f3cd99879",
+      "note": "tight headshot — brada lehce dolů, vřelý pohled",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1762341124796-530c0085f7d8?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0001.jpg"
+    },
+    {
+      "id": "pose-0002",
+      "kind": "pose",
+      "file": "poses/pose-0002.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "warm"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "d600196e80df3390",
+      "note": "3/4 — ramena uvolněná, mírný náklon",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1577788474020-48fd7a603c17?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0002.jpg"
+    },
+    {
+      "id": "pose-0003",
+      "kind": "pose",
+      "file": "poses/pose-0003.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "engaged",
+          "thoughtful"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "seated"
+      },
+      "hash": "371ae1b0db8bdc3f",
+      "note": "vsedě — předklon, naslouchání",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1665224751641-8ea911ca2267?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0003.jpg"
+    },
+    {
+      "id": "pose-0004",
+      "kind": "pose",
+      "file": "poses/pose-0004.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "hands"
+      },
+      "hash": "8be0f2ba639f3ae4",
+      "note": "ruce — klidné gesto, detail",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1659800783158-ea91cfb283c4?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0004.jpg"
+    },
+    {
+      "id": "pose-0005",
+      "kind": "pose",
+      "file": "poses/pose-0005.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful",
+          "calm"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural",
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "e1fcb16718dfb85d",
+      "note": "u okna — světlo na tváři, profil",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1741605071896-e31fa2441819?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0005.jpg"
+    },
+    {
+      "id": "pose-0006",
+      "kind": "pose",
+      "file": "poses/pose-0006.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "warm"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "warm"
+        ],
+        "shot": "seated"
+      },
+      "hash": "d87a10ab103ab622",
+      "note": "vsedě v křesle, otevřené držení",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1701450706464-20a1376739bc?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0006.jpg"
+    },
+    {
+      "id": "pose-0007",
+      "kind": "pose",
+      "file": "poses/pose-0007.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "dynamic"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "235e9a3147dc9325",
+      "note": "gesto při řeči — jakoby vysvětluje",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1620409415692-920100aa0ce3?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0007.jpg"
+    },
+    {
+      "id": "pose-0008",
+      "kind": "pose",
+      "file": "poses/pose-0008.jpg",
+      "tags": {
+        "emotion": [
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "31ba63730efce13e",
+      "note": "3/4 vstoje, váha na zadní noze",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1707303051855-118478f68558?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0008.jpg"
+    },
+    {
+      "id": "pose-0009",
+      "kind": "pose",
+      "file": "poses/pose-0009.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "a75157e64696b4a2",
+      "note": "celá postava, sebevědomý postoj",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1614786269829-d24616faf56d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0009.jpg"
+    },
+    {
+      "id": "pose-0010",
+      "kind": "pose",
+      "file": "poses/pose-0010.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "confident"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "1caea4c1f6dff707",
+      "note": "vstoje opřená o stěnu, uvolnění",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1604904612715-47bf9d9bc670?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0010.jpg"
+    },
+    {
+      "id": "pose-0011",
+      "kind": "pose",
+      "file": "poses/pose-0011.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "3564a7c28f17158c",
+      "note": "celá postava, krok / lehký pohyb",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1696960190591-60d693f4d50d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0011.jpg"
+    },
+    {
+      "id": "pose-0012",
+      "kind": "pose",
+      "file": "poses/pose-0012.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "friendly",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "e13915a314db54ed",
+      "note": "ruce v kapsách, otevřený úsměv",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1637589267610-6c66fc2a086b?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0012.jpg"
+    },
+    {
+      "id": "pose-0013",
+      "kind": "pose",
+      "file": "poses/pose-0013.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "7fe9276f9617c837",
+      "note": "polocelek, ruce složené před tělem",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1758599543125-0a927f1d7a3b?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0013.jpg"
+    },
+    {
+      "id": "pose-0014",
+      "kind": "pose",
+      "file": "poses/pose-0014.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "472f79295083f9e4",
+      "note": "vstoje, pohled stranou, zamyšlení",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1736939666660-d4c776e0532c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0014.jpg"
+    },
+    {
+      "id": "pose-0015",
+      "kind": "pose",
+      "file": "poses/pose-0015.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "bold"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "9ff30155e573fdf6",
+      "note": "dynamický postoj, energie vpřed",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1759350075145-92fa877c632a?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "marketa-matejova/poses/0015.jpg"
+    },
+    {
+      "id": "mood-0019",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0019.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "thoughtful"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "low-key",
+          "natural",
+          "soft"
+        ],
+        "palette": [
+          "dark",
+          "muted"
+        ]
+      },
+      "hash": "98c233b04aba36fe",
+      "note": "prostředí, tlumené světlo od okna",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1759505041005-6c75a1399f4c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0001.jpg"
+    },
+    {
+      "id": "mood-0020",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0020.jpg",
+      "tags": {
+        "emotion": [
+          "intense",
+          "serene"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "dark",
+          "low-key",
+          "dramatic"
+        ],
+        "palette": [
+          "dark"
+        ]
+      },
+      "hash": "623f0f802fe3e67a",
+      "note": "tmavý interiér, atmosféra",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1761727074976-ea99983f8e0d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0002.jpg"
+    },
+    {
+      "id": "mood-0021",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0021.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful",
+          "intense"
+        ],
+        "lighting": [
+          "low-key",
+          "dark"
+        ],
+        "palette": [
+          "dark",
+          "muted"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "a9f041aa4feebc2f",
+      "note": "portrét v šeru, kontext prostoru",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1764016888075-7ecc2884b6ea?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0003.jpg"
+    },
+    {
+      "id": "mood-0022",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0022.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "soft",
+          "natural",
+          "rim"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "914e3eeb2ea2ada8",
+      "note": "okno + měkké směrové světlo",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1762127915984-b905f4210e95?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0004.jpg"
+    },
+    {
+      "id": "mood-0023",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0023.jpg",
+      "tags": {
+        "emotion": [
+          "grounded",
+          "intense"
+        ],
+        "setting": [
+          "workshop",
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted",
+          "earthy"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "8f671d61ebb333e0",
+      "note": "environmentální portrét, syrový prostor",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1770062422093-ae32c8fed2a3?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0005.jpg"
+    },
+    {
+      "id": "mood-0024",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0024.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "earthy",
+          "muted"
+        ]
+      },
+      "hash": "7e80a82f986a8449",
+      "note": "kostým + přirozené světlo",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1636936291087-2972edf08f14?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/moodboard/0006.jpg"
+    },
+    {
+      "id": "mood-0025",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0025.jpg",
+      "tags": {
+        "emotion": [
+          "serene",
+          "thoughtful"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural",
+          "soft"
+        ],
+        "palette": [
+          "muted",
+          "earthy"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "9c68646ab1e6b47f",
+      "note": "dobový portrét u okna",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1588145497009-0b234790d741?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/moodboard/0007.jpg"
+    },
+    {
+      "id": "mood-0026",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0026.jpg",
+      "tags": {
+        "emotion": [
+          "intense"
+        ],
+        "lighting": [
+          "dramatic"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "0470c482077e47ef",
+      "note": "výraz v kostýmu, detail",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1587980876477-ea92e0191fd6?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/moodboard/0008.jpg"
+    },
+    {
+      "id": "mood-0027",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0027.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful",
+          "intense"
+        ],
+        "lighting": [
+          "dramatic",
+          "low-key"
+        ],
+        "palette": [
+          "dark"
+        ]
+      },
+      "hash": "05c1217405e25f67",
+      "note": "role vs. civil, charakter",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1741497734565-522c8bb52166?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/moodboard/0009.jpg"
+    },
+    {
+      "id": "mood-0028",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0028.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "friendly",
+          "engaged"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "c87d4f66ce0ecd4f",
+      "note": "skupina komunity, candid",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1755157041335-f62badca535c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0010.jpg"
+    },
+    {
+      "id": "mood-0029",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0029.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "engaged",
+          "playful"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "b7ed8b6bdc8d5527",
+      "note": "interakce komunity",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1755157041534-0aca90fbb802?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0011.jpg"
+    },
+    {
+      "id": "mood-0030",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0030.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "grounded"
+        ],
+        "setting": [
+          "home"
+        ],
+        "lighting": [
+          "natural",
+          "soft"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "26c4632198be2a39",
+      "note": "skupinový portrét v interiéru",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1755157041610-25aba1496d8c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0012.jpg"
+    },
+    {
+      "id": "mood-0031",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0031.jpg",
+      "tags": {
+        "emotion": [
+          "warm",
+          "serene"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "muted",
+          "warm"
+        ]
+      },
+      "hash": "b5721a48c9a42102",
+      "note": "dvojice, blízkost",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1602443394222-300ea8fca02e?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0013.jpg"
+    },
+    {
+      "id": "mood-0032",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0032.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "friendly",
+          "warm"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ]
+      },
+      "hash": "ead930bde9d15ef8",
+      "note": "skupina, společná energie",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1755157041505-b4d6d2d2bd0c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/moodboard/0014.jpg"
+    },
+    {
+      "id": "pose-0016",
+      "kind": "pose",
+      "file": "poses/pose-0016.jpg",
+      "tags": {
+        "emotion": [
+          "confident"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "801a91d39fc37f20",
+      "note": "polopostava, sebejisté, u zdi",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1762204909391-76685f54888f?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0001.jpg"
+    },
+    {
+      "id": "pose-0017",
+      "kind": "pose",
+      "file": "poses/pose-0017.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "bold"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "bcae2a8d239238e0",
+      "note": "přímý pohled, ruce v bok",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1763404410596-f5ee1f79f05a?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0002.jpg"
+    },
+    {
+      "id": "pose-0018",
+      "kind": "pose",
+      "file": "poses/pose-0018.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "9079198ed3c8db98",
+      "note": "¾ postava, klidná jistota",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1758521540646-abb9612038fb?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0003.jpg"
+    },
+    {
+      "id": "pose-0019",
+      "kind": "pose",
+      "file": "poses/pose-0019.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "approachable"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "9eda4ea2159eddba",
+      "note": "ramena otevřená, přímý kontakt",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1777054033521-2a7af4a10074?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0004.jpg"
+    },
+    {
+      "id": "pose-0020",
+      "kind": "pose",
+      "file": "poses/pose-0020.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "confident"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "earthy",
+          "muted"
+        ],
+        "shot": "full"
+      },
+      "hash": "9cef38a5fe0d60a3",
+      "note": "opřený o cihlovou zeď",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1759873911304-8ecddef529bc?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0005.jpg"
+    },
+    {
+      "id": "pose-0021",
+      "kind": "pose",
+      "file": "poses/pose-0021.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "4dc1454002e177ea",
+      "note": "civilní jistota, půlportrét",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1758915214543-ce0a3d5e0bff?w=1400&q=80&fm=jpg&fit=crop",
+      "harvestedFrom": "rolling/poses/0006.jpg"
+    },
+    {
+      "id": "pose-0022",
+      "kind": "pose",
+      "file": "poses/pose-0022.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "full"
+      },
+      "hash": "5fa4ce491e516e54",
+      "note": "opřený o zeď, uvolněně",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1771476585829-f831e92dc0c2?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0007.jpg"
+    },
+    {
+      "id": "pose-0023",
+      "kind": "pose",
+      "file": "poses/pose-0023.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "b5b89b71e7a10c69",
+      "note": "stoj, váha na jedné noze",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1580536226795-32069b12f6b4?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0008.jpg"
+    },
+    {
+      "id": "pose-0024",
+      "kind": "pose",
+      "file": "poses/pose-0024.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "4503b1cbee8d8a29",
+      "note": "ruce v kapsách, klid",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1695996966970-1691e30882be?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0009.jpg"
+    },
+    {
+      "id": "pose-0025",
+      "kind": "pose",
+      "file": "poses/pose-0025.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "77126ec18feff038",
+      "note": "pohled stranou, přemýšlivý",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1602192405378-960aff1feb15?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0010.jpg"
+    },
+    {
+      "id": "pose-0026",
+      "kind": "pose",
+      "file": "poses/pose-0026.jpg",
+      "tags": {
+        "emotion": [
+          "grounded",
+          "serene"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "14b71e42d3c90527",
+      "note": "postava v prostoru, měřítko",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1598801008947-28b9eb3349f7?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0011.jpg"
+    },
+    {
+      "id": "pose-0027",
+      "kind": "pose",
+      "file": "poses/pose-0027.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "calm"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "muted"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "45935f556fa48c9c",
+      "note": "opřený, klidná energie",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1704880920556-0db89efca033?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "rolling/poses/0012.jpg"
+    },
+    {
+      "id": "mood-0033",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0033.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "confident",
+          "engaged"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed",
+          "dramatic"
+        ],
+        "palette": [
+          "cool",
+          "dark"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "66f19d9b6dfe2910",
+      "note": "speaker on stage, dynamic",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1582192730841-2a682d7375f9?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0001.jpg"
+    },
+    {
+      "id": "mood-0034",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0034.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "dynamic"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ]
+      },
+      "hash": "d04409383af4b9b0",
+      "note": "presenter gesture, engaged",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1600320844656-a311b0477df0?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0002.jpg"
+    },
+    {
+      "id": "mood-0035",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0035.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "bold",
+          "engaged"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed",
+          "dramatic"
+        ],
+        "palette": [
+          "cool",
+          "dark"
+        ]
+      },
+      "hash": "1447aec0a4f48967",
+      "note": "conference talk energy",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1592758080692-b6a5dbe9c725?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0003.jpg"
+    },
+    {
+      "id": "mood-0036",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0036.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "focused"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ]
+      },
+      "hash": "6be5440d282911f8",
+      "note": "speaker mid-explanation",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1600320261634-78edd477fa1e?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0004.jpg"
+    },
+    {
+      "id": "mood-0037",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0037.jpg",
+      "tags": {
+        "emotion": [
+          "focused"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ]
+      },
+      "hash": "e5f2abebb5bdbaf5",
+      "note": "working at laptop, focused",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1622151834677-70f982c9adef?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0005.jpg"
+    },
+    {
+      "id": "mood-0038",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0038.jpg",
+      "tags": {
+        "emotion": [
+          "focused",
+          "calm"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "mixed",
+          "low-key"
+        ],
+        "palette": [
+          "cool",
+          "dark"
+        ]
+      },
+      "hash": "beff619c5b4f27a4",
+      "note": "man laptop cool light",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1603575448878-868a20723f5d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0006.jpg"
+    },
+    {
+      "id": "mood-0039",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0039.jpg",
+      "tags": {
+        "emotion": [
+          "focused",
+          "intense"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "low-key",
+          "dark"
+        ],
+        "palette": [
+          "dark",
+          "cool"
+        ]
+      },
+      "hash": "59188c0d0f944c72",
+      "note": "screen glow, dark workspace",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1534665482403-a909d0d97c67?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0007.jpg"
+    },
+    {
+      "id": "mood-0040",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0040.jpg",
+      "tags": {
+        "emotion": [
+          "focused"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ]
+      },
+      "hash": "2264af3db8cbce58",
+      "note": "focused at desk, modern",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1559163304-2bd8f8600164?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0008.jpg"
+    },
+    {
+      "id": "mood-0041",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0041.jpg",
+      "tags": {
+        "emotion": [
+          "focused"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral",
+          "cool"
+        ],
+        "shot": "hands"
+      },
+      "hash": "43a32ef900334fba",
+      "note": "laptop hands detail",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1514543250559-83867827ecce?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0009.jpg"
+    },
+    {
+      "id": "mood-0042",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0042.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "engaged"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "8f4d4d5c39f4846a",
+      "note": "presenter portrait stage",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1560439514-e960a3ef5019?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0010.jpg"
+    },
+    {
+      "id": "mood-0043",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0043.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "authoritative"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "9121702cd664de37",
+      "note": "speaker to audience",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1566792906589-d89ee63bce83?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0011.jpg"
+    },
+    {
+      "id": "mood-0044",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0044.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "engaged"
+        ],
+        "setting": [
+          "stage"
+        ],
+        "lighting": [
+          "mixed"
+        ],
+        "palette": [
+          "cool"
+        ]
+      },
+      "hash": "dbca8170926c89fb",
+      "note": "presenting, gestural",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1573131522938-8e68a40017a5?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0012.jpg"
+    },
+    {
+      "id": "mood-0045",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0045.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "warm",
+          "friendly"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "neutral"
+        ]
+      },
+      "hash": "e7a5e14b2b2960d9",
+      "note": "teaching/explaining candid",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1600896997793-b8ed3459a17f?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0013.jpg"
+    },
+    {
+      "id": "mood-0046",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0046.jpg",
+      "tags": {
+        "emotion": [
+          "confident"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral",
+          "cool"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "4854b727c70e840e",
+      "note": "3/4 portrait modern",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1696603865152-74514c198a07?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0014.jpg"
+    },
+    {
+      "id": "mood-0047",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0047.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "friendly",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "7ba7dadc6a90f514",
+      "note": "approachable to camera",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1614927879396-50307fd9e488?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0015.jpg"
+    },
+    {
+      "id": "mood-0048",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0048.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "hands"
+      },
+      "hash": "f9efb805bcfb9204",
+      "note": "dynamic hands in motion",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1589320843233-e9f89b57815f?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0016.jpg"
+    },
+    {
+      "id": "mood-0049",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0049.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "calm"
+        ],
+        "setting": [
+          "studio",
+          "neutral-bg"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral",
+          "monochrome"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "8e880a1e4e9369ff",
+      "note": "clean studio headshot, grey",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1758613654216-ea195d4382f7?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0017.jpg"
+    },
+    {
+      "id": "mood-0050",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0050.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "e8c7061e3e2f3f90",
+      "note": "studio portrait, soft key",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1763701503289-ae681a00698a?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0018.jpg"
+    },
+    {
+      "id": "mood-0051",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0051.jpg",
+      "tags": {
+        "emotion": [
+          "confident"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "a14e4a6fe0301b75",
+      "note": "confident studio headshot",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1580518337843-f959e992563b?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0019.jpg"
+    },
+    {
+      "id": "mood-0052",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0052.jpg",
+      "tags": {
+        "emotion": [
+          "calm"
+        ],
+        "setting": [
+          "studio",
+          "neutral-bg"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral",
+          "monochrome"
+        ]
+      },
+      "hash": "dc44e2669d8ae971",
+      "note": "minimal grey backdrop",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1578982566793-8f278402007c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0020.jpg"
+    },
+    {
+      "id": "mood-0053",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0053.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ],
+        "shot": "environmental"
+      },
+      "hash": "39b4b352761bf2f2",
+      "note": "architectural environmental portrait",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1718209881007-c0ecdfc00f9d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0021.jpg"
+    },
+    {
+      "id": "mood-0054",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0054.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "bold"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "bright",
+          "natural"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ]
+      },
+      "hash": "3b4b7c58159d5483",
+      "note": "modern building negative space",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1489410342162-b4b300a0bb15?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0022.jpg"
+    },
+    {
+      "id": "mood-0055",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0055.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "authoritative"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "f3afcb4013c6d113",
+      "note": "businessman clean lines",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1617244147299-5ef406921c35?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0011.jpg"
+    },
+    {
+      "id": "mood-0056",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0056.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "authoritative"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "561cfaa2fa6a762b",
+      "note": "confident professional, modern",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1534698435722-8d4dd3902268?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0024.jpg"
+    },
+    {
+      "id": "mood-0057",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0057.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "3302b6bcb62c24b6",
+      "note": "full-body architectural",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1569594984813-02490511ddcb?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0025.jpg"
+    },
+    {
+      "id": "mood-0058",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0058.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "bold"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "bright"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ]
+      },
+      "hash": "d4866043481bd31d",
+      "note": "negative space cover frame",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1611943574626-91c9be96abc6?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0026.jpg"
+    },
+    {
+      "id": "mood-0059",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0059.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "engaged"
+        ],
+        "setting": [
+          "office"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "seated"
+      },
+      "hash": "36c580b672629f47",
+      "note": "seated leaning in, confident",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1574311900613-6035f818c18a?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0027.jpg"
+    },
+    {
+      "id": "mood-0060",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0060.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful",
+          "focused"
+        ],
+        "lighting": [
+          "dramatic",
+          "low-key"
+        ],
+        "palette": [
+          "dark",
+          "cool"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "b25ecc9b69c98684",
+      "note": "profile vision frame",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1601680385575-41063f08a14c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0028.jpg"
+    },
+    {
+      "id": "mood-0061",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0061.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "authoritative"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "83e10ea904554e80",
+      "note": "arms-folded confident",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1656399910161-8efafd973a29?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0029.jpg"
+    },
+    {
+      "id": "mood-0062",
+      "kind": "moodboard",
+      "file": "moodboard/mood-0062.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "setting": [
+          "studio",
+          "neutral-bg"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral",
+          "monochrome"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "072b7aa1c67a2bfa",
+      "note": "clean minimal portrait",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1628263516427-a82107586790?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/moodboard/0030.jpg"
+    },
+    {
+      "id": "pose-0028",
+      "kind": "pose",
+      "file": "poses/pose-0028.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "bold"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "17c4b36c7362dda6",
+      "note": "tight headshot, direct gaze",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0001.jpg"
+    },
+    {
+      "id": "pose-0029",
+      "kind": "pose",
+      "file": "poses/pose-0029.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "confident"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "adfcda70c4edfa71",
+      "note": "headshot, slight angle",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0002.jpg"
+    },
+    {
+      "id": "pose-0030",
+      "kind": "pose",
+      "file": "poses/pose-0030.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "relaxed"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "711fc4e714528f89",
+      "note": "3/4 confident, arms relaxed",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1568316674077-d72ee56de61c?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0003.jpg"
+    },
+    {
+      "id": "pose-0031",
+      "kind": "pose",
+      "file": "poses/pose-0031.jpg",
+      "tags": {
+        "emotion": [
+          "approachable",
+          "friendly"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "610ddd3b49898798",
+      "note": "3/4 approachable smile",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1600878459138-e1123b37cb30?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0004.jpg"
+    },
+    {
+      "id": "pose-0032",
+      "kind": "pose",
+      "file": "poses/pose-0032.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "seated"
+      },
+      "hash": "2877791f20aeef8c",
+      "note": "seated, leaning in",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1531750026848-8ada78f641c2?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0005.jpg"
+    },
+    {
+      "id": "pose-0033",
+      "kind": "pose",
+      "file": "poses/pose-0033.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "0f102c9219e7c759",
+      "note": "profile / looking off",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1610903866883-c280999dcc0e?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0006.jpg"
+    },
+    {
+      "id": "pose-0034",
+      "kind": "pose",
+      "file": "poses/pose-0034.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "633811598a2a1c7f",
+      "note": "full body standing, weight shift",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1590086782957-93c06ef21604?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0007.jpg"
+    },
+    {
+      "id": "pose-0035",
+      "kind": "pose",
+      "file": "poses/pose-0035.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded",
+          "authoritative"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "3faf63ca01a6d4e1",
+      "note": "arms folded, grounded",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0008.jpg"
+    },
+    {
+      "id": "pose-0036",
+      "kind": "pose",
+      "file": "poses/pose-0036.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "confident",
+          "approachable"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "aa6139c8fa5aa76c",
+      "note": "hands in pockets, casual confident",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1543132220-4bf3de6e10ae?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0009.jpg"
+    },
+    {
+      "id": "pose-0037",
+      "kind": "pose",
+      "file": "poses/pose-0037.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "engaged"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "5f72b4d6c164e0e7",
+      "note": "gesture mid-talk",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0010.jpg"
+    },
+    {
+      "id": "pose-0038",
+      "kind": "pose",
+      "file": "poses/pose-0038.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "approachable"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "db35f8fade4f86f8",
+      "note": "standing, open posture",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1637589274742-8d4c152720a2?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0012.jpg"
+    },
+    {
+      "id": "pose-0039",
+      "kind": "pose",
+      "file": "poses/pose-0039.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful",
+          "focused"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "1bcda16b43c0392f",
+      "note": "hand to chin, thoughtful",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1640531005390-38bd92755d6a?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0013.jpg"
+    },
+    {
+      "id": "pose-0040",
+      "kind": "pose",
+      "file": "poses/pose-0040.jpg",
+      "tags": {
+        "emotion": [
+          "dynamic",
+          "engaged"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "496f05d6f6381d5c",
+      "note": "three-quarter, hands expressive",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1642257834579-eee89ff3e9fd?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0014.jpg"
+    },
+    {
+      "id": "pose-0041",
+      "kind": "pose",
+      "file": "poses/pose-0041.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "bold"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "d53557d521c555f3",
+      "note": "headshot, direct gaze",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1623366302587-b38b1ddaefd9?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0015.jpg"
+    },
+    {
+      "id": "pose-0042",
+      "kind": "pose",
+      "file": "poses/pose-0042.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "authoritative"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "a6e3069031892a0d",
+      "note": "arms-folded, confident",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1557862921-37829c790f19?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0016.jpg"
+    },
+    {
+      "id": "pose-0043",
+      "kind": "pose",
+      "file": "poses/pose-0043.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "26af70664421b184",
+      "note": "¾ turn, composed",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1616434116710-c45ce99c1a77?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0017.jpg"
+    },
+    {
+      "id": "pose-0044",
+      "kind": "pose",
+      "file": "poses/pose-0044.jpg",
+      "tags": {
+        "emotion": [
+          "engaged",
+          "focused"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "seated"
+      },
+      "hash": "a33248005a0964fb",
+      "note": "seated, leaning forward",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0018.jpg"
+    },
+    {
+      "id": "pose-0045",
+      "kind": "pose",
+      "file": "poses/pose-0045.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "grounded"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "3471bdbd64545651",
+      "note": "full-body, grounded stance",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1764546899196-b53061b1b609?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0019.jpg"
+    },
+    {
+      "id": "pose-0046",
+      "kind": "pose",
+      "file": "poses/pose-0046.jpg",
+      "tags": {
+        "emotion": [
+          "thoughtful"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "217a0836df15137b",
+      "note": "profile, looking off",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1768216330646-a612a0e3c77d?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0020.jpg"
+    },
+    {
+      "id": "pose-0047",
+      "kind": "pose",
+      "file": "poses/pose-0047.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "confident"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "three-quarter"
+      },
+      "hash": "b9a04f4511c9ea7b",
+      "note": "hands in pockets, relaxed-confident",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1736673947882-7b806a66b55f?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0021.jpg"
+    },
+    {
+      "id": "pose-0048",
+      "kind": "pose",
+      "file": "poses/pose-0048.jpg",
+      "tags": {
+        "emotion": [
+          "confident",
+          "approachable"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "2422f8ef40cad147",
+      "note": "standing, shoulders open",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1761956261160-5219e7d7fd52?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0022.jpg"
+    },
+    {
+      "id": "pose-0049",
+      "kind": "pose",
+      "file": "poses/pose-0049.jpg",
+      "tags": {
+        "emotion": [
+          "calm",
+          "confident"
+        ],
+        "setting": [
+          "studio"
+        ],
+        "lighting": [
+          "soft"
+        ],
+        "palette": [
+          "neutral"
+        ],
+        "shot": "headshot"
+      },
+      "hash": "4d7aca9926ef18c5",
+      "note": "centered headshot, calm",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1754577060078-21315dd188c8?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0023.jpg"
+    },
+    {
+      "id": "pose-0050",
+      "kind": "pose",
+      "file": "poses/pose-0050.jpg",
+      "tags": {
+        "emotion": [
+          "relaxed",
+          "confident"
+        ],
+        "setting": [
+          "urban"
+        ],
+        "lighting": [
+          "natural"
+        ],
+        "palette": [
+          "cool",
+          "neutral"
+        ],
+        "shot": "full"
+      },
+      "hash": "cbf75fbdb11ecdce",
+      "note": "leaning on wall, architectural",
+      "source": "harvest",
+      "url": "https://images.unsplash.com/photo-1773859096755-66b665a0c1c5?w=1400&q=80&fm=jpg&fit=max",
+      "harvestedFrom": "tomas-guth-jarkovsky/poses/0024.jpg"
+    }
+  ]
+}
