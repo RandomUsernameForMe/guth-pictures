@@ -104,41 +104,81 @@ and which palettes to keep. Default to all three concepts if the user doesn't pi
 approval (like concept/image approval) ultimately happens in the web admin; `approvals.json` may
 carry a `palettes: { <palette-id>: "approved" }` map (concept-prefixed id).
 
-## Phase 4 — Moodboard (web refs + AI originals)
+## Library-first sourcing
+
+A persistent, tagged **library** of pose sketches + moodboard refs lives at
+`library/` (sibling to `clients/`, single source of truth `library/manifest.json`). Always
+**match the library first**, then only search/generate for gaps — and feed anything new back
+so the library grows every shoot. Tag axes + allowed values: `references/tag-vocabulary.md`
+(emotion · shot · setting · lighting · palette). **Poses are loose-line AI sketches, not stock
+photos** — stock breaks the aesthetic.
+
+Per concept, derive a tag query from its `mood` / `poseDirection` / `lighting` / `location` /
+`shotList`, then:
+
+```
+node scripts/library-query.mjs --kind pose --emotion confident,calm \
+  --shot three-quarter --setting studio --lighting soft --palette neutral
+```
+
+Ranked JSON comes back (emotion + shot weigh most). Open the browser to eyeball candidates,
+then materialize the picks into the client folder:
+
+```
+node scripts/build-library.mjs                 # (re)build library/index.html browser
+node scripts/library-pick.mjs <slug> poses pose-0007 pose-0011 --concept A
+node scripts/library-pick.mjs <slug> moodboard mood-0003 mood-0009 --concept A
+```
+
+`library-pick` copies the files into `clients/<slug>/assets/{poses,moodboard}/` and merges
+their notes into that client's `sources.json` — so **everything downstream (build-board,
+review, sync) is unchanged**. Other helpers: `library-add` (add a file/URL), `library-tag`
+(tag existing items, e.g. after harvest), `library-harvest` (seed from past clients).
+
+## Phase 4 — Moodboard (library-first, then web for gaps)
 
 For each chosen concept, follow `references/board-spec.md`. Per concept:
 
-1. **Curate web references (primary image source):** `WebSearch` for imagery matching the
-   concept's style, lighting, color, and composition. Collect ~12–20 strong image URLs.
-2. Download them:
+1. **Match the library first:** `library-query.mjs --kind moodboard …` with the concept's
+   tags → present the ranked candidates → you confirm/swap → `library-pick.mjs <slug>
+   moodboard <id…> --concept <X>`.
+2. **Fill gaps with web references:** if the library lacks coverage, `WebSearch` for imagery
+   matching the concept's style/lighting/color/composition and download:
    ```
    echo '[{"url":"...","note":"warm rim light"}, ...]' \
      | node scripts/fetch-images.mjs clients/<slug>/assets/moodboard --json
    ```
-3. **AI originals — deferred (no Gemini yet).** `scripts/gen-images.mjs` is wired but no-ops
-   without `GEMINI_API_KEY`. Canva's `generate-design` is a *design* generator, not a
-   photographic image generator, so do NOT use it to fake originals. For now boards are built
-   from curated web references; AI originals turn on later by setting `GEMINI_API_KEY`.
-4. Build the local board (always-works deliverable + preview):
+   Then **add the good ones back to the library** so they're reusable next time:
+   `library-add.mjs --kind moodboard --url <url> --emotion … --note …`.
+3. Build the local board (always-works deliverable + preview):
    ```
    node scripts/build-board.mjs clients/<slug>/assets/moodboard clients/<slug>/moodboard.html \
      --title "Moodboard — <name>" --subtitle "<concept>" \
      --palette "#hex,#hex,#hex" --notes "<look in one line>"
    ```
-5. **Canva:** create/locate a client folder (`create-folder`), upload web refs by URL
+4. **Canva:** create/locate a client folder (`create-folder`), upload web refs by URL
    (`upload-asset-from-url` — they already have URLs from `sources.json`), then have Canva
    generate a `photo_collage` (or `poster`) moodboard design seeded with those `asset_ids`.
    See "Canva assembly" below.
 
-## Phase 5 — Pose board
+## Phase 5 — Pose board (library sketches, then generate for gaps)
 
-Same dual sourcing, targeting **pose reference** specifically: a balanced spread of
-headshot / three-quarter / full-body / seated / standing / hands, matched to each concept's
-posture and energy. Save into `clients/<slug>/assets/poses`, build
-`clients/<slug>/poseboard.html`, and assemble a Canva pose board.
+Poses are **loose-line AI sketches** with one consistent style — never stock photos. Use the
+**locked style + generation recipe in `references/pose-sketch-style.md`**. Target a balanced
+spread of headshot / three-quarter / full / seated / hands / environmental matched to each
+concept's posture and energy.
 
-Annotate pose tiles with short direction notes (e.g. "chin slightly down, weight on back
-foot") via the `--notes` field on fetch and in the Canva captions.
+1. **Match the library first:** `library-query.mjs --kind pose …` with the concept's tags →
+   confirm/swap → `library-pick.mjs <slug> poses <id…> --concept <X>`.
+2. **Fill gaps by generating new sketches** (then `library-add` → reusable forever):
+   - **Primary — Canva MCP** (no extra cost): `generate-design` with the locked style spec →
+     `export-design` PNG → `library-add.mjs --kind pose --file <png> --emotion … --shot …`.
+     Full recipe in `references/pose-sketch-style.md`.
+   - **Optional fallback** — local model (Draw Things/ComfyUI) → `library-add --file`, or
+     `gen-pose-sketch.mjs` if `GEMINI_API_KEY` is set (builds the locked prompt + tags itself).
+   Then `library-pick` the new ids into the client.
+3. Build `clients/<slug>/poseboard.html` with `build-board.mjs` and assemble a Canva pose
+   board as in Phase 4. Pose direction notes ride along from the library/`sources.json` notes.
 
 ## Phase 6 — Presentation (Canva → PDF)
 
@@ -248,7 +288,11 @@ Ask which brand kit to apply (or none) before generating; pass its id as `brand_
 ## Resilience
 
 - LinkedIn blocked → research proceeds via `WebSearch`.
-- No `GEMINI_API_KEY` → AI originals are skipped; boards use curated web references only.
-  (Canva `generate-design` is a design generator, not a photo generator — don't substitute.)
+- New pose sketches are generated via **Canva MCP** (no extra cost) per
+  `references/pose-sketch-style.md`; local model or `GEMINI_API_KEY` are optional fallbacks.
+  No generator available → reuse existing library poses. (Canva `generate-design` is a design
+  generator — fine for line-art *sketches*, but don't use it to fake *photographic* originals.)
+- Empty / thin library → `library-query` returns little; just search/generate the full set as
+  before and `library-add` / `gen-pose-sketch` feeds it so the next shoot matches more.
 - Canva MCP unavailable → deliver local HTML boards + markdown; note the gap.
 - Image download failures are skipped, not fatal (script reports saved/skipped/failed).
