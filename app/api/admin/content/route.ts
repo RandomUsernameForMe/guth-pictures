@@ -55,7 +55,6 @@ export function isValidContentData(d: unknown): d is ContentData {
   const o = d as Record<string, unknown>;
   if (!o.home || typeof o.home !== "object") return false;
   if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
-  if (!o.lightTesterPromo || typeof o.lightTesterPromo !== "object") return false;
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   if (!isTestimonials(o.testimonials)) return false;
   const s = o.sluzby as Record<string, unknown>;

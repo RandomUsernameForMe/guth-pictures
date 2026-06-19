@@ -56,10 +56,4 @@ describe("isValidContentData — testimonials", () => {
     d.testimonials = [{ id: "x".repeat(201), quote: "ok", author: "Jana" }];
     expect(isValidContentData(d)).toBe(false);
   });
-
-  it("rejects data missing lightTesterPromo", () => {
-    const d = valid() as Record<string, unknown>;
-    delete d.lightTesterPromo;
-    expect(isValidContentData(d)).toBe(false);
-  });
 });
