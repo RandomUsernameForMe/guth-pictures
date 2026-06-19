@@ -14,6 +14,7 @@ const MAX_SHORT = 200;
 const MAX_LONG = 2000;
 const MAX_PACKAGES = 10;
 const MAX_INCLUDES = 20;
+const MAX_TESTIMONIALS = 30;
 
 function isServiceContent(s: unknown): boolean {
   if (!s || typeof s !== "object" || Array.isArray(s)) return false;
@@ -34,12 +35,28 @@ function isServiceContent(s: unknown): boolean {
   });
 }
 
-function isValidContentData(d: unknown): d is ContentData {
+function isTestimonials(v: unknown): boolean {
+  if (v === undefined) return true; // optional for legacy KV data
+  if (!Array.isArray(v) || v.length > MAX_TESTIMONIALS) return false;
+  return v.every((t) => {
+    if (!t || typeof t !== "object" || Array.isArray(t)) return false;
+    const o = t as Record<string, unknown>;
+    if (typeof o.quote !== "string" || o.quote.length === 0 || o.quote.length > MAX_LONG) return false;
+    if (typeof o.author !== "string" || o.author.length === 0 || o.author.length > MAX_SHORT) return false;
+    if (o.id !== undefined && typeof o.id !== "string") return false;
+    if (o.role !== undefined && (typeof o.role !== "string" || o.role.length > MAX_SHORT)) return false;
+    if (o.photo !== undefined && (typeof o.photo !== "string" || o.photo.length > MAX_SHORT)) return false;
+    return true;
+  });
+}
+
+export function isValidContentData(d: unknown): d is ContentData {
   if (!d || typeof d !== "object" || Array.isArray(d)) return false;
   const o = d as Record<string, unknown>;
   if (!o.home || typeof o.home !== "object") return false;
   if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
+  if (!isTestimonials(o.testimonials)) return false;
   const s = o.sluzby as Record<string, unknown>;
   return isServiceContent(s.portraits) && isServiceContent(s.weddings);
 }
