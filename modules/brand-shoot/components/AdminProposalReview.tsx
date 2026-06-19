@@ -9,7 +9,6 @@ import type {
   ProposalStatus,
   ProposalImage,
   ProposalConcept,
-  ProposalPalette,
 } from "@/modules/brand-shoot/lib/types";
 
 type SafeProposal = Omit<ProposalRecord, "passwordHash">;
@@ -74,15 +73,12 @@ export function AdminProposalReview({
     await patch({ action: "approvals", patch: { concepts: { [c.id]: status } } });
   }
 
-  async function togglePalette(p: ProposalPalette) {
-    const status = next[p.status];
+  // Admin picks the one palette shown to the client for this concept.
+  async function choosePalette(conceptId: string, paletteId: string) {
     setConcepts((prev) =>
-      prev.map((c) => ({
-        ...c,
-        palettes: c.palettes.map((x) => (x.id === p.id ? { ...x, status } : x)),
-      }))
+      prev.map((c) => (c.id === conceptId ? { ...c, chosenPaletteId: paletteId } : c))
     );
-    await patch({ action: "approvals", patch: { palettes: { [p.id]: status } } });
+    await patch({ action: "assign", patch: { chosenPalette: { [conceptId]: paletteId } } });
   }
 
   async function toggleImage(
@@ -95,6 +91,38 @@ export function AdminProposalReview({
       prev.map((x) => (x.cloudinaryId === img.cloudinaryId ? { ...x, status } : x))
     );
     await patch({ action: "approvals", patch: { [kind]: { [img.cloudinaryId]: status } } });
+  }
+
+  // Assign an image to a concept (or unassign) — web-managed, persisted across re-syncs.
+  async function assignImageConcept(
+    kind: "moodboard" | "poses",
+    img: ProposalImage,
+    setter: typeof setMoodboard,
+    concept: string | null
+  ) {
+    setter((prev) =>
+      prev.map((x) =>
+        x.cloudinaryId === img.cloudinaryId ? { ...x, concept: concept ?? undefined } : x
+      )
+    );
+    await patch({ action: "assign", patch: { images: { [kind]: { [img.cloudinaryId]: { concept } } } } });
+  }
+
+  // Mark an image as its concept's lead/stage portrait (clears any previous hero in that concept).
+  async function setImageHero(
+    kind: "moodboard" | "poses",
+    img: ProposalImage,
+    setter: typeof setMoodboard,
+    hero: boolean
+  ) {
+    setter((prev) =>
+      prev.map((x) => {
+        if (x.cloudinaryId === img.cloudinaryId) return { ...x, hero };
+        if (hero && x.concept && x.concept === img.concept) return { ...x, hero: false };
+        return x;
+      })
+    );
+    await patch({ action: "assign", patch: { images: { [kind]: { [img.cloudinaryId]: { hero } } } } });
   }
 
   async function toggleFinalize() {
@@ -144,20 +172,50 @@ export function AdminProposalReview({
   }) {
     if (!images.length) return <p className="text-sm text-gray-600">Žádné snímky.</p>;
     return (
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
         {images.map((img) => (
-          <button
-            key={img.cloudinaryId}
-            onClick={() => toggleImage(kind, img, setter)}
-            disabled={busy}
-            className={`relative aspect-square overflow-hidden border ${badge[img.status]} group`}
-            title={img.note}
-          >
-            <Image src={thumb(img.cloudinaryId)} alt={img.note ?? ""} fill className="object-cover" sizes="120px" />
-            <span className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center text-xs bg-black/70 rounded-full">
-              {mark[img.status]}
-            </span>
-          </button>
+          <div key={img.cloudinaryId} className="space-y-1">
+            <button
+              onClick={() => toggleImage(kind, img, setter)}
+              disabled={busy}
+              className={`relative block w-full aspect-square overflow-hidden border ${badge[img.status]} group`}
+              title={img.note}
+            >
+              <Image src={thumb(img.cloudinaryId)} alt={img.note ?? ""} fill className="object-cover" sizes="120px" />
+              <span className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center text-xs bg-black/70 rounded-full">
+                {mark[img.status]}
+              </span>
+              {img.hero && img.concept && (
+                <span className="absolute top-1 left-1 px-1 text-[10px] font-medium bg-amber-400 text-black rounded">
+                  HERO
+                </span>
+              )}
+            </button>
+            <select
+              value={img.concept ?? ""}
+              onChange={(e) => assignImageConcept(kind, img, setter, e.target.value || null)}
+              disabled={busy}
+              className="w-full bg-zinc-900 border border-zinc-700 px-1 py-1 text-xs focus:outline-none focus:border-white"
+            >
+              <option value="">— bez konceptu —</option>
+              {concepts.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.id} — {c.title}
+                </option>
+              ))}
+            </select>
+            <label
+              className={`flex items-center gap-1 text-[11px] ${img.concept ? "text-gray-300" : "text-gray-600"}`}
+            >
+              <input
+                type="checkbox"
+                checked={!!img.hero}
+                disabled={busy || !img.concept}
+                onChange={(e) => setImageHero(kind, img, setter, e.target.checked)}
+              />
+              hero (titulní)
+            </label>
+          </div>
         ))}
       </div>
     );
@@ -234,27 +292,36 @@ export function AdminProposalReview({
 
               {c.palettes.length > 0 && (
                 <div className="ml-4 space-y-2 border-l border-zinc-800 pl-4">
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Palety</p>
-                  {c.palettes.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => togglePalette(p)}
-                      disabled={busy}
-                      className={`w-full text-left border px-4 py-2 transition-colors ${badge[p.status]}`}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="font-medium flex items-center gap-2">
-                          <span className="inline-flex rounded overflow-hidden border border-white/10">
-                            {p.colors.slice(0, 6).map((col, i) => (
-                              <span key={i} style={{ background: col, width: 18, height: 18 }} />
-                            ))}
+                  <p className="text-xs uppercase tracking-wide text-gray-500">
+                    Paleta (vyber jednu pro klienta)
+                  </p>
+                  {c.palettes.map((p) => {
+                    const active = c.chosenPaletteId === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => choosePalette(c.id, p.id)}
+                        disabled={busy}
+                        className={`w-full text-left border px-4 py-2 transition-colors ${
+                          active
+                            ? "bg-white/10 text-white border-white/60"
+                            : "bg-white/5 text-gray-400 border-white/10 hover:border-white/30"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="font-medium flex items-center gap-2">
+                            <span className="inline-flex rounded overflow-hidden border border-white/10">
+                              {p.colors.slice(0, 6).map((col, i) => (
+                                <span key={i} style={{ background: col, width: 18, height: 18 }} />
+                              ))}
+                            </span>
+                            {active ? "◉" : "○"} {p.name}
                           </span>
-                          {mark[p.status]} {p.name}
-                        </span>
-                        <span className="text-xs uppercase">{p.status}</span>
-                      </div>
-                    </button>
-                  ))}
+                          {active && <span className="text-xs uppercase text-green-300">zvoleno</span>}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>

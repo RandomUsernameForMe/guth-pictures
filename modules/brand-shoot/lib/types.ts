@@ -21,7 +21,8 @@ export interface ProposalConcept {
   pitch: string;
   why: string;
   mood: string;
-  palettes: ProposalPalette[]; // this approach's color palette options (client-toggleable)
+  palettes: ProposalPalette[]; // this approach's color palette options
+  chosenPaletteId?: string; // admin-picked palette shown to the client (one per concept)
   wardrobe: string;
   location: string;
   lighting: string;

@@ -2,10 +2,12 @@ import { isAuthenticated } from "@/lib/auth";
 import {
   getProposal,
   setApprovals,
+  setAssignments,
   setFinalized,
   setPassword,
   deleteProposal,
   type ApprovalPatch,
+  type AssignmentPatch,
 } from "@/modules/brand-shoot/lib/proposals";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -33,7 +35,7 @@ export async function PATCH(
 
   let body: {
     action?: unknown;
-    patch?: ApprovalPatch;
+    patch?: ApprovalPatch & AssignmentPatch;
     finalized?: unknown;
     password?: unknown;
     expiryDays?: unknown;
@@ -47,6 +49,11 @@ export async function PATCH(
   switch (body.action) {
     case "approvals": {
       const updated = await setApprovals(slug, body.patch ?? {});
+      if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ proposal: updated });
+    }
+    case "assign": {
+      const updated = await setAssignments(slug, body.patch ?? {});
       if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
       return NextResponse.json({ proposal: updated });
     }
