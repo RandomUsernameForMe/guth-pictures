@@ -72,10 +72,18 @@ export function ContentEditor() {
     e.preventDefault();
     setStatus("saving");
     try {
+      // Drop unfinished testimonial rows (e.g. a freshly-added empty one) so a
+      // blank row doesn't make the whole save fail server-side validation.
+      const payload: ContentData = {
+        ...current,
+        testimonials: (current.testimonials ?? []).filter(
+          (t) => t.quote.trim() !== "" && t.author.trim() !== "",
+        ),
+      };
       const res = await fetch("/api/admin/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ locale, data: current }),
+        body: JSON.stringify({ locale, data: payload }),
       });
       setStatus(res.ok ? "ok" : "error");
       if (res.ok) setTimeout(() => setStatus("idle"), 3000);
