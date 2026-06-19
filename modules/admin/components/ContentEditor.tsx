@@ -18,6 +18,7 @@ const emptyContent = (): ContentData => ({
     portraits: { title: "", desc: "", packages: [], note: "" },
     weddings: { title: "", desc: "", packages: [], note: "" },
   },
+  testimonials: [],
 });
 
 export function ContentEditor() {
