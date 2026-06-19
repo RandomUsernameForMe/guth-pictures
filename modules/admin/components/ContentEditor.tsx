@@ -464,6 +464,7 @@ function TestimonialEditor({
   onChange: (items: Testimonial[]) => void;
 }) {
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
 
   function update(i: number, updater: (t: Testimonial) => void) {
     const next = testimonials.map((t, idx) => {
@@ -480,6 +481,7 @@ function TestimonialEditor({
 
   async function uploadPhoto(i: number, file: File, id: string) {
     setUploadingId(id);
+    setErrorId(null);
     try {
       const fd = new FormData();
       fd.append("file", file);
@@ -489,7 +491,7 @@ function TestimonialEditor({
       const { publicId } = await res.json();
       update(i, (t) => { t.photo = publicId; });
     } catch {
-      // leave photo unchanged on failure
+      setErrorId(id); // leave photo unchanged, surface failure
     } finally {
       setUploadingId(null);
     }
@@ -505,7 +507,8 @@ function TestimonialEditor({
             <button
               type="button"
               onClick={() => remove(i)}
-              className="text-xs text-red-400 hover:text-red-300 transition-colors"
+              disabled={uploadingId === (t.id ?? String(i))}
+              className="text-xs text-red-400 hover:text-red-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Odebrat
             </button>
@@ -550,6 +553,7 @@ function TestimonialEditor({
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 className="hidden"
+                disabled={uploadingId === (t.id ?? String(i))}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) uploadPhoto(i, file, t.id ?? String(i));
@@ -565,6 +569,9 @@ function TestimonialEditor({
               >
                 Odebrat fotku
               </button>
+            )}
+            {errorId === (t.id ?? String(i)) && (
+              <span className="text-xs text-red-400">Nahrávání selhalo</span>
             )}
           </div>
         </div>
