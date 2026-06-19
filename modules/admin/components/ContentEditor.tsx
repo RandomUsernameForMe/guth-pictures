@@ -3,12 +3,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
-import type { ContentData, SiteImages } from "@/modules/admin/lib/content";
+import type { ContentData, SiteImages, Testimonial } from "@/modules/admin/lib/content";
 import type { PricingPackage } from "@/lib/types";
 
 type Locale = "cs" | "en";
 
 const emptyPackage = (): PricingPackage => ({ id: crypto.randomUUID(), name: "", price: "", duration: "", includes: [] });
+const emptyTestimonial = (): Testimonial => ({ id: crypto.randomUUID(), quote: "", author: "", role: "", photo: "" });
 
 const emptyContent = (): ContentData => ({
   home: { title: "", subtitle: "" },
@@ -307,6 +308,13 @@ export function ContentEditor() {
           />
         </Section>
 
+        <Section title="Reference (testimonials)">
+          <TestimonialEditor
+            testimonials={current.testimonials ?? []}
+            onChange={(items) => patch((d) => { d.testimonials = items; })}
+          />
+        </Section>
+
         <div className="flex items-center gap-4">
           <button
             type="submit"
@@ -443,6 +451,130 @@ function PackageEditor({
         className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30"
       >
         + Přidat balíček
+      </button>
+    </div>
+  );
+}
+
+function TestimonialEditor({
+  testimonials,
+  onChange,
+}: {
+  testimonials: Testimonial[];
+  onChange: (items: Testimonial[]) => void;
+}) {
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
+
+  function update(i: number, updater: (t: Testimonial) => void) {
+    const next = testimonials.map((t, idx) => {
+      if (idx !== i) return t;
+      const copy = structuredClone(t);
+      updater(copy);
+      return copy;
+    });
+    onChange(next);
+  }
+
+  function add() { onChange([...testimonials, emptyTestimonial()]); }
+  function remove(i: number) { onChange(testimonials.filter((_, idx) => idx !== i)); }
+
+  async function uploadPhoto(i: number, file: File, id: string) {
+    setUploadingId(id);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("folder", "site");
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("upload failed");
+      const { publicId } = await res.json();
+      update(i, (t) => { t.photo = publicId; });
+    } catch {
+      // leave photo unchanged on failure
+    } finally {
+      setUploadingId(null);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-gray-400">Reference se na webu zobrazí jen pokud existuje alespoň jedna.</p>
+      {testimonials.map((t, i) => (
+        <div key={t.id ?? String(i)} className="border border-white/10 p-4 space-y-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Reference {i + 1}</span>
+            <button
+              type="button"
+              onClick={() => remove(i)}
+              className="text-xs text-red-400 hover:text-red-300 transition-colors"
+            >
+              Odebrat
+            </button>
+          </div>
+          <textarea
+            placeholder="Citace / co klient řekl"
+            value={t.quote}
+            onChange={(e) => update(i, (x) => { x.quote = e.target.value; })}
+            rows={3}
+            className="w-full bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40 resize-none"
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="text"
+              placeholder="Jméno (autor)"
+              value={t.author}
+              onChange={(e) => update(i, (x) => { x.author = e.target.value; })}
+              className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
+            />
+            <input
+              type="text"
+              placeholder="Role / popis (volitelné)"
+              value={t.role ?? ""}
+              onChange={(e) => update(i, (x) => { x.role = e.target.value; })}
+              className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            {t.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={cloudinaryUrl(t.photo, "w_64,h_64,c_fill,g_face,q_auto,f_auto")}
+                alt={t.author || "Foto reference"}
+                className="w-12 h-12 object-cover rounded-full"
+              />
+            ) : (
+              <span className="text-xs text-gray-500">Bez fotky</span>
+            )}
+            <label className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30 cursor-pointer">
+              {uploadingId === (t.id ?? String(i)) ? "Nahrávám…" : "Vybrat fotku"}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) uploadPhoto(i, file, t.id ?? String(i));
+                  e.target.value = "";
+                }}
+              />
+            </label>
+            {t.photo && (
+              <button
+                type="button"
+                onClick={() => update(i, (x) => { x.photo = ""; })}
+                className="text-xs text-gray-400 hover:text-white transition-colors"
+              >
+                Odebrat fotku
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={add}
+        className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30"
+      >
+        + Přidat referenci
       </button>
     </div>
   );
