@@ -9,7 +9,7 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 - U každého pojmu slider "zkus sám" (hybrid scroll + interakce)
 - Finále = CTA na formulář zájmu o focení
 
-## Pojem → 3D technika (sekce 0–8)
+## Pojem → 3D technika (sekce 0–10)
 
 | Pojem | Technika |
 |---|---|
@@ -21,16 +21,32 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 | Úhel | posun kamery Y (`angle` -1..1), lookAt drží subjekt |
 | Vyvážení bílé | `tint` vec3 v GrainShader (teplo/chlad multiply) |
 | Kompozice | posun subjektu X + světla follow + CSS mřížka třetin |
+| **09 Všechno je světlo** | reveal: meter on, otevři clonu → bar swing (clona/čas/ISO = stejné světlo) |
+| **10 Capstone** | fix-it: clona locked f/1.4, balancuj čas+ISO na střed metru |
+
+## Světlo = jeden model (expoziční trojúhelník)
+
+`light.ts` = single source of truth pro jas. `computeLight(params) → { mul, evDelta }`:
+**clona × čas × ISO × exposure** → jeden multiplikátor (1.0 = správně exponováno), `evDelta = log2(mul)` (0 = akorát, + přepal, − tma). Konzumuje ho `StudioScene` (`toneMappingExposure = 1.05 * mul`) i `ExposureMeter`.
+
+- **Izolované sekce (clona/čas/ISO, `holdLight: true`):** App dopočítá `exposure = holdExposureFor(base)` (auto-exposure) → net mul = 1, vidíš JEN vlastní efekt (blur/šmouha/zrno), žádná změna jasu, meter skrytý.
+- **Reveal (09) + capstone (10):** hold vypnutý → bar se hýbe, vidíš coupling.
+- **Capstone (10):** clona locked f/1.4, `exposure = 1/apertureMul(1.4)` → při min čas+ISO je to akorát; start `{shutter:0.5, iso:1600}` = přepal, user sjede dolů. Víc kombinací řeší = obchod. `solved` když `|evDelta| < 0.3`.
+- Kalibrační knoby (`K_AP`, `S0`, …) nahoře v `light.ts` — dráma > fotografická přesnost.
+- `ExposureMeter` = bar overlay na stage, viditelný jen u sekcí s `meter: true`.
 
 ## Struktura
 
 ```
 modules/foceni-101/
 └── components/
-    ├── Foceni101App.tsx   # scroll orchestrace, sticky stage, sekce/karty, slider state
+    ├── Foceni101App.tsx   # scroll orchestrace, sticky stage, sekce/karty, slider state, capstone wiring
     ├── StudioScene.tsx    # Three.js engine: renderer + EffectComposer (Render→Bokeh→Grain→Output)
-    ├── sections.ts        # config sekcí (CS text, target params, slider)
-    └── types.ts           # PhotoParams, Section, SectionControl
+    ├── light.ts           # čistý light model: computeLight / apertureMul / holdExposureFor (+ test)
+    ├── ExposureMeter.tsx  # bar overlay (evDelta), viditelný u meter:true sekcí
+    ├── Capstone.tsx       # bespoke fix-it karta: 2 slidery (čas+ISO), success reveal
+    ├── sections.ts        # config sekcí (CS text, target params, slider, meter/holdLight/capstone flags)
+    └── types.ts           # PhotoParams, Section (+ meter/holdLight/capstone), SectionControl
 ```
 
 ## Přístupová cesta
@@ -52,7 +68,7 @@ modules/foceni-101/
 
 ## Stav
 
-Sekce 0–8 + CTA placeholder. F2 (úhel/WB/kompozice) hotovo. TODO dle build planu:
+Sekce 0–10 + CTA placeholder. F2 (úhel/WB/kompozice) hotovo. Expoziční trojúhelník hotovo (unified light model + reveal 09 + capstone 10). TODO dle build planu:
 - F3 dlouhá expozice/ND, F4 HDR/polarizace
 - i18n (teď CS hardcoded v `sections.ts`), OG image, sitemap
 - CTA napojit na Formspree (vzor: FeedbackModal v light-testeru)
