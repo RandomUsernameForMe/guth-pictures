@@ -9,6 +9,7 @@ import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
+import { computeLight } from "./light";
 
 const SUBJECT_HEIGHT = 1.55;
 const BASE_FOCAL = 50;
@@ -299,9 +300,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       current.whiteBalance = lerp(current.whiteBalance, t.whiteBalance, k);
       current.composition = lerp(current.composition, t.composition, k);
 
-      // Exposure (+ slight ISO brightening)
-      const isoGain = 1 + Math.log2(Math.max(current.iso, 100) / 100) * 0.12;
-      renderer.toneMappingExposure = 1.05 * current.exposure * isoGain;
+      // Exposure: unified light model — aperture + shutter + ISO all feed brightness.
+      renderer.toneMappingExposure = 1.05 * computeLight(current).mul;
 
       // Composition → slide subject off-centre; lights follow so it stays lit
       const compX = current.composition * 0.7;
