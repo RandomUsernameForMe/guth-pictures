@@ -1223,6 +1223,18 @@ body::after {
 }
 .f101-ctrl-val { color: var(--color-text); }
 
+/* Locked control (capstone aperture) — visible but not interactive */
+.f101-ctrl--locked { opacity: 0.55; }
+.f101-ctrl--locked .gp-slider { cursor: not-allowed; }
+.f101-ctrl-lock {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
 .f101-capstone-win {
   margin: 16px 0 0;
   font-size: 14px;

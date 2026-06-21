@@ -29,6 +29,26 @@ export function Capstone({ num, title, body, vals, onChange, solved, active }: P
       <h2 className="f101-card-title">{title}</h2>
       <p className="f101-card-body">{body}</p>
 
+      {/* Third leg of the triangle: aperture is fixed open — shown locked so the
+          user sees why the shot is overexposed and what they're compensating for. */}
+      <div className="f101-ctrl f101-ctrl--locked">
+        <div className="f101-ctrl-row">
+          <span>Clona <span className="f101-ctrl-lock">zamčená</span></span>
+          <span className="f101-ctrl-val">f/1.8</span>
+        </div>
+        <input
+          type="range"
+          className="gp-slider"
+          min={1.8}
+          max={16}
+          step={0.1}
+          value={1.8}
+          disabled
+          readOnly
+          style={{ ["--p" as string]: "100%" }}
+        />
+      </div>
+
       {SLIDERS.map((c) => {
         const val = vals[c.key];
         const pct = ((val - c.min) / (c.max - c.min)) * 100;
