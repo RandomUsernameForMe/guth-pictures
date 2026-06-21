@@ -5,7 +5,7 @@ import { StudioScene } from "./StudioScene";
 import { ExposureMeter } from "./ExposureMeter";
 import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
-import { holdExposureFor, apertureMul, computeLight } from "./light";
+import { holdExposureFor, computeLight } from "./light";
 import { Capstone, type CapVals } from "./Capstone";
 
 type Quality = "high" | "low";
@@ -20,12 +20,17 @@ function initialSliderVals(): Record<string, number> {
   return out;
 }
 
+// Capstone "correct" reference: aperture wide open (blur kept), solved at a
+// mid-range shutter/ISO point — so the user can trade one against the other in
+// either direction, not just bottom both out. That two-way trade IS the triangle.
+const CAP_REF: PhotoParams = { ...DEFAULT_PARAMS, aperture: 1.4, shutter: 0.25, iso: 100 };
+
 export function Foceni101App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
-  const [capVals, setCapVals] = useState<CapVals>({ shutter: 0.5, iso: 1600 });
+  const [capVals, setCapVals] = useState<CapVals>({ shutter: 0.7, iso: 3200 });
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Lower the 3D quality on small / coarse-pointer devices (still fully usable).
@@ -60,13 +65,13 @@ export function Foceni101App() {
     const sec = SECTIONS[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
     if (sec.capstone) {
-      // Aperture locked open (blur kept). Exposure pinned so that min shutter +
-      // min ISO would be correct — the user must cancel the extra light they're
-      // given. Many shutter/ISO combos solve it: that's the trade-off.
-      base.aperture = 1.4;
+      // Aperture locked open (blur kept). Exposure pinned to CAP_REF so the
+      // scene starts overexposed and the user cancels the extra light by
+      // trading shutter against ISO — many combos on the contour solve it.
+      base.aperture = CAP_REF.aperture;
       base.shutter = capVals.shutter;
       base.iso = capVals.iso;
-      base.exposure = 1 / apertureMul(1.4);
+      base.exposure = holdExposureFor(CAP_REF);
       return base;
     }
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];

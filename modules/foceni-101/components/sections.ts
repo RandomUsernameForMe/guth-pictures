@@ -165,7 +165,7 @@ export const SECTIONS: Section[] = [
     num: "10",
     title: "Zkus to vybalancovat",
     body:
-      "Chceš rozmazané pozadí, tak držíš clonu dokořán (f/1.4). Jenže tím pustíš dovnitř spoustu světla — fotka je přepálená. Sjeď čas a ISO dolů, dokud ukazatel nesedne na střed. Můžeš to dohnat víc časem, nebo víc ISO — to je ten obchod.",
+      "Chceš rozmazané pozadí, tak držíš clonu dokořán (f/1.4). Jenže tím pustíš dovnitř spoustu světla — fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na střed. Klidně nech čas trochu vejš, když ISO sjedeš níž (nebo naopak) — to je ten obchod.",
     target: { aperture: 1.4 },
     meter: true,
     capstone: true,

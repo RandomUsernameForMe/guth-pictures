@@ -3,8 +3,7 @@ import type { PhotoParams } from "./types";
 // ── Calibration knobs (favor readable drama over photographic exactness) ──────
 const F_REF = 5.6;        // ponytail: reference f-stop where apertureMul = 1
 const K_AP = 1.2;         // ponytail: <2 softens real (5.6/f)^2 so f/1.4 isn't pure white; tune visually
-const SHUTTER_REF = 0;    // ponytail: default shutter (fast/sharp) = neutral baseline
-const S0 = 0.5;           // ponytail: offset so the shutter curve is gentle, not a cliff
+const S0 = 0.5;           // ponytail: offset so shutter=0 is neutral (mul 1) and the curve is gentle
 const ISO_K = 0.12;       // ISO brightness slope (moved out of StudioScene)
 
 export interface Light {
@@ -21,7 +20,7 @@ export function apertureMul(aperture: number): number {
 
 /** Light gain from shutter "slowness" (0 fast .. 1 slow). Longer → > 1. */
 export function shutterMul(shutter: number): number {
-  return (shutter + S0) / (SHUTTER_REF + S0);
+  return (shutter + S0) / S0;
 }
 
 /** Brightness gain from ISO. Higher → > 1 (also adds grain elsewhere). */
