@@ -16,14 +16,15 @@ Hlavní stránka webu — landing page, portfolio showcase, kontakt. Propojuje o
 modules/homepage/
 ├── components/
 │   ├── HeroSection.tsx          # hero s fotkou, animovaným textem
-│   ├── SelectedWork.tsx         # výběr nejlepších fotek
 │   ├── ServiceCards.tsx         # karty služeb (typy focení)
-│   ├── ScrollVelocityStrip.tsx  # horizontální scroll strip
-│   ├── WordReveal.tsx           # animace odhalování slov
-│   ├── AmbientGlow.tsx          # ambient glow efekt za hero
+│   ├── Testimonials.tsx         # reference klientů (admin-editable)
+│   ├── StickyContactCta.tsx     # plovoucí CTA po odscrollování hero
+│   ├── LightTesterPromo.tsx     # promo banner light testeru
 │   └── PortfolioFilter.tsx      # filtrování portfolio fotek
 ├── __tests__/
 │   ├── PortfolioFilter.test.tsx
+│   ├── Testimonials.test.tsx
+│   ├── StickyContactCta.test.tsx
 │   └── visual-components.test.tsx
 └── MODULE.md
 ```
