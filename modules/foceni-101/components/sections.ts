@@ -139,17 +139,9 @@ export const SECTIONS: Section[] = [
     id: "kompozice",
     num: "08",
     title: "Kompozice",
-    body:
-      "Umístění subjektu v záběru. Pravidlo třetin radí položit subjekt na třetinovou čáru místo do středu — je to výchozí vodítko, ne zákon. Posuň hlavu a sleduj mřížku.",
-    target: { composition: 0.5 },
-    control: {
-      param: "composition",
-      min: -1,
-      max: 1,
-      step: 0.01,
-      label: "Umístění",
-      fmt: (v) => (v < -0.2 ? "levá třetina" : v > 0.2 ? "pravá třetina" : "střed"),
-    },
+    body: "Kam v záběru subjekt patří. Vyber kompozici a porovnej, jak mění vyznění.",
+    target: {},
+    composition: true,
   },
   {
     id: "svetlo",
