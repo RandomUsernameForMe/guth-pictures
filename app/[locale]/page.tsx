@@ -111,7 +111,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <div className="hp-eyebrow">02</div>
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
-          <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <ServiceCards
             selectLabel={t("sluzby.vybrat")}
             services={[
@@ -152,7 +151,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Testimonials
           testimonials={content.testimonials}
           locale={locale}
-          eyebrow={t("testimonials.eyebrow")}
+          eyebrow="03"
           title={t("testimonials.title")}
         />
       </AnimatedSection>
@@ -169,7 +168,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <AnimatedSection>
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
-          <div className="hp-eyebrow">03</div>
+          <div className="hp-eyebrow">04</div>
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
           <ContactForm />
