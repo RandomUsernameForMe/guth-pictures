@@ -1143,6 +1143,28 @@ body::after {
   letter-spacing: var(--tracking-wider);
   color: var(--color-text-muted);
 }
+.f101-comp-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms;
+}
+.f101-comp-overlay--on { opacity: 1; }
+.f101-comp-overlay line {
+  stroke: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.f101-comp-overlay .f101-comp-faint {
+  stroke: color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+.f101-comp-space {
+  fill: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
 
 /* Sections overlay the sticky stage */
 .f101-sections {
