@@ -1165,6 +1165,32 @@ body::after {
 .f101-comp-space {
   fill: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
+.f101-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 14px 0;
+}
+.f101-chip {
+  pointer-events: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 200ms, border-color 200ms, background 200ms;
+}
+.f101-chip:hover { color: var(--color-text); }
+.f101-chip--on {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
 
 /* Sections overlay the sticky stage */
 .f101-sections {
