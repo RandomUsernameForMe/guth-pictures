@@ -33,6 +33,7 @@ export const SECTIONS: Section[] = [
     body:
       "Tohle je ten trik, proč portrét od profíka „vyskočí“. Otevřená clona (malé číslo f) rozmaže pozadí na hebkou kaši a oddělí člověka od okolí. Zavřená clona (velké f) nechá ostré všechno.",
     target: { aperture: 1.4 },
+    holdLight: true,
     control: {
       param: "aperture",
       min: 1.4,
@@ -50,6 +51,7 @@ export const SECTIONS: Section[] = [
     body:
       "Jak dlouho foťák „kouká“. Krátký čas zmrazí i běžící psa. Dlouhý čas pohyb rozmaže do efektní šmouhy. Sleduj tu kuličku, co krouží kolem hlavy.",
     target: { shutter: 0 },
+    holdLight: true,
     control: {
       param: "shutter",
       min: 0,
@@ -66,6 +68,7 @@ export const SECTIONS: Section[] = [
     body:
       "Když je málo světla, ISO uměle zesílí signál a fotka je světlejší. Daň za to je zrno — ten „šum“, co znáš z nočních fotek z mobilu. Profík drží ISO co nejníž.",
     target: { iso: 100 },
+    holdLight: true,
     control: {
       param: "iso",
       min: 100,
@@ -138,5 +141,33 @@ export const SECTIONS: Section[] = [
       label: "Umístění v záběru",
       fmt: (v) => (v < -0.2 ? "levá třetina" : v > 0.2 ? "pravá třetina" : "na střed"),
     },
+  },
+  {
+    id: "svetlo",
+    num: "09",
+    title: "Všechno je světlo",
+    body:
+      "Tady je ten trik, co spojuje předchozí tři. Clona, čas i ISO — každý z nich potají přidává nebo ubírá světlo. Otevři clonu a koukni na ukazatel: fotka začne přepalovat. Čas a ISO dělají úplně to samé.",
+    target: { aperture: 5.6 },
+    meter: true,
+    control: {
+      param: "aperture",
+      min: 1.4,
+      max: 16,
+      step: 0.1,
+      label: "Clona",
+      fmt: (v) => `f/${v.toFixed(1)}`,
+      invert: true,
+    },
+  },
+  {
+    id: "capstone",
+    num: "10",
+    title: "Zkus to vybalancovat",
+    body:
+      "Chceš rozmazané pozadí, tak držíš clonu dokořán (f/1.4). Jenže tím pustíš dovnitř spoustu světla — fotka je přepálená. Sjeď čas a ISO dolů, dokud ukazatel nesedne na střed. Můžeš to dohnat víc časem, nebo víc ISO — to je ten obchod.",
+    target: { aperture: 1.4 },
+    meter: true,
+    capstone: true,
   },
 ];

@@ -55,4 +55,10 @@ export interface Section {
   target: Partial<PhotoParams>;
   /** Optional interactive control ("zkus sám"). Intro has none. */
   control?: SectionControl;
+  /** Show the on-scene exposure meter while this section is active. */
+  meter?: boolean;
+  /** Auto-balance exposure so only this section's own effect shows (no brightness change). */
+  holdLight?: boolean;
+  /** Render the bespoke two-slider capstone card instead of a standard card. */
+  capstone?: boolean;
 }
