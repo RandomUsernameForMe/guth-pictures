@@ -1099,6 +1099,50 @@ body::after {
   background: var(--color-accent);
   transform: scale(1.4);
 }
+.f101-meter {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(260px, 60vw);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 350ms;
+  pointer-events: none;
+}
+.f101-meter--on { opacity: 1; }
+.f101-meter-track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.f101-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--color-accent);
+  transition: width 200ms;
+}
+.f101-meter-tick {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--color-text);
+  z-index: 1;
+}
+.f101-meter-label {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-text-muted);
+}
 
 /* Sections overlay the sticky stage */
 .f101-sections {

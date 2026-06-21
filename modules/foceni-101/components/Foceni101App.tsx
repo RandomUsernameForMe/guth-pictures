@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { StudioScene } from "./StudioScene";
+import { ExposureMeter } from "./ExposureMeter";
 import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
 import { holdExposureFor } from "./light";
@@ -67,6 +68,7 @@ export function Foceni101App() {
     <div className="f101">
       <div className="f101-stage">
         <StudioScene target={target} quality={quality} orbLightOn={orbLightOn} />
+        <ExposureMeter params={target} show={!!SECTIONS[activeIndex]?.meter} />
         <button
           type="button"
           className="f101-toggle"
