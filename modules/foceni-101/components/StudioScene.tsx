@@ -353,7 +353,11 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       hist.push(orbiter.position.clone());
       if (hist.length > MAX_GHOST + 2) hist.shift();
 
-      orbLight.visible = orbLightOnRef.current;
+      // Toggle hides the whole orbiter (glowing dot + its light + trail), so the
+      // on/off has a clear visible effect — not just the subtle cast light.
+      const orbOn = orbLightOnRef.current;
+      orbLight.visible = orbOn;
+      orbiter.visible = orbOn;
 
       const nGhost = Math.round(current.shutter * MAX_GHOST);
       // Lead orbiter dims as the trail grows (energy spread over time)
@@ -362,7 +366,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       for (let i = 0; i < MAX_GHOST; i++) {
         const g = ghosts[i];
         const idx = hist.length - 2 - i;
-        if (i < nGhost && idx >= 0) {
+        if (orbOn && i < nGhost && idx >= 0) {
           g.visible = true;
           g.position.copy(hist[idx]);
           (g.material as THREE.MeshBasicMaterial).opacity =

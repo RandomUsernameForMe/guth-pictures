@@ -9,7 +9,7 @@ export function ExposureMeter({ params, show }: { params: PhotoParams; show: boo
   const { evDelta } = computeLight(params);
   const clamped = Math.max(-RANGE, Math.min(RANGE, evDelta));
   const pct = ((clamped + RANGE) / (2 * RANGE)) * 100; // 0..100, 50 = correct
-  const word = evDelta > 0.4 ? "přepal" : evDelta < -0.4 ? "tma" : "akorát";
+  const word = evDelta > 0.4 ? "přeexpozice" : evDelta < -0.4 ? "podexpozice" : "správně";
   return (
     <div className={`f101-meter${show ? " f101-meter--on" : ""}`} aria-hidden>
       <div className="f101-meter-track">
@@ -17,7 +17,7 @@ export function ExposureMeter({ params, show }: { params: PhotoParams; show: boo
         <span className="f101-meter-tick" />
       </div>
       <div className="f101-meter-label">
-        {evDelta >= 0 ? "+" : ""}{evDelta.toFixed(1)} EV · {word}
+        Expozice {evDelta >= 0 ? "+" : ""}{evDelta.toFixed(1)} EV · {word}
       </div>
     </div>
   );

@@ -1,37 +1,46 @@
 import type { Section } from "./types";
 
-// MVP = sekce 0–5. Hravý, lidský tón, žádný žargon.
+// ── Value formatters (exact, real units) ──────────────────────────────────────
+/** Exposure multiplier (0.2..2) → EV relative to correct. +1 EV = 2× světla. */
+export const fmtEv = (v: number) => `${Math.log2(v) >= 0 ? "+" : ""}${Math.log2(v).toFixed(1)} EV`;
+/** Shutter "slowness" param 0..1 → real exposure time (1/1000 s .. 1 s). */
+export function fmtShutter(v: number): string {
+  const t = Math.pow(1000, v) / 1000; // seconds
+  return t >= 1 ? `${t.toFixed(t < 2 ? 1 : 0)} s` : `1/${Math.round(1 / t)} s`;
+}
+export const fmtIso = (v: number) => `ISO ${Math.round(v)}`;
+
 export const SECTIONS: Section[] = [
   {
     id: "intro",
     num: "00",
-    title: "Tohle je scéna",
+    title: "Scéna",
     body:
-      "Hlava, světlo, pozadí. Z týhle jedný scény uděláme úplně jinou fotku — jen tím, co zmáčkneme na foťáku. Scrolluj dolů a hraj si s posuvníky. Uvidíš, co každá věc dělá.",
+      "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka — podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky.",
     target: { exposure: 1, aperture: 5.6, shutter: 0, iso: 100, focal: 50 },
   },
   {
     id: "expozice",
     num: "01",
-    title: "Světlo a jas",
+    title: "Expozice",
     body:
-      "Foťák je v jádru kýbl na světlo. Málo světla → tmavá fotka. Moc → přepálená, bílá. Profík hlídá, aby toho světla bylo akorát. Zkus to — sjeď posuvník dolů a nahoru.",
+      "Expozice je celkové množství světla, které dopadne na snímač. Málo světla → tmavá fotka, moc → přepálená. Posuvník mění expozici v EV; +1 EV znamená dvojnásobek světla.",
     target: { exposure: 1 },
     control: {
       param: "exposure",
       min: 0.2,
       max: 2,
       step: 0.01,
-      label: "Množství světla",
-      fmt: (v) => (v < 0.7 ? "tma" : v > 1.4 ? "přepal" : "akorát"),
+      label: "Expozice",
+      fmt: fmtEv,
     },
   },
   {
     id: "clona",
     num: "02",
-    title: "Clona = rozmazané pozadí",
+    title: "Clona",
     body:
-      "Tohle je ten trik, proč portrét od profíka „vyskočí“. Otevřená clona (malé číslo f) rozmaže pozadí na hebkou kaši a oddělí člověka od okolí. Zavřená clona (velké f) nechá ostré všechno.",
+      "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.4) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí.",
     target: { aperture: 1.4 },
     holdLight: true,
     control: {
@@ -47,9 +56,9 @@ export const SECTIONS: Section[] = [
   {
     id: "cas",
     num: "03",
-    title: "Čas závěrky = pohyb",
+    title: "Čas závěrky",
     body:
-      "Jak dlouho foťák „kouká“. Krátký čas zmrazí i běžící psa. Dlouhý čas pohyb rozmaže do efektní šmouhy. Sleduj tu kuličku, co krouží kolem hlavy.",
+      "Čas závěrky je doba, po kterou na snímač dopadá světlo. Krátký čas (1/1000 s) zmrazí pohyb, dlouhý (1/15 s a delší) ho rozmaže do šmouhy. Sleduj kuličku obíhající kolem hlavy.",
     target: { shutter: 0 },
     holdLight: true,
     control: {
@@ -58,15 +67,15 @@ export const SECTIONS: Section[] = [
       max: 1,
       step: 0.01,
       label: "Čas závěrky",
-      fmt: (v) => (v < 0.15 ? "rychlý (ostré)" : v > 0.6 ? "dlouhý (šmouha)" : "střední"),
+      fmt: fmtShutter,
     },
   },
   {
     id: "iso",
     num: "04",
-    title: "ISO = záchrana ve tmě",
+    title: "ISO",
     body:
-      "Když je málo světla, ISO uměle zesílí signál a fotka je světlejší. Daň za to je zrno — ten „šum“, co znáš z nočních fotek z mobilu. Profík drží ISO co nejníž.",
+      "ISO je citlivost snímače. Vyšší hodnota fotku zesvětlí, když je málo světla, ale přidá šum (zrno). Drží se proto co nejníž, jak to dané světlo dovolí.",
     target: { iso: 100 },
     holdLight: true,
     control: {
@@ -75,15 +84,15 @@ export const SECTIONS: Section[] = [
       max: 6400,
       step: 100,
       label: "ISO",
-      fmt: (v) => `${Math.round(v)}`,
+      fmt: fmtIso,
     },
   },
   {
     id: "ohnisko",
     num: "05",
-    title: "Ohnisko = jak moc lichotí",
+    title: "Ohnisko",
     body:
-      "Širokáč (malé mm) zblízka natáhne nos a uši — proto selfie nikdy nevypadá jako ty. Teleobjektiv (velké mm) z dálky obličej zploští a zkrášlí. Proto se portréty fotí na „85“.",
+      "Ohnisková vzdálenost (v mm) určuje zorný úhel. Když měníš ohnisko a zároveň vzdálenost tak, aby byl subjekt stále stejně velký, mění se perspektiva: kratší ohnisko zblízka roztáhne bližší rysy, delší ohnisko z dálky perspektivu stlačí. Volíš tím vztah mezi obličejem a pozadím.",
     target: { focal: 50 },
     control: {
       param: "focal",
@@ -97,57 +106,57 @@ export const SECTIONS: Section[] = [
   {
     id: "uhel",
     num: "06",
-    title: "Úhel = kdo je tady šéf",
+    title: "Úhel pohledu",
     body:
-      "Foťák dole a koukáš nahoru → člověk působí jako hrdina, mocně. Foťák nahoře a koukáš dolů → působí menší a křehčí. Stejná hlava, úplně jiný dojem. Zkus to.",
+      "Výška kamery vůči subjektu. Pohled zdola subjekt opticky zvětší, pohled shora ho zmenší, úroveň očí je neutrální. Je to nástroj pro vyznění záběru, ne pravidlo.",
     target: { angle: -0.5 },
     control: {
       param: "angle",
       min: -1,
       max: 1,
       step: 0.01,
-      label: "Úhel kamery",
-      fmt: (v) => (v < -0.3 ? "zespoda (hrdina)" : v > 0.3 ? "shora (drobek)" : "z očí do očí"),
+      label: "Výška kamery",
+      fmt: (v) => (v < -0.3 ? "podhled" : v > 0.3 ? "nadhled" : "úroveň očí"),
     },
   },
   {
     id: "wb",
     num: "07",
-    title: "Vyvážení bílé = nálada",
+    title: "Vyvážení bílé",
     body:
-      "Tahle volba ladí barvy do tepla, nebo do chladu. Teplá = útulno, večer, intimně. Studená = čisto, ráno, odtažitě. Není to o správně či špatně — je to o pocitu, co fotka vyvolá.",
+      "Vyvážení bílé určuje, jakou teplotu světla foťák považuje za neutrální (v kelvinech). Nižší hodnota nechá fotku teplejší (oranžovou), vyšší studenější (modrou). Nastavuje se podle zdroje světla.",
     target: { whiteBalance: 4200 },
     control: {
       param: "whiteBalance",
       min: 3000,
       max: 8000,
       step: 50,
-      label: "Teplota barev",
-      fmt: (v) => (v < 4500 ? "teplá" : v > 6500 ? "studená" : "neutrální"),
+      label: "Teplota",
+      fmt: (v) => `${Math.round(v)} K`,
     },
   },
   {
     id: "kompozice",
     num: "08",
-    title: "Kompozice = kam ho postavit",
+    title: "Kompozice",
     body:
-      "Profík málokdy cpe člověka přesně doprostřed. Pomyslně rozdělí obraz na třetiny a postaví ho na čáru — působí to živěji a líp se na to kouká. Posuň hlavu a sleduj mřížku třetin.",
+      "Umístění subjektu v záběru. Pravidlo třetin radí položit subjekt na třetinovou čáru místo do středu — je to výchozí vodítko, ne zákon. Posuň hlavu a sleduj mřížku.",
     target: { composition: 0.5 },
     control: {
       param: "composition",
       min: -1,
       max: 1,
       step: 0.01,
-      label: "Umístění v záběru",
-      fmt: (v) => (v < -0.2 ? "levá třetina" : v > 0.2 ? "pravá třetina" : "na střed"),
+      label: "Umístění",
+      fmt: (v) => (v < -0.2 ? "levá třetina" : v > 0.2 ? "pravá třetina" : "střed"),
     },
   },
   {
     id: "svetlo",
     num: "09",
-    title: "Všechno je světlo",
+    title: "Expoziční trojúhelník",
     body:
-      "Tady je ten trik, co spojuje předchozí tři. Clona, čas i ISO — každý z nich potají přidává nebo ubírá světlo. Otevři clonu a koukni na ukazatel: fotka začne přepalovat. Čas a ISO dělají úplně to samé.",
+      "Clona, čas a ISO neovlivňují jen vzhled — všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně.",
     target: { aperture: 5.6 },
     meter: true,
     control: {
@@ -163,9 +172,9 @@ export const SECTIONS: Section[] = [
   {
     id: "capstone",
     num: "10",
-    title: "Zkus to vybalancovat",
+    title: "Vyrovnej expozici",
     body:
-      "Chceš rozmazané pozadí, tak držíš clonu dokořán (f/1.4). Jenže tím pustíš dovnitř spoustu světla — fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na střed. Klidně nech čas trochu vejš, když ISO sjedeš níž (nebo naopak) — to je ten obchod.",
+      "Clona je zamčená na f/1.4 kvůli rozostřenému pozadí, takže dopadá hodně světla a fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na nulu. Delší čas vykompenzuješ nižším ISO a naopak — to je ten kompromis.",
     target: { aperture: 1.4 },
     meter: true,
     capstone: true,

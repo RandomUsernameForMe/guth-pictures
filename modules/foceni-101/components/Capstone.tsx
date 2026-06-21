@@ -1,5 +1,7 @@
 "use client";
 
+import { fmtShutter, fmtIso } from "./sections";
+
 export interface CapVals {
   shutter: number;
   iso: number;
@@ -16,10 +18,8 @@ interface Props {
 }
 
 const SLIDERS = [
-  { key: "shutter" as const, min: 0, max: 1, step: 0.01, label: "Čas závěrky",
-    fmt: (v: number) => (v < 0.15 ? "rychlý" : v > 0.6 ? "dlouhý" : "střední") },
-  { key: "iso" as const, min: 100, max: 6400, step: 100, label: "ISO",
-    fmt: (v: number) => `${Math.round(v)}` },
+  { key: "shutter" as const, min: 0, max: 1, step: 0.01, label: "Čas závěrky", fmt: fmtShutter },
+  { key: "iso" as const, min: 100, max: 6400, step: 100, label: "ISO", fmt: fmtIso },
 ];
 
 export function Capstone({ num, title, body, vals, onChange, solved, active }: Props) {
