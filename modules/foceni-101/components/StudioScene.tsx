@@ -16,6 +16,7 @@ const BASE_FOCAL = 50;
 const BASE_DISTANCE = 1.6;
 const SENSOR = 36; // full-frame width (mm) for FOV math
 const MAX_GHOST = 18;
+const MIN_F = 1.8; // widest aperture the UI allows; defines "fully open" for DoF math
 
 type Quality = "high" | "low";
 
@@ -326,14 +327,18 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       // Aperture → depth of field. Low f = big blur. focus tracks subject.
       // `aperture` uniform = how fast things go soft off the focal plane,
       // `maxblur` caps the blur radius. Both scale with how open the f-stop is.
-      const aT = (current.aperture - 1.4) / (16 - 1.4); // 0 (open) .. 1 (closed)
+      // 0 (wide open at MIN_F) .. 1 (closed at f/16). Clamped so f/MIN_F = fully open.
+      const aT = Math.min(1, Math.max(0, (current.aperture - MIN_F) / (16 - MIN_F)));
       const open = 1 - aT;
       const bu = bokeh.uniforms as Record<string, THREE.IUniform>;
-      // Focus the face surface (camera→front of head), not the head's centre,
-      // so eyes/nose stay crisp wide open. Background balls sit far behind it.
-      bu["focus"].value = Math.max(0.1, dist - headFrontZ);
-      bu["aperture"].value = 0.0002 + open * open * 0.04;
-      bu["maxblur"].value = 0.004 + open * 0.018;
+      // Focus a touch behind the nose tip (≈ the eyes), so the face reads sharp —
+      // not just the front-most point. Background balls sit far behind, still blur.
+      // ponytail: 0.4 = how far back into the head the focal plane sits; tune visually.
+      bu["focus"].value = Math.max(0.1, dist - headFrontZ * 0.4);
+      // Gentler than before so the whole face stays crisp wide open while the
+      // distant background still goes creamy. ponytail: coefficients tuned by eye.
+      bu["aperture"].value = 0.0002 + open * open * 0.02;
+      bu["maxblur"].value = 0.003 + open * 0.01;
 
       // ISO → grain
       const isoT = (current.iso - 100) / (6400 - 100);

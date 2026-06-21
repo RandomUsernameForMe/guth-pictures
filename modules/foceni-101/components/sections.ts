@@ -40,12 +40,12 @@ export const SECTIONS: Section[] = [
     num: "02",
     title: "Clona",
     body:
-      "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.4) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí.",
-    target: { aperture: 1.4 },
+      "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.8) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí.",
+    target: { aperture: 1.8 },
     holdLight: true,
     control: {
       param: "aperture",
-      min: 1.4,
+      min: 1.8,
       max: 16,
       step: 0.1,
       label: "Clona",
@@ -161,7 +161,7 @@ export const SECTIONS: Section[] = [
     meter: true,
     control: {
       param: "aperture",
-      min: 1.4,
+      min: 1.8,
       max: 16,
       step: 0.1,
       label: "Clona",
@@ -174,8 +174,8 @@ export const SECTIONS: Section[] = [
     num: "10",
     title: "Vyrovnej expozici",
     body:
-      "Clona je zamčená na f/1.4 kvůli rozostřenému pozadí, takže dopadá hodně světla a fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na nulu. Delší čas vykompenzuješ nižším ISO a naopak — to je ten kompromis.",
-    target: { aperture: 1.4 },
+      "Clona je zamčená na f/1.8 kvůli rozostřenému pozadí, takže dopadá hodně světla a fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na nulu. Delší čas vykompenzuješ nižším ISO a naopak — to je ten kompromis.",
+    target: { aperture: 1.8 },
     meter: true,
     capstone: true,
   },

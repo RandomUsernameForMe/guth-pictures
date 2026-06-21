@@ -23,7 +23,7 @@ function initialSliderVals(): Record<string, number> {
 // Capstone "correct" reference: aperture wide open (blur kept), solved at a
 // mid-range shutter/ISO point — so the user can trade one against the other in
 // either direction, not just bottom both out. That two-way trade IS the triangle.
-const CAP_REF: PhotoParams = { ...DEFAULT_PARAMS, aperture: 1.4, shutter: 0.25, iso: 100 };
+const CAP_REF: PhotoParams = { ...DEFAULT_PARAMS, aperture: 1.8, shutter: 0.25, iso: 100 };
 
 export function Foceni101App() {
   const [activeIndex, setActiveIndex] = useState(0);
