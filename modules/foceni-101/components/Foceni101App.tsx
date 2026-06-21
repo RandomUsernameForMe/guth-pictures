@@ -6,7 +6,8 @@ import { ExposureMeter } from "./ExposureMeter";
 import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
 import { holdExposureFor, computeLight } from "./light";
-import { Capstone, type CapVals } from "./Capstone";
+import { Capstone } from "./Capstone";
+import { CAPSTONES, capstoneExposure, type CapVals } from "./capstones";
 import { CompositionPicker } from "./CompositionPicker";
 import { CompositionOverlay } from "./CompositionOverlay";
 import { COMPOSITIONS, subjectScreenX } from "./compositions";
@@ -23,17 +24,14 @@ function initialSliderVals(): Record<string, number> {
   return out;
 }
 
-// Capstone "correct" reference: aperture wide open (blur kept), solved at a
-// mid-range shutter/ISO point — so the user can trade one against the other in
-// either direction, not just bottom both out. That two-way trade IS the triangle.
-const CAP_REF: PhotoParams = { ...DEFAULT_PARAMS, aperture: 1.8, shutter: 0.25, iso: 100 };
-
 export function Foceni101App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
-  const [capVals, setCapVals] = useState<CapVals>({ shutter: 0.7, iso: 3200 });
+  const [capVals, setCapVals] = useState<Record<string, CapVals>>(() =>
+    Object.fromEntries(Object.entries(CAPSTONES).map(([id, m]) => [id, { ...m.init }])),
+  );
   const [compSel, setCompSel] = useState(0);
   const [compHover, setCompHover] = useState<number | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
@@ -70,13 +68,15 @@ export function Foceni101App() {
     const sec = SECTIONS[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
     if (sec.capstone) {
-      // Aperture locked open (blur kept). Exposure pinned to CAP_REF so the
-      // scene starts overexposed and the user cancels the extra light by
-      // trading shutter against ISO — many combos on the contour solve it.
-      base.aperture = CAP_REF.aperture;
-      base.shutter = capVals.shutter;
-      base.iso = capVals.iso;
-      base.exposure = holdExposureFor(CAP_REF);
+      // One leg held in a narrow range by the scenario's goal; the other two
+      // are free. Exposure pinned so the scenario's ref balances — the user
+      // trades the two free legs to cancel the light error.
+      const m = CAPSTONES[sec.id];
+      const v = capVals[sec.id];
+      base.aperture = v.aperture;
+      base.shutter = v.shutter;
+      base.iso = v.iso;
+      base.exposure = capstoneExposure(m);
       return base;
     }
     if (sec.composition) {
@@ -136,8 +136,9 @@ export function Foceni101App() {
                   num={s.num}
                   title={s.title}
                   body={s.body}
-                  vals={capVals}
-                  onChange={setCapVals}
+                  scenario={CAPSTONES[s.id]}
+                  vals={capVals[s.id]}
+                  onChange={(v) => setCapVals((p) => ({ ...p, [s.id]: v }))}
                   solved={capSolved}
                   active={i === activeIndex}
                 />

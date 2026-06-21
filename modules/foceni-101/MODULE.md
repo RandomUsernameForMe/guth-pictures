@@ -22,7 +22,7 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 | Vyvážení bílé | `tint` vec3 v GrainShader (teplo/chlad multiply) |
 | **08 Kompozice** | chip picker (5 kompozic) + SVG overlay; `composition` X + `framing` dolly |
 | **09 Všechno je světlo** | reveal: meter on, otevři clonu → bar swing (clona/čas/ISO = stejné světlo) |
-| **10 Capstone** | fix-it: clona locked f/1.8, balancuj čas+ISO na střed metru |
+| **10/11 Capstone ×2** | fix-it: jedna noha omezená (10 clona f/1.8–3.2 = přepal; 11 čas ≤1/250 s = podexpozice), balancuj zbylé dvě na střed metru |
 
 ## Světlo = jeden model (expoziční trojúhelník)
 
@@ -31,7 +31,7 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 
 - **Izolované sekce (clona/čas/ISO, `holdLight: true`):** App dopočítá `exposure = holdExposureFor(base)` (auto-exposure) → net mul = 1, vidíš JEN vlastní efekt (blur/šmouha/zrno), žádná změna jasu, meter skrytý.
 - **Reveal (09) + capstone (10):** hold vypnutý → bar se hýbe, vidíš coupling.
-- **Capstone (10):** clona locked f/1.8, `exposure = holdExposureFor(CAP_REF)` (CAP_REF = mid-range shutter/ISO) → start `{shutter:0.7, iso:3200}` = přepal, user balancuje. Dvoucestný obchod (čas ↔ ISO). `solved` když `|evDelta| < 0.3`. Karta ukazuje i zamčenou clonu (třetí strana trojúhelníku).
+- **Capstone (10/11):** dva úkoly z `capstones.ts` (`CAPSTONES` keyed by section id). Každý má jednu nohu **omezenou na úzký rozsah** (ne zamčenou) kvůli cíli + badge `reason`, druhé dvě volné. `exposure = capstoneExposure(m) = holdExposureFor(m.ref)` → start `init` je rozhozený (10 přepal, 11 podexpozice), user balancuje volné nohy. `solved` když `|evDelta| < 0.3`. Test ověřuje, že omezená noha sama o sobě nestačí (obchod je nutný).
 - Kalibrační knoby (`K_AP`, `S0`, …) nahoře v `light.ts` — dráma > fotografická přesnost.
 - `ExposureMeter` = bar overlay dole na stage (mimo navbar), viditelný jen u sekcí s `meter: true`.
 
@@ -48,7 +48,8 @@ modules/foceni-101/
     ├── StudioScene.tsx    # Three.js engine: renderer + EffectComposer (Render→Bokeh→Grain→Output)
     ├── light.ts           # čistý light model: computeLight / apertureMul / holdExposureFor (+ test)
     ├── ExposureMeter.tsx  # bar overlay (evDelta), viditelný u meter:true sekcí
-    ├── Capstone.tsx       # bespoke fix-it karta: 2 slidery (čas+ISO) + zamčená clona, success reveal
+    ├── Capstone.tsx       # bespoke fix-it karta: 3 slidery (1 omezená noha + badge), scenario-driven
+    ├── capstones.ts       # config 2 capstone scénářů (ranges/restricted/ref/init) + test
     ├── compositions.ts    # config 5 kompozic + subjectScreenX (+ test)
     ├── CompositionPicker.tsx  # bespoke karta: chips výběr kompozice
     ├── CompositionOverlay.tsx # SVG guide overlay (thirds/center/golden/leading/space)

@@ -1,72 +1,55 @@
 "use client";
 
 import { fmtShutter, fmtIso } from "./sections";
-
-export interface CapVals {
-  shutter: number;
-  iso: number;
-}
+import type { CapVals, CapLeg, CapstoneMechanic } from "./capstones";
 
 interface Props {
   num: string;
   title: string;
   body: string;
+  scenario: CapstoneMechanic;
   vals: CapVals;
   onChange: (v: CapVals) => void;
   solved: boolean;
   active: boolean;
 }
 
-const SLIDERS = [
-  { key: "shutter" as const, min: 0, max: 1, step: 0.01, label: "Čas závěrky", fmt: fmtShutter },
-  { key: "iso" as const, min: 100, max: 6400, step: 100, label: "ISO", fmt: fmtIso },
+const LEGS: { key: CapLeg; label: string; fmt: (v: number) => string }[] = [
+  { key: "aperture", label: "Clona", fmt: (v) => `f/${v.toFixed(1)}` },
+  { key: "shutter", label: "Čas závěrky", fmt: fmtShutter },
+  { key: "iso", label: "ISO", fmt: fmtIso },
 ];
 
-export function Capstone({ num, title, body, vals, onChange, solved, active }: Props) {
+export function Capstone({ num, title, body, scenario, vals, onChange, solved, active }: Props) {
   return (
     <div className={`f101-card${active ? " f101-card--active" : ""}`}>
       <div className="f101-card-num">{num}</div>
       <h2 className="f101-card-title">{title}</h2>
       <p className="f101-card-body">{body}</p>
 
-      {/* Third leg of the triangle: aperture is fixed open — shown locked so the
-          user sees why the shot is overexposed and what they're compensating for. */}
-      <div className="f101-ctrl f101-ctrl--locked">
-        <div className="f101-ctrl-row">
-          <span>Clona <span className="f101-ctrl-lock">zamčená</span></span>
-          <span className="f101-ctrl-val">f/1.8</span>
-        </div>
-        <input
-          type="range"
-          className="gp-slider"
-          min={1.8}
-          max={16}
-          step={0.1}
-          value={1.8}
-          disabled
-          readOnly
-          style={{ ["--p" as string]: "100%" }}
-        />
-      </div>
-
-      {SLIDERS.map((c) => {
-        const val = vals[c.key];
-        const pct = ((val - c.min) / (c.max - c.min)) * 100;
+      {LEGS.map((leg) => {
+        const r = scenario.ranges[leg.key];
+        const val = vals[leg.key];
+        const pct = ((val - r.min) / (r.max - r.min)) * 100;
+        const restricted = scenario.restricted === leg.key;
         return (
-          <div className="f101-ctrl" key={c.key}>
+          <div className="f101-ctrl" key={leg.key}>
             <div className="f101-ctrl-row">
-              <span>{c.label}</span>
-              <span className="f101-ctrl-val">{c.fmt(val)}</span>
+              <span>
+                {leg.label}
+                {restricted && <span className="f101-ctrl-lock">{scenario.reason}</span>}
+              </span>
+              <span className="f101-ctrl-val">{leg.fmt(val)}</span>
             </div>
             <input
               type="range"
               className="gp-slider"
-              min={c.min}
-              max={c.max}
-              step={c.step}
+              min={r.min}
+              max={r.max}
+              step={r.step}
               value={val}
               style={{ ["--p" as string]: `${pct}%` }}
-              onChange={(e) => onChange({ ...vals, [c.key]: parseFloat(e.target.value) })}
+              onChange={(e) => onChange({ ...vals, [leg.key]: parseFloat(e.target.value) })}
             />
           </div>
         );

@@ -1271,16 +1271,16 @@ body::after {
 }
 .f101-ctrl-val { color: var(--color-text); }
 
-/* Locked control (capstone aperture) — visible but not interactive */
-.f101-ctrl--locked { opacity: 0.55; }
-.f101-ctrl--locked .gp-slider { cursor: not-allowed; }
+/* Reason badge on a capstone's restricted leg (narrow range, still movable) */
 .f101-ctrl-lock {
   margin-left: 6px;
   padding: 1px 6px;
-  border: 1px solid var(--color-border);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
   border-radius: 999px;
   font-size: 9px;
-  color: var(--color-text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-accent);
 }
 
 .f101-capstone-win {

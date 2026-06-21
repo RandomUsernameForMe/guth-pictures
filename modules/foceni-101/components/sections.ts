@@ -162,12 +162,22 @@ export const SECTIONS: Section[] = [
     },
   },
   {
-    id: "capstone",
+    id: "capstone-blur",
     num: "10",
-    title: "Vyrovnej expozici",
+    title: "Vyrovnej expozici: rozostřené pozadí",
     body:
-      "Clona je zamčená na f/1.8 kvůli rozostřenému pozadí, takže dopadá hodně světla a fotka je přepálená. Stáhni čas a ISO, dokud ukazatel nesedne na nulu. Delší čas vykompenzuješ nižším ISO a naopak — to je ten kompromis.",
-    target: { aperture: 1.8 },
+      "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán — jde zavřít jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu.",
+    target: {},
+    meter: true,
+    capstone: true,
+  },
+  {
+    id: "capstone-freeze",
+    num: "11",
+    title: "Vyrovnej expozici: zmrazit pohyb",
+    body:
+      "Chceš zmrazit rychlý pohyb, proto čas musí zůstat krátký — nejdál 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu.",
+    target: {},
     meter: true,
     capstone: true,
   },
