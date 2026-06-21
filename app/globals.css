@@ -1223,6 +1223,20 @@ body::after {
 }
 .f101-ctrl-val { color: var(--color-text); }
 
+.f101-capstone-win {
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-accent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 350ms, transform 350ms;
+}
+.f101-capstone-win--on {
+  opacity: 1;
+  transform: none;
+}
+
 .f101-scroll-hint {
   margin-top: 20px;
   font-family: var(--font-mono);

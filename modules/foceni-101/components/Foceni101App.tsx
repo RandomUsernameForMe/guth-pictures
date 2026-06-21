@@ -5,7 +5,8 @@ import { StudioScene } from "./StudioScene";
 import { ExposureMeter } from "./ExposureMeter";
 import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
-import { holdExposureFor } from "./light";
+import { holdExposureFor, apertureMul, computeLight } from "./light";
+import { Capstone, type CapVals } from "./Capstone";
 
 type Quality = "high" | "low";
 
@@ -24,6 +25,7 @@ export function Foceni101App() {
   const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
+  const [capVals, setCapVals] = useState<CapVals>({ shutter: 0.5, iso: 1600 });
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Lower the 3D quality on small / coarse-pointer devices (still fully usable).
@@ -57,12 +59,25 @@ export function Foceni101App() {
   const target = useMemo<PhotoParams>(() => {
     const sec = SECTIONS[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
+    if (sec.capstone) {
+      // Aperture locked open (blur kept). Exposure pinned so that min shutter +
+      // min ISO would be correct — the user must cancel the extra light they're
+      // given. Many shutter/ISO combos solve it: that's the trade-off.
+      base.aperture = 1.4;
+      base.shutter = capVals.shutter;
+      base.iso = capVals.iso;
+      base.exposure = 1 / apertureMul(1.4);
+      return base;
+    }
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];
     // Isolated sections: cancel the side-effect on brightness so only the
     // taught effect (blur / trail / grain) shows. Reveal & capstone skip this.
     if (sec.holdLight) base.exposure = holdExposureFor(base);
     return base;
-  }, [activeIndex, sliderVals]);
+  }, [activeIndex, sliderVals, capVals]);
+
+  const capSolved =
+    !!SECTIONS[activeIndex]?.capstone && Math.abs(computeLight(target).evDelta) < 0.3;
 
   return (
     <div className="f101">
@@ -103,34 +118,46 @@ export function Foceni101App() {
               ref={(el) => { sectionRefs.current[i] = el; }}
               className="f101-section"
             >
-              <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
-                <div className="f101-card-num">{s.num}</div>
-                <h2 className="f101-card-title">{s.title}</h2>
-                <p className="f101-card-body">{s.body}</p>
+              {s.capstone ? (
+                <Capstone
+                  num={s.num}
+                  title={s.title}
+                  body={s.body}
+                  vals={capVals}
+                  onChange={setCapVals}
+                  solved={capSolved}
+                  active={i === activeIndex}
+                />
+              ) : (
+                <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
+                  <div className="f101-card-num">{s.num}</div>
+                  <h2 className="f101-card-title">{s.title}</h2>
+                  <p className="f101-card-body">{s.body}</p>
 
-                {c && (
-                  <div className="f101-ctrl">
-                    <div className="f101-ctrl-row">
-                      <span>{c.label}</span>
-                      <span className="f101-ctrl-val">{c.fmt(val)}</span>
+                  {c && (
+                    <div className="f101-ctrl">
+                      <div className="f101-ctrl-row">
+                        <span>{c.label}</span>
+                        <span className="f101-ctrl-val">{c.fmt(val)}</span>
+                      </div>
+                      <input
+                        type="range"
+                        className="gp-slider"
+                        min={c.min}
+                        max={c.max}
+                        step={c.step}
+                        value={val}
+                        style={{ ["--p" as string]: `${pct}%` }}
+                        onChange={(e) =>
+                          setSliderVals((v) => ({ ...v, [s.id]: parseFloat(e.target.value) }))
+                        }
+                      />
                     </div>
-                    <input
-                      type="range"
-                      className="gp-slider"
-                      min={c.min}
-                      max={c.max}
-                      step={c.step}
-                      value={val}
-                      style={{ ["--p" as string]: `${pct}%` }}
-                      onChange={(e) =>
-                        setSliderVals((v) => ({ ...v, [s.id]: parseFloat(e.target.value) }))
-                      }
-                    />
-                  </div>
-                )}
+                  )}
 
-                {i === 0 && <div className="f101-scroll-hint">scrolluj ↓</div>}
-              </div>
+                  {i === 0 && <div className="f101-scroll-hint">scrolluj ↓</div>}
+                </div>
+              )}
             </section>
           );
         })}
