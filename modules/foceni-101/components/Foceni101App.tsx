@@ -7,6 +7,9 @@ import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
 import { holdExposureFor, computeLight } from "./light";
 import { Capstone, type CapVals } from "./Capstone";
+import { CompositionPicker } from "./CompositionPicker";
+import { CompositionOverlay } from "./CompositionOverlay";
+import { COMPOSITIONS, subjectScreenX } from "./compositions";
 
 type Quality = "high" | "low";
 
@@ -31,6 +34,8 @@ export function Foceni101App() {
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
   const [capVals, setCapVals] = useState<CapVals>({ shutter: 0.7, iso: 3200 });
+  const [compSel, setCompSel] = useState(0);
+  const [compHover, setCompHover] = useState<number | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Lower the 3D quality on small / coarse-pointer devices (still fully usable).
@@ -74,12 +79,18 @@ export function Foceni101App() {
       base.exposure = holdExposureFor(CAP_REF);
       return base;
     }
+    if (sec.composition) {
+      const cmp = COMPOSITIONS[compHover ?? compSel];
+      base.composition = cmp.comp;
+      base.framing = cmp.framing;
+      return base;
+    }
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];
     // Isolated sections: cancel the side-effect on brightness so only the
     // taught effect (blur / trail / grain) shows. Reveal & capstone skip this.
     if (sec.holdLight) base.exposure = holdExposureFor(base);
     return base;
-  }, [activeIndex, sliderVals, capVals]);
+  }, [activeIndex, sliderVals, capVals, compSel, compHover]);
 
   const capSolved =
     !!SECTIONS[activeIndex]?.capstone && Math.abs(computeLight(target).evDelta) < 0.3;
@@ -97,14 +108,11 @@ export function Foceni101App() {
         >
           Světlo kuličky: {orbLightOn ? "zap" : "vyp"}
         </button>
-        {SECTIONS[activeIndex]?.id === "kompozice" && (
-          <div className="f101-thirds" aria-hidden>
-            <span className="f101-thirds-v" style={{ left: "33.33%" }} />
-            <span className="f101-thirds-v" style={{ left: "66.66%" }} />
-            <span className="f101-thirds-h" style={{ top: "33.33%" }} />
-            <span className="f101-thirds-h" style={{ top: "66.66%" }} />
-          </div>
-        )}
+        <CompositionOverlay
+          kind={COMPOSITIONS[compHover ?? compSel].overlay}
+          subjectX={subjectScreenX(COMPOSITIONS[compHover ?? compSel].comp)}
+          show={SECTIONS[activeIndex]?.composition === true}
+        />
         <div className="f101-progress">
           {SECTIONS.map((s, i) => (
             <span key={s.id} className={`f101-dot${i === activeIndex ? " f101-dot--on" : ""}`} />
@@ -131,6 +139,15 @@ export function Foceni101App() {
                   vals={capVals}
                   onChange={setCapVals}
                   solved={capSolved}
+                  active={i === activeIndex}
+                />
+              ) : s.composition ? (
+                <CompositionPicker
+                  num={s.num}
+                  title={s.title}
+                  selected={compSel}
+                  onSelect={setCompSel}
+                  onHover={setCompHover}
                   active={i === activeIndex}
                 />
               ) : (
