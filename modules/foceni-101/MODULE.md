@@ -20,9 +20,9 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 | Ohnisko | FOV + dolly (drží velikost subjektu = komprese) |
 | Úhel | posun kamery Y (`angle` -1..1), lookAt drží subjekt |
 | Vyvážení bílé | `tint` vec3 v GrainShader (teplo/chlad multiply) |
-| Kompozice | posun subjektu X + světla follow + CSS mřížka třetin |
+| **08 Kompozice** | chip picker (5 kompozic) + SVG overlay; `composition` X + `framing` dolly |
 | **09 Všechno je světlo** | reveal: meter on, otevři clonu → bar swing (clona/čas/ISO = stejné světlo) |
-| **10 Capstone** | fix-it: clona locked f/1.4, balancuj čas+ISO na střed metru |
+| **10 Capstone** | fix-it: clona locked f/1.8, balancuj čas+ISO na střed metru |
 
 ## Světlo = jeden model (expoziční trojúhelník)
 
@@ -31,9 +31,13 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 
 - **Izolované sekce (clona/čas/ISO, `holdLight: true`):** App dopočítá `exposure = holdExposureFor(base)` (auto-exposure) → net mul = 1, vidíš JEN vlastní efekt (blur/šmouha/zrno), žádná změna jasu, meter skrytý.
 - **Reveal (09) + capstone (10):** hold vypnutý → bar se hýbe, vidíš coupling.
-- **Capstone (10):** clona locked f/1.4, `exposure = 1/apertureMul(1.4)` → při min čas+ISO je to akorát; start `{shutter:0.5, iso:1600}` = přepal, user sjede dolů. Víc kombinací řeší = obchod. `solved` když `|evDelta| < 0.3`.
+- **Capstone (10):** clona locked f/1.8, `exposure = holdExposureFor(CAP_REF)` (CAP_REF = mid-range shutter/ISO) → start `{shutter:0.7, iso:3200}` = přepal, user balancuje. Dvoucestný obchod (čas ↔ ISO). `solved` když `|evDelta| < 0.3`. Karta ukazuje i zamčenou clonu (třetí strana trojúhelníku).
 - Kalibrační knoby (`K_AP`, `S0`, …) nahoře v `light.ts` — dráma > fotografická přesnost.
-- `ExposureMeter` = bar overlay na stage, viditelný jen u sekcí s `meter: true`.
+- `ExposureMeter` = bar overlay dole na stage (mimo navbar), viditelný jen u sekcí s `meter: true`.
+
+## Kompozice (sekce 08)
+
+Bespoke `CompositionPicker` (jako capstone) místo slideru. `compositions.ts` = pole 5 kompozic (Třetiny, Na střed, Zlatý řez, Vedoucí linie, Prostor), každá má `comp` (X), `framing` (dolly kamery; Prostor 1.8 → malý subjekt) a `overlay` typ. Klik chip → scéna snapne + vysvětlení; hover → preview overlaye (čte se `COMPOSITIONS[compHover ?? compSel]`). `CompositionOverlay` = SVG na stage (thirds/center/golden grid, leading lines mířící na subjekt přes `subjectScreenX(comp)`, negative-space rect). `framing` = nové pole v `PhotoParams` (násobič vzdálenosti kamery).
 
 ## Struktura
 
@@ -44,9 +48,12 @@ modules/foceni-101/
     ├── StudioScene.tsx    # Three.js engine: renderer + EffectComposer (Render→Bokeh→Grain→Output)
     ├── light.ts           # čistý light model: computeLight / apertureMul / holdExposureFor (+ test)
     ├── ExposureMeter.tsx  # bar overlay (evDelta), viditelný u meter:true sekcí
-    ├── Capstone.tsx       # bespoke fix-it karta: 2 slidery (čas+ISO), success reveal
-    ├── sections.ts        # config sekcí (CS text, target params, slider, meter/holdLight/capstone flags)
-    └── types.ts           # PhotoParams, Section (+ meter/holdLight/capstone), SectionControl
+    ├── Capstone.tsx       # bespoke fix-it karta: 2 slidery (čas+ISO) + zamčená clona, success reveal
+    ├── compositions.ts    # config 5 kompozic + subjectScreenX (+ test)
+    ├── CompositionPicker.tsx  # bespoke karta: chips výběr kompozice
+    ├── CompositionOverlay.tsx # SVG guide overlay (thirds/center/golden/leading/space)
+    ├── sections.ts        # config sekcí (CS text, target params, slider, meter/holdLight/capstone/composition flags)
+    └── types.ts           # PhotoParams (+ framing), Section (+ meter/holdLight/capstone/composition), SectionControl
 ```
 
 ## Přístupová cesta
