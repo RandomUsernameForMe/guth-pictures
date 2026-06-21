@@ -300,6 +300,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       current.angle = lerp(current.angle, t.angle, k);
       current.whiteBalance = lerp(current.whiteBalance, t.whiteBalance, k);
       current.composition = lerp(current.composition, t.composition, k);
+      current.framing = lerp(current.framing, t.framing, k);
 
       // Exposure: unified light model — aperture + shutter + ISO all feed brightness.
       renderer.toneMappingExposure = 1.05 * computeLight(current).mul;
@@ -312,7 +313,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
 
       // Focal length → FOV + dolly (keeps subject size, shows compression).
       // Angle → raise/lower the camera while still looking at the subject.
-      const dist = BASE_DISTANCE * (current.focal / BASE_FOCAL);
+      const dist = BASE_DISTANCE * (current.focal / BASE_FOCAL) * current.framing;
       const camY = SUBJECT_HEIGHT + current.angle * 0.7;
       camera.position.set(0, camY, dist);
       camera.fov = focalToFov(current.focal);

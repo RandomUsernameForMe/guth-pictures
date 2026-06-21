@@ -16,6 +16,8 @@ export interface PhotoParams {
   whiteBalance: number;
   /** Subject horizontal placement. -1 = left third, 0 = centred, 1 = right third. */
   composition: number;
+  /** Camera-distance multiplier for framing. 1 = normal; >1 dollies back (subject smaller). */
+  framing: number;
 }
 
 export const DEFAULT_PARAMS: PhotoParams = {
@@ -27,6 +29,7 @@ export const DEFAULT_PARAMS: PhotoParams = {
   angle: 0,
   whiteBalance: 5500,
   composition: 0,
+  framing: 1,
 };
 
 export type ParamKey = keyof PhotoParams;
@@ -61,4 +64,6 @@ export interface Section {
   holdLight?: boolean;
   /** Render the bespoke two-slider capstone card instead of a standard card. */
   capstone?: boolean;
+  /** Render the bespoke composition picker card instead of a standard card. */
+  composition?: boolean;
 }
