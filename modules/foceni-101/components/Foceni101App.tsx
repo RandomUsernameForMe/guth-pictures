@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { StudioScene } from "./StudioScene";
 import { SECTIONS } from "./sections";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
+import { holdExposureFor } from "./light";
 
 type Quality = "high" | "low";
 
@@ -56,6 +57,9 @@ export function Foceni101App() {
     const sec = SECTIONS[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];
+    // Isolated sections: cancel the side-effect on brightness so only the
+    // taught effect (blur / trail / grain) shows. Reveal & capstone skip this.
+    if (sec.holdLight) base.exposure = holdExposureFor(base);
     return base;
   }, [activeIndex, sliderVals]);
 
