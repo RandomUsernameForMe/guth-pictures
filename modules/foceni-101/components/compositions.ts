@@ -33,7 +33,7 @@ export const COMPOSITIONS: Composition[] = [
   {
     id: "golden",
     label: "Zlatý řez",
-    comp: 0.62,
+    comp: 0.33,
     framing: 1,
     overlay: "golden",
     body: "Subjekt na linii zlatého řezu (≈ 62 %). Podobné třetinám, ale o kousek blíž středu — poměr převzatý z malířství.",

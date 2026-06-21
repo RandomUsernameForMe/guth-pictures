@@ -1343,34 +1343,6 @@ body::after {
   border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
 }
 
-/* Rule-of-thirds overlay (composition section only) */
-.f101-thirds {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  animation: f101-thirds-in 400ms ease both;
-}
-.f101-thirds-v,
-.f101-thirds-h {
-  position: absolute;
-  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
-}
-.f101-thirds-v {
-  top: 0;
-  bottom: 0;
-  width: 1px;
-}
-.f101-thirds-h {
-  left: 0;
-  right: 0;
-  height: 1px;
-}
-@keyframes f101-thirds-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 @media (max-width: 768px) {
   .f101-section { padding: 0 5vw; justify-content: center; }
   .f101-card { max-width: 100%; }

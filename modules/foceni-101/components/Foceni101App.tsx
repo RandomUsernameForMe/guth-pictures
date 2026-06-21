@@ -145,6 +145,7 @@ export function Foceni101App() {
                 <CompositionPicker
                   num={s.num}
                   title={s.title}
+                  intro={s.body}
                   selected={compSel}
                   onSelect={setCompSel}
                   onHover={setCompHover}
