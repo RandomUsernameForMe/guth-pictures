@@ -26,11 +26,15 @@ export function Footer({ title, subtitle, email }: Props) {
           {/* Quick nav */}
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--color-text-muted)]">
             <Link href="/portfolio" className="hover:text-[var(--color-text)] transition-colors">{tNav("portfolio")}</Link>
+            <Link href="/sluzby" className="hover:text-[var(--color-text)] transition-colors">{tNav("sluzby")}</Link>
+            <Link href="/o-mne" className="hover:text-[var(--color-text)] transition-colors">{tNav("o-mne")}</Link>
             <Link href="/blog" className="hover:text-[var(--color-text)] transition-colors">{tNav("blog")}</Link>
+            <Link href="/foceni-101" className="hover:text-[var(--color-text)] transition-colors">{tNav("foceni-101")}</Link>
             <a href="/#kontakt" className="hover:text-[var(--color-text)] transition-colors">{tNav("kontakt")}</a>
             <Link href="/vop" className="hover:text-[var(--color-text)] transition-colors">{tNav("vop")}</Link>
             <Link href="/privacy" className="hover:text-[var(--color-text)] transition-colors">{tNav("privacy")}</Link>
             <a href={`mailto:${email}`} className="hover:text-[var(--color-text)] transition-colors">{email}</a>
+            <a href="https://www.instagram.com/guth_pictures/" target="_blank" rel="noopener" className="hover:text-[var(--color-text)] transition-colors">Instagram</a>
           </nav>
         </div>
 

@@ -8,16 +8,25 @@
     "kontakt": "Kontakt",
     "vop": "Obchodní podmínky",
     "privacy": "Ochrana osobních údajů",
-    "light-tester": "Light Tester"
+    "light-tester": "Light Tester",
+    "foceni-101": "Focení 101"
   },
   "meta": {
     "home": {
-      "title": "Guth Pictures — Fotograf",
-      "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty."
+      "title": "Fotograf Praha — kreativní portréty, svatby a larpy",
+      "description": "Profesionální fotograf v Praze. Kreativní portréty se silnou atmosférou, svatební fotografie, eventy a larpy. Focení v ateliéru i exteriéru."
     },
     "portfolio": {
-      "title": "Portfolio — Guth Pictures",
-      "description": "Výběr fotografií: portréty, eventy a larpy."
+      "title": "Portfolio — portréty, svatby, larpy",
+      "description": "Výběr fotografií pražského fotografa: kreativní portréty, svatby, eventy a larpy."
+    },
+    "sluzby": {
+      "title": "Služby a ceník — portrétní a svatební focení",
+      "description": "Ceník focení v Praze: portrétní balíčky, svatební fotografie, eventy a larpy. Vyberte si balíček a rezervujte termín."
+    },
+    "o-mne": {
+      "title": "O mně — fotograf Tomáš Guth Jarkovský",
+      "description": "Fotograf z Prahy. Kreativní portréty se silnou atmosférou, svatby, eventy a larpy. Kdo stojí za Guth Pictures."
     }
   },
   "home": {
@@ -82,8 +91,8 @@
   "blog": {
     "title": "Blog",
     "subtitle": "Zápisky z fotografického světa",
-    "metaTitle": "Blog — Guth Pictures",
-    "metaDescription": "Zápisky o fotografii, technice a zážitcích z focení.",
+    "metaTitle": "Blog o fotografii",
+    "metaDescription": "Zápisky o fotografii, technice a zážitcích z focení. Tipy pro klienty i fotografy od pražského fotografa.",
     "empty": "Zatím žádné příspěvky.",
     "readMore": "Číst dál",
     "back": "Zpět na blog"

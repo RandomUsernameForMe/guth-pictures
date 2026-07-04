@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: t("description"),
     alternates: {
       canonical: `/${locale}/portfolio`,
-      languages: { cs: "/cs/portfolio", en: "/en/portfolio" },
+      languages: { cs: "/cs/portfolio", en: "/en/portfolio", "x-default": "/cs/portfolio" },
     },
     openGraph: {
       title: t("title"),

@@ -41,10 +41,12 @@ function Grain() {
   );
 }
 
+type PanelImage = { src: string; srcSet: string };
+
 function TriptychPanel({
   images, interval = 5000, kbAnimation, label, index,
 }: {
-  images: string[];
+  images: PanelImage[];
   interval?: number;
   kbAnimation: string;
   label: string;
@@ -65,8 +67,8 @@ function TriptychPanel({
       className="relative overflow-hidden"
       style={{ background: "var(--color-surface)", borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none" }}
     >
-      <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
-      <img key={cur} src={images[cur]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
+      <img src={images[prev]?.src} srcSet={images[prev]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
+      <img key={cur} src={images[cur]?.src} srcSet={images[cur]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
       <FilmicTint />
       {/* Accent duotone — unifies all three panels toward the brand gold. Tune via opacities. */}
       <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
@@ -129,7 +131,12 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
   );
 
   const panelData = useMemo(() => {
-    const toSrcs = (ids: string[]) => ids.map((id) => cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"));
+    const toSrcs = (ids: string[]): PanelImage[] => ids.map((id) => ({
+      src: cloudinaryUrl(id, "w_800,c_fill,q_auto:good,f_auto"),
+      srcSet: [400, 800, 1200]
+        .map((w) => `${cloudinaryUrl(id, `w_${w},c_fill,q_auto:good,f_auto`)} ${w}w`)
+        .join(", "),
+    }));
     const labels = locale === "cs" ? ["Portréty", "Eventy", "Portréty"] : ["Portraits", "Events", "Portraits"];
     return [
       { srcs: toSrcs(photos?.[0] ?? []), label: labels[0], kb: "heroKb1 18s ease-in-out infinite alternate" },

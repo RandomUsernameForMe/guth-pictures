@@ -8,16 +8,25 @@
     "kontakt": "Contact",
     "vop": "Terms & Guidelines",
     "privacy": "Privacy Policy",
-    "light-tester": "Light Tester"
+    "light-tester": "Light Tester",
+    "foceni-101": "Photography 101"
   },
   "meta": {
     "home": {
-      "title": "Guth Pictures — Photographer",
-      "description": "Professional photographer. Strong atmosphere, distinctive creative portraits."
+      "title": "Prague Photographer — Creative Portraits, Weddings & Larps",
+      "description": "Professional photographer in Prague, Czech Republic. Creative portraits with strong atmosphere, wedding photography, events and larps. Studio and outdoor shoots."
     },
     "portfolio": {
-      "title": "Portfolio — Guth Pictures",
-      "description": "A selection of photographs: portraits, events and larps."
+      "title": "Portfolio — Portraits, Weddings, Larps",
+      "description": "Selected work by a Prague-based photographer: creative portraits, weddings, events and larps."
+    },
+    "sluzby": {
+      "title": "Services & Pricing — Portrait and Wedding Photography",
+      "description": "Photography pricing in Prague: portrait packages, wedding photography, events and larps. Pick a package and book a date."
+    },
+    "o-mne": {
+      "title": "About — Photographer Tomáš Guth Jarkovský",
+      "description": "Prague-based photographer. Creative portraits with strong atmosphere, weddings, events and larps. The person behind Guth Pictures."
     }
   },
   "home": {
@@ -82,8 +91,8 @@
   "blog": {
     "title": "Blog",
     "subtitle": "Notes from the world of photography",
-    "metaTitle": "Blog — Guth Pictures",
-    "metaDescription": "Notes on photography, technique and experiences from shoots.",
+    "metaTitle": "Photography Blog",
+    "metaDescription": "Notes on photography, technique and experiences from shoots by a Prague-based photographer.",
     "empty": "No posts yet.",
     "readMore": "Read more",
     "back": "Back to blog"

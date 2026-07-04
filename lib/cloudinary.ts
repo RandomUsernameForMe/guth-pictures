@@ -26,17 +26,26 @@ async function fetchGalleryPhotos(folder: string): Promise<GalleryPhoto[]> {
     .max_results(50)
     .execute();
 
-  return result.resources.map((r: CloudinaryResource) => ({
-    publicId: r.public_id,
-    width: r.width,
-    height: r.height,
-    alt: {
-      cs: r.context?.alt_cs ?? r.public_id,
-      en: r.context?.alt_en ?? r.public_id,
-    },
-    category: r.context?.category ?? "portréty",
-    selected: r.tags?.includes("selected_work") ?? false,
-  }));
+  const altFallback: Record<GalleryPhoto["category"], { cs: string; en: string }> = {
+    "portréty": { cs: "Portrétní fotografie — Guth Pictures", en: "Portrait photography — Guth Pictures" },
+    svatby: { cs: "Svatební fotografie — Guth Pictures", en: "Wedding photography — Guth Pictures" },
+    larpy: { cs: "Larpová fotografie — Guth Pictures", en: "Larp photography — Guth Pictures" },
+  };
+
+  return result.resources.map((r: CloudinaryResource) => {
+    const category = r.context?.category ?? "portréty";
+    return {
+      publicId: r.public_id,
+      width: r.width,
+      height: r.height,
+      alt: {
+        cs: r.context?.alt_cs ?? altFallback[category].cs,
+        en: r.context?.alt_en ?? altFallback[category].en,
+      },
+      category,
+      selected: r.tags?.includes("selected_work") ?? false,
+    };
+  });
 }
 
 export const getGalleryPhotos = unstable_cache(

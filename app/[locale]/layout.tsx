@@ -31,6 +31,7 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { template: "%s | Guth Pictures", default: "Guth Pictures" },
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
   openGraph: {
     siteName: "Guth Pictures",
     images: [{ url: ogImage.url, width: ogImage.width, height: ogImage.height }],
@@ -59,15 +60,32 @@ export default async function LocaleLayout({
   ]);
   const themeStyle = buildThemeStyle(themeColors);
 
+  const cs = locale === "cs";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${siteUrl}/#business`,
     name: "Guth Pictures",
-    description: locale === "cs"
-      ? "Profesionální fotograf Praha — portréty, svatby, larpy"
-      : "Professional photographer Prague — portraits, weddings, larps",
-    address: { "@type": "PostalAddress", addressLocality: "Praha", addressCountry: "CZ" },
+    description: cs
+      ? "Profesionální fotograf Praha — kreativní portréty, svatby, eventy a larpy"
+      : "Professional photographer Prague — creative portraits, weddings, events and larps",
     url: siteUrl,
+    email,
+    image: `${siteUrl}${ogImage.url}`,
+    address: { "@type": "PostalAddress", addressLocality: "Praha", addressCountry: "CZ" },
+    sameAs: ["https://www.instagram.com/guth_pictures/"],
+    areaServed: cs ? "Česká republika" : "Czech Republic",
+    founder: { "@type": "Person", name: "Tomáš Guth Jarkovský" },
+    knowsAbout: cs
+      ? ["portrétní fotografie", "svatební fotografie", "eventová fotografie", "larpová fotografie"]
+      : ["portrait photography", "wedding photography", "event photography", "larp photography"],
+    makesOffer: (cs
+      ? ["Portrétní focení", "Svatební fotografie", "Focení eventů a larpů"]
+      : ["Portrait sessions", "Wedding photography", "Event & larp photography"]
+    ).map((name) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name },
+    })),
   };
 
   return (
