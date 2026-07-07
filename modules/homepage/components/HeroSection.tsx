@@ -44,13 +44,14 @@ function Grain() {
 type PanelImage = { src: string; srcSet: string };
 
 function TriptychPanel({
-  images, interval = 5000, kbAnimation, label, index,
+  images, interval = 5000, kbAnimation, label, index, paused,
 }: {
   images: PanelImage[];
   interval?: number;
   kbAnimation: string;
   label: string;
   index: number;
+  paused: boolean;
 }) {
   const [cur, setCur] = useState(0);
 
@@ -67,12 +68,24 @@ function TriptychPanel({
       className="relative overflow-hidden"
       style={{ background: "var(--color-surface)", borderLeft: index > 0 ? "1px solid rgba(0,0,0,0.45)" : "none" }}
     >
-      <img src={images[prev]?.src} srcSet={images[prev]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
-      <img key={cur} src={images[cur]?.src} srcSet={images[cur]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
-      <FilmicTint />
-      {/* Accent duotone — unifies all three panels toward the brand gold. Tune via opacities. */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
-      <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "soft-light", opacity: 0.24 }} />
+      {/*
+        Ken Burns + grade live on ONE promoted layer. The blend-mode tints are
+        blended against the images once (cached), then the whole layer is
+        transform-animated — so blends aren't recomputed against a moving
+        backdrop every frame. This is what keeps the hero smooth on large
+        monitors. The panel label stays OUTSIDE this layer so it doesn't scale.
+      */}
+      <div
+        className="hero-kb absolute inset-0"
+        style={{ animation: kbAnimation, animationPlayState: paused ? "paused" : "running", willChange: "transform", transform: "translateZ(0)", isolation: "isolate", contain: "paint" }}
+      >
+        <img src={images[prev]?.src} srcSet={images[prev]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" aria-hidden />
+        <img key={cur} src={images[cur]?.src} srcSet={images[cur]?.srcSet} sizes="33vw" alt="" className="hero-fade absolute inset-0 w-full h-full object-cover" style={{ animation: "heroFadeIn 1.6s ease-out" }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
+        <FilmicTint />
+        {/* Accent duotone — unifies all three panels toward the brand gold. Tune via opacities. */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
+        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "soft-light", opacity: 0.24 }} />
+      </div>
       <div
         className="absolute top-20 left-5 flex items-center gap-2"
         style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.45)", letterSpacing: "0.22em", textTransform: "uppercase" }}
@@ -160,6 +173,9 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         @keyframes heroKb2 { from { transform: scale(1.06) translate(0.5%,0); } to { transform: scale(1.02) translate(-0.5%,0.8%); } }
         @keyframes heroKb3 { from { transform: scale(1.04) translate(0,0); }    to { transform: scale(1.10) translate(1%,-1%); } }
         @keyframes heroFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-kb, .hero-fade { animation: none !important; }
+        }
       `}</style>
 
       {/* ── Fixed navbar — visible after hero scrolls away ──── */}
@@ -213,7 +229,7 @@ export function HeroSection({ title, subtitle, ctaPortfolio, ctaContact, photos,
         {/* Triptych */}
         <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
           {panelData.map((p, i) => (
-            <TriptychPanel key={i} images={p.srcs} kbAnimation={p.kb} label={p.label} index={i} interval={4800 + i * 600} />
+            <TriptychPanel key={i} images={p.srcs} kbAnimation={p.kb} label={p.label} index={i} interval={4800 + i * 600} paused={navbarVisible} />
           ))}
         </div>
 
