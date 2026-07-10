@@ -42,6 +42,20 @@ export function Foceni101App() {
   const [compHover, setCompHover] = useState<number | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
+  // Scroll-story starts at the beginning: override back/reload scroll
+  // restoration, which would otherwise drop returning visitors on the CTA
+  // (everyone who finishes the story leaves the page scrolled to the end).
+  // scrollRestoration=manual stops the browser's late async restore on reload;
+  // restored on unmount so the rest of the site keeps normal back behavior.
+  useEffect(() => {
+    const prev = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    return () => {
+      window.history.scrollRestoration = prev;
+    };
+  }, []);
+
   // Lower the 3D quality on small / coarse-pointer devices (still fully usable).
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px), (pointer: coarse)");
