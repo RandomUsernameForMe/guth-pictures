@@ -50,12 +50,16 @@ modules/foceni-101/
     ├── ExposureMeter.tsx  # bar overlay (evDelta), viditelný u meter:true sekcí
     ├── Capstone.tsx       # bespoke fix-it karta: 3 slidery (1 omezená noha + badge), scenario-driven
     ├── capstones.ts       # config 2 capstone scénářů (ranges/restricted/ref/init) + test
-    ├── compositions.ts    # config 5 kompozic + subjectScreenX (+ test)
+    ├── compositions.ts    # config 5 kompozic (jen mechanika) + subjectScreenX (+ test)
     ├── CompositionPicker.tsx  # bespoke karta: chips výběr kompozice
     ├── CompositionOverlay.tsx # SVG guide overlay (thirds/center/golden/leading/space)
-    ├── sections.ts        # config sekcí (CS text, target params, slider, meter/holdLight/capstone/composition flags)
-    └── types.ts           # PhotoParams (+ framing), Section (+ meter/holdLight/capstone/composition), SectionControl
+    ├── sections.ts        # buildSections(t) — mechanika sekcí; VŠECHNA copy v messages/{cs,en}.json pod `foceni101`
+    └── types.ts           # PhotoParams (+ framing), Section (+ meter/holdLight/capstone/composition/cta/orb), SectionControl
 ```
+
+## i18n
+
+Copy žije v `messages/cs.json` + `en.json` (namespace `foceni101`): sekce, kompozice, capstone reasons, meter, toggle, meta. Konfigy (`sections.ts`, `compositions.ts`, `capstones.ts`) drží jen mechaniku — text se resolvuje přes `buildSections(t)` / `useTranslations("foceni101")` v komponentách. Metadata + JSON-LD (`LearningResource`) v `page.tsx`, OG image v `opengraph-image.tsx` (expoziční trojúhelník, lokalizovaný).
 
 ## Přístupová cesta
 
@@ -76,7 +80,13 @@ modules/foceni-101/
 
 ## Stav
 
-Sekce 0–11 + finále (id `finale`, `cta: true`) = plnohodnotná sekce v `SECTIONS`: scéna se přeladí na „money shot" (85 mm, f/2.8, třetiny, podhled), CTA odkazuje na `/{locale}#kontakt`. F2 (úhel/WB/kompozice) hotovo. Expoziční trojúhelník hotovo (unified light model + reveal 09 + capstone 10/11). Grain pass se skipuje, když je no-op (ISO 100 + neutrální WB); `prefers-reduced-motion` snapuje parametry a zastaví orbiter. TODO dle build planu:
+Sekce 0–11 + finále (id `finale`, `cta: true`): scéna se přeladí na „money shot" (85 mm, f/2.8, třetiny, podhled) a karta obsahuje inline `<ContactForm />` (Formspree, stejný form ID jako homepage). F2 (úhel/WB/kompozice) hotovo. Expoziční trojúhelník hotovo (unified light model + reveal 09 + capstone 10/11). i18n (cs/en), OG image i JSON-LD hotovo.
+
+Chování scény:
+- Orbiter jen v sekcích s `orb: true` (čas + capstony) — jinde by nad portrétem plavala svítící koule; toggle se renderuje jen tam.
+- Grain pass se skipuje, když je no-op (ISO 100 + neutrální WB); `prefers-reduced-motion` snapuje parametry a zastaví orbiter.
+- Slidery clony mají `invert` (direction rtl) → doprava = otevřenější = víc světla, konzistentně s meterem.
+- Mobil: karty kotvené dole (subjekt viditelný nad nimi), meter nahoře pod togglem.
+
+TODO dle build planu:
 - F3 dlouhá expozice/ND, F4 HDR/polarizace
-- i18n (teď CS hardcoded v `sections.ts`), OG image, sitemap
-- CTA napojit na Formspree (vzor: FeedbackModal v light-testeru)

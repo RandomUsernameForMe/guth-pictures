@@ -12,10 +12,9 @@ export interface CapVals {
 export interface CapstoneMechanic {
   /** Slider range per leg. The restricted leg gets a narrow range. */
   ranges: Record<CapLeg, { min: number; max: number; step: number }>;
-  /** Which leg is held in a narrow range by the scenario's goal. */
+  /** Which leg is held in a narrow range by the scenario's goal.
+   *  The badge text lives in messages: `foceni101.capstones.<sectionId>.reason`. */
   restricted: CapLeg;
-  /** Short reason shown as a badge on the restricted leg. */
-  reason: string;
   /** Balanced reference point — pins scene exposure so this reads correct. */
   ref: CapVals;
   /** Starting values, deliberately off-balance. */
@@ -33,7 +32,6 @@ export const CAPSTONES: Record<string, CapstoneMechanic> = {
       iso: { min: 100, max: 6400, step: 100 },
     },
     restricted: "aperture",
-    reason: "kvůli rozostření",
     ref: { aperture: 1.8, shutter: 0.25, iso: 100 },
     init: { aperture: 1.8, shutter: 0.7, iso: 6400 },
   },
@@ -45,7 +43,6 @@ export const CAPSTONES: Record<string, CapstoneMechanic> = {
       iso: { min: 100, max: 6400, step: 100 },
     },
     restricted: "shutter",
-    reason: "kvůli zmrazení pohybu",
     ref: { aperture: 4, shutter: 0.07, iso: 400 },
     init: { aperture: 11, shutter: 0.05, iso: 100 },
   },

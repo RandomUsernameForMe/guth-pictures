@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { COMPOSITIONS } from "./compositions";
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function CompositionPicker({ num, title, intro, selected, onSelect, onHover, active }: Props) {
+  const t = useTranslations("foceni101");
   const sel = COMPOSITIONS[selected];
   return (
     <div className={`f101-card${active ? " f101-card--active" : ""}`}>
@@ -30,11 +32,11 @@ export function CompositionPicker({ num, title, intro, selected, onSelect, onHov
             onClick={() => onSelect(i)}
             onMouseEnter={() => onHover(i)}
           >
-            {c.label}
+            {t(`comps.${c.id}.label`)}
           </button>
         ))}
       </div>
-      <p className="f101-card-body">{sel.body}</p>
+      <p className="f101-card-body">{t(`comps.${sel.id}.body`)}</p>
     </div>
   );
 }

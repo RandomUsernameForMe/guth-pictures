@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { fmtShutter, fmtIso } from "./sections";
 import type { CapVals, CapLeg, CapstoneMechanic } from "./capstones";
 
@@ -7,6 +8,8 @@ interface Props {
   num: string;
   title: string;
   body: string;
+  /** Section id — keys the reason badge in messages (`foceni101.capstones.<id>.reason`). */
+  sectionId: string;
   scenario: CapstoneMechanic;
   vals: CapVals;
   onChange: (v: CapVals) => void;
@@ -14,13 +17,14 @@ interface Props {
   active: boolean;
 }
 
-const LEGS: { key: CapLeg; label: string; fmt: (v: number) => string }[] = [
-  { key: "aperture", label: "Clona", fmt: (v) => `f/${v.toFixed(1)}` },
-  { key: "shutter", label: "Čas závěrky", fmt: fmtShutter },
-  { key: "iso", label: "ISO", fmt: fmtIso },
+const LEGS: { key: CapLeg; labelKey: string; fmt: (v: number) => string; invert?: boolean }[] = [
+  { key: "aperture", labelKey: "ctrl.aperture", fmt: (v) => `f/${v.toFixed(1)}`, invert: true },
+  { key: "shutter", labelKey: "ctrl.shutter", fmt: fmtShutter },
+  { key: "iso", labelKey: "ctrl.iso", fmt: fmtIso },
 ];
 
-export function Capstone({ num, title, body, scenario, vals, onChange, solved, active }: Props) {
+export function Capstone({ num, title, body, sectionId, scenario, vals, onChange, solved, active }: Props) {
+  const t = useTranslations("foceni101");
   return (
     <div className={`f101-card${active ? " f101-card--active" : ""}`}>
       <div className="f101-card-num">{num}</div>
@@ -36,20 +40,25 @@ export function Capstone({ num, title, body, scenario, vals, onChange, solved, a
           <div className="f101-ctrl" key={leg.key}>
             <div className="f101-ctrl-row">
               <span>
-                {leg.label}
-                {restricted && <span className="f101-ctrl-lock">{scenario.reason}</span>}
+                {t(leg.labelKey)}
+                {restricted && (
+                  <span className="f101-ctrl-lock">{t(`capstones.${sectionId}.reason`)}</span>
+                )}
               </span>
               <span className="f101-ctrl-val">{leg.fmt(val)}</span>
             </div>
             <input
               type="range"
               className="gp-slider"
-              aria-label={leg.label}
+              aria-label={t(leg.labelKey)}
               min={r.min}
               max={r.max}
               step={r.step}
               value={val}
-              style={{ ["--p" as string]: `${pct}%` }}
+              style={{
+                ["--p" as string]: `${leg.invert ? 100 - pct : pct}%`,
+                direction: leg.invert ? "rtl" : undefined,
+              }}
               onChange={(e) => onChange({ ...vals, [leg.key]: parseFloat(e.target.value) })}
             />
           </div>
@@ -57,7 +66,7 @@ export function Capstone({ num, title, body, scenario, vals, onChange, solved, a
       })}
 
       <p className={`f101-capstone-win${solved ? " f101-capstone-win--on" : ""}`}>
-        Vyměnil jsi jedno za druhé. To je celý ten trojúhelník.
+        {t("capstoneWin")}
       </p>
     </div>
   );

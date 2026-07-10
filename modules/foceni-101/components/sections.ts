@@ -1,5 +1,8 @@
 import type { Section } from "./types";
 
+/** Translator for the `foceni101` namespace (next-intl `useTranslations`). */
+export type F101Translator = (key: string) => string;
+
 // ── Value formatters (exact, real units) ──────────────────────────────────────
 /** Exposure multiplier (0.2..2) → EV relative to correct. +1 EV = 2× světla. */
 export const fmtEv = (v: number) => `${Math.log2(v) >= 0 ? "+" : ""}${Math.log2(v).toFixed(1)} EV`;
@@ -10,186 +13,159 @@ export function fmtShutter(v: number): string {
 }
 export const fmtIso = (v: number) => `ISO ${Math.round(v)}`;
 
-export const SECTIONS: Section[] = [
-  {
-    id: "intro",
-    num: "00",
-    title: "Scéna",
-    body:
-      "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka — podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky.",
-    target: { exposure: 1, aperture: 5.6, shutter: 0, iso: 100, focal: 50 },
-  },
-  {
-    id: "expozice",
-    num: "01",
-    title: "Expozice",
-    body:
-      "Expozice je celkové množství světla, které dopadne na snímač. Málo světla → tmavá fotka, moc → přepálená. Posuvník mění expozici v EV; +1 EV znamená dvojnásobek světla.",
-    target: { exposure: 1 },
-    control: {
-      param: "exposure",
-      min: 0.2,
-      max: 2,
-      step: 0.01,
-      label: "Expozice",
-      fmt: fmtEv,
+/** Build the section config with all copy resolved for the active locale. */
+export function buildSections(t: F101Translator): Section[] {
+  const copy = (id: string) => ({
+    id,
+    title: t(`sections.${id}.title`),
+    body: t(`sections.${id}.body`),
+  });
+  return [
+    {
+      ...copy("intro"),
+      num: "00",
+      target: { exposure: 1, aperture: 5.6, shutter: 0, iso: 100, focal: 50 },
     },
-  },
-  {
-    id: "clona",
-    num: "02",
-    title: "Clona",
-    body:
-      "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.8) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí.",
-    target: { aperture: 1.8 },
-    holdLight: true,
-    control: {
-      param: "aperture",
-      min: 1.8,
-      max: 16,
-      step: 0.1,
-      label: "Clona",
-      fmt: (v) => `f/${v.toFixed(1)}`,
-      invert: true,
+    {
+      ...copy("expozice"),
+      num: "01",
+      target: { exposure: 1 },
+      control: {
+        param: "exposure",
+        min: 0.2,
+        max: 2,
+        step: 0.01,
+        label: t("ctrl.exposure"),
+        fmt: fmtEv,
+      },
     },
-  },
-  {
-    id: "cas",
-    num: "03",
-    title: "Čas závěrky",
-    body:
-      "Čas závěrky je doba, po kterou na snímač dopadá světlo. Krátký čas (1/1000 s) zmrazí pohyb, dlouhý (1/15 s a delší) ho rozmaže do šmouhy. Sleduj kuličku obíhající kolem hlavy.",
-    target: { shutter: 0 },
-    holdLight: true,
-    control: {
-      param: "shutter",
-      min: 0,
-      max: 1,
-      step: 0.01,
-      label: "Čas závěrky",
-      fmt: fmtShutter,
+    {
+      ...copy("clona"),
+      num: "02",
+      target: { aperture: 1.8 },
+      holdLight: true,
+      control: {
+        param: "aperture",
+        min: 1.8,
+        max: 16,
+        step: 0.1,
+        label: t("ctrl.aperture"),
+        fmt: (v) => `f/${v.toFixed(1)}`,
+        invert: true,
+      },
     },
-  },
-  {
-    id: "iso",
-    num: "04",
-    title: "ISO",
-    body:
-      "ISO je citlivost snímače. Vyšší hodnota fotku zesvětlí, když je málo světla, ale přidá šum (zrno). Drží se proto co nejníž, jak to dané světlo dovolí.",
-    target: { iso: 100 },
-    holdLight: true,
-    control: {
-      param: "iso",
-      min: 100,
-      max: 6400,
-      step: 100,
-      label: "ISO",
-      fmt: fmtIso,
+    {
+      ...copy("cas"),
+      num: "03",
+      target: { shutter: 0 },
+      holdLight: true,
+      orb: true,
+      control: {
+        param: "shutter",
+        min: 0,
+        max: 1,
+        step: 0.01,
+        label: t("ctrl.shutter"),
+        fmt: fmtShutter,
+      },
     },
-  },
-  {
-    id: "ohnisko",
-    num: "05",
-    title: "Ohnisko",
-    body:
-      "Ohnisková vzdálenost (v mm) určuje zorný úhel. Když měníš ohnisko a zároveň vzdálenost tak, aby byl subjekt stále stejně velký, mění se perspektiva: kratší ohnisko zblízka roztáhne bližší rysy, delší ohnisko z dálky perspektivu stlačí. Volíš tím vztah mezi obličejem a pozadím.",
-    target: { focal: 50 },
-    control: {
-      param: "focal",
-      min: 24,
-      max: 135,
-      step: 1,
-      label: "Ohnisko",
-      fmt: (v) => `${Math.round(v)} mm`,
+    {
+      ...copy("iso"),
+      num: "04",
+      target: { iso: 100 },
+      holdLight: true,
+      control: {
+        param: "iso",
+        min: 100,
+        max: 6400,
+        step: 100,
+        label: t("ctrl.iso"),
+        fmt: fmtIso,
+      },
     },
-  },
-  {
-    id: "uhel",
-    num: "06",
-    title: "Úhel pohledu",
-    body:
-      "Výška kamery vůči subjektu. Pohled zdola subjekt opticky zvětší, pohled shora ho zmenší, úroveň očí je neutrální. Je to nástroj pro vyznění záběru, ne pravidlo.",
-    target: { angle: -0.5 },
-    control: {
-      param: "angle",
-      min: -1,
-      max: 1,
-      step: 0.01,
-      label: "Výška kamery",
-      fmt: (v) => (v < -0.3 ? "podhled" : v > 0.3 ? "nadhled" : "úroveň očí"),
+    {
+      ...copy("ohnisko"),
+      num: "05",
+      target: { focal: 50 },
+      control: {
+        param: "focal",
+        min: 24,
+        max: 135,
+        step: 1,
+        label: t("ctrl.focal"),
+        fmt: (v) => `${Math.round(v)} mm`,
+      },
     },
-  },
-  {
-    id: "wb",
-    num: "07",
-    title: "Vyvážení bílé",
-    body:
-      "Vyvážení bílé určuje, jakou teplotu světla foťák považuje za neutrální (v kelvinech). Nižší hodnota nechá fotku teplejší (oranžovou), vyšší studenější (modrou). Nastavuje se podle zdroje světla.",
-    target: { whiteBalance: 4200 },
-    control: {
-      param: "whiteBalance",
-      min: 3000,
-      max: 8000,
-      step: 50,
-      label: "Teplota",
-      fmt: (v) => `${Math.round(v)} K`,
+    {
+      ...copy("uhel"),
+      num: "06",
+      target: { angle: -0.5 },
+      control: {
+        param: "angle",
+        min: -1,
+        max: 1,
+        step: 0.01,
+        label: t("ctrl.angle"),
+        fmt: (v) => (v < -0.3 ? t("angle.low") : v > 0.3 ? t("angle.high") : t("angle.eye")),
+      },
     },
-  },
-  {
-    id: "kompozice",
-    num: "08",
-    title: "Kompozice",
-    body: "Kam v záběru subjekt patří. Vyber kompozici a porovnej, jak mění vyznění.",
-    target: {},
-    composition: true,
-  },
-  {
-    id: "svetlo",
-    num: "09",
-    title: "Expoziční trojúhelník",
-    body:
-      "Clona, čas a ISO neovlivňují jen vzhled — všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně.",
-    target: { aperture: 5.6 },
-    meter: true,
-    control: {
-      param: "aperture",
-      min: 1.8,
-      max: 16,
-      step: 0.1,
-      label: "Clona",
-      fmt: (v) => `f/${v.toFixed(1)}`,
-      invert: true,
+    {
+      ...copy("wb"),
+      num: "07",
+      target: { whiteBalance: 4200 },
+      control: {
+        param: "whiteBalance",
+        min: 3000,
+        max: 8000,
+        step: 50,
+        label: t("ctrl.wb"),
+        fmt: (v) => `${Math.round(v)} K`,
+      },
     },
-  },
-  {
-    id: "capstone-blur",
-    num: "10",
-    title: "Vyrovnej expozici: rozostřené pozadí",
-    body:
-      "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán — jde zavřít jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu.",
-    target: {},
-    meter: true,
-    capstone: true,
-  },
-  {
-    id: "capstone-freeze",
-    num: "11",
-    title: "Vyrovnej expozici: zmrazit pohyb",
-    body:
-      "Chceš zmrazit rychlý pohyb, proto čas musí zůstat krátký — nejdál 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu.",
-    target: {},
-    meter: true,
-    capstone: true,
-  },
-  {
-    id: "finale",
-    num: "→",
-    title: "Tohle všechno řeším za tebe",
-    body:
-      "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se jen díváš do objektivu. Napiš mi, co chceš nafotit.",
-    // The money shot: portrait tele + open aperture + subject on thirds.
-    target: { focal: 85, aperture: 2.8, angle: -0.15, whiteBalance: 5300, composition: 0.5 },
-    holdLight: true,
-    cta: true,
-  },
-];
+    {
+      ...copy("kompozice"),
+      num: "08",
+      target: {},
+      composition: true,
+    },
+    {
+      ...copy("svetlo"),
+      num: "09",
+      target: { aperture: 5.6 },
+      meter: true,
+      control: {
+        param: "aperture",
+        min: 1.8,
+        max: 16,
+        step: 0.1,
+        label: t("ctrl.aperture"),
+        fmt: (v) => `f/${v.toFixed(1)}`,
+        invert: true,
+      },
+    },
+    {
+      ...copy("capstone-blur"),
+      num: "10",
+      target: {},
+      meter: true,
+      capstone: true,
+      orb: true,
+    },
+    {
+      ...copy("capstone-freeze"),
+      num: "11",
+      target: {},
+      meter: true,
+      capstone: true,
+      orb: true,
+    },
+    {
+      ...copy("finale"),
+      num: "→",
+      // The money shot: portrait tele + open aperture + subject on thirds.
+      target: { focal: 85, aperture: 2.8, angle: -0.15, whiteBalance: 5300, composition: 0.5 },
+      holdLight: true,
+      cta: true,
+    },
+  ];
+}

@@ -43,7 +43,7 @@ export interface SectionControl {
   label: string;
   /** Format the live value for display. */
   fmt: (v: number) => string;
-  /** Higher value on the right? If false, slider is visually inverted (aperture: low f = more open). */
+  /** Render the slider right-to-left, so "more light" is always to the right (aperture: low f = open). */
   invert?: boolean;
 }
 
@@ -52,7 +52,7 @@ export interface Section {
   /** Two-digit index shown mono, e.g. "01". */
   num: string;
   title: string;
-  /** Playful, jargon-free body copy (CS). */
+  /** Playful, jargon-free body copy (localized via buildSections). */
   body: string;
   /** Params the scene tweens to when this section scrolls into view. */
   target: Partial<PhotoParams>;
@@ -68,4 +68,6 @@ export interface Section {
   composition?: boolean;
   /** Render the finale CTA card instead of a standard card. */
   cta?: boolean;
+  /** Show the orbiter (glowing ball + its light + trail) while this section is active. */
+  orb?: boolean;
 }

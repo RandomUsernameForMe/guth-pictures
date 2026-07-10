@@ -150,5 +150,119 @@
     "conceptWord": "Koncept",
     "whoYouAreKicker": "Kdo jste",
     "whoYouAreTitle": "Začneme u vás, ne u objektivu."
+  },
+  "foceni101": {
+    "meta": {
+      "title": "Focení 101 — co dělá fotku",
+      "description": "Interaktivní průvodce pro nefotografy. Posuň posuvník a uvidíš, co clona, čas závěrky, ISO a ohnisko udělají s fotkou. Žádný žargon."
+    },
+    "sections": {
+      "intro": {
+        "title": "Scéna",
+        "body": "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka — podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky."
+      },
+      "expozice": {
+        "title": "Expozice",
+        "body": "Expozice je celkové množství světla, které dopadne na snímač. Málo světla → tmavá fotka, moc → přepálená. Posuvník mění expozici v EV; +1 EV znamená dvojnásobek světla."
+      },
+      "clona": {
+        "title": "Clona",
+        "body": "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.8) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí."
+      },
+      "cas": {
+        "title": "Čas závěrky",
+        "body": "Čas závěrky je doba, po kterou na snímač dopadá světlo. Krátký čas (1/1000 s) zmrazí pohyb, dlouhý (1/15 s a delší) ho rozmaže do šmouhy. Sleduj kuličku obíhající kolem hlavy."
+      },
+      "iso": {
+        "title": "ISO",
+        "body": "ISO je citlivost snímače. Vyšší hodnota fotku zesvětlí, když je málo světla, ale přidá šum (zrno). Drží se proto co nejníž, jak to dané světlo dovolí."
+      },
+      "ohnisko": {
+        "title": "Ohnisko",
+        "body": "Ohnisková vzdálenost (v mm) určuje zorný úhel. Když měníš ohnisko a zároveň vzdálenost tak, aby byl subjekt stále stejně velký, mění se perspektiva: kratší ohnisko zblízka roztáhne bližší rysy, delší ohnisko z dálky perspektivu stlačí. Volíš tím vztah mezi obličejem a pozadím."
+      },
+      "uhel": {
+        "title": "Úhel pohledu",
+        "body": "Výška kamery vůči subjektu. Pohled zdola subjekt opticky zvětší, pohled shora ho zmenší, úroveň očí je neutrální. Je to nástroj pro vyznění záběru, ne pravidlo."
+      },
+      "wb": {
+        "title": "Vyvážení bílé",
+        "body": "Vyvážení bílé určuje, jakou teplotu světla foťák považuje za neutrální (v kelvinech). Nižší hodnota nechá fotku teplejší (oranžovou), vyšší studenější (modrou). Nastavuje se podle zdroje světla."
+      },
+      "kompozice": {
+        "title": "Kompozice",
+        "body": "Kam v záběru subjekt patří. Vyber kompozici a porovnej, jak mění vyznění."
+      },
+      "svetlo": {
+        "title": "Expoziční trojúhelník",
+        "body": "Clona, čas a ISO neovlivňují jen vzhled — všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně."
+      },
+      "capstone-blur": {
+        "title": "Vyrovnej expozici: rozostřené pozadí",
+        "body": "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán — jde zavřít jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu."
+      },
+      "capstone-freeze": {
+        "title": "Vyrovnej expozici: zmrazit pohyb",
+        "body": "Chceš zmrazit rychlý pohyb, proto čas musí zůstat krátký — nejdál 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu."
+      },
+      "finale": {
+        "title": "Tohle všechno řeším za tebe",
+        "body": "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se jen díváš do objektivu. Napiš mi, co chceš nafotit."
+      }
+    },
+    "ctrl": {
+      "exposure": "Expozice",
+      "aperture": "Clona",
+      "shutter": "Čas závěrky",
+      "iso": "ISO",
+      "focal": "Ohnisko",
+      "angle": "Výška kamery",
+      "wb": "Teplota"
+    },
+    "angle": {
+      "low": "podhled",
+      "high": "nadhled",
+      "eye": "úroveň očí"
+    },
+    "comps": {
+      "thirds": {
+        "label": "Třetiny",
+        "body": "Subjekt leží na pravé třetinové čáře místo ve středu. Pohled má kam plynout a záběr působí vyváženě, ne staticky."
+      },
+      "center": {
+        "label": "Na střed",
+        "body": "Subjekt přesně uprostřed. Působí symetricky, formálně a přímo — vhodné, když chceš klid a konfrontaci pohledem."
+      },
+      "golden": {
+        "label": "Zlatý řez",
+        "body": "Subjekt na linii zlatého řezu (≈ 62 %). Podobné třetinám, ale o kousek blíž středu — poměr převzatý z malířství."
+      },
+      "leading": {
+        "label": "Vedoucí linie",
+        "body": "Linie v záběru (cesty, hrany, světlo) směřují k subjektu a vedou k němu oko diváka. Najeď myší na dlaždici a uvidíš je."
+      },
+      "space": {
+        "label": "Prostor",
+        "body": "Subjekt je malý a posunutý ke kraji, zbytek záběru zůstává prázdný. Negativní prostor dává záběru dýchat a podtrhuje měřítko."
+      }
+    },
+    "capstones": {
+      "capstone-blur": {
+        "reason": "kvůli rozostření"
+      },
+      "capstone-freeze": {
+        "reason": "kvůli zmrazení pohybu"
+      }
+    },
+    "capstoneWin": "Vyměnil jsi jedno za druhé. To je celý ten trojúhelník.",
+    "meter": {
+      "label": "Expozice",
+      "over": "přeexpozice",
+      "under": "podexpozice",
+      "ok": "správně"
+    },
+    "orbOn": "Světlo kuličky: zap",
+    "orbOff": "Světlo kuličky: vyp",
+    "scrollHint": "scrolluj ↓"
   }
 }

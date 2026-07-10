@@ -1,22 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { StudioScene } from "./StudioScene";
 import { ExposureMeter } from "./ExposureMeter";
-import { SECTIONS } from "./sections";
-import { DEFAULT_PARAMS, type PhotoParams } from "./types";
+import { buildSections } from "./sections";
+import { DEFAULT_PARAMS, type PhotoParams, type Section } from "./types";
 import { holdExposureFor, computeLight } from "./light";
 import { Capstone } from "./Capstone";
 import { CAPSTONES, capstoneExposure, type CapVals } from "./capstones";
 import { CompositionPicker } from "./CompositionPicker";
 import { CompositionOverlay } from "./CompositionOverlay";
 import { COMPOSITIONS, subjectScreenX } from "./compositions";
+import { ContactForm } from "@/components/ContactForm";
 
 type Quality = "high" | "low";
 
-function initialSliderVals(): Record<string, number> {
+function initialSliderVals(sections: Section[]): Record<string, number> {
   const out: Record<string, number> = {};
-  for (const s of SECTIONS) {
+  for (const s of sections) {
     if (s.control) {
       out[s.id] = s.target[s.control.param] ?? DEFAULT_PARAMS[s.control.param];
     }
@@ -24,9 +26,13 @@ function initialSliderVals(): Record<string, number> {
   return out;
 }
 
-export function Foceni101App({ locale }: { locale: string }) {
+export function Foceni101App() {
+  const t = useTranslations("foceni101");
+  const sections = useMemo(() => buildSections(t), [t]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
+  const [sliderVals, setSliderVals] = useState<Record<string, number>>(() =>
+    initialSliderVals(sections),
+  );
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
   const [capVals, setCapVals] = useState<Record<string, CapVals>>(() =>
@@ -65,7 +71,7 @@ export function Foceni101App({ locale }: { locale: string }) {
   // Params the scene tweens to: each section starts from a neutral baseline,
   // applies its own tweak, then the user's slider override (if any).
   const target = useMemo<PhotoParams>(() => {
-    const sec = SECTIONS[activeIndex];
+    const sec = sections[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
     if (sec.capstone) {
       // One leg held in a narrow range by the scenario's goal; the other two
@@ -90,38 +96,43 @@ export function Foceni101App({ locale }: { locale: string }) {
     // taught effect (blur / trail / grain) shows. Reveal & capstone skip this.
     if (sec.holdLight) base.exposure = holdExposureFor(base);
     return base;
-  }, [activeIndex, sliderVals, capVals, compSel, compHover]);
+  }, [sections, activeIndex, sliderVals, capVals, compSel, compHover]);
 
   const capSolved =
-    !!SECTIONS[activeIndex]?.capstone && Math.abs(computeLight(target).evDelta) < 0.3;
+    !!sections[activeIndex]?.capstone && Math.abs(computeLight(target).evDelta) < 0.3;
+  // The orbiter only appears where it teaches something (shutter + capstones);
+  // elsewhere it would just be a glowing ball floating over a portrait.
+  const orbAllowed = !!sections[activeIndex]?.orb;
 
   return (
     <div className="f101">
       <div className="f101-stage">
-        <StudioScene target={target} quality={quality} orbLightOn={orbLightOn} />
-        <ExposureMeter params={target} show={!!SECTIONS[activeIndex]?.meter} />
-        <button
-          type="button"
-          className="f101-toggle"
-          aria-pressed={orbLightOn}
-          onClick={() => setOrbLightOn((v) => !v)}
-        >
-          Světlo kuličky: {orbLightOn ? "zap" : "vyp"}
-        </button>
+        <StudioScene target={target} quality={quality} orbLightOn={orbAllowed && orbLightOn} />
+        <ExposureMeter params={target} show={!!sections[activeIndex]?.meter} />
+        {orbAllowed && (
+          <button
+            type="button"
+            className="f101-toggle"
+            aria-pressed={orbLightOn}
+            onClick={() => setOrbLightOn((v) => !v)}
+          >
+            {orbLightOn ? t("orbOn") : t("orbOff")}
+          </button>
+        )}
         <CompositionOverlay
           kind={COMPOSITIONS[compHover ?? compSel].overlay}
           subjectX={subjectScreenX(COMPOSITIONS[compHover ?? compSel].comp)}
-          show={SECTIONS[activeIndex]?.composition === true}
+          show={sections[activeIndex]?.composition === true}
         />
         <div className="f101-progress">
-          {SECTIONS.map((s, i) => (
+          {sections.map((s, i) => (
             <span key={s.id} className={`f101-dot${i === activeIndex ? " f101-dot--on" : ""}`} />
           ))}
         </div>
       </div>
 
       <div className="f101-sections">
-        {SECTIONS.map((s, i) => {
+        {sections.map((s, i) => {
           const c = s.control;
           const val = c ? sliderVals[s.id] : 0;
           const pct = c ? ((val - c.min) / (c.max - c.min)) * 100 : 0;
@@ -136,6 +147,7 @@ export function Foceni101App({ locale }: { locale: string }) {
                   num={s.num}
                   title={s.title}
                   body={s.body}
+                  sectionId={s.id}
                   scenario={CAPSTONES[s.id]}
                   vals={capVals[s.id]}
                   onChange={(v) => setCapVals((p) => ({ ...p, [s.id]: v }))}
@@ -153,13 +165,13 @@ export function Foceni101App({ locale }: { locale: string }) {
                   active={i === activeIndex}
                 />
               ) : s.cta ? (
-                <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
+                <div className={`f101-card f101-card--cta${i === activeIndex ? " f101-card--active" : ""}`}>
                   <div className="f101-card-num">{s.num}</div>
                   <h2 className="f101-card-title">{s.title}</h2>
                   <p className="f101-card-body">{s.body}</p>
-                  <a className="lt-btn lt-btn-primary f101-cta-btn" href={`/${locale}#kontakt`}>
-                    Mám zájem o focení
-                  </a>
+                  <div className="f101-cta-form">
+                    <ContactForm />
+                  </div>
                 </div>
               ) : (
                 <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
@@ -181,7 +193,10 @@ export function Foceni101App({ locale }: { locale: string }) {
                         max={c.max}
                         step={c.step}
                         value={val}
-                        style={{ ["--p" as string]: `${pct}%` }}
+                        style={{
+                          ["--p" as string]: `${c.invert ? 100 - pct : pct}%`,
+                          direction: c.invert ? "rtl" : undefined,
+                        }}
                         onChange={(e) =>
                           setSliderVals((v) => ({ ...v, [s.id]: parseFloat(e.target.value) }))
                         }
@@ -189,7 +204,7 @@ export function Foceni101App({ locale }: { locale: string }) {
                     </div>
                   )}
 
-                  {i === 0 && <div className="f101-scroll-hint">scrolluj ↓</div>}
+                  {i === 0 && <div className="f101-scroll-hint">{t("scrollHint")}</div>}
                 </div>
               )}
             </section>

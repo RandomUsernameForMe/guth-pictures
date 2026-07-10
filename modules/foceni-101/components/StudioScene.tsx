@@ -90,6 +90,9 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
   targetRef.current = target;
   const orbLightOnRef = useRef(orbLightOn);
   orbLightOnRef.current = orbLightOn;
+  // Lives outside the scene effect so a quality-change remount keeps the
+  // tweened params instead of jumping back to defaults.
+  const currentRef = useRef<PhotoParams>({ ...DEFAULT_PARAMS });
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -261,7 +264,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
 
     composer.addPass(new OutputPass());
 
-    const current: PhotoParams = { ...DEFAULT_PARAMS };
+    const current = currentRef.current;
 
     stateRef.current = {
       renderer, composer, bokeh, grain, scene, camera, key, fill,
@@ -342,8 +345,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       const bu = bokeh.uniforms as Record<string, THREE.IUniform>;
       // Focus a touch behind the nose tip (≈ the eyes), so the face reads sharp —
       // not just the front-most point. Background balls sit far behind, still blur.
-      // ponytail: 0.4 = how far back into the head the focal plane sits; tune visually.
-      bu["focus"].value = Math.max(0.1, dist - headFrontZ * 0.4);
+      // ponytail: 0.2 = how far back into the head the focal plane sits; tune visually.
+      bu["focus"].value = Math.max(0.1, dist - headFrontZ * 0.2);
       // Gentler than before so the whole face stays crisp wide open while the
       // distant background still goes creamy. ponytail: coefficients tuned by eye.
       bu["aperture"].value = 0.0002 + open * open * 0.02;
@@ -352,7 +355,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       // ISO → grain
       const isoT = (current.iso - 100) / (6400 - 100);
       const gu = grain.uniforms as Record<string, THREE.IUniform>;
-      gu["amount"].value = Math.max(0, isoT) * 0.35;
+      // Capped so ISO 6400 reads "noisy", not broken-TV static hiding the subject.
+      gu["amount"].value = Math.max(0, isoT) * 0.22;
       gu["time"].value = reduceMotion ? 1 : timer.getElapsed();
       // Skip the full-screen grain pass when it would be a no-op (ISO 100, neutral WB).
       grain.enabled = gu["amount"].value > 0.002 || Math.abs(wbT) > 0.01;

@@ -1306,9 +1306,24 @@ body::after {
   50% { opacity: 1; transform: translateY(3px); }
 }
 
-.f101-cta-btn {
-  margin-top: 22px;
-  display: inline-flex;
+.f101-card--cta { max-width: 440px; }
+.f101-cta-form {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--color-border-sub);
+}
+
+/* Mobile: pin cards to the bottom so the subject stays visible above them;
+   the meter moves to the top (its usual spot is behind the card). */
+@media (max-width: 768px) {
+  .f101-section {
+    align-items: flex-end;
+    padding-bottom: 14px;
+  }
+  .f101-meter {
+    bottom: auto;
+    top: 120px; /* below the navbar and the orb toggle */
+  }
 }
 
 /* Orbiter-light toggle (top-left of stage, below the fixed navbar) */
