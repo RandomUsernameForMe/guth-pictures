@@ -132,8 +132,8 @@ export function AdminProposalReview({
 
   async function savePassword(e: React.FormEvent) {
     e.preventDefault();
-    if (pw.length < 4) {
-      setMsg("Heslo min. 4 znaky");
+    if (pw.length < 8) {
+      setMsg("Heslo min. 8 znaků");
       return;
     }
     if (await patch({ action: "password", password: pw })) {

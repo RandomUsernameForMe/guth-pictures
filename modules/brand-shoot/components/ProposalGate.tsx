@@ -25,6 +25,10 @@ export function ProposalGate({ slug, clientName }: { slug: string; clientName: s
         setError(t("wrongPassword"));
         return;
       }
+      if (res.status === 429) {
+        setError(t("tooManyAttempts"));
+        return;
+      }
       if (res.status === 410) {
         setError(t("expiredTitle"));
         return;

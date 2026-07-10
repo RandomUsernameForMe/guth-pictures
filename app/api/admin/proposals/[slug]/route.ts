@@ -63,8 +63,8 @@ export async function PATCH(
       return NextResponse.json({ proposal: updated });
     }
     case "password": {
-      if (typeof body.password !== "string" || body.password.length < 4) {
-        return NextResponse.json({ error: "Password too short (min 4 chars)" }, { status: 400 });
+      if (typeof body.password !== "string" || body.password.length < 8) {
+        return NextResponse.json({ error: "Password too short (min 8 chars)" }, { status: 400 });
       }
       const expiryDays =
         typeof body.expiryDays === "number" ? Math.max(1, Math.min(365, body.expiryDays)) : undefined;

@@ -1,5 +1,6 @@
 import { getProposal, verifyProposalPassword, isExpired } from "@/modules/brand-shoot/lib/proposals";
 import { signProposalToken, proposalCookieName } from "@/modules/brand-shoot/lib/proposal-auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -7,6 +8,15 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
   const { slug } = await params;
+
+  // x-vercel-forwarded-for is set by Vercel infrastructure and cannot be spoofed by clients
+  const ip =
+    request.headers.get("x-vercel-forwarded-for") ??
+    request.headers.get("x-real-ip") ??
+    "unknown";
+  if (!(await checkRateLimit(`proposal-auth:${slug}:${ip}`, 5, 15 * 60))) {
+    return NextResponse.json({ error: "Too many attempts" }, { status: 429 });
+  }
 
   const proposal = await getProposal(slug);
   if (!proposal) return NextResponse.json({ error: "Not found" }, { status: 404 });
