@@ -4,6 +4,7 @@ import { paletteToAmbient } from "@/modules/brand-shoot/lib/palette-theme";
 import type { ProposalPublic, ProposalConcept, ProposalImage } from "@/modules/brand-shoot/lib/types";
 import { LivingPalette } from "./LivingPalette";
 import { ProposalGallery } from "./ProposalGallery";
+import { ProposalFeedbackForm } from "./ProposalFeedbackForm";
 
 const FALLBACK = {
   accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B",
@@ -63,7 +64,14 @@ function ConceptSection({
         <figure className="bsp-ed-portrait">
           {hero ? (
             <div className="bsp-ed-portrait-wrap">
-              <img className="bsp-ed-portrait-img" src={img(hero.cloudinaryId, 1100)} alt={hero.note ?? concept.title} />
+              <img
+                className="bsp-ed-portrait-img"
+                src={img(hero.cloudinaryId, 1100)}
+                alt={hero.note || concept.title}
+                width={hero.width}
+                height={hero.height}
+                loading="lazy"
+              />
             </div>
           ) : (
             <div className="bsp-ed-portrait-ph" aria-hidden />
@@ -96,7 +104,13 @@ function ConceptSection({
         <div className="bsp-ed-mood" data-reveal>
           {mood.map((m) => (
             <figure key={m.cloudinaryId} className="bsp-ed-mood-fig">
-              <img src={img(m.cloudinaryId, 700)} alt={m.note ?? ""} loading="lazy" />
+              <img
+                src={img(m.cloudinaryId, 700)}
+                alt={m.note || concept.title}
+                width={m.width}
+                height={m.height}
+                loading="lazy"
+              />
             </figure>
           ))}
         </div>
@@ -201,7 +215,14 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
         <div className="bsp-ed-close-inner" data-reveal>
           <span className="bsp-ed-eyebrow-accent">{t("ctaTitle")}</span>
           <h2 className="bsp-ed-close-h">{t("ctaBody")}</h2>
-          <a className="bsp-ed-cta" href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(`Návrh focení — ${proposal.name}`)}`}>
+          <ProposalFeedbackForm
+            slug={proposal.slug}
+            concepts={concepts.map((c) => ({ id: c.id, title: c.title }))}
+          />
+          <a
+            className="bsp-ed-cta-alt"
+            href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(t("ctaMailSubject", { name: proposal.name }))}`}
+          >
             {t("ctaButton")} →
           </a>
         </div>

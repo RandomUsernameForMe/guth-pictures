@@ -27,6 +27,70 @@ const badge: Record<ProposalStatus, string> = {
 
 const mark: Record<ProposalStatus, string> = { approved: "✓", rejected: "✗", pending: "•" };
 
+const EDIT_FIELDS = [
+  ["title", "Titul"],
+  ["pitch", "Pitch"],
+  ["why", "Proč"],
+  ["mood", "Nálada"],
+  ["wardrobe", "Oblečení"],
+  ["location", "Místo"],
+  ["lighting", "Světlo"],
+  ["poseDirection", "Pózování"],
+] as const;
+
+type EditableField = (typeof EDIT_FIELDS)[number][0];
+
+// Top-level (not nested in AdminProposalReview) so parent re-renders don't remount it mid-typing.
+function ConceptEditForm({
+  concept,
+  busy,
+  onSave,
+  onCancel,
+}: {
+  concept: ProposalConcept;
+  busy: boolean;
+  onSave: (fields: Record<EditableField, string>) => void;
+  onCancel: () => void;
+}) {
+  const [draft, setDraft] = useState(
+    () =>
+      Object.fromEntries(EDIT_FIELDS.map(([k]) => [k, concept[k] ?? ""])) as Record<
+        EditableField,
+        string
+      >
+  );
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSave(draft);
+      }}
+      className="ml-4 space-y-2 border-l border-zinc-800 pl-4 py-2"
+    >
+      {EDIT_FIELDS.map(([k, label]) => (
+        <label key={k} className="block text-xs text-gray-400">
+          {label}
+          <textarea
+            value={draft[k]}
+            onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
+            rows={k === "title" ? 1 : 2}
+            required={k === "title"}
+            className="mt-0.5 w-full bg-zinc-900 border border-zinc-700 px-2 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-white resize-y"
+          />
+        </label>
+      ))}
+      <div className="flex gap-2">
+        <button disabled={busy} className="px-3 py-1 bg-white text-black text-xs font-medium disabled:opacity-40">
+          Uložit texty
+        </button>
+        <button type="button" onClick={onCancel} className="px-3 py-1 text-xs text-gray-400 hover:text-white">
+          Zrušit
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export function AdminProposalReview({
   proposal,
   hasPassword,
@@ -43,6 +107,7 @@ export function AdminProposalReview({
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [copied, setCopied] = useState(false);
+  const [editingConcept, setEditingConcept] = useState<string | null>(null);
 
   async function patch(body: Record<string, unknown>) {
     setBusy(true);
@@ -93,6 +158,38 @@ export function AdminProposalReview({
     await patch({ action: "approvals", patch: { [kind]: { [img.cloudinaryId]: status } } });
   }
 
+  // Approve every pending item in one PATCH — saves click-per-item on fresh syncs.
+  async function approveAllPending(kind: "concepts" | "moodboard" | "poses") {
+    if (kind === "concepts") {
+      const pend = concepts.filter((c) => c.status === "pending");
+      if (!pend.length) return;
+      setConcepts((prev) => prev.map((c) => (c.status === "pending" ? { ...c, status: "approved" } : c)));
+      await patch({
+        action: "approvals",
+        patch: { concepts: Object.fromEntries(pend.map((c) => [c.id, "approved"])) },
+      });
+      return;
+    }
+    const [items, setter] =
+      kind === "moodboard" ? ([moodboard, setMoodboard] as const) : ([poses, setPoses] as const);
+    const pend = items.filter((i) => i.status === "pending");
+    if (!pend.length) return;
+    setter((prev) => prev.map((i) => (i.status === "pending" ? { ...i, status: "approved" } : i)));
+    await patch({
+      action: "approvals",
+      patch: { [kind]: Object.fromEntries(pend.map((i) => [i.cloudinaryId, "approved"])) },
+    });
+  }
+
+  async function saveConceptEdit(conceptId: string, fields: Record<EditableField, string>) {
+    if (await patch({ action: "editConcept", conceptId, fields })) {
+      setConcepts((prev) =>
+        prev.map((c) => (c.id === conceptId ? { ...c, ...fields, edited: true } : c))
+      );
+      setEditingConcept(null);
+    }
+  }
+
   // Assign an image to a concept (or unassign) — web-managed, persisted across re-syncs.
   async function assignImageConcept(
     kind: "moodboard" | "poses",
@@ -132,8 +229,8 @@ export function AdminProposalReview({
 
   async function savePassword(e: React.FormEvent) {
     e.preventDefault();
-    if (pw.length < 4) {
-      setMsg("Heslo min. 4 znaky");
+    if (pw.length < 8) {
+      setMsg("Heslo min. 8 znaků");
       return;
     }
     if (await patch({ action: "password", password: pw })) {
@@ -229,6 +326,11 @@ export function AdminProposalReview({
           <p className="text-xs text-gray-500 mt-0.5">
             {proposal.slug} · {proposal.locale.toUpperCase()}
           </p>
+          {proposal.firstOpenedAt && (
+            <p className="text-xs text-gray-500">
+              klient otevřel {new Date(proposal.firstOpenedAt).toLocaleString("cs-CZ")}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -270,9 +372,42 @@ export function AdminProposalReview({
         </form>
       </section>
 
+      {/* Client feedback */}
+      {(proposal.feedback?.length ?? 0) > 0 && (
+        <section className="border border-blue-500/20 p-4 space-y-3">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-blue-300">
+            Reakce klienta ({proposal.feedback!.length})
+          </h2>
+          {proposal.feedback!.map((f, i) => (
+            <div key={i} className="text-sm border-l-2 border-blue-400/40 pl-3">
+              <p className="text-xs text-gray-500">
+                {new Date(f.createdAt).toLocaleString("cs-CZ")}
+                {f.conceptId && (
+                  <span className="ml-2 text-amber-300">
+                    ♥ koncept {f.conceptId} — {concepts.find((c) => c.id === f.conceptId)?.title}
+                  </span>
+                )}
+              </p>
+              <p className="mt-1 whitespace-pre-wrap text-gray-200">{f.message}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
       {/* Concepts (each with its own palettes) */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Koncepty</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Koncepty</h2>
+          {concepts.some((c) => c.status === "pending") && (
+            <button
+              onClick={() => approveAllPending("concepts")}
+              disabled={busy}
+              className="text-xs px-2 py-1 border border-green-500/40 text-green-300 hover:bg-green-900/30"
+            >
+              Schválit vše ({concepts.filter((c) => c.status === "pending").length})
+            </button>
+          )}
+        </div>
         <div className="space-y-4">
           {concepts.map((c) => (
             <div key={c.id} className="space-y-2">
@@ -289,6 +424,24 @@ export function AdminProposalReview({
                 </div>
                 {c.pitch && <p className="text-xs opacity-80 mt-1">{c.pitch}</p>}
               </button>
+
+              <div className="flex items-center gap-3 ml-4">
+                <button
+                  onClick={() => setEditingConcept(editingConcept === c.id ? null : c.id)}
+                  className="text-xs text-gray-400 hover:text-white"
+                >
+                  {editingConcept === c.id ? "Zavřít úpravy" : "Upravit texty"}
+                </button>
+                {c.edited && <span className="text-[10px] uppercase text-amber-400">upraveno</span>}
+              </div>
+              {editingConcept === c.id && (
+                <ConceptEditForm
+                  concept={c}
+                  busy={busy}
+                  onSave={(fields) => saveConceptEdit(c.id, fields)}
+                  onCancel={() => setEditingConcept(null)}
+                />
+              )}
 
               {c.palettes.length > 0 && (
                 <div className="ml-4 space-y-2 border-l border-zinc-800 pl-4">
@@ -331,13 +484,35 @@ export function AdminProposalReview({
 
       {/* Moodboard */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Moodboard</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Moodboard</h2>
+          {moodboard.some((i) => i.status === "pending") && (
+            <button
+              onClick={() => approveAllPending("moodboard")}
+              disabled={busy}
+              className="text-xs px-2 py-1 border border-green-500/40 text-green-300 hover:bg-green-900/30"
+            >
+              Schválit vše ({moodboard.filter((i) => i.status === "pending").length})
+            </button>
+          )}
+        </div>
         <ImageGrid kind="moodboard" images={moodboard} setter={setMoodboard} />
       </section>
 
       {/* Poses */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Pózy</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Pózy</h2>
+          {poses.some((i) => i.status === "pending") && (
+            <button
+              onClick={() => approveAllPending("poses")}
+              disabled={busy}
+              className="text-xs px-2 py-1 border border-green-500/40 text-green-300 hover:bg-green-900/30"
+            >
+              Schválit vše ({poses.filter((i) => i.status === "pending").length})
+            </button>
+          )}
+        </div>
         <ImageGrid kind="poses" images={poses} setter={setPoses} />
       </section>
 

@@ -1,5 +1,5 @@
 ---
-description: Prep a brand photo shoot end-to-end — research client, design concepts, build moodboard + pose board, assemble Canva presentation.
+description: Prep a brand photo shoot end-to-end — research client, design concepts, build moodboard + pose board, sync to the client proposal page.
 argument-hint: <name> | <linkedin-url> | <website>
 ---
 
@@ -11,5 +11,5 @@ $ARGUMENTS
 
 Follow the phases in `.claude/skills/brand-shoot-prep/SKILL.md` in order. If any of
 name / LinkedIn / website is missing, ask for it before scaffolding. Otherwise proceed
-autonomously, pausing only at the two decision points the skill defines (which concept(s)
-to board, and confirm before exporting the Canva deck).
+autonomously, pausing only at the one decision point the skill defines (which concept(s)
+and palettes to board). Final approval happens in the web admin after sync.

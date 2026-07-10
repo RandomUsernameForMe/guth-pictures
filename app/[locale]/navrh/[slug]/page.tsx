@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { getProposal, isExpired, toPublicProposal } from "@/modules/brand-shoot/lib/proposals";
+import { getProposal, isExpired, toPublicProposal, markOpened } from "@/modules/brand-shoot/lib/proposals";
 import { verifyProposalToken, proposalCookieName } from "@/modules/brand-shoot/lib/proposal-auth";
 import { ProposalGate } from "@/modules/brand-shoot/components/ProposalGate";
 import { ProposalView } from "@/modules/brand-shoot/components/ProposalView";
@@ -44,5 +44,6 @@ export default async function ProposalPage({
     return <ProposalGate slug={slug} clientName={proposal.name} />;
   }
 
+  await markOpened(slug);
   return <ProposalView proposal={toPublicProposal(proposal)} />;
 }

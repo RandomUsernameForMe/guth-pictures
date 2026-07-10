@@ -18,6 +18,9 @@ export default async function NavrhyPage() {
           approvedConcepts: p.concepts.filter((c) => c.status === "approved").length,
           conceptCount: p.concepts.length,
           syncedAt: p.syncedAt,
+          feedbackCount: p.feedback?.length ?? 0,
+          firstOpenedAt: p.firstOpenedAt,
+          hasNewChanges: !!p.syncedAt && (!p.reviewedAt || p.syncedAt > p.reviewedAt),
         }))}
       />
     </AdminShell>
