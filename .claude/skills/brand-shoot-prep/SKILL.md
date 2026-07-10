@@ -3,17 +3,18 @@ name: brand-shoot-prep
 description: >-
   Prep a brand photo shoot end-to-end from a client name / LinkedIn / website:
   deep client research, three distinct shoot concepts, a moodboard and a pose board
-  (web-curated references + AI-generated originals), and a client-facing Canva
-  presentation exported to PDF. Use when the user wants to prepare, research, pitch,
-  or storyboard a brand / personal-branding / founder / headshot photo shoot, or
-  invokes /brandshoot.
+  (library-first references + AI-generated sketches), synced to a password-gated
+  client proposal page on the website. Use when the user wants to prepare, research,
+  pitch, or storyboard a brand / personal-branding / founder / headshot photo shoot,
+  or invokes /brandshoot.
 ---
 
 # Brand Shoot Prep
 
 Turn a client identity (name / LinkedIn / website) into a complete, client-ready shoot
-proposal. You own the whole pipeline; the photographer just supplies the identity and
-makes two creative calls along the way.
+proposal hosted on the website. You own the whole pipeline; the photographer just supplies
+the identity and makes one creative call along the way (which concepts/palettes to board) —
+final approval happens in the web admin.
 
 ## Inputs
 
@@ -156,10 +157,6 @@ For each chosen concept, follow `references/board-spec.md`. Per concept:
      --title "Moodboard — <name>" --subtitle "<concept>" \
      --palette "#hex,#hex,#hex" --notes "<look in one line>"
    ```
-4. **Canva:** create/locate a client folder (`create-folder`), upload web refs by URL
-   (`upload-asset-from-url` — they already have URLs from `sources.json`), then have Canva
-   generate a `photo_collage` (or `poster`) moodboard design seeded with those `asset_ids`.
-   See "Canva assembly" below.
 
 ## Phase 5 — Pose board (library sketches, then generate for gaps)
 
@@ -177,73 +174,16 @@ concept's posture and energy.
    - **Optional fallback** — local model (Draw Things/ComfyUI) → `library-add --file`, or
      `gen-pose-sketch.mjs` if `GEMINI_API_KEY` is set (builds the locked prompt + tags itself).
    Then `library-pick` the new ids into the client.
-3. Build `clients/<slug>/poseboard.html` with `build-board.mjs` and assemble a Canva pose
-   board as in Phase 4. Pose direction notes ride along from the library/`sources.json` notes.
+3. Build `clients/<slug>/poseboard.html` with `build-board.mjs`. Pose direction notes ride
+   along from the library/`sources.json` notes.
 
-## Phase 6 — Presentation (Canva → PDF)
+## Phase 6 — Publish (sync to the website)
 
-Assemble the deck — the primary deliverable. Order:
-
-1. Cover (client name, "Brand Shoot Proposal", date)
-2. Who they are / research summary (audience, voice, visual identity)
-3. The three approaches (one section each)
-4. Moodboard(s)
-5. Pose board(s)
-6. Logistics: shot list, wardrobe, location, lighting, timeline
-
-**Decision point 2:** confirm with the user before exporting.
-
-Then `export-design` to PDF into `clients/<slug>/deliverables/presentation.pdf` and record
-all Canva URLs + the PDF path in `clients/<slug>/deliverables/canva-links.md`.
-
-## Phase 7 — Prep & approval (review gate)
-
-Nothing reaches the client until the photographer approves it. Approval is **hybrid**:
-per-concept and per-image (each moodboard / pose reference).
-
-```
-npm run review            # or: node scripts/review-server.mjs --open
-```
-
-Opens a local-only review UI (disposable `localhost`, not hosting — browsers can't write
-files from a bare page, so this tiny helper persists the choices). Pick the client, toggle
-**Approve / Reject** on each concept and image, then **Finalize & build client view**.
-This writes `clients/<slug>/approvals.json` and rebuilds `proposal.html` from **approved
-items only**. Any later change reopens the draft (must re-finalize).
-
-- Internal `index.html` shows every item with an approval badge (✓ / ✗ / •).
-- `proposal.html` and the published share contain **only approved** concepts + images.
-- Status values in `approvals.json`: `approved` / `rejected` / (absent = pending).
-
-## Phase 8 — Client pages (build hub + all-clients gallery)
-
-Generate the self-contained pages. Run **after** approval so the internal hub shows correct
-badges and the client proposal reflects approved-only items:
-
-```
-node scripts/build-page.mjs clients/<slug>            # internal hub -> index.html (approval badges)
-node scripts/build-page.mjs clients/<slug> --client   # client-facing -> proposal.html (approved-only)
-node scripts/build-index.mjs clients                  # all-clients gallery -> clients/index.html
-```
-
-- **index.html** — internal hub (all 6 tabs incl. Overview/Research + sourcing detail + ✓/✗
-  approval badges on every image).
-- **proposal.html** (`--client`) — hides Overview/Research and internal notes/alternates,
-  hides image source hosts, and shows **only approved** concepts + images. (Phase 7's
-  Finalize already rebuilds this; re-run only if you tweak after finalizing.)
-- Both: hero band (cover = first approved moodboard image, or `--cover <file>`), dark/light
-  theme toggle (persisted), print stylesheet, click-to-zoom galleries, palette strip, CTAs.
-- **clients/index.html** — gallery card per client (thumbnail, concept, progress, links);
-  rebuild after finishing any client.
-
-No deps, offline-capable; reads brief/research/approaches markdown, both galleries +
-`sources.json`, `approvals.json`, and `deliverables/canva-links.md`.
-
-## Phase 9 — Publish (sync to the website)
-
-The proposal is hosted **remotely on the guth-pictures website** (not a static bundle). Sync
-pushes the structured proposal + images to the site; the photographer then sets a password and
-finalizes in the web admin, and hands the client a URL + password.
+The proposal is hosted **remotely on the guth-pictures website**. Sync pushes the structured
+proposal + images to the site; **all approval happens in the web admin** (concepts, images,
+palette choice), then the photographer sets a password, finalizes, and hands the client a
+URL + password. The client page has an inline feedback form (concept pick + message), so
+client reactions land back in the admin.
 
 ```
 node scripts/build-proposal-json.mjs clients/<slug>   # assemble structured proposal.json
@@ -251,39 +191,31 @@ node scripts/sync-to-web.mjs <slug>                   # builds json if needed, u
                                                       # to Cloudinary, POSTs to the site
 ```
 
+- `build-proposal-json.mjs` **fails loudly** if it can't parse any concepts or a concept has
+  no palettes (usually a malformed heading or a non-indented palette sub-list) — fix
+  `approaches.md` and re-run.
 - `sync-to-web.mjs` is **idempotent**: image ids are content-derived, and the website preserves
-  any approval state / password set in its admin across re-syncs. Re-run anytime after edits.
+  approval state, password, and admin text edits across re-syncs. Re-run anytime after edits.
 - Required env (in `brand-shoot-prep/.env`, git-ignored): `WEB_URL` (default
   `http://localhost:3000`), `PROPOSAL_SYNC_SECRET` (must match the site), and
   `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET`.
-- After sync: open `<WEB_URL>/admin/navrhy/<slug>` → approve concepts + images (or it carries the
-  local `approvals.json` statuses on first sync) → set a password → **Finalize**. Give the client
+- After sync: open `<WEB_URL>/admin/navrhy/<slug>` → approve concepts + images (bulk-approve
+  button for fresh syncs), pick one palette per concept, optionally edit concept texts inline
+  (edits survive re-syncs) → set a password (min 8 chars) → **Finalize**. Give the client
   `<WEB_URL>/<locale>/navrh/<slug>` + the password.
 - The client view shows **approved-only** concepts + images; research stays internal (admin only).
+- Optional local preview before syncing: `node scripts/build-board.mjs …` boards from Phases
+  4–5 are self-contained HTML you can open directly.
 
-> Legacy static-deploy path (`scripts/codes.mjs` + `scripts/build-share.mjs`) is **deprecated**
-> in favor of the web sync above, but still works if you need a self-hosted static bundle.
+## Canva (pose sketches only)
 
-## Canva assembly (MCP)
+Canva MCP is used solely to **generate pose sketches** (Phase 5) — the deck/board assembly
+path is retired; the website proposal is the deliverable.
 
-Connection confirmed. Brand kits available: **Nobig.Deals**, **Herkules** (+ one unnamed).
-Ask which brand kit to apply (or none) before generating; pass its id as `brand_kit_id`.
-
-- Group the client's work under one folder: `create-folder` (parent `root`).
-- Bring in web references first: `upload-asset-from-url` for each curated URL → collect the
-  returned `asset_id`s.
-- **Boards** (moodboard / pose board): `generate-design` with `design_type: "photo_collage"`
-  (or `"poster"`), passing the uploaded `asset_ids` and a descriptive `query`. This returns
-  **design candidates** — show them, let the user pick, then `create-design-from-candidate`.
-- **Presentation deck**: `generate-design` does **NOT** support `presentation`. Use the
-  outline flow — `request-outline-review` → `generate-design-structured` — or
-  `search-brand-templates` + `create-design-from-brand-template` for a fixed house style.
-- Refine layout/text/images: `start-editing-transaction` → `perform-editing-operations` →
-  `commit-editing-transaction`.
-- Combine board + deck pages with `merge-designs` if needed.
-- Export: `get-export-formats` then `export-design` (PDF) → `deliverables/`.
-- If any Canva step is unavailable, the local `moodboard.html` / `poseboard.html` plus the
-  markdown artifacts already constitute a usable deliverable — report that and continue.
+- `generate-design` with the locked style spec from `references/pose-sketch-style.md` →
+  `export-design` PNG → `library-add.mjs --kind pose --file <png> --emotion … --shot …`.
+- Optionally group generated assets under a client folder (`create-folder`, parent `root`).
+- Canva unavailable → local model / `GEMINI_API_KEY` fallbacks per Resilience below.
 
 ## Resilience
 
@@ -294,5 +226,4 @@ Ask which brand kit to apply (or none) before generating; pass its id as `brand_
   generator — fine for line-art *sketches*, but don't use it to fake *photographic* originals.)
 - Empty / thin library → `library-query` returns little; just search/generate the full set as
   before and `library-add` / `gen-pose-sketch` feeds it so the next shoot matches more.
-- Canva MCP unavailable → deliver local HTML boards + markdown; note the gap.
 - Image download failures are skipped, not fatal (script reports saved/skipped/failed).
