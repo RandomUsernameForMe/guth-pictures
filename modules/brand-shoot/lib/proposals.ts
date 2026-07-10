@@ -7,6 +7,7 @@ import type {
   ProposalStatus,
   ProposalPublic,
   ProposalImage,
+  ProposalConcept,
 } from "./types";
 
 export type {
@@ -68,6 +69,10 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
   const paletteStatus = new Map(
     existing?.concepts.flatMap((c) => (c.palettes ?? []).map((p) => [p.id, p.status] as const))
   );
+  // Admin-edited concept text (web-managed) wins over incoming sync text.
+  const editedConcepts = new Map(
+    (existing?.concepts ?? []).filter((c) => c.edited).map((c) => [c.id, c])
+  );
   // Image→concept assignment, hero flag + approval status are web-managed; preserve across re-syncs.
   const moodAssign = new Map(existing?.moodboard.map((i) => [i.cloudinaryId, i]));
   const poseAssign = new Map(existing?.poses.map((i) => [i.cloudinaryId, i]));
@@ -89,8 +94,22 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
         chosenPalette.get(c.id) ??
         c.chosenPaletteId ??
         palettes.find((p) => p.status === "approved")?.id;
+      const prevEdit = editedConcepts.get(c.id);
       return {
         ...c,
+        ...(prevEdit
+          ? {
+              title: prevEdit.title,
+              pitch: prevEdit.pitch,
+              why: prevEdit.why,
+              mood: prevEdit.mood,
+              wardrobe: prevEdit.wardrobe,
+              location: prevEdit.location,
+              lighting: prevEdit.lighting,
+              poseDirection: prevEdit.poseDirection,
+              edited: true as const,
+            }
+          : {}),
         status: conceptStatus.get(c.id) ?? c.status,
         palettes,
         chosenPaletteId: palettes.some((p) => p.id === chosen) ? chosen : undefined,
@@ -121,6 +140,10 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
     expiresAt: existing?.expiresAt,
     createdAt: existing?.createdAt ?? now,
     syncedAt: now,
+    feedback: existing?.feedback,
+    firstOpenedAt: existing?.firstOpenedAt,
+    lastOpenedAt: existing?.lastOpenedAt,
+    reviewedAt: existing?.reviewedAt,
   };
 
   await kv.set(key(payload.slug), record);
@@ -267,6 +290,71 @@ export async function deleteProposal(slug: string): Promise<void> {
   const kv = await getKv();
   if (!kv) return;
   await Promise.all([kv.del(key(slug)), kv.srem("proposals:index", slug)]);
+}
+
+// Client reaction from the proposal page. Capped so a stuck client can't grow the record forever.
+export async function addFeedback(
+  slug: string,
+  entry: { conceptId?: string; message: string }
+): Promise<boolean> {
+  const kv = await getKv();
+  if (!kv) return false;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return false;
+  const feedback = [
+    ...(record.feedback ?? []),
+    { ...entry, createdAt: new Date().toISOString() },
+  ].slice(-50);
+  await kv.set(key(slug), { ...record, feedback });
+  return true;
+}
+
+export async function markOpened(slug: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return;
+  const now = new Date().toISOString();
+  await kv.set(key(slug), {
+    ...record,
+    firstOpenedAt: record.firstOpenedAt ?? now,
+    lastOpenedAt: now,
+  });
+}
+
+export async function markReviewed(slug: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return;
+  await kv.set(key(slug), { ...record, reviewedAt: new Date().toISOString() });
+}
+
+export type ConceptTextFields = Partial<
+  Pick<
+    ProposalConcept,
+    "title" | "pitch" | "why" | "mood" | "wardrobe" | "location" | "lighting" | "poseDirection"
+  >
+>;
+
+// Admin inline text edit; sets `edited` so upsert preserves it across re-syncs.
+export async function editConcept(
+  slug: string,
+  conceptId: string,
+  fields: ConceptTextFields
+): Promise<ProposalRecord | null> {
+  const kv = await getKv();
+  if (!kv) return null;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return null;
+  const updated: ProposalRecord = {
+    ...record,
+    concepts: record.concepts.map((c) =>
+      c.id === conceptId ? { ...c, ...fields, edited: true } : c
+    ),
+  };
+  await kv.set(key(slug), updated);
+  return updated;
 }
 
 // Strip to approved-only, drop internal fields — for the gated client view.

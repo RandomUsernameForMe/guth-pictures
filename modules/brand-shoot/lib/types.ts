@@ -29,6 +29,7 @@ export interface ProposalConcept {
   shotList: string[];
   poseDirection: string;
   status: ProposalStatus;
+  edited?: boolean; // admin edited text fields in the web admin; sync must not overwrite them
 }
 
 export interface ProposalImage {
@@ -46,6 +47,12 @@ export interface ProposalBrief {
   website?: string;
   notes?: string;
   date: string;
+}
+
+export interface ProposalFeedback {
+  conceptId?: string; // concept the client picked as favourite (optional)
+  message: string;
+  createdAt: string;
 }
 
 export interface ProposalRecord {
@@ -66,6 +73,10 @@ export interface ProposalRecord {
   expiresAt?: string; // ISO; absent = never expires
   createdAt: string;
   syncedAt?: string;
+  feedback?: ProposalFeedback[]; // client reactions from the proposal page
+  firstOpenedAt?: string; // first time the client viewed the proposal (valid session)
+  lastOpenedAt?: string;
+  reviewedAt?: string; // last time the admin opened the review screen
 }
 
 // Shape the local sync script POSTs to /api/admin/proposals/sync.
