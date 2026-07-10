@@ -75,6 +75,12 @@
     "desc": "Interaktivní 3D simulátor studiového osvětlení. Nastav si světelné schéma, prozkoumej presety a přijď připravený.",
     "cta": "Otevřít Light Tester"
   },
+  "foceni101-promo": {
+    "label": "Interaktivní průvodce",
+    "title": "Zjisti, co dělá fotku fotkou",
+    "desc": "Clona, čas, ISO nebo kompozice — scrolluj 3D scénou a vyzkoušej si, co každé nastavení udělá s portrétem. Žádný žargon.",
+    "cta": "Otevřít Focení 101"
+  },
   "o-mne": {
     "title": "O mně",
     "subtitle": "Jsem fotograf z Prahy.",

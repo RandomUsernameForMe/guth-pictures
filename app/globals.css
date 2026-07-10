@@ -357,6 +357,9 @@ body::after {
   justify-content: center;
   opacity: 0.85;
 }
+/* Mirrored variant — diagram left, text right (zigzag rhythm when promos stack) */
+.lt-promo--flip { grid-template-columns: 320px 1fr; }
+.lt-promo--flip .lt-promo-text { order: 2; }
 @media (max-width: 768px) {
   .lt-promo {
     grid-template-columns: 1fr;

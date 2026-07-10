@@ -7,6 +7,7 @@ import { HomeAurora } from "@/components/HomeAurora";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { LightTesterPromo } from "@/modules/homepage/components/LightTesterPromo";
+import { Foceni101Promo } from "@/modules/homepage/components/Foceni101Promo";
 import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -162,6 +163,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           title={content.lightTesterPromo.title}
           desc={content.lightTesterPromo.desc}
           cta={t("light-tester-promo.cta")}
+          locale={locale}
+        />
+      </AnimatedSection>
+
+      <AnimatedSection>
+        <Foceni101Promo
+          label={t("foceni101-promo.label")}
+          title={t("foceni101-promo.title")}
+          desc={t("foceni101-promo.desc")}
+          cta={t("foceni101-promo.cta")}
           locale={locale}
         />
       </AnimatedSection>

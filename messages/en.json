@@ -75,6 +75,12 @@
     "desc": "Interactive 3D studio lighting simulator. Set up your lighting scheme, explore presets and come prepared.",
     "cta": "Open Light Tester"
   },
+  "foceni101-promo": {
+    "label": "Interactive guide",
+    "title": "See what makes a photo",
+    "desc": "Aperture, shutter speed, ISO or composition — scroll through a 3D scene and see what every setting does to a portrait. No jargon.",
+    "cta": "Open Photo 101"
+  },
   "o-mne": {
     "title": "About me",
     "subtitle": "I'm a photographer based in Prague.",
