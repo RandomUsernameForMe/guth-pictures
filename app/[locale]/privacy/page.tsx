@@ -28,7 +28,7 @@ function CsVersion() {
     <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
       <h1 className="text-4xl font-bold mb-2">Zásady zpracování osobních údajů</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">
-        Tomáš Guth Jarkovský — Guth Pictures · Platné od 1. 1. 2025
+        Tomáš Guth Jarkovský · Guth Pictures · Platné od 1. 1. 2025
       </p>
 
       <Section title="1. Správce osobních údajů">
@@ -72,19 +72,19 @@ function CsVersion() {
 
       <Section title="6. Předávání do třetích zemí">
         <p>
-          Fotografie mohou být uloženy na platformách provozovaných mimo EHP (např. Cloudinary — USA).
+          Fotografie mohou být uloženy na platformách provozovaných mimo EHP (např. Cloudinary, USA).
           Přenos probíhá na základě standardních smluvních doložek Evropské komise.
         </p>
       </Section>
 
       <Section title="7. Vaše práva">
         <ul>
-          <li><strong>Právo na přístup</strong> — kdykoli si můžete vyžádat přehled údajů, které o vás zpracováváme.</li>
-          <li><strong>Právo na opravu</strong> — pokud jsou vaše údaje nepřesné, opravíme je.</li>
-          <li><strong>Právo na výmaz</strong> — za podmínek GDPR můžete požádat o smazání vašich údajů.</li>
-          <li><strong>Právo vznést námitku</strong> — zejména proti zpracování na základě oprávněného zájmu (portfolio).</li>
-          <li><strong>Právo na přenositelnost</strong> — na vyžádání poskytneme vaše údaje ve strojově čitelném formátu.</li>
-          <li><strong>Právo podat stížnost</strong> — u Úřadu pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7, www.uoou.cz.</li>
+          <li><strong>Právo na přístup:</strong> kdykoli si můžete vyžádat přehled údajů, které o vás zpracováváme.</li>
+          <li><strong>Právo na opravu:</strong> pokud jsou vaše údaje nepřesné, opravíme je.</li>
+          <li><strong>Právo na výmaz:</strong> za podmínek GDPR můžete požádat o smazání vašich údajů.</li>
+          <li><strong>Právo vznést námitku:</strong> zejména proti zpracování na základě oprávněného zájmu (portfolio).</li>
+          <li><strong>Právo na přenositelnost:</strong> na vyžádání poskytneme vaše údaje ve strojově čitelném formátu.</li>
+          <li><strong>Právo podat stížnost:</strong> u Úřadu pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7, www.uoou.cz.</li>
         </ul>
       </Section>
 
@@ -109,7 +109,7 @@ function EnVersion() {
     <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
       <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">
-        Tomáš Guth Jarkovský — Guth Pictures · Effective 1 January 2025
+        Tomáš Guth Jarkovský · Guth Pictures · Effective 1 January 2025
       </p>
 
       <Section title="1. Data Controller">
@@ -152,19 +152,19 @@ function EnVersion() {
 
       <Section title="6. International transfers">
         <p>
-          Photographs may be stored on platforms outside the EEA (e.g. Cloudinary — USA).
+          Photographs may be stored on platforms outside the EEA (e.g. Cloudinary, USA).
           Transfers are covered by EU Standard Contractual Clauses.
         </p>
       </Section>
 
       <Section title="7. Your rights">
         <ul>
-          <li><strong>Right of access</strong> — request a copy of your data at any time.</li>
-          <li><strong>Right to rectification</strong> — if your data is inaccurate, we will correct it.</li>
-          <li><strong>Right to erasure</strong> — request deletion under GDPR conditions.</li>
-          <li><strong>Right to object</strong> — especially to processing based on legitimate interest (portfolio).</li>
-          <li><strong>Right to data portability</strong> — we can provide your data in a machine-readable format.</li>
-          <li><strong>Right to lodge a complaint</strong> — with the Czech Office for Personal Data Protection (ÚOOÚ), www.uoou.cz.</li>
+          <li><strong>Right of access:</strong> request a copy of your data at any time.</li>
+          <li><strong>Right to rectification:</strong> if your data is inaccurate, we will correct it.</li>
+          <li><strong>Right to erasure:</strong> request deletion under GDPR conditions.</li>
+          <li><strong>Right to object:</strong> especially to processing based on legitimate interest (portfolio).</li>
+          <li><strong>Right to data portability:</strong> we can provide your data in a machine-readable format.</li>
+          <li><strong>Right to lodge a complaint:</strong> with the Czech Office for Personal Data Protection (ÚOOÚ), www.uoou.cz.</li>
         </ul>
       </Section>
 

@@ -6,7 +6,7 @@ import { PortfolioFilter } from "@/modules/homepage/components/PortfolioFilter";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.portfolio" });
-  const ogAlt = locale === "cs" ? "Portfolio — Guth Pictures" : "Portfolio — Guth Pictures — Prague Photographer";
+  const ogAlt = locale === "cs" ? "Portfolio — Guth Pictures" : "Portfolio — Guth Pictures, Prague photographer";
   return {
     title: t("title"),
     description: t("description"),

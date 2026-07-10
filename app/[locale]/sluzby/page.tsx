@@ -27,20 +27,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 // FAQ answers stay consistent with VOP (storno, delivery, postprodukce) — update both together
 const FAQ = {
   cs: [
-    { q: "Jak probíhá objednávka focení?", a: "Objednávka probíhá elektronicky — přes kontaktní formulář, e-mailem nebo přes sociální sítě. Domluvíme si termín, rozsah a balíček; termín je závazně rezervován po uhrazení rezervačního poplatku." },
-    { q: "Kde focení probíhá?", a: "V Praze a okolí — v ateliéru, v exteriéru nebo u vás. Po domluvě fotím po celé České republice." },
+    { q: "Jak probíhá objednávka focení?", a: "Objednávka probíhá elektronicky: přes kontaktní formulář, e-mailem nebo přes sociální sítě. Domluvíme si termín, rozsah a balíček; termín je závazně rezervován po uhrazení rezervačního poplatku." },
+    { q: "Kde focení probíhá?", a: "V Praze a okolí, v ateliéru, v exteriéru nebo u vás. Po domluvě fotím po celé České republice." },
     { q: "Kdy a jak dostanu fotografie?", a: "Termín dodání sjednáváme individuálně podle rozsahu zakázky. Hotové fotografie předávám zabezpečeným odkazem na online galerii; odkaz platí 3 měsíce a v archivu fotky držím 6 měsíců od předání." },
-    { q: "Upravujete fotografie?", a: "Ano, všechny odevzdané fotografie procházejí autorskou postprodukcí — barevné korekce, expozice, ořez. Nadstandardní retuše jsou možné po dohodě za příplatek. Neupravené RAW soubory nepředávám." },
+    { q: "Upravujete fotografie?", a: "Ano, všechny odevzdané fotografie procházejí autorskou postprodukcí (barevné korekce, expozice, ořez). Nadstandardní retuše jsou možné po dohodě za příplatek. Neupravené RAW soubory nepředávám." },
     { q: "Co když potřebuji termín zrušit?", a: "Při zrušení méně než 14 dní před termínem propadá rezervační poplatek jako náhrada za blokaci termínu. Dřívější zrušení či přesun řešíme dohodou, u špatného počasí v exteriéru se bez sankcí domluvíme na náhradním termínu." },
-    { q: "Kolik focení stojí?", a: "Ceny se odvíjejí od balíčků výše na této stránce — portrétní balíčky a svatební fotografie. Pro eventy, larpy a nestandardní zakázky připravím nabídku na míru." },
+    { q: "Kolik focení stojí?", a: "Ceny se odvíjejí od balíčků výše na této stránce. Pro eventy, larpy a nestandardní zakázky připravím nabídku na míru." },
   ],
   en: [
-    { q: "How do I book a shoot?", a: "Booking is electronic — via the contact form, e-mail or social media. We agree on a date, scope and package; the date is confirmed once the booking fee is paid." },
-    { q: "Where do shoots take place?", a: "In and around Prague — in a studio, outdoors or at your place. Shoots across the Czech Republic are possible by arrangement." },
+    { q: "How do I book a shoot?", a: "Booking is electronic: via the contact form, e-mail or social media. We agree on a date, scope and package; the date is confirmed once the booking fee is paid." },
+    { q: "Where do shoots take place?", a: "In and around Prague, in a studio, outdoors or at your place. Shoots across the Czech Republic are possible by arrangement." },
     { q: "When and how do I get my photos?", a: "Delivery time is agreed individually based on the scope of the job. Finished photos are delivered via a secure online gallery link valid for 3 months; I keep them archived for 6 months after delivery." },
-    { q: "Do you edit the photos?", a: "Yes, all delivered photos go through my post-production — colour correction, exposure, cropping. Advanced retouching is available by agreement for an extra fee. I do not hand over unedited RAW files." },
+    { q: "Do you edit the photos?", a: "Yes, all delivered photos go through my post-production (colour correction, exposure, cropping). Advanced retouching is available by agreement for an extra fee. I do not hand over unedited RAW files." },
     { q: "What if I need to cancel?", a: "Cancelling less than 14 days before the date forfeits the booking fee as compensation for blocking the slot. Earlier cancellations or reschedules are handled by agreement; bad weather for outdoor shoots means we simply pick a new date." },
-    { q: "How much does a shoot cost?", a: "Prices follow the packages above — portrait packages and wedding photography. For events, larps and custom jobs I prepare a tailored quote." },
+    { q: "How much does a shoot cost?", a: "Prices follow the packages above. For events, larps and custom jobs I prepare a tailored quote." },
   ],
 } as const;
 

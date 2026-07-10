@@ -57,15 +57,15 @@
     "vybrat": "Mám zájem",
     "portraits": {
       "title": "Portréty",
-      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."
+      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo u vás. Hlavní je pro mě přirozený výraz."
     },
     "weddings": {
       "title": "Svatby",
-      "desc": "Celý den od příprav po večer. Reportážní styl — žádné nucené pózy, jen skutečné okamžiky."
+      "desc": "Celý den od příprav po večer. Fotím reportážně, bez nucených póz."
     },
     "larp": {
       "title": "Larpy a akce",
-      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa."
+      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb a atmosféra jsou moje parketa."
     },
     "cta": "Nezávazně napsat"
   },
@@ -78,13 +78,13 @@
   "foceni101-promo": {
     "label": "Interaktivní průvodce",
     "title": "Zjisti, co dělá fotku fotkou",
-    "desc": "Clona, čas, ISO nebo kompozice — scrolluj 3D scénou a vyzkoušej si, co každé nastavení udělá s portrétem. Žádný žargon.",
+    "desc": "Scrolluj 3D scénou a uvidíš, co s portrétem udělá clona, čas, ISO nebo kompozice.",
     "cta": "Otevřít Focení 101"
   },
   "o-mne": {
     "title": "O mně",
     "subtitle": "Jsem fotograf z Prahy.",
-    "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
+    "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly, bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
     "cta": "Pojďme se domluvit"
   },
   "testimonials": {
@@ -160,12 +160,12 @@
   "foceni101": {
     "meta": {
       "title": "Focení 101 — co dělá fotku",
-      "description": "Interaktivní průvodce pro nefotografy. Posuň posuvník a uvidíš, co clona, čas závěrky, ISO a ohnisko udělají s fotkou. Žádný žargon."
+      "description": "Interaktivní průvodce pro nefotografy. Posuň posuvník a uvidíš, co s fotkou udělá clona, čas závěrky, ISO nebo ohnisko."
     },
     "sections": {
       "intro": {
         "title": "Scéna",
-        "body": "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka — podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky."
+        "body": "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky."
       },
       "expozice": {
         "title": "Expozice",
@@ -201,19 +201,19 @@
       },
       "svetlo": {
         "title": "Expoziční trojúhelník",
-        "body": "Clona, čas a ISO neovlivňují jen vzhled — všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně."
+        "body": "Clona, čas a ISO neovlivňují jen vzhled. Všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně."
       },
       "capstone-blur": {
         "title": "Vyrovnej expozici: rozostřené pozadí",
-        "body": "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán — jde zavřít jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu."
+        "body": "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán. Zavřít ji jde jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu."
       },
       "capstone-freeze": {
         "title": "Vyrovnej expozici: zmrazit pohyb",
-        "body": "Chceš zmrazit rychlý pohyb, proto čas musí zůstat krátký — nejdál 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu."
+        "body": "Chceš zmrazit rychlý pohyb, proto čas musí zůstat nejvýš 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu."
       },
       "finale": {
         "title": "Tohle všechno řeším za tebe",
-        "body": "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se jen díváš do objektivu. Napiš mi, co chceš nafotit."
+        "body": "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe. Ty se jen díváš do objektivu. Napiš mi, co chceš nafotit."
       }
     },
     "ctrl": {
@@ -237,11 +237,11 @@
       },
       "center": {
         "label": "Na střed",
-        "body": "Subjekt přesně uprostřed. Působí symetricky, formálně a přímo — vhodné, když chceš klid a konfrontaci pohledem."
+        "body": "Subjekt přesně uprostřed. Působí symetricky, formálně a přímo. Hodí se, když chceš klid a přímý pohled."
       },
       "golden": {
         "label": "Zlatý řez",
-        "body": "Subjekt na linii zlatého řezu (≈ 62 %). Podobné třetinám, ale o kousek blíž středu — poměr převzatý z malířství."
+        "body": "Subjekt na linii zlatého řezu (≈ 62 %). Podobné třetinám, jen o kousek blíž středu. Poměr známý z malířství."
       },
       "leading": {
         "label": "Vedoucí linie",

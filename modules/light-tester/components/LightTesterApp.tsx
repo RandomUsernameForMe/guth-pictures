@@ -55,7 +55,7 @@ function FeedbackModal({ onClose }: { onClose: () => void }) {
         {status === "sent" ? (
           <>
             <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.5, margin: "0 0 20px" }}>
-              Díky za feedback — pomůže to zlepšit Light Tester.
+              Díky za feedback, pomůže mi Light Tester zlepšovat.
             </p>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button className="lt-btn lt-btn-primary" onClick={close}>Zavřít</button>
@@ -83,7 +83,7 @@ function FeedbackModal({ onClose }: { onClose: () => void }) {
             />
             <div className="lt-feedback-footer">
               <span className="lt-feedback-status">
-                {status === "error" && "Odeslání selhalo — zkus to znovu."}
+                {status === "error" && "Odeslání selhalo, zkus to znovu."}
               </span>
               <button className="lt-btn lt-btn-ghost" onClick={close}>Zrušit</button>
               <button
@@ -139,8 +139,8 @@ function SupportToast({ onDismiss }: { onDismiss: () => void }) {
   return (
     <div className={`lt-support-toast${visible ? " lt-support-toast--in" : ""}`}>
       <p className="lt-support-text">
-        Light Tester je zdarma a vždy bude. Stál ale čas a zkušenosti —
-        pokud ti pomohl, budu rád za příspěvek.
+        Light Tester je zdarma a vždy bude. Stál ale dost času a zkušeností.
+        Pokud ti pomohl, budu rád za příspěvek.
       </p>
       <div className="lt-support-actions">
         <button className="lt-btn lt-btn-primary" onClick={openBMC}>☕ Přispět</button>

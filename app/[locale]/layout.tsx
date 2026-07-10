@@ -67,8 +67,8 @@ export default async function LocaleLayout({
     "@id": `${siteUrl}/#business`,
     name: "Guth Pictures",
     description: cs
-      ? "Profesionální fotograf Praha — kreativní portréty, svatby, eventy a larpy"
-      : "Professional photographer Prague — creative portraits, weddings, events and larps",
+      ? "Profesionální fotograf v Praze: kreativní portréty, svatby, eventy a larpy"
+      : "Professional photographer in Prague: creative portraits, weddings, events and larps",
     url: siteUrl,
     email,
     image: `${siteUrl}${ogImage.url}`,
