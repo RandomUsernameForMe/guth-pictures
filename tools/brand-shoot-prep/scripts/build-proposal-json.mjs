@@ -172,6 +172,28 @@ export async function buildProposalJson(dir) {
     return concept;
   });
 
+  // Fail loudly when parsing yields nothing — a malformed heading otherwise syncs an
+  // empty proposal (e.g. curly quotes in `## Concept A — "Title"` broke this before).
+  if (!parsedConcepts.length) {
+    const headings = approachesMd.split("\n").filter((l) => /^##\s/.test(l));
+    throw new Error(
+      `No concepts parsed from ${join(dir, "approaches.md")}.\n` +
+        `Expected H2 headings like: ## Concept A — "Title" (straight quotes, em dash).\n` +
+        (headings.length
+          ? `Found H2 headings:\n${headings.map((h) => `  ${h}`).join("\n")}`
+          : "No H2 headings found at all — is approaches.md present and non-empty?")
+    );
+  }
+  const paletteless = parsedConcepts.filter((c) => !c.palettes.length);
+  if (paletteless.length) {
+    throw new Error(
+      `Concept(s) without palettes: ${paletteless.map((c) => c.id).join(", ")} (approaches.md).\n` +
+        `Each concept needs a "- **Palety:**" bullet with an INDENTED sub-list, e.g.:\n` +
+        `  - **Palety:**\n` +
+        "    - **Hřejivá:** `#1f1d1b` `#6b5d4f` `#b9a88f` `#e8e2d8`"
+    );
+  }
+
   const applyStatus = (items, statusMap) =>
     items.map((it) => ({ ...it, status: statusMap?.[it.file] || "pending" }));
 
