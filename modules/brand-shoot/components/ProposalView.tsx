@@ -4,6 +4,7 @@ import { paletteToAmbient } from "@/modules/brand-shoot/lib/palette-theme";
 import type { ProposalPublic, ProposalConcept, ProposalImage } from "@/modules/brand-shoot/lib/types";
 import { LivingPalette } from "./LivingPalette";
 import { ProposalGallery } from "./ProposalGallery";
+import { ProposalFeedbackForm } from "./ProposalFeedbackForm";
 
 const FALLBACK = {
   accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B",
@@ -201,7 +202,14 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
         <div className="bsp-ed-close-inner" data-reveal>
           <span className="bsp-ed-eyebrow-accent">{t("ctaTitle")}</span>
           <h2 className="bsp-ed-close-h">{t("ctaBody")}</h2>
-          <a className="bsp-ed-cta" href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(`Návrh focení — ${proposal.name}`)}`}>
+          <ProposalFeedbackForm
+            slug={proposal.slug}
+            concepts={concepts.map((c) => ({ id: c.id, title: c.title }))}
+          />
+          <a
+            className="bsp-ed-cta-alt"
+            href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(t("ctaMailSubject", { name: proposal.name }))}`}
+          >
             {t("ctaButton")} →
           </a>
         </div>

@@ -1773,6 +1773,19 @@ body::after {
   font-weight: 600; font-size: 1.05rem; text-decoration: none; transition: filter .25s; }
 .bsp-ed-cta:hover { filter: brightness(1.08); }
 
+/* Proposal feedback form (close section) */
+.bsp-fb { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 34rem; text-align: left; }
+.bsp-fb-pills > div { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.bsp-fb-pill { border: 1px solid color-mix(in srgb, var(--p-accent, #C8A96E) 45%, transparent); background: transparent; color: inherit; padding: 0.5rem 1.1rem; border-radius: 9999px; font-size: 0.9rem; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+.bsp-fb-pill.is-active { background: var(--p-accent, #C8A96E); border-color: var(--p-accent, #C8A96E); color: #0A0A0B; }
+.bsp-fb-text { background: color-mix(in srgb, currentColor 6%, transparent); border: 1px solid color-mix(in srgb, currentColor 22%, transparent); color: inherit; padding: 0.9rem 1rem; border-radius: var(--radius-md); font: inherit; resize: vertical; }
+.bsp-fb-text:focus { outline: none; border-color: var(--p-accent, #C8A96E); }
+.bsp-fb .bsp-ed-cta { border: 0; cursor: pointer; }
+.bsp-fb .bsp-ed-cta:disabled { opacity: 0.5; cursor: default; }
+.bsp-fb-success { font-size: 1.15rem; margin-top: 0.6rem; }
+.bsp-ed-cta-alt { display: inline-block; align-self: flex-start; font-size: 0.9rem; opacity: 0.7; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.bsp-ed-cta-alt:hover { opacity: 1; }
+
 @media (max-width: 860px) {
   .bsp-ed-concept-inner { grid-template-columns: 1fr; }
   .bsp-ed-portrait { max-width: 24rem; }
