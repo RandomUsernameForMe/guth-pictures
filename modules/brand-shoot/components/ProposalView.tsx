@@ -64,7 +64,14 @@ function ConceptSection({
         <figure className="bsp-ed-portrait">
           {hero ? (
             <div className="bsp-ed-portrait-wrap">
-              <img className="bsp-ed-portrait-img" src={img(hero.cloudinaryId, 1100)} alt={hero.note ?? concept.title} />
+              <img
+                className="bsp-ed-portrait-img"
+                src={img(hero.cloudinaryId, 1100)}
+                alt={hero.note || concept.title}
+                width={hero.width}
+                height={hero.height}
+                loading="lazy"
+              />
             </div>
           ) : (
             <div className="bsp-ed-portrait-ph" aria-hidden />
@@ -97,7 +104,13 @@ function ConceptSection({
         <div className="bsp-ed-mood" data-reveal>
           {mood.map((m) => (
             <figure key={m.cloudinaryId} className="bsp-ed-mood-fig">
-              <img src={img(m.cloudinaryId, 700)} alt={m.note ?? ""} loading="lazy" />
+              <img
+                src={img(m.cloudinaryId, 700)}
+                alt={m.note || concept.title}
+                width={m.width}
+                height={m.height}
+                loading="lazy"
+              />
             </figure>
           ))}
         </div>

@@ -50,8 +50,9 @@ export function ProposalGate({ slug, clientName }: { slug: string; clientName: s
       <form onSubmit={handleSubmit} className="bsp-gate">
         <p className="gp-label">{t("gateLabel")}</p>
         <h1 className="gp-h2">{clientName}</h1>
-        <p className="gp-body-md">{t("gatePrompt")}</p>
+        <label htmlFor="bsp-gate-password" className="gp-body-md block">{t("gatePrompt")}</label>
         <input
+          id="bsp-gate-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
