@@ -71,12 +71,12 @@ modules/foceni-101/
 ## Závislosti
 
 - `three` + `three/examples/jsm/postprocessing/*`, `GLTFLoader`
-- `public/models/head.glb` (sdílený s [[light-tester]])
+- `public/models/head.glb` (sdílený s [[light-tester]]) — **meshopt-compressed** (155 KB, dřív 820 KB); oba loadery volají `setMeshoptDecoder(MeshoptDecoder)`
 - CSS: prefix `f101-` v `app/globals.css`, konzumuje stejné `--color-*` vars jako light-tester
 
 ## Stav
 
-Sekce 0–10 + CTA placeholder. F2 (úhel/WB/kompozice) hotovo. Expoziční trojúhelník hotovo (unified light model + reveal 09 + capstone 10). TODO dle build planu:
+Sekce 0–11 + finále (id `finale`, `cta: true`) = plnohodnotná sekce v `SECTIONS`: scéna se přeladí na „money shot" (85 mm, f/2.8, třetiny, podhled), CTA odkazuje na `/{locale}#kontakt`. F2 (úhel/WB/kompozice) hotovo. Expoziční trojúhelník hotovo (unified light model + reveal 09 + capstone 10/11). Grain pass se skipuje, když je no-op (ISO 100 + neutrální WB); `prefers-reduced-motion` snapuje parametry a zastaví orbiter. TODO dle build planu:
 - F3 dlouhá expozice/ND, F4 HDR/polarizace
 - i18n (teď CS hardcoded v `sections.ts`), OG image, sitemap
 - CTA napojit na Formspree (vzor: FeedbackModal v light-testeru)

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { kelvinToRGB, mixGel } from "./colorUtils";
 import type { Light, Tweaks } from "./types";
@@ -291,6 +292,7 @@ export function CameraScene({ lights, tweaks, cameraPos }: Props) {
       s.invalidate();
 
       const loader = new GLTFLoader();
+      loader.setMeshoptDecoder(MeshoptDecoder); // head.glb is meshopt-compressed
       loader.load(
         "/models/head.glb",
         (gltf) => {

@@ -66,4 +66,6 @@ export interface Section {
   capstone?: boolean;
   /** Render the bespoke composition picker card instead of a standard card. */
   composition?: boolean;
+  /** Render the finale CTA card instead of a standard card. */
+  cta?: boolean;
 }

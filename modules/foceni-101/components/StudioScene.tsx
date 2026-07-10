@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
@@ -99,10 +100,12 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#0A0A0B");
 
-    const renderer = new THREE.WebGLRenderer({ antialias: quality === "high" });
+    // No canvas AA: EffectComposer renders through offscreen targets, so MSAA
+    // on the canvas would cost memory without smoothing anything.
+    const renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(pixelRatio);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.domElement.style.width = "100%";
@@ -179,7 +182,9 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     clay.receiveShadow = true;
     headGroup.add(clay);
 
-    new GLTFLoader().load(
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.setMeshoptDecoder(MeshoptDecoder); // head.glb is meshopt-compressed
+    gltfLoader.load(
       "/models/head.glb",
       (gltf) => {
         const model = gltf.scene;
@@ -280,7 +285,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     resize();
 
     // ── Animation loop: run while visible & on-screen, pause otherwise ────
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     let visible = !document.hidden;
     let onScreen = true;
@@ -288,9 +294,11 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     const active = () => visible && onScreen;
 
     const tick = () => {
-      const dt = Math.min(clock.getDelta(), 0.05);
+      timer.update();
+      const dt = Math.min(timer.getDelta(), 0.05);
       const t = targetRef.current;
-      const k = 1 - Math.pow(0.001, dt); // frame-rate independent damping
+      // Frame-rate independent damping; reduced motion snaps instead of tweening.
+      const k = reduceMotion ? 1 : 1 - Math.pow(0.001, dt);
 
       current.exposure = lerp(current.exposure, t.exposure, k);
       current.aperture = lerp(current.aperture, t.aperture, k);
@@ -345,10 +353,12 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       const isoT = (current.iso - 100) / (6400 - 100);
       const gu = grain.uniforms as Record<string, THREE.IUniform>;
       gu["amount"].value = Math.max(0, isoT) * 0.35;
-      gu["time"].value = clock.elapsedTime;
+      gu["time"].value = reduceMotion ? 1 : timer.getElapsed();
+      // Skip the full-screen grain pass when it would be a no-op (ISO 100, neutral WB).
+      grain.enabled = gu["amount"].value > 0.002 || Math.abs(wbT) > 0.01;
 
       // Shutter → motion blur of the orbiter (ghost trail)
-      orbitAngle += dt * 1.7;
+      if (!reduceMotion) orbitAngle += dt * 1.7;
       const R = 0.5;
       orbiter.position.set(
         Math.cos(orbitAngle) * R,
@@ -386,7 +396,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       if (active()) raf = requestAnimationFrame(tick);
       else raf = 0;
     };
-    const start = () => { if (raf === 0 && active()) { clock.getDelta(); raf = requestAnimationFrame(tick); } };
+    const start = () => { if (raf === 0 && active()) { timer.update(); raf = requestAnimationFrame(tick); } };
     const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
 
     const onVis = () => { visible = !document.hidden; if (active()) start(); else stop(); };

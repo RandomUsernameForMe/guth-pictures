@@ -181,4 +181,15 @@ export const SECTIONS: Section[] = [
     meter: true,
     capstone: true,
   },
+  {
+    id: "finale",
+    num: "→",
+    title: "Tohle všechno řeším za tebe",
+    body:
+      "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se jen díváš do objektivu. Napiš mi, co chceš nafotit.",
+    // The money shot: portrait tele + open aperture + subject on thirds.
+    target: { focal: 85, aperture: 2.8, angle: -0.15, whiteBalance: 5300, composition: 0.5 },
+    holdLight: true,
+    cta: true,
+  },
 ];

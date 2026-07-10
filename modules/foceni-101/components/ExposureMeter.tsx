@@ -11,8 +11,8 @@ export function ExposureMeter({ params, show }: { params: PhotoParams; show: boo
   const pct = ((clamped + RANGE) / (2 * RANGE)) * 100; // 0..100, 50 = correct
   const word = evDelta > 0.4 ? "přeexpozice" : evDelta < -0.4 ? "podexpozice" : "správně";
   return (
-    <div className={`f101-meter${show ? " f101-meter--on" : ""}`} aria-hidden>
-      <div className="f101-meter-track">
+    <div className={`f101-meter${show ? " f101-meter--on" : ""}`}>
+      <div className="f101-meter-track" aria-hidden>
         <span className="f101-meter-fill" style={{ width: `${pct}%` }} />
         <span className="f101-meter-tick" />
       </div>

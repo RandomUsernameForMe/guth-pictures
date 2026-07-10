@@ -44,6 +44,7 @@ export function Capstone({ num, title, body, scenario, vals, onChange, solved, a
             <input
               type="range"
               className="gp-slider"
+              aria-label={leg.label}
               min={r.min}
               max={r.max}
               step={r.step}

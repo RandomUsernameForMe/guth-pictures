@@ -1207,11 +1207,6 @@ body::after {
   padding: 0 6vw;
   pointer-events: none;
 }
-.f101-section--cta {
-  align-items: center;
-  justify-content: center;
-}
-
 .f101-card {
   pointer-events: auto;
   width: 100%;
@@ -1316,10 +1311,10 @@ body::after {
   display: inline-flex;
 }
 
-/* Orbiter-light toggle (top-left of stage) */
+/* Orbiter-light toggle (top-left of stage, below the fixed navbar) */
 .f101-toggle {
   position: absolute;
-  top: 16px;
+  top: 76px;
   left: 16px;
   z-index: 3;
   pointer-events: auto;

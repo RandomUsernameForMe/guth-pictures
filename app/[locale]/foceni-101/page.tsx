@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default function Foceni101Page() {
-  return <Foceni101App />;
+export default async function Foceni101Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return <Foceni101App locale={locale} />;
 }

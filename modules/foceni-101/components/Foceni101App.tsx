@@ -24,7 +24,7 @@ function initialSliderVals(): Record<string, number> {
   return out;
 }
 
-export function Foceni101App() {
+export function Foceni101App({ locale }: { locale: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
   const [quality, setQuality] = useState<Quality>("high");
@@ -139,7 +139,7 @@ export function Foceni101App() {
                   scenario={CAPSTONES[s.id]}
                   vals={capVals[s.id]}
                   onChange={(v) => setCapVals((p) => ({ ...p, [s.id]: v }))}
-                  solved={capSolved}
+                  solved={i === activeIndex && capSolved}
                   active={i === activeIndex}
                 />
               ) : s.composition ? (
@@ -152,6 +152,15 @@ export function Foceni101App() {
                   onHover={setCompHover}
                   active={i === activeIndex}
                 />
+              ) : s.cta ? (
+                <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
+                  <div className="f101-card-num">{s.num}</div>
+                  <h2 className="f101-card-title">{s.title}</h2>
+                  <p className="f101-card-body">{s.body}</p>
+                  <a className="lt-btn lt-btn-primary f101-cta-btn" href={`/${locale}#kontakt`}>
+                    Mám zájem o focení
+                  </a>
+                </div>
               ) : (
                 <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
                   <div className="f101-card-num">{s.num}</div>
@@ -167,6 +176,7 @@ export function Foceni101App() {
                       <input
                         type="range"
                         className="gp-slider"
+                        aria-label={c.label}
                         min={c.min}
                         max={c.max}
                         step={c.step}
@@ -185,21 +195,6 @@ export function Foceni101App() {
             </section>
           );
         })}
-
-        {/* Finále / CTA → formulář zájmu (placeholder, napojí se na Formspree) */}
-        <section className="f101-section f101-section--cta">
-          <div className="f101-card f101-card--active">
-            <div className="f101-card-num">→</div>
-            <h2 className="f101-card-title">Tohle všechno řeším za tebe</h2>
-            <p className="f101-card-body">
-              Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se
-              jen díváš do objektivu. Napiš mi, co chceš nafotit.
-            </p>
-            <a className="lt-btn lt-btn-primary f101-cta-btn" href="#kontakt">
-              Mám zájem o focení
-            </a>
-          </div>
-        </section>
       </div>
     </div>
   );
