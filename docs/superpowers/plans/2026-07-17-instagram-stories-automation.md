@@ -1808,3 +1808,5 @@ git commit -m "docs(stories): deployment checklist"
 3. **Vercel Hobby cron limit** — publish každých 15 min chce Pro; fallback externí trigger (zdokumentováno).
 4. **KV konkurence** — read-modify-write bez zámku; jediný uživatel + cron, kolize nepravděpodobná. Neřešit, dokud se neprojeví.
 5. **Stav tokenu v adminu** — vědomé zjednodušení oproti specu: samostatný indikátor stavu tokenu se nestaví; expirovaný token se projeví jako `failed` položka ve frontě s chybovou hláškou IG API. Doplnit, až kdyby to v praxi nestačilo.
+6. **E-mail o selhání publikace** — vědomě nedodáno (spec ho zmiňuje); chyba je vidět ve frontě v adminu. Doplnit, až kdyby to nestačilo.
+7. **AI texty a pondělní návrhy** — čerstvé AI texty jsou `approved: false`, do návrhů se dostanou až po schválení v záložce Texty (bezpečnější než spec formulace „schvaluje jako součást návrhu"). Záměr.

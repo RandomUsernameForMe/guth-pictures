@@ -26,9 +26,10 @@ export function useExport() {
       fastStart: 'in-memory',
     })
 
+    let encoderError: Error | null = null;
     const encoder = new VideoEncoder({
       output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
-      error: e => { throw e },
+      error: e => { encoderError = e; },
     })
 
     encoder.configure({
@@ -44,6 +45,7 @@ export function useExport() {
     let frameIndex = 0
 
     while (!abortRef.current && frameIndex < totalFrames) {
+      if (encoderError) throw encoderError;
       onProgress?.(frameIndex / totalFrames)
 
       await onFrameStart?.(frameIndex)

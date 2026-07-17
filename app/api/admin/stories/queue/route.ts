@@ -18,6 +18,7 @@ export async function PUT(req: NextRequest) {
   }
   const { id, publishAt } = body as { id?: string; publishAt?: string };
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  if (publishAt !== undefined && (typeof publishAt !== "string" || Number.isNaN(Date.parse(publishAt)))) return NextResponse.json({ error: "Invalid publishAt" }, { status: 400 });
   const queue = await getQueue();
   if (!queue.some(item => item.id === id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await saveQueue(queue.map(item =>
