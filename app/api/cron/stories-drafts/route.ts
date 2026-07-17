@@ -39,5 +39,22 @@ export async function GET(req: NextRequest) {
   await markPhotosUsed(usedNow);
   await saveDrafts([...drafts, ...(await getDrafts())]);
 
+  if (process.env.RESEND_API_KEY && process.env.STORIES_NOTIFY_EMAIL && drafts.length > 0) {
+    try {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "Stories <stories@guthpictures.cz>",
+          to: process.env.STORIES_NOTIFY_EMAIL,
+          subject: `${drafts.length} nových návrhů stories ke schválení`,
+          text: `Připraveno ${drafts.length} návrhů: https://guthpictures.cz/admin/stories`,
+        }),
+      });
+    } catch (err) {
+      console.error("[stories-drafts] email failed:", err);
+    }
+  }
+
   return NextResponse.json({ ok: true, created: drafts.length });
 }
