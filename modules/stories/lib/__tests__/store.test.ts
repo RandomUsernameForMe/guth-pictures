@@ -33,6 +33,14 @@ describe("store", () => {
     expect(await getDrafts()).toEqual([draft]);
   });
 
+  it("markPhotosUsed upserts — no duplicate entries per publicId", async () => {
+    await markPhotosUsed(["portfolio/a"], new Date("2026-05-01T00:00:00Z"));
+    await markPhotosUsed(["portfolio/a"], new Date("2026-07-15T00:00:00Z"));
+    const used = await getUsedPhotoIds(new Date("2026-07-17T00:00:00Z"));
+    expect(used.has("portfolio/a")).toBe(true); // novější usedAt vyhrál
+    expect(kvData.get("stories:usedPhotos")).toHaveLength(1);
+  });
+
   it("markPhotosUsed accumulates and getUsedPhotoIds filters by age", async () => {
     await markPhotosUsed(["portfolio/a"], new Date("2026-05-01T00:00:00Z"));
     await markPhotosUsed(["portfolio/b"], new Date("2026-07-15T00:00:00Z"));

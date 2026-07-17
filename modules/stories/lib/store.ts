@@ -11,6 +11,8 @@ const KEYS = {
 
 const USED_WEEKS = 8;
 
+// read vrací [] i bez nakonfigurovaného KV (lokální dev — UI se načte prázdné);
+// write v tom případě hází, takže cron bez KV selže nahlas.
 async function read<T>(key: string): Promise<T[]> {
   const kv = await getKv();
   if (!kv) return [];
