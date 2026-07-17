@@ -10,6 +10,7 @@ const tabs = [
   { href: "/admin/tema", label: "Téma" },
   { href: "/admin/galerie", label: "Galerie" },
   { href: "/admin/navrhy", label: "Návrhy" },
+  { href: "/admin/stories", label: "Stories" },
 ];
 
 export function AdminNav() {
