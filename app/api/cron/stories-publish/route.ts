@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getQueue, saveQueue } from "@/modules/stories/lib/store";
 import { publishStory, refreshTokenIfNeeded } from "@/modules/stories/lib/instagram";
-import type { QueueItem } from "@/modules/stories/lib/types";
 
 export const maxDuration = 300; // container poll může trvat minuty
 
@@ -16,22 +15,23 @@ export async function GET(req: NextRequest) {
 
   const now = new Date();
   const queue = await getQueue();
-  const results: QueueItem[] = [];
+  let published = 0;
 
   for (const item of queue) {
-    if (item.status !== "queued" || new Date(item.publishAt) > now) {
-      results.push(item);
-      continue;
-    }
+    if (item.status !== "queued" || new Date(item.publishAt) > now) continue;
     try {
       await publishStory(videoUrl(item.videoPublicId));
-      results.push({ ...item, status: "published", error: undefined });
+      item.status = "published";
+      item.error = undefined;
+      published++;
     } catch (err) {
       console.error(`[stories-publish] ${item.id} failed:`, err);
-      results.push({ ...item, status: "failed", error: err instanceof Error ? err.message : String(err) });
+      item.status = "failed";
+      item.error = err instanceof Error ? err.message : String(err);
     }
+    // uložit hned po každé změně — okno pro double-publish při pádu KV se zmenší na jednu položku
+    await saveQueue(queue);
   }
-  await saveQueue(results);
 
   // údržba tokenu — best effort
   try {
@@ -40,6 +40,5 @@ export async function GET(req: NextRequest) {
     console.error("[stories-publish] token refresh failed:", err);
   }
 
-  const published = results.filter((r, i) => r.status === "published" && queue[i]?.status === "queued").length;
   return NextResponse.json({ ok: true, published });
 }
