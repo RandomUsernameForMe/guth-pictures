@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import { flushSync } from "react-dom";
 import { cloudinaryUrl, type GalleryPhoto } from "@/lib/cloudinary-utils";
 import type { StoryDraft } from "../lib/types";
 import { TemplateC } from "./story/TemplateC";
@@ -54,12 +55,12 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
 
   const onFrameStart = useCallback(async (frameIndex: number) => {
     const framesPerSlide = Math.round(SLIDE_MS / 1000 * FPS);
-    setExportTick(Math.floor(frameIndex / framesPerSlide) % slideCount);
+    flushSync(() => setExportTick(Math.min(Math.floor(frameIndex / framesPerSlide), slideCount - 1)));
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   }, [slideCount]);
 
   async function approve() {
-    if (!publishAt || d.photos.length === 0 || exporting) return;
+    if (!publishAt || d.photos.length === 0 || exporting || (d.template === "D" && d.words.filter(Boolean).length === 0)) return;
     setExporting(true);
     try {
       // 1. render videa v prohlížeči
@@ -143,7 +144,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
         {/* fotky: výměna + focal point */}
         <div className="space-y-2">
           {d.photos.map((p, i) => (
-            <div key={i} className="flex items-center gap-2">
+            <div key={`${p.publicId}-${i}`} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={cloudinaryUrl(p.publicId, "w_64,h_64,c_fill,q_auto,f_auto")} alt="" className="w-8 h-8 object-cover" />
               <select value={p.publicId}
@@ -163,6 +164,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
           ))}
           {d.photos.length < 6 && (
             <button className="text-xs border border-white/20 px-2 py-1"
+              disabled={galleryPhotos.length === 0}
               onClick={() => patch({ photos: [...d.photos, { publicId: galleryPhotos[0]?.publicId ?? "", x: 50, y: 50 }] })}>
               + fotka
             </button>
@@ -174,7 +176,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
           <input type="datetime-local" value={publishAt} onChange={e => setPublishAt(e.target.value)}
             className="bg-zinc-900 border border-white/20 px-2 py-1" />
           <button onClick={save} className="border border-white/20 px-3 py-1.5 hover:border-white/50">Uložit</button>
-          <button onClick={approve} disabled={!publishAt || exporting || d.photos.length === 0}
+          <button onClick={approve} disabled={!publishAt || exporting || d.photos.length === 0 || (d.template === "D" && d.words.filter(Boolean).length === 0)}
             className="bg-amber-500 text-black px-3 py-1.5 font-medium disabled:opacity-30">
             {exporting ? `Renderuji… ${Math.round(progress * 100)}%` : "Schválit + naplánovat"}
           </button>
