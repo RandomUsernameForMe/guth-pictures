@@ -22,7 +22,12 @@ async function getToken(): Promise<string> {
 }
 
 async function graphJson(res: Response): Promise<Record<string, unknown>> {
-  const json = await res.json();
+  let json: Record<string, unknown>;
+  try {
+    json = await res.json();
+  } catch {
+    throw new Error(`Instagram API: unexpected response (${res.status})`);
+  }
   if (!res.ok || json.error) {
     const msg = (json.error as { message?: string } | undefined)?.message ?? JSON.stringify(json);
     throw new Error(`Instagram API: ${msg}`);
@@ -49,7 +54,8 @@ export async function publishStory(
   let finished = false;
   for (let i = 0; i < maxPolls; i++) {
     const status = await graphJson(await fetch(
-      `${GRAPH}/${creationId}?fields=status_code&access_token=${token}`,
+      `${GRAPH}/${creationId}?fields=status_code`,
+      { headers: { Authorization: `Bearer ${token}` } },
     ));
     if (status.status_code === "FINISHED") { finished = true; break; }
     if (status.status_code === "ERROR") throw new Error("Instagram API: container processing failed");
@@ -81,7 +87,7 @@ export async function refreshTokenIfNeeded(now = new Date()): Promise<void> {
     client_secret: FB_APP_SECRET,
     fb_exchange_token: current,
   });
-  const json = await graphJson(await fetch(`${GRAPH}/oauth/access_token?${params}`));
+  const json = await graphJson(await fetch(`${GRAPH}/oauth/access_token`, { method: "POST", body: params }));
 
   const kv = await getKv();
   if (!kv) throw new Error("KV not configured");

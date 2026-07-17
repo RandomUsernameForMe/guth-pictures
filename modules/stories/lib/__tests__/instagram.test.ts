@@ -45,6 +45,14 @@ describe("publishStory", () => {
     ));
     await expect(publishStory("https://x/v.mp4", { pollIntervalMs: 0 })).rejects.toThrow("Invalid video");
   });
+
+  it("throws when container processing returns ERROR", async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse({ id: "creation-1" }))
+      .mockResolvedValueOnce(jsonResponse({ status_code: "ERROR" }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(publishStory("https://x/v.mp4", { pollIntervalMs: 0 })).rejects.toThrow("container processing failed");
+  });
 });
 
 describe("refreshTokenIfNeeded", () => {
@@ -59,6 +67,18 @@ describe("refreshTokenIfNeeded", () => {
     await refreshTokenIfNeeded();
     const auth = kvData.get("stories:igAuth") as { accessToken: string };
     expect(auth.accessToken).toBe("new-token");
+  });
+
+  it("refreshes immediately when only env seed token exists (unknown expiry)", async () => {
+    // žádný stories:igAuth v KV
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      jsonResponse({ access_token: "exchanged", expires_in: 5184000 }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    await refreshTokenIfNeeded();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const auth = kvData.get("stories:igAuth") as { accessToken: string };
+    expect(auth.accessToken).toBe("exchanged");
   });
 
   it("does nothing when token is fresh", async () => {
