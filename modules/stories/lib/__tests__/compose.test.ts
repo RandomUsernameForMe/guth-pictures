@@ -44,8 +44,20 @@ describe("composeDrafts", () => {
   it("shrinks batch when photos run out instead of failing", () => {
     const few = photos.slice(0, 5);
     const { drafts } = composeDrafts({ photos: few, usedIds: new Set(), texts, count: 4 });
-    expect(drafts.length).toBeGreaterThanOrEqual(1);
-    expect(drafts.length).toBeLessThan(4);
+    expect(drafts.length).toBe(1);
+  });
+
+  it("returns empty result for empty photo pool", () => {
+    const { drafts, usedNow } = composeDrafts({ photos: [], usedIds: new Set(), texts, count: 4 });
+    expect(drafts).toEqual([]);
+    expect(usedNow).toEqual([]);
+  });
+
+  it("produces drafts with empty text fields when text pool is empty", () => {
+    const { drafts } = composeDrafts({ photos, usedIds: new Set(), texts: [], count: 2 });
+    expect(drafts).toHaveLength(2);
+    expect(drafts[0]).toMatchObject({ headline: "", sub: "", textSource: "manual" });
+    expect(drafts[1]).toMatchObject({ words: [], subHeadline: "" });
   });
 
   it("photos default to centered focal point", () => {

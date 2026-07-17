@@ -27,7 +27,8 @@ export function composeDrafts(opts: {
   }
   const pool: GalleryPhoto[] = [];
   const buckets = [...byCategory.values()];
-  for (let i = 0; pool.length < available.length; i++) {
+  const maxLen = buckets.length ? Math.max(...buckets.map(b => b.length)) : 0;
+  for (let i = 0; i < maxLen; i++) {
     for (const bucket of buckets) if (bucket[i]) pool.push(bucket[i]);
   }
 
