@@ -14,3 +14,11 @@
 6. **Test:** vyexportuj MP4 ze story-generatoru, nahraj ručně do Cloudinary (Media Library, folder `stories`), zkopíruj delivery URL (`https://res.cloudinary.com/<cloud>/video/upload/<id>.mp4`) a spusť:
    `IG_USER_ID=... IG_ACCESS_TOKEN=... VIDEO_URL=... npx tsx scripts/ig-test-publish.ts`
 7. Ověř v IG appce, že story je publikovaná. Pokud Graph API vrátí chybu na video specs, zkus URL s transformací `.../video/upload/f_mp4,vc_h264/<id>.mp4` a zapiš výsledek sem.
+
+## Nasazení — checklist
+
+- [ ] Vercel env: IG_USER_ID, IG_ACCESS_TOKEN, FB_APP_ID, FB_APP_SECRET, CRON_SECRET, ANTHROPIC_API_KEY (+ volitelně RESEND_API_KEY, STORIES_NOTIFY_EMAIL)
+- [ ] Spike proběhl úspěšně (scripts/ig-test-publish.ts) — PŘED zapnutím cronu
+- [ ] Vercel Pro pro */15 cron, jinak externí trigger (cron-job.org) na /api/cron/stories-publish
+- [ ] První ostrý průchod: ručně GET /api/cron/stories-drafts (s Bearer CRON_SECRET), schválit 1 návrh, ručně GET /api/cron/stories-publish, ověřit story na IG
+- [ ] Naplnit zásobník textů v /admin/stories → Texty (aspoň 2× C, 2× D)
