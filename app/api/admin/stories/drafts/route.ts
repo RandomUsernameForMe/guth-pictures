@@ -11,7 +11,12 @@ export async function GET() {
 // vytvoření ručního návrhu
 export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const body = await req.json();
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
   const draft: StoryDraft = {
     id: `d-${Date.now()}`,
     template: body.template === "D" ? "D" : "C",
@@ -27,7 +32,13 @@ export async function POST(req: NextRequest) {
 // úprava návrhu (full replace podle id)
 export async function PUT(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { draft } = (await req.json()) as { draft?: StoryDraft };
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  const { draft } = body as { draft?: StoryDraft };
   if (!draft?.id) return NextResponse.json({ error: "Invalid draft" }, { status: 400 });
   const drafts = await getDrafts();
   if (!drafts.some(d => d.id === draft.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });

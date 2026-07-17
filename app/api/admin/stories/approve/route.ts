@@ -5,7 +5,12 @@ import { validateApproveBody, type ApproveBody } from "./validation";
 
 export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const body = await req.json();
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
   const error = validateApproveBody(body);
   if (error) return NextResponse.json({ error }, { status: 400 });
   const { draftId, videoPublicId, publishAt } = body as ApproveBody;

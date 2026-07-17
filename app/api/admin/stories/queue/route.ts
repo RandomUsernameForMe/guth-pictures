@@ -10,9 +10,16 @@ export async function GET() {
 // re-queue failed položky (případně s novým časem)
 export async function PUT(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { id, publishAt } = (await req.json()) as { id?: string; publishAt?: string };
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  const { id, publishAt } = body as { id?: string; publishAt?: string };
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const queue = await getQueue();
+  if (!queue.some(item => item.id === id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await saveQueue(queue.map(item =>
     item.id === id
       ? { ...item, status: "queued", error: undefined, publishAt: publishAt ?? item.publishAt }

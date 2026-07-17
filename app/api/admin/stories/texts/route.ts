@@ -11,7 +11,12 @@ export async function GET() {
 // přidání nového textu (schválený manual)
 export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const body = (await req.json()) as Partial<StoryTextEntry>;
+  let body: Partial<StoryTextEntry>;
+  try {
+    body = (await req.json()) as Partial<StoryTextEntry>;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
   if (body.template !== "C" && body.template !== "D") {
     return NextResponse.json({ error: "Invalid template" }, { status: 400 });
   }
@@ -29,9 +34,16 @@ export async function POST(req: NextRequest) {
 // úprava/schválení (full replace podle id)
 export async function PUT(req: NextRequest) {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { text } = (await req.json()) as { text?: StoryTextEntry };
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  const { text } = body as { text?: StoryTextEntry };
   if (!text?.id) return NextResponse.json({ error: "Invalid text" }, { status: 400 });
   const texts = await getTexts();
+  if (!texts.some(t => t.id === text.id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await saveTexts(texts.map(t => (t.id === text.id ? text : t)));
   return NextResponse.json({ ok: true });
 }
