@@ -8,7 +8,7 @@ import type { StoryDraft } from "@/modules/stories/lib/types";
 const DRAFT_COUNT = 4;
 
 export async function GET(req: NextRequest) {
-  if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!process.env.CRON_SECRET || req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -33,11 +33,11 @@ export async function GET(req: NextRequest) {
 
   const stamp = Date.now();
   const drafts: StoryDraft[] = composed.map((d, i) => ({
-    ...d, id: `d-${stamp}-${i}`, createdAt: new Date().toISOString(),
+    ...d, id: `d-${stamp}-${i}`, createdAt: new Date(stamp).toISOString(),
   }));
 
-  await saveDrafts([...drafts, ...(await getDrafts())]);
   await markPhotosUsed(usedNow);
+  await saveDrafts([...drafts, ...(await getDrafts())]);
 
   return NextResponse.json({ ok: true, created: drafts.length });
 }
