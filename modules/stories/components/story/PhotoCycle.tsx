@@ -27,6 +27,25 @@ export function PhotoCycle({ photos, duration, paused, onTick, forceIndex }: Pro
 
   const activeIndex = forceIndex !== undefined ? forceIndex % Math.max(photos.length, 1) : i
 
+  // Export mode: jediný statický slide bez animací — fade/zoom interpoluje
+  // useExport na canvasu ze snapshotů. data-photo-layer = kotva pro capture.
+  if (forceIndex !== undefined && photos.length > 0) {
+    const photo = photos[activeIndex]
+    return (
+      <div data-photo-layer="" style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+        <div
+          style={{
+            width: '100%', height: '100%',
+            backgroundImage: `url(${photo.url})`,
+            backgroundSize: 'cover',
+            backgroundPosition: `${photo.x}% ${photo.y}%`,
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      </div>
+    )
+  }
+
   if (photos.length === 0) {
     return (
       <div style={{
@@ -63,10 +82,15 @@ export function PhotoCycle({ photos, duration, paused, onTick, forceIndex }: Pro
               willChange: 'opacity, transform',
             }}
           >
-            <img
-              src={photo.url}
-              alt=""
-              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: `${photo.x}% ${photo.y}%`, display: 'block' }}
+            {/* div + background instead of img: html2canvas ignores object-fit, but honors background-size/position */}
+            <div
+              style={{
+                width: '100%', height: '100%',
+                backgroundImage: `url(${photo.url})`,
+                backgroundSize: 'cover',
+                backgroundPosition: `${photo.x}% ${photo.y}%`,
+                backgroundRepeat: 'no-repeat',
+              }}
             />
           </div>
         )
