@@ -130,19 +130,16 @@ export function TemplateC({ photos, duration, paused, lang, headline, sub, cta, 
             zIndex: 10,
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: px(16),
           }}>
-            <div style={{
-              width: px(80), height: px(80), borderRadius: 999,
-              background: 'rgba(242,240,235,0.12)',
-              backdropFilter: 'blur(10px)',
-              border: `${px(1)}px solid rgba(255,255,255,0.25)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <svg width={px(32)} height={px(32)} viewBox="0 0 24 24" fill="none" stroke="#F2F0EB" strokeWidth="1.6" strokeLinecap="round">
-                <path d="M12 20V4" /><path d="M5 11l7-7 7 7" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
+              <svg width={px(30)} height={px(30)} viewBox="0 0 24 24" fill="none" stroke="#F2F0EB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" />
               </svg>
+              <span style={{ fontSize: px(30), fontWeight: 500, color: '#F2F0EB' }}>
+                {cta || (cs ? 'Odepiš rovnou na tuhle story' : 'Reply to this story')}
+              </span>
             </div>
-            <AMono size={px(18)} color="rgba(242,240,235,0.85)" tracking="0.28em">
-              {cta || (cs ? 'Chci fotky' : 'Book a shoot')}
+            <AMono size={px(18)} color="rgba(242,240,235,0.60)" tracking="0.28em">
+              {cs ? 'VÍCE INFO V BIO' : 'MORE INFO IN BIO'}
             </AMono>
           </div>
 

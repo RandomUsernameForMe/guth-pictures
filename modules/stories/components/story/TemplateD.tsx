@@ -159,16 +159,15 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
             }}>
               {subHeadline || (cs ? 'Silná atmosféra. Osobité portréty.' : 'Strong atmosphere. Distinctive portraits.')}
             </h2>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: px(14),
-              padding: `${px(24)}px ${px(36)}px`,
-              background: '#C8A96E', color: '#0A0A0B',
-              borderRadius: px(14),
-              fontSize: px(24), fontWeight: 600,
-            }}>
-              {cta || (cs ? 'Chci fotky' : 'Book a shoot')} →
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: px(12), color: '#C8A96E', fontSize: px(26), fontWeight: 600 }}>
+              <svg width={px(28)} height={px(28)} viewBox="0 0 24 24" fill="none" stroke="#C8A96E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" />
+              </svg>
+              {cta || (cs ? 'Odepiš rovnou na tuhle story' : 'Reply to this story')}
             </div>
-            <AMono size={px(16)} color="rgba(242,240,235,0.55)">guthpictures.eu</AMono>
+            <AMono size={px(16)} color="rgba(242,240,235,0.55)" tracking="0.24em">
+              {cs ? 'VÍCE INFO V BIO' : 'MORE INFO IN BIO'} · GUTHPICTURES.EU
+            </AMono>
           </div>
 
           <AGrain />

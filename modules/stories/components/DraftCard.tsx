@@ -51,6 +51,14 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
 
   function patch(p: Partial<StoryDraft>) { setD(prev => ({ ...prev, ...p })); }
 
+  function movePhoto(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= d.photos.length) return;
+    const photos = [...d.photos];
+    [photos[i], photos[j]] = [photos[j], photos[i]];
+    patch({ photos });
+  }
+
   function pickPhoto(publicId: string) {
     if (pickerFor === "add") patch({ photos: [...d.photos, { publicId, x: 50, y: 50 }] });
     else if (typeof pickerFor === "number") patch({ photos: d.photos.map((pp, j) => j === pickerFor ? { ...pp, publicId } : pp) });
@@ -249,13 +257,19 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
           </>
         )}
         <input value={d.cta ?? ""} onChange={e => patch({ cta: e.target.value })}
-          placeholder={lang === "cs" ? "CTA (výchozí: Chci fotky)" : "CTA (default: Book a shoot)"}
+          placeholder={lang === "cs" ? "Výzva (výchozí: Odepiš rovnou na tuhle story)" : "CTA (default: Reply to this story)"}
           className="w-full bg-zinc-900 border border-white/20 px-2 py-1" />
 
         {/* fotky: výměna + focal point */}
         <div className="space-y-2">
           {d.photos.map((p, i) => (
             <div key={`${p.publicId}-${i}`} className="flex items-center gap-2">
+              <div className="flex flex-col">
+                <button className="text-xs text-gray-500 hover:text-white disabled:opacity-30 leading-none"
+                  disabled={i === 0} title="Posunout výš" onClick={() => movePhoto(i, -1)}>↑</button>
+                <button className="text-xs text-gray-500 hover:text-white disabled:opacity-30 leading-none"
+                  disabled={i === d.photos.length - 1} title="Posunout níž" onClick={() => movePhoto(i, 1)}>↓</button>
+              </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={cloudinaryUrl(p.publicId, "w_64,h_64,c_fill,q_auto,f_auto")} alt="" className="w-8 h-8 object-cover" />
               <button
