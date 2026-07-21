@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useCallback } from 'react'
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas-pro'
 import { Muxer, ArrayBufferTarget } from 'mp4-muxer'
 
 export const FPS = 24

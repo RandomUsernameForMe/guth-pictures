@@ -18,7 +18,7 @@
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "framer-motion": "^12.35.0",
-    "html2canvas": "^1.4.1",
+    "html2canvas-pro": "^2.3.0",
     "lucide-react": "^0.577.0",
     "mp4-muxer": "^5.2.2",
     "next": "16.1.6",
