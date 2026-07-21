@@ -1817,3 +1817,14 @@ body::after {
 .bsp-ed-mood-fig::after { background: var(--bsp-duo-light, #E8DFCF); mix-blend-mode: multiply; opacity: .22; }
 .bsp-ed-portrait-wrap::before { background: var(--bsp-duo-shadow, #2A1C12); mix-blend-mode: lighten; opacity: .28; }
 .bsp-ed-portrait-wrap::after { background: var(--bsp-duo-light, #E8DFCF); mix-blend-mode: multiply; opacity: .16; }
+
+/* stories: word transition animations (Template D preview) */
+@keyframes wordIn {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.96); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0);   }
+}
+
+@keyframes wordOut {
+  0%   { opacity: 1; transform: translateY(0)     scale(1);    filter: blur(0);   }
+  100% { opacity: 0; transform: translateY(-20px) scale(0.96); filter: blur(8px); }
+}

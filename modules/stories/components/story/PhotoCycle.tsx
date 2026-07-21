@@ -8,9 +8,10 @@ interface Props {
   paused: boolean
   onTick?: (i: number) => void
   forceIndex?: number
+  isExportCapture?: boolean
 }
 
-export function PhotoCycle({ photos, duration, paused, onTick, forceIndex }: Props) {
+export function PhotoCycle({ photos, duration, paused, onTick, forceIndex, isExportCapture }: Props) {
   const [i, setI] = useState(0)
 
   useEffect(() => { setI(0) }, [photos.length])
@@ -69,16 +70,25 @@ export function PhotoCycle({ photos, duration, paused, onTick, forceIndex }: Pro
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
       {photos.map((photo, idx) => {
         const active = idx === activeIndex
+
+        const opacity = active ? 1 : 0
+        // Export capture: scale 1.00 (canvas compositing handles Ken Burns)
+        // Normal: active photo zooms to 1.04 via CSS transition
+        const transform = (isExportCapture || !active) ? 'scale(1.00)' : 'scale(1.04)'
+        const transition = isExportCapture
+          ? 'none'
+          : active
+            ? `opacity 800ms cubic-bezier(0.25,0.46,0.45,0.94), transform ${duration + 800}ms cubic-bezier(0.25,0.46,0.45,0.94)`
+            : 'opacity 800ms cubic-bezier(0.25,0.46,0.45,0.94), transform 0ms'
+
         return (
           <div
             key={photo.url}
             style={{
               position: 'absolute', inset: 0,
-              opacity: active ? 1 : 0,
-              transform: active ? 'scale(1.04)' : 'scale(1.00)',
-              transitionProperty: 'opacity, transform',
-              transitionDuration: active ? `800ms, ${duration + 800}ms` : '800ms, 0ms',
-              transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              opacity,
+              transform,
+              transition,
               willChange: 'opacity, transform',
             }}
           >

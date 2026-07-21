@@ -23,8 +23,10 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
   const [exporting, setExporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [exportTick, setExportTick] = useState<number | undefined>(undefined);
+  const [exportLayer, setExportLayer] = useState<"photo" | "overlay" | "word" | undefined>(undefined);
   const [paused, setPaused] = useState(false);
   const [chromePreview, setChromePreview] = useState(false);
+  const [showSafeZone, setShowSafeZone] = useState(false);
   const [uploading, setUploading] = useState(false);
   const exportRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +44,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
     ? Math.max(d.photos.length, 1)
     : Math.max(d.words.filter(Boolean).length, 1);
 
-  const templateProps = { photos, duration, paused, lang, chrome: false };
+  const templateProps = { photos, duration, paused, lang, chrome: false, cta: d.cta ?? "" };
   const previewProps = { ...templateProps, chrome: chromePreview };
 
   function patch(p: Partial<StoryDraft>) { setD(prev => ({ ...prev, ...p })); }
@@ -59,21 +61,29 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
     await onChanged();
   }
 
-  const setSlide = useCallback(async (i: number) => {
-    flushSync(() => setExportTick(i));
+  const onLayerReady = useCallback(async (slideIndex: number, layer: "photo" | "overlay" | "word") => {
+    flushSync(() => { setExportTick(slideIndex); setExportLayer(layer); });
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   }, []);
 
   const canRender = d.photos.length > 0 && !exporting && !(d.template === "D" && d.words.filter(Boolean).length === 0);
 
   async function renderVideo(): Promise<Blob> {
-    return exportVideo(exportRef.current!, {
-      slideCount,
-      photoCount: Math.max(photos.length, 1),
-      slideDurationMs: duration,
-      setSlide,
-      onProgress: setProgress,
-    });
+    try {
+      return await exportVideo({
+        element: exportRef.current!,
+        width: W,
+        height: H,
+        slideCount,
+        slideDurationMs: duration,
+        hasWordLayer: d.template === "D",
+        onProgress: setProgress,
+        onLayerReady,
+      });
+    } finally {
+      setExportTick(undefined);
+      setExportLayer(undefined);
+    }
   }
 
   async function downloadMp4() {
@@ -176,7 +186,17 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
           {d.template === "C"
             ? <TemplateC {...previewProps} headline={d.headline} sub={d.sub} scale={PREVIEW_SCALE} />
             : <TemplateD {...previewProps} words={d.words.filter(Boolean)} subHeadline={d.subHeadline} scale={PREVIEW_SCALE} />}
+          {showSafeZone && (
+            <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 50 }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 250 * PREVIEW_SCALE, background: "rgba(255,60,60,0.22)", borderBottom: "1px solid rgba(255,80,80,0.7)" }} />
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 250 * PREVIEW_SCALE, background: "rgba(255,60,60,0.22)", borderTop: "1px solid rgba(255,80,80,0.7)" }} />
+            </div>
+          )}
         </div>
+        <label className="flex items-center gap-1 mt-2 text-xs text-gray-500 cursor-pointer">
+          <input type="checkbox" checked={showSafeZone} onChange={e => setShowSafeZone(e.target.checked)} />
+          safe zone
+        </label>
       </div>
 
       {/* editace */}
@@ -220,6 +240,9 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
               placeholder="Podtitulek" className="w-full bg-zinc-900 border border-white/20 px-2 py-1" />
           </>
         )}
+        <input value={d.cta ?? ""} onChange={e => patch({ cta: e.target.value })}
+          placeholder={lang === "cs" ? "CTA (výchozí: Chci fotky)" : "CTA (default: Book a shoot)"}
+          className="w-full bg-zinc-900 border border-white/20 px-2 py-1" />
 
         {/* fotky: výměna + focal point */}
         <div className="space-y-2">
@@ -283,8 +306,8 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
         width: W, height: H, pointerEvents: "none", overflow: "hidden",
       }}>
         {d.template === "C"
-          ? <TemplateC {...templateProps} headline={d.headline} sub={d.sub} scale={1} exportTick={exportTick} />
-          : <TemplateD {...templateProps} words={d.words.filter(Boolean)} subHeadline={d.subHeadline} scale={1} exportTick={exportTick} />}
+          ? <TemplateC {...templateProps} headline={d.headline} sub={d.sub} scale={1} exportTick={exportTick} exportLayer={exportLayer} />
+          : <TemplateD {...templateProps} words={d.words.filter(Boolean)} subHeadline={d.subHeadline} scale={1} exportTick={exportTick} exportLayer={exportLayer} />}
       </div>
     </div>
   );

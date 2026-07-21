@@ -25,6 +25,7 @@ export type StoryDraft = {
   createdAt: string; // ISO
   durationMs?: number;   // délka slidu, default 2400
   lang?: "cs" | "en";    // default cs
+  cta?: string;          // text CTA tlačítka, default dle jazyka
 };
 
 export type QueueItem = {
