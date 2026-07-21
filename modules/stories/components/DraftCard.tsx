@@ -12,6 +12,7 @@ import type { Photo } from "./story/types";
 const W = 1080;
 const H = 1920;
 const PREVIEW_SCALE = 420 / H;
+const MAX_PHOTOS = 10;
 
 export function DraftCard({ draft, galleryPhotos, onChanged }: {
   draft: StoryDraft;
@@ -28,6 +29,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
   const [chromePreview, setChromePreview] = useState(false);
   const [showSafeZone, setShowSafeZone] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [pickerFor, setPickerFor] = useState<number | "add" | null>(null);
   const exportRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { exportVideo } = useExport();
@@ -48,6 +50,12 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
   const previewProps = { ...templateProps, chrome: chromePreview };
 
   function patch(p: Partial<StoryDraft>) { setD(prev => ({ ...prev, ...p })); }
+
+  function pickPhoto(publicId: string) {
+    if (pickerFor === "add") patch({ photos: [...d.photos, { publicId, x: 50, y: 50 }] });
+    else if (typeof pickerFor === "number") patch({ photos: d.photos.map((pp, j) => j === pickerFor ? { ...pp, publicId } : pp) });
+    setPickerFor(null);
+  }
 
   async function save() {
     await fetch("/api/admin/stories/drafts", {
@@ -112,7 +120,7 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
     try {
       const sig = await fetch("/api/admin/stories/upload-signature", { method: "POST" }).then(r => r.json());
       const uploadedIds: string[] = [];
-      for (const file of Array.from(files).slice(0, 6 - d.photos.length)) {
+      for (const file of Array.from(files).slice(0, MAX_PHOTOS - d.photos.length)) {
         const form = new FormData();
         form.append("file", file);
         form.append("api_key", sig.apiKey);
@@ -250,26 +258,29 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
             <div key={`${p.publicId}-${i}`} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={cloudinaryUrl(p.publicId, "w_64,h_64,c_fill,q_auto,f_auto")} alt="" className="w-8 h-8 object-cover" />
-              <select value={p.publicId}
-                onChange={e => patch({ photos: d.photos.map((pp, j) => j === i ? { ...pp, publicId: e.target.value } : pp) })}
-                className="bg-zinc-900 border border-white/20 px-1 py-0.5 text-xs flex-1">
-                {galleryPhotos.map(g => <option key={g.publicId} value={g.publicId}>{g.publicId}</option>)}
-              </select>
-              <label className="text-xs text-gray-500">x</label>
+              <button
+                className="text-xs text-left flex-1 truncate border border-white/20 px-1 py-0.5 hover:border-white/50"
+                title="Vybrat jinou fotku z portfolia"
+                onClick={() => setPickerFor(pickerFor === i ? null : i)}>
+                {p.publicId.split("/").pop()}
+              </button>
+              <label className="text-xs text-gray-500" title="Výřez vodorovně: 0 = levý okraj fotky, 100 = pravý">x</label>
               <input type="range" min={0} max={100} value={p.x} className="w-16"
+                title="Výřez vodorovně: 0 = levý okraj fotky, 100 = pravý"
                 onChange={e => patch({ photos: d.photos.map((pp, j) => j === i ? { ...pp, x: +e.target.value } : pp) })} />
-              <label className="text-xs text-gray-500">y</label>
+              <label className="text-xs text-gray-500" title="Výřez svisle: 0 = horní okraj fotky, 100 = dolní">y</label>
               <input type="range" min={0} max={100} value={p.y} className="w-16"
+                title="Výřez svisle: 0 = horní okraj fotky, 100 = dolní"
                 onChange={e => patch({ photos: d.photos.map((pp, j) => j === i ? { ...pp, y: +e.target.value } : pp) })} />
               <button className="text-xs text-gray-500 hover:text-red-400"
                 onClick={() => patch({ photos: d.photos.filter((_, j) => j !== i) })}>✕</button>
             </div>
           ))}
-          {d.photos.length < 6 && (
+          {d.photos.length < MAX_PHOTOS && (
             <div className="flex gap-2">
               <button className="text-xs border border-white/20 px-2 py-1"
                 disabled={galleryPhotos.length === 0}
-                onClick={() => patch({ photos: [...d.photos, { publicId: galleryPhotos[0]?.publicId ?? "", x: 50, y: 50 }] })}>
+                onClick={() => setPickerFor(pickerFor === "add" ? null : "add")}>
                 + z portfolia
               </button>
               <button className="text-xs border border-white/20 px-2 py-1"
@@ -279,6 +290,17 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
               </button>
               <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden"
                 onChange={e => uploadFromDisk(e.target.files)} />
+            </div>
+          )}
+          {pickerFor !== null && (
+            <div className="flex flex-wrap gap-1 border border-white/20 p-2 max-h-64 overflow-y-auto">
+              {galleryPhotos.map(g => (
+                <button key={g.publicId} title={g.publicId} onClick={() => pickPhoto(g.publicId)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={cloudinaryUrl(g.publicId, "w_120,h_120,c_fill,q_auto,f_auto")} alt=""
+                    className="w-16 h-16 object-cover hover:opacity-70" />
+                </button>
+              ))}
             </div>
           )}
         </div>
