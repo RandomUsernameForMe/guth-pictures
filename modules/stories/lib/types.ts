@@ -23,6 +23,8 @@ export type StoryDraft = {
   subHeadline: string;
   textSource: "manual" | "ai";
   createdAt: string; // ISO
+  durationMs?: number;   // délka slidu, default 2400
+  lang?: "cs" | "en";    // default cs
 };
 
 export type QueueItem = {
