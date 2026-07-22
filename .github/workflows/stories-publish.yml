@@ -16,4 +16,4 @@ jobs:
         run: |
           curl -fsS --max-time 290 \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            "https://guthpictures.cz/api/cron/stories-publish"
+            "https://guthpictures.eu/api/cron/stories-publish"
