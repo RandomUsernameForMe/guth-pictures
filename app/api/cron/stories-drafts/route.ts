@@ -4,6 +4,7 @@ import { composeDrafts } from "@/modules/stories/lib/compose";
 import { suggestTexts } from "@/modules/stories/lib/claude";
 import { getTexts, saveTexts, getDrafts, saveDrafts, getUsedPhotoIds, markPhotosUsed } from "@/modules/stories/lib/store";
 import type { StoryDraft } from "@/modules/stories/lib/types";
+import { siteUrl } from "@/lib/config";
 
 const DRAFT_COUNT = 4;
 
@@ -45,10 +46,12 @@ export async function GET(req: NextRequest) {
         method: "POST",
         headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: "Stories <stories@guthpictures.cz>",
+          // resend.dev je sdílená testovací doména Resendu — doručí jen na adresu
+          // vlastníka účtu. Vlastní odesílatel by chtěl ověřenou doménu.
+          from: "Stories <onboarding@resend.dev>",
           to: process.env.STORIES_NOTIFY_EMAIL,
           subject: `${drafts.length} nových návrhů stories ke schválení`,
-          text: `Připraveno ${drafts.length} návrhů: https://guthpictures.cz/admin/stories`,
+          text: `Připraveno ${drafts.length} návrhů: ${siteUrl}/admin/stories`,
         }),
       });
     } catch (err) {

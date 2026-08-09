@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { contactEmail } from "@/lib/config";
 import { paletteToAmbient } from "@/modules/brand-shoot/lib/palette-theme";
 import type { ProposalPublic, ProposalConcept, ProposalImage } from "@/modules/brand-shoot/lib/types";
 import { LivingPalette } from "./LivingPalette";
@@ -221,7 +222,7 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
           />
           <a
             className="bsp-ed-cta-alt"
-            href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(t("ctaMailSubject", { name: proposal.name }))}`}
+            href={`mailto:${contactEmail}?subject=${encodeURIComponent(t("ctaMailSubject", { name: proposal.name }))}`}
           >
             {t("ctaButton")} →
           </a>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { contactEmail } from "@/lib/config";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -34,7 +35,7 @@ function CsVersion() {
       <Section title="1. Správce osobních údajů">
         <p>
           Správcem osobních údajů je Tomáš Guth Jarkovský, IČO: [doplnit], se sídlem Praha, Česká republika,
-          e-mail: jan@guthpictures.cz (dále jen „Fotograf").
+          e-mail: {contactEmail} (dále jen „Fotograf").
         </p>
       </Section>
 
@@ -91,8 +92,8 @@ function CsVersion() {
       <Section title="8. Kontakt">
         <p>
           Veškeré dotazy, námitky nebo žádosti o výkon práv zasílejte na:{" "}
-          <a href="mailto:jan@guthpictures.cz" className="underline hover:text-[var(--color-text)] transition-colors">
-            jan@guthpictures.cz
+          <a href={`mailto:${contactEmail}`} className="underline hover:text-[var(--color-text)] transition-colors">
+            {contactEmail}
           </a>
         </p>
       </Section>
@@ -115,7 +116,7 @@ function EnVersion() {
       <Section title="1. Data Controller">
         <p>
           The data controller is Tomáš Guth Jarkovský, ID: [fill in], Prague, Czech Republic,
-          e-mail: jan@guthpictures.cz (the "Photographer").
+          e-mail: {contactEmail} (the "Photographer").
         </p>
       </Section>
 
@@ -171,8 +172,8 @@ function EnVersion() {
       <Section title="8. Contact">
         <p>
           For any questions, objections, or rights requests:{" "}
-          <a href="mailto:jan@guthpictures.cz" className="underline hover:text-[var(--color-text)] transition-colors">
-            jan@guthpictures.cz
+          <a href={`mailto:${contactEmail}`} className="underline hover:text-[var(--color-text)] transition-colors">
+            {contactEmail}
           </a>
         </p>
       </Section>
