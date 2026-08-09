@@ -11,7 +11,7 @@ import { Capstone } from "./Capstone";
 import { CAPSTONES, capstoneExposure, type CapVals } from "./capstones";
 import { CompositionPicker } from "./CompositionPicker";
 import { CompositionOverlay } from "./CompositionOverlay";
-import { COMPOSITIONS, subjectScreenX } from "./compositions";
+import { COMPOSITIONS } from "./compositions";
 import { ContactForm } from "@/components/ContactForm";
 
 type Quality = "high" | "low";
@@ -102,7 +102,11 @@ export function Foceni101App() {
     if (sec.composition) {
       const cmp = COMPOSITIONS[compHover ?? compSel];
       base.composition = cmp.comp;
+      base.compositionY = cmp.compY;
       base.framing = cmp.framing;
+      // Open aperture here purely so the rearranged background balls read as
+      // bokeh; hold the light so switching composition doesn't change brightness.
+      base.exposure = holdExposureFor(base);
       return base;
     }
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];
@@ -117,11 +121,18 @@ export function Foceni101App() {
   // The orbiter only appears where it teaches something (shutter + capstones);
   // elsewhere it would just be a glowing ball floating over a portrait.
   const orbAllowed = !!sections[activeIndex]?.orb;
+  const activeComp = COMPOSITIONS[compHover ?? compSel];
+  const inComposition = sections[activeIndex]?.composition === true;
 
   return (
     <div className="f101">
       <div className="f101-stage">
-        <StudioScene target={target} quality={quality} orbLightOn={orbAllowed && orbLightOn} />
+        <StudioScene
+          target={target}
+          quality={quality}
+          orbLightOn={orbAllowed && orbLightOn}
+          orbLayout={inComposition ? activeComp.id : "default"}
+        />
         <ExposureMeter params={target} show={!!sections[activeIndex]?.meter} />
         {orbAllowed && (
           <button
@@ -134,9 +145,10 @@ export function Foceni101App() {
           </button>
         )}
         <CompositionOverlay
-          kind={COMPOSITIONS[compHover ?? compSel].overlay}
-          subjectX={subjectScreenX(COMPOSITIONS[compHover ?? compSel].comp)}
-          show={sections[activeIndex]?.composition === true}
+          kind={activeComp.overlay}
+          markX={activeComp.markX}
+          markY={activeComp.markY}
+          show={inComposition}
         />
         <div className="f101-progress">
           {sections.map((s, i) => (

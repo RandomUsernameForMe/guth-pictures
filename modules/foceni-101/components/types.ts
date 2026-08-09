@@ -14,8 +14,10 @@ export interface PhotoParams {
   angle: number;
   /** White balance in Kelvin. 3000 = warm/orange, 5500 = neutral, 8000 = cool/blue. */
   whiteBalance: number;
-  /** Subject horizontal placement. -1 = left third, 0 = centred, 1 = right third. */
+  /** Subject horizontal placement as a fraction of the frame's half-width. -1 = left edge, 0 = centred, 1 = right edge. */
   composition: number;
+  /** Subject vertical placement as a fraction of the frame's half-height. -1 = bottom, 0 = centred, 1 = top. */
+  compositionY: number;
   /** Camera-distance multiplier for framing. 1 = normal; >1 dollies back (subject smaller). */
   framing: number;
 }
@@ -29,6 +31,7 @@ export const DEFAULT_PARAMS: PhotoParams = {
   angle: 0,
   whiteBalance: 5500,
   composition: 0,
+  compositionY: 0,
   framing: 1,
 };
 

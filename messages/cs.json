@@ -242,23 +242,27 @@
     "comps": {
       "thirds": {
         "label": "Třetiny",
-        "body": "Subjekt leží na pravé třetinové čáře místo ve středu. Pohled má kam plynout a záběr působí vyváženě, ne staticky."
+        "body": "Subjekt leží na průsečíku třetinových čar, ne ve středu. Hmota v protilehlé třetině mu dělá protiváhu, takže záběr působí vyváženě, ne staticky."
       },
       "center": {
         "label": "Na střed",
-        "body": "Subjekt přesně uprostřed. Působí symetricky, formálně a přímo. Hodí se, když chceš klid a přímý pohled."
+        "body": "Subjekt přesně uprostřed, pozadí zrcadlově symetrické. Působí formálně a přímo. Hodí se, když chceš klid a přímý pohled."
       },
       "golden": {
         "label": "Zlatý řez",
-        "body": "Subjekt na linii zlatého řezu (≈ 62 %). Podobné třetinám, jen o kousek blíž středu. Poměr známý z malířství."
+        "body": "Poměr 1 : 1,618, známý z malířství. Subjekt sedí v nejtěsnějším závitu zlaté spirály a světla se po ní stáčejí ven. Oko sklouzne po širokém oblouku dovnitř a skončí na tváři. Proti třetinám tu nejde o polohu, ale o ten tok."
       },
       "leading": {
         "label": "Vedoucí linie",
-        "body": "Linie v záběru (cesty, hrany, světlo) směřují k subjektu a vedou k němu oko diváka. Najeď myší na dlaždici a uvidíš je."
+        "body": "Linie v záběru (cesty, hrany, světlo) vedou oko diváka k subjektu. Světla se seřadila do dvou řad, které ubíhají do hloubky a sbíhají se přesně na obličeji."
       },
       "space": {
         "label": "Prostor",
-        "body": "Subjekt je malý a posunutý ke kraji, zbytek záběru zůstává prázdný. Negativní prostor dává záběru dýchat a podtrhuje měřítko."
+        "body": "Subjekt je malý a odsunutý ke kraji, zbytek záběru zůstává prázdný. Negativní prostor dává záběru dýchat a podtrhuje měřítko."
+      },
+      "frame": {
+        "label": "Rám v rámu",
+        "body": "Rozostřené popředí obklopí subjekt a udělá kolem něj rám. Oko se do záběru nedostane jinudy než dírou uprostřed, takže pozornost jde přesně tam, kam chceš."
       }
     },
     "capstones": {

@@ -242,23 +242,27 @@
     "comps": {
       "thirds": {
         "label": "Thirds",
-        "body": "The subject sits on the right third line instead of dead centre. The eye has somewhere to travel and the frame feels balanced, not static."
+        "body": "The subject sits on a thirds intersection, not dead centre. The mass in the opposite third counterweights it, so the frame feels balanced rather than static."
       },
       "center": {
         "label": "Centred",
-        "body": "The subject exactly in the middle. Symmetric, formal and direct. It works when you want calm and a straight-on gaze."
+        "body": "The subject exactly in the middle, the background mirrored around it. Formal and direct. It works when you want calm and a straight-on gaze."
       },
       "golden": {
         "label": "Golden ratio",
-        "body": "The subject on the golden-ratio line (≈ 62 %). Like thirds, just a touch closer to centre. A proportion painters have used for centuries."
+        "body": "The 1 : 1.618 proportion painters have used for centuries. The subject sits in the tightest coil of the golden spiral and the lights curl outward along it, so the eye rides the wide arm inward and lands on the face. Against thirds it is not about position, it is about that flow."
       },
       "leading": {
         "label": "Leading lines",
-        "body": "Lines in the frame (paths, edges, light) point at the subject and guide the viewer's eye to it. Hover over the tile to see them."
+        "body": "Lines in the frame (paths, edges, light) guide the viewer's eye to the subject. The lights have lined up into two rows that recede into depth and converge right on the face."
       },
       "space": {
         "label": "Negative space",
         "body": "The subject is small and pushed to the edge; the rest of the frame stays empty. Negative space lets the shot breathe and underlines scale."
+      },
+      "frame": {
+        "label": "Frame within a frame",
+        "body": "Out-of-focus foreground wraps the subject and builds a frame around it. The eye has no way in but the hole in the middle, so attention goes exactly where you want it."
       }
     },
     "capstones": {

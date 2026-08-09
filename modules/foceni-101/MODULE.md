@@ -20,7 +20,7 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 | Ohnisko | FOV + dolly (drží velikost subjektu = komprese) |
 | Úhel | posun kamery Y (`angle` -1..1), lookAt drží subjekt |
 | Vyvážení bílé | `tint` vec3 v GrainShader (teplo/chlad multiply) |
-| **08 Kompozice** | chip picker (5 kompozic) + SVG overlay; `composition` X + `framing` dolly |
+| **08 Kompozice** | chip picker (6 kompozic); každá přeskládá koule v pozadí (`ORB_LAYOUTS`) + posune subjekt (`composition`/`compositionY`) + `framing` dolly |
 | **09 Všechno je světlo** | reveal: meter on, otevři clonu → bar swing (clona/čas/ISO = stejné světlo) |
 | **10/11 Capstone ×2** | fix-it: jedna noha omezená (10 clona f/1.8–3.2 = přepal; 11 čas ≤1/250 s = podexpozice), balancuj zbylé dvě na střed metru |
 
@@ -37,7 +37,17 @@ Interaktivní edukativní scroll-story pro **nefotografy** — ukazuje, co zákl
 
 ## Kompozice (sekce 08)
 
-Bespoke `CompositionPicker` (jako capstone) místo slideru. `compositions.ts` = pole 5 kompozic (Třetiny, Na střed, Zlatý řez, Vedoucí linie, Prostor), každá má `comp` (X), `framing` (dolly kamery; Prostor 1.8 → malý subjekt) a `overlay` typ. Klik chip → scéna snapne + vysvětlení; hover → preview overlaye (čte se `COMPOSITIONS[compHover ?? compSel]`). `CompositionOverlay` = SVG na stage (thirds/center/golden grid, leading lines mířící na subjekt přes `subjectScreenX(comp)`, negative-space rect). `framing` = nové pole v `PhotoParams` (násobič vzdálenosti kamery).
+Bespoke `CompositionPicker` (jako capstone) místo slideru. 6 kompozic: Třetiny, Na střed, Zlatý řez, Vedoucí linie, Prostor, Rám v rámu.
+
+**Kompozici dělá rozložení scény, ne overlay.** 14 bokeh koulí v pozadí je zároveň rekvizita: každý chip je přeskládá (`ORB_LAYOUTS` v `compositions.ts`) — protiváha v protilehlé třetině, zrcadlová symetrie, zlatá spirála (r roste o φ² za půl otáčky, velikost koule roste s r), dvě řady ubíhající do hloubky a sbíhající se na obličeji, pár koulí u kraje pro negativní prostor, prstenec velkých rozostřených koulí v popředí pro rám v rámu. Bez toho byly `center` a `leading` identické scény lišící se jen SVG čárou.
+
+- **Vše se autoruje ve screen-space, ne v metrech.** Koule = `{u, v, z, s}`, kde `u/v` ∈ −1..1 jsou zlomky poloviny záběru v hloubce `z` (metry za subjektem, záporné = před ním), `s` = násobič poloměru. `StudioScene` převádí každý snímek přes `halfH/halfV` z aktuálního `camera.fov`/`aspect`. Totéž platí pro `composition`/`compositionY` subjektu — proto layout vypadá stejně na 16:9 i na mobilu a subjekt nemůže vyjet ze záběru při úzkém poměru stran (což dřív dělal: `comp * 0.7` ve world units = hlava mimo frame na 390 px).
+- **Poloměr koule se škáluje aspectem** (`sizeK = min(1, aspect / 1.6)`) — world radius by na výšku zabral ~3× víc plochy.
+- **Subjekt se míří očima.** Model je vycentrovaný na bounding box včetně ramen, takže jeho origin sedí ≈9 % záběru pod očima; `placeAt(markX, markY)` ten offset (`EYE_OFFSET`) odečte, aby průsečík třetin/phi padl na obličej, ne na klíční kost. `markX/markY` zároveň řídí kolečko v overlayi.
+- **Pozor na zeď.** Backdrop je na world z = −1.6; koule s `z > ~1.5` za ní zmizí.
+- Nepoužité koule v layoutu (`s: 0`) se zmenší **na místě** — kdyby se tweenovala i pozice, přeletí přes celý záběr.
+- `CompositionOverlay` = SVG (viewBox 0–100, `preserveAspectRatio="none"` = stejný normalizovaný prostor jako layouty) + kolečko značky mimo SVG (v roztaženém viewBoxu by z něj byla elipsa). Prostor a rám nekreslí nic — prázdno a rozostřený prstenec jsou samy o sobě sdělením.
+- Klik chip → scéna se přetweenuje + vysvětlení; hover → preview (`COMPOSITIONS[compHover ?? compSel]`). Sekce má `aperture: 3.2` + hold expozice, aby koule byly bokeh a přepínání neměnilo jas.
 
 ## Struktura
 
@@ -50,11 +60,11 @@ modules/foceni-101/
     ├── ExposureMeter.tsx  # bar overlay (evDelta), viditelný u meter:true sekcí
     ├── Capstone.tsx       # bespoke fix-it karta: 3 slidery (1 omezená noha + badge), scenario-driven
     ├── capstones.ts       # config 2 capstone scénářů (ranges/restricted/ref/init) + test
-    ├── compositions.ts    # config 5 kompozic (jen mechanika) + subjectScreenX (+ test)
+    ├── compositions.ts    # config 6 kompozic + ORB_LAYOUTS (screen-space) + zlatá spirála (+ test)
     ├── CompositionPicker.tsx  # bespoke karta: chips výběr kompozice
     ├── CompositionOverlay.tsx # SVG guide overlay (thirds/center/golden/leading/space)
     ├── sections.ts        # buildSections(t) — mechanika sekcí; VŠECHNA copy v messages/{cs,en}.json pod `foceni101`
-    └── types.ts           # PhotoParams (+ framing), Section (+ meter/holdLight/capstone/composition/cta/orb), SectionControl
+    └── types.ts           # PhotoParams (+ framing/compositionY), Section (+ meter/holdLight/capstone/composition/cta/orb), SectionControl
 ```
 
 ## i18n

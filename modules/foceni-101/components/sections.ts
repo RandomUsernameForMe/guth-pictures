@@ -125,7 +125,8 @@ export function buildSections(t: F101Translator): Section[] {
     {
       ...copy("kompozice"),
       num: "08",
-      target: {},
+      // Open a bit so the rearranged background balls read as bokeh, not dots.
+      target: { aperture: 3.2 },
       composition: true,
     },
     {
@@ -163,7 +164,14 @@ export function buildSections(t: F101Translator): Section[] {
       ...copy("finale"),
       num: "→",
       // The money shot: portrait tele + open aperture + subject on thirds.
-      target: { focal: 85, aperture: 2.8, angle: -0.15, whiteBalance: 5300, composition: 0.5 },
+      target: {
+        focal: 85,
+        aperture: 2.8,
+        angle: -0.15,
+        whiteBalance: 5300,
+        composition: 0.3,
+        compositionY: 0.15,
+      },
       holdLight: true,
       cta: true,
     },

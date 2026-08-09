@@ -11,6 +11,7 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
 import { computeLight } from "./light";
+import { ORB_COUNT, ORB_LAYOUTS, type Orb } from "./compositions";
 
 const SUBJECT_HEIGHT = 1.55;
 const BASE_FOCAL = 50;
@@ -18,6 +19,7 @@ const BASE_DISTANCE = 1.6;
 const SENSOR = 36; // full-frame width (mm) for FOV math
 const MAX_GHOST = 18;
 const MIN_F = 1.8; // widest aperture the UI allows; defines "fully open" for DoF math
+const REF_ASPECT = 1.6; // the aspect the orb layouts were tuned at
 
 type Quality = "high" | "low";
 
@@ -77,19 +79,23 @@ interface Props {
   target: PhotoParams;
   quality: Quality;
   orbLightOn: boolean;
+  /** Key into ORB_LAYOUTS — which arrangement the background balls tween to. */
+  orbLayout: string;
 }
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function StudioScene({ target, quality, orbLightOn }: Props) {
+export function StudioScene({ target, quality, orbLightOn, orbLayout }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<SceneState | null>(null);
   const targetRef = useRef<PhotoParams>(target);
   targetRef.current = target;
   const orbLightOnRef = useRef(orbLightOn);
   orbLightOnRef.current = orbLightOn;
+  const orbLayoutRef = useRef(orbLayout);
+  orbLayoutRef.current = orbLayout;
   // Lives outside the scene effect so a quality-change remount keeps the
   // tweened params instead of jumping back to defaults.
   const currentRef = useRef<PhotoParams>({ ...DEFAULT_PARAMS });
@@ -151,9 +157,15 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     scene.add(floor);
 
     // ── Bokeh balls behind subject (so shallow DoF is obvious) ───────────
+    // They double as the composition section's props: each composition rearranges
+    // them (see ORB_LAYOUTS), so the layout — not just the subject's position —
+    // is what actually demonstrates the rule.
     const ballGeo = new THREE.SphereGeometry(0.05, 16, 16);
     const ballColors = [0xc8a96e, 0xd4b87a, 0x8a93b0, 0xf2f0eb];
-    for (let i = 0; i < 14; i++) {
+    const balls: THREE.Mesh[] = [];
+    /** Live orb state, tweened toward the active layout. */
+    const ballState: Orb[] = ORB_LAYOUTS.default.map((o) => ({ ...o }));
+    for (let i = 0; i < ORB_COUNT; i++) {
       const m = new THREE.MeshStandardMaterial({
         color: ballColors[i % ballColors.length],
         emissive: new THREE.Color(ballColors[i % ballColors.length]),
@@ -161,12 +173,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
         roughness: 0.4,
       });
       const ball = new THREE.Mesh(ballGeo, m);
-      ball.position.set(
-        (Math.random() - 0.5) * 2.6,
-        SUBJECT_HEIGHT + (Math.random() - 0.5) * 1.6,
-        -0.7 - Math.random() * 0.8,
-      );
       scene.add(ball);
+      balls.push(ball);
     }
 
     // ── Head: clay placeholder, swap to head.glb when loaded ─────────────
@@ -311,16 +319,11 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       current.angle = lerp(current.angle, t.angle, k);
       current.whiteBalance = lerp(current.whiteBalance, t.whiteBalance, k);
       current.composition = lerp(current.composition, t.composition, k);
+      current.compositionY = lerp(current.compositionY, t.compositionY, k);
       current.framing = lerp(current.framing, t.framing, k);
 
       // Exposure: unified light model — aperture + shutter + ISO all feed brightness.
       renderer.toneMappingExposure = 1.05 * computeLight(current).mul;
-
-      // Composition → slide subject off-centre; lights follow so it stays lit
-      const compX = current.composition * 0.7;
-      headGroup.position.x = compX;
-      key.target.position.x = compX;
-      fill.target.position.x = compX;
 
       // Focal length → FOV + dolly (keeps subject size, shows compression).
       // Angle → raise/lower the camera while still looking at the subject.
@@ -330,6 +333,46 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       camera.fov = focalToFov(current.focal);
       camera.updateProjectionMatrix();
       camera.lookAt(0, SUBJECT_HEIGHT, 0);
+
+      // Screen space → world, at a given distance from the camera. Composition
+      // is authored as a fraction of the frame rather than in metres, so a layout
+      // reads the same on a wide desktop and a tall phone — and the subject can't
+      // slide out of frame when the aspect ratio narrows.
+      // ponytail: assumes the camera axis is parallel to Z (angle ≈ 0, true in the
+      // composition section); a tilted camera makes this a small approximation.
+      const tanHalf = Math.tan((camera.fov * Math.PI) / 360);
+      const halfV = (d: number) => d * tanHalf;
+      const halfH = (d: number) => d * tanHalf * camera.aspect;
+
+      // Composition → place the subject in the frame; lights follow so it stays lit
+      const compX = current.composition * halfH(dist);
+      const compY = current.compositionY * halfV(dist);
+      headGroup.position.x = compX;
+      headGroup.position.y = compY;
+      key.target.position.set(compX, SUBJECT_HEIGHT + compY, 0);
+      fill.target.position.set(compX, SUBJECT_HEIGHT + compY, 0);
+
+      // Background balls tween toward the active layout (screen-space u/v, radius s).
+      // Radius is in world units, so on a tall phone the same ball covers ~3× more
+      // of the frame; scale it with the aspect so a layout keeps its proportions.
+      const layout = ORB_LAYOUTS[orbLayoutRef.current] ?? ORB_LAYOUTS.default;
+      const sizeK = Math.min(1, camera.aspect / REF_ASPECT);
+      for (let i = 0; i < ORB_COUNT; i++) {
+        const b = ballState[i];
+        const to = layout[i];
+        // Balls a layout doesn't use shrink away where they stand; tweening their
+        // position too would streak them across the frame on the way out.
+        if (to.s > 0.02) {
+          b.u = lerp(b.u, to.u, k);
+          b.v = lerp(b.v, to.v, k);
+          b.z = lerp(b.z, to.z, k);
+        }
+        b.s = lerp(b.s, to.s, k);
+        const d = Math.max(0.2, dist + b.z); // b.z = metres behind the subject
+        balls[i].position.set(b.u * halfH(d), SUBJECT_HEIGHT + b.v * halfV(d), -b.z);
+        balls[i].scale.setScalar(Math.max(b.s * sizeK, 0.0001));
+        balls[i].visible = b.s > 0.02;
+      }
 
       // White balance → warm/cool tint on the final image
       const wbT = (current.whiteBalance - 5500) / 2500; // -1 warm .. +1 cool
