@@ -180,7 +180,7 @@ export async function getContactEmail(): Promise<string> {
       // KV unavailable, fall through to env
     }
   }
-  return process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "guth.jarkovsky.tomas@gmail.com";
+  return process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contact@guthpictures.eu";
 }
 
 export async function setContactEmail(email: string): Promise<void> {
