@@ -3,8 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { getContent, getImages } from "@/modules/admin/lib/content";
-import { getThemeColors } from "@/lib/theme";
-import { cloudinaryUrl, blurUrl, duotone } from "@/lib/cloudinary-utils";
+import { cloudinaryUrl, blurUrl, PROFILE_TRANSFORM } from "@/lib/cloudinary-utils";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -28,16 +27,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function OMnePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, images, theme] = await Promise.all([
+  const [t, content, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ profile: "" })),
-    getThemeColors(),
   ]);
-
-  // Profile photo is site chrome, not portfolio work — duotone it into the
-  // active preset so a warm original doesn't fight the palette.
-  const profileTx = `w_560,c_fill,g_face,${duotone(theme.bg, theme.text)},q_auto,f_auto`;
 
   return (
     <main>
@@ -46,11 +40,11 @@ export default async function OMnePage({ params }: { params: Promise<{ locale: s
           {images.profile && (
             <div className="aspect-[4/5] relative overflow-hidden">
               <Image
-                src={cloudinaryUrl(images.profile, profileTx)}
+                src={cloudinaryUrl(images.profile, PROFILE_TRANSFORM)}
                 alt={content["o-mne"].subtitle}
                 fill
                 placeholder="blur"
-                blurDataURL={blurUrl(images.profile, duotone(theme.bg, theme.text))}
+                blurDataURL={blurUrl(images.profile)}
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 280px"
               />

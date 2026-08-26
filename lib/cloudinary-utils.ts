@@ -18,16 +18,13 @@ export function cloudinaryUrl(publicId: string, transformation = ""): string {
 }
 
 /**
- * Cloudinary duotone: strip colour, then map shadows to `shadow` and
- * highlights to `light`. Feed it theme tokens so the photo follows the preset.
+ * Profile portrait. The original is warm and yellow, which fights the palette,
+ * so it comes down a notch in saturation. Tune the number, not the pipeline.
  */
-export function duotone(shadow: string, light: string): string {
-  return `e_grayscale,e_tint:70:rgb:${shadow.slice(1)}:rgb:${light.slice(1)}`;
-}
+export const PROFILE_TRANSFORM = "w_560,c_fill,g_face,e_saturation:-30,q_auto,f_auto";
 
-/** `extra` lets a graded image keep the same grade in its blur placeholder. */
-export function blurUrl(publicId: string, extra = ""): string {
-  return cloudinaryUrl(publicId, `e_blur:1000,q_1,f_webp,w_20${extra && `,${extra}`}`);
+export function blurUrl(publicId: string): string {
+  return cloudinaryUrl(publicId, "e_blur:1000,q_1,f_webp,w_20");
 }
 
 export function getAlt(photo: GalleryPhoto, locale: string): string {
