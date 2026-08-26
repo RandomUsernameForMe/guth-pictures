@@ -5,10 +5,11 @@ import { HeroSection } from "@/modules/homepage/components/HeroSection";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { HomeAurora } from "@/components/HomeAurora";
 import { getContent, getImages } from "@/modules/admin/lib/content";
+import { getThemeColors } from "@/lib/theme";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { LightTesterPromo } from "@/modules/homepage/components/LightTesterPromo";
 import { Foceni101Promo } from "@/modules/homepage/components/Foceni101Promo";
-import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { cloudinaryUrl, blurUrl, duotone } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { Testimonials } from "@/modules/homepage/components/Testimonials";
@@ -45,11 +46,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, images] = await Promise.all([
+  const [t, content, images, theme] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ profile: "" })),
+    getThemeColors(),
   ]);
+
+  // Profile photo is site chrome, not portfolio work — duotone it into the
+  // active preset so a warm original doesn't fight the palette.
+  const profileTx = `w_560,c_fill,g_face,${duotone(theme.bg, theme.text)},q_auto,f_auto`;
 
   return (
     <main className="-mt-16">
@@ -77,17 +83,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 />
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
-                    src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
+                    src={cloudinaryUrl(images.profile, profileTx)}
                     alt={content["o-mne"].subtitle}
                     fill
                     placeholder="blur"
-                    blurDataURL={blurUrl(images.profile)}
+                    blurDataURL={blurUrl(images.profile, duotone(theme.bg, theme.text))}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 280px"
                   />
-                  {/* Accent duotone — matches hero triptych panels */}
-                  <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
-                  <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "soft-light", opacity: 0.24 }} />
                 </div>
               </div>
             )}
