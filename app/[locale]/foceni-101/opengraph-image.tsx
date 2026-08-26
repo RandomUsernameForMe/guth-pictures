@@ -1,4 +1,10 @@
 import { ImageResponse } from "next/og";
+import { defaultColors as P } from "@/lib/theme-presets";
+
+// Static images can't read KV — they render the shipped default preset.
+const alpha = (hex: string, a: number) =>
+  hex + Math.round(a * 255).toString(16).padStart(2, "0");
+
 
 export const runtime = "edge";
 export const alt = "Focení 101 — Guth Pictures";
@@ -6,14 +12,15 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const C = {
-  bg:        "#0A0A0B",
-  surface:   "#1E1E23",
-  text:      "#F2F0EB",
-  muted:     "#9B9899",
-  ghost:     "#5C5A5E",
-  accent:    "#C8A96E",
-  border:    "rgba(255,255,255,0.10)",
-  borderSub: "rgba(255,255,255,0.06)",
+  bg:        P.bg,
+  elevated:  P.bgElevated,
+  surface:   P.surface,
+  text:      P.text,
+  muted:     P.textMuted,
+  ghost:     P.textGhost,
+  accent:    P.accentSecondary,
+  border:    alpha(P.text, 0.10),
+  borderSub: alpha(P.text, 0.06),
 } as const;
 
 export default async function Image({ params }: { params: Promise<{ locale: string }> }) {

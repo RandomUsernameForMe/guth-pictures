@@ -163,14 +163,15 @@ Kostěný akcent na vínové ploše, měděné linky. Měď posunuta z `#C8A96E`
 | `text` | `#F1E4E4` |
 | `textMuted` | `#B79A9C` |
 | `textGhost` | `#7E5A5E` |
-| `accent` | `#D4485A` |
-| `accentHover` | `#E45E6E` |
+| `accent` | `#D64C5E` |
+| `accentHover` | `#E76474` |
 | `accentSecondary` | `#B87333` |
 | `grain` | `#A0202F` |
 
-Akcent je proti mockupu zesvětlen z `#B32B3C` na `#D4485A`. Původní hodnota
+Akcent je proti mockupu zesvětlen z `#B32B3C` na `#D64C5E`. Původní hodnota
 dávala na pozadí `#170A0D` kontrast 2,5 : 1, což na text neprojde.
-`#D4485A` je na 4,5 : 1, `#E45E6E` na 5,2 : 1.
+`#D64C5E` je na 4,66 : 1, `#E76474` na 5,8 : 1. (`#D4485A` z návrhu vyšel
+na 4,49 : 1 — o chlup pod hranicí, kontrastní test ho odmítl.)
 
 Chybová barva zůstává `#F87171`. Od akcentu se liší, ale je to blízko —
 implementace musí ověřit, že chybová hláška v tomhle presetu čte jako chyba.

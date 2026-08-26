@@ -230,7 +230,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
         <line
           x1={camPx.x} y1={camPx.y}
           x2={subjectPx.x} y2={subjectPx.y}
-          stroke="#C8A96E" strokeWidth="1" opacity="0.35"
+          stroke="var(--color-accent-secondary)" strokeWidth="1" opacity="0.35"
           strokeDasharray="4 4"
           style={{ pointerEvents: "none" }}
         />
@@ -294,9 +294,9 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
           style={{
             width: 36, height: 24,
             borderRadius: 3,
-            background: "rgba(200,169,110,0.12)",
-            border: "1.5px solid #C8A96E",
-            boxShadow: "0 0 14px rgba(200,169,110,0.25)",
+            background: "color-mix(in srgb, var(--color-accent-secondary) 12%, transparent)",
+            border: "1.5px solid var(--color-accent-secondary)",
+            boxShadow: "0 0 14px color-mix(in srgb, var(--color-accent-secondary) 25%, transparent)",
             display: "grid",
             placeItems: "center",
             cursor: "grab",
@@ -306,7 +306,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
           {/* Lens circle */}
           <div style={{
             width: 10, height: 10, borderRadius: "50%",
-            border: "1.5px solid #C8A96E",
+            border: "1.5px solid var(--color-accent-secondary)",
           }} />
         </div>
         <div style={{
@@ -314,7 +314,7 @@ export function StudioFloor({ lights, selectedId, onSelect, onMove, onUpdate, on
           top: "calc(100% + 4px)", left: "50%", transform: "translateX(-50%)",
           fontFamily: "Geist Mono, monospace",
           fontSize: 9,
-          color: "#C8A96E",
+          color: "var(--color-accent-secondary)",
           whiteSpace: "nowrap",
           letterSpacing: "0.12em",
           textTransform: "uppercase",

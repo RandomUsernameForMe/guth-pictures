@@ -30,19 +30,19 @@ export function Foceni101Promo({ label, title, desc, cta, locale }: Props) {
           <circle cx="0" cy="0" r="175" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
 
           {/* Triangle edges */}
-          <line x1="0" y1="-130" x2="-120" y2="90" stroke="#C8A96E" strokeWidth="1" opacity="0.4" />
-          <line x1="0" y1="-130" x2="120" y2="90" stroke="#C8A96E" strokeWidth="1" opacity="0.4" />
-          <line x1="-120" y1="90" x2="120" y2="90" stroke="#C8A96E" strokeWidth="1" opacity="0.4" />
+          <line x1="0" y1="-130" x2="-120" y2="90" stroke="var(--color-accent-secondary)" strokeWidth="1" opacity="0.4" />
+          <line x1="0" y1="-130" x2="120" y2="90" stroke="var(--color-accent-secondary)" strokeWidth="1" opacity="0.4" />
+          <line x1="-120" y1="90" x2="120" y2="90" stroke="var(--color-accent-secondary)" strokeWidth="1" opacity="0.4" />
 
           {/* CLONA — apex */}
-          <circle cx="0" cy="-130" r="18" fill="#C8A96E" opacity="0.9" />
-          <circle cx="0" cy="-130" r="30" fill="none" stroke="#C8A96E" strokeWidth="1.5" opacity="0.45" />
-          <text x="0" y="-172" textAnchor="middle" fontSize="9" letterSpacing="2.5" fill="#C8A96E" opacity="0.65">{legs.ap}</text>
+          <circle cx="0" cy="-130" r="18" fill="var(--color-accent-secondary)" opacity="0.9" />
+          <circle cx="0" cy="-130" r="30" fill="none" stroke="var(--color-accent-secondary)" strokeWidth="1.5" opacity="0.45" />
+          <text x="0" y="-172" textAnchor="middle" fontSize="9" letterSpacing="2.5" fill="var(--color-accent-secondary)" opacity="0.65">{legs.ap}</text>
 
           {/* ČAS — bottom left */}
-          <circle cx="-120" cy="90" r="18" fill="#9B9899" opacity="0.85" />
-          <circle cx="-120" cy="90" r="30" fill="none" stroke="#9B9899" strokeWidth="1.5" opacity="0.38" />
-          <text x="-120" y="134" textAnchor="middle" fontSize="9" letterSpacing="2.5" fill="#9B9899" opacity="0.6">{legs.sh}</text>
+          <circle cx="-120" cy="90" r="18" fill="var(--color-text-muted)" opacity="0.85" />
+          <circle cx="-120" cy="90" r="30" fill="none" stroke="var(--color-text-muted)" strokeWidth="1.5" opacity="0.38" />
+          <text x="-120" y="134" textAnchor="middle" fontSize="9" letterSpacing="2.5" fill="var(--color-text-muted)" opacity="0.6">{legs.sh}</text>
 
           {/* ISO — bottom right */}
           <circle cx="120" cy="90" r="18" fill="#7BA7BC" opacity="0.85" />
@@ -50,10 +50,10 @@ export function Foceni101Promo({ label, title, desc, cta, locale }: Props) {
           <text x="120" y="134" textAnchor="middle" fontSize="9" letterSpacing="2.5" fill="#7BA7BC" opacity="0.6">{legs.iso}</text>
 
           {/* Centre: balanced-exposure readout */}
-          <text x="0" y="-6" textAnchor="middle" fontSize="20" fontWeight="700" fill="#F2F0EB" letterSpacing="-0.5">0.0 EV</text>
+          <text x="0" y="-6" textAnchor="middle" fontSize="20" fontWeight="700" fill="var(--color-text)" letterSpacing="-0.5">0.0 EV</text>
           <rect x="-55" y="8" width="110" height="7" rx="3.5" fill="#1E1E23" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-          <rect x="-55" y="8" width="55" height="7" rx="3.5" fill="#C8A96E" />
-          <rect x="-1" y="5" width="2" height="13" fill="#F2F0EB" />
+          <rect x="-55" y="8" width="55" height="7" rx="3.5" fill="var(--color-accent-secondary)" />
+          <rect x="-1" y="5" width="2" height="13" fill="var(--color-text)" />
         </svg>
       </div>
     </div>

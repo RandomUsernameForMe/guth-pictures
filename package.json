@@ -23,7 +23,6 @@
     "mp4-muxer": "^5.2.2",
     "next": "16.1.6",
     "next-intl": "^4.8.3",
-    "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",

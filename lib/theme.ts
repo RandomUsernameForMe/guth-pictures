@@ -1,17 +1,20 @@
 import "server-only";
 import { getKv } from "./kv";
-import type { ThemeColors, ColorSet } from "./theme-types";
-import { defaultColors } from "./theme-types";
-export type { ColorSet, ThemeColors } from "./theme-types";
-export { defaultColors } from "./theme-types";
+import type { ColorSet } from "./theme-types";
+import { CSS_VAR_MAP, COLOR_KEYS } from "./theme-types";
+import { defaultColors } from "./theme-presets";
+export type { ColorSet } from "./theme-types";
+export { defaultColors } from "./theme-presets";
 
-const KV_KEY = "theme-colors";
+// v2: flat ColorSet (no light mode), plus accentSecondary and grain.
+// The old "theme-colors" key holds an incompatible shape and is ignored.
+const KV_KEY = "theme-colors-v2";
 
-export async function getThemeColors(): Promise<ThemeColors> {
+export async function getThemeColors(): Promise<ColorSet> {
   const kv = await getKv();
   if (!kv) return defaultColors;
   try {
-    const stored = await kv.get<ThemeColors>(KV_KEY);
+    const stored = await kv.get<ColorSet>(KV_KEY);
     if (!stored) return defaultColors;
     return stored;
   } catch {
@@ -19,15 +22,14 @@ export async function getThemeColors(): Promise<ThemeColors> {
   }
 }
 
-export async function setThemeColors(colors: ThemeColors): Promise<void> {
+export async function setThemeColors(colors: ColorSet): Promise<void> {
   const kv = await getKv();
   if (!kv) throw new Error("KV not available");
   await kv.set(KV_KEY, colors);
 }
 
-/** Generates a <style> block with CSS var overrides for both themes */
-export function buildThemeStyle(colors: ThemeColors): string {
-  const render = (cls: string, c: ColorSet) =>
-    `${cls}{--color-bg:${c.bg};--color-bg-elevated:${c.bgElevated};--color-bg-overlay:${c.bgOverlay};--color-surface:${c.surface};--color-text:${c.text};--color-text-muted:${c.textMuted};--color-text-ghost:${c.textGhost};--color-accent:${c.accent};--color-accent-hover:${c.accentHover};}`;
-  return render(":root,.dark", colors.dark) + render(".light", colors.light);
+/** Generates a <style> block with CSS var overrides */
+export function buildThemeStyle(colors: ColorSet): string {
+  const decls = COLOR_KEYS.map((k) => `${CSS_VAR_MAP[k]}:${colors[k]};`).join("");
+  return `:root{${decls}}`;
 }

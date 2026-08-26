@@ -8,8 +8,8 @@ import { ProposalGallery } from "./ProposalGallery";
 import { ProposalFeedbackForm } from "./ProposalFeedbackForm";
 
 const FALLBACK = {
-  accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B",
-  duoShadow: "#3A2A1A", duoLight: "#E8DFCF",
+  accent: "#B87333", glowA: "#2A1218", glowB: "#150D10", tint: "#1A0A0F",
+  duoShadow: "#3A1A24", duoLight: "#E8DCD4",
 };
 
 // Build the `data-pal-*` attribute bag a section/button needs for the living-palette scroll-spy.

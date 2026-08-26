@@ -38,8 +38,8 @@ function PresetDiagram({ preset }: { preset: typeof PRESETS[0] }) {
   return (
     <div className="preset-diag">
       <svg viewBox="-3 -3 6 6" width="36" height="36">
-        <circle cx="0" cy="0" r="0.4" fill="rgba(242,240,235,0.30)" stroke="rgba(242,240,235,0.6)" strokeWidth="0.05" strokeDasharray="0.15 0.15" />
-        <rect x="-0.3" y="1.4" width="0.6" height="0.4" fill="none" stroke="#C8A96E" strokeWidth="0.08" />
+        <circle cx="0" cy="0" r="0.4" fill="color-mix(in srgb, var(--color-text) 30%, transparent)" stroke="color-mix(in srgb, var(--color-text) 60%, transparent)" strokeWidth="0.05" strokeDasharray="0.15 0.15" />
+        <rect x="-0.3" y="1.4" width="0.6" height="0.4" fill="none" stroke="var(--color-accent-secondary)" strokeWidth="0.08" />
         {preset.lights.map((L, i) => {
           const info = TYPE_INFO[L.type];
           return (

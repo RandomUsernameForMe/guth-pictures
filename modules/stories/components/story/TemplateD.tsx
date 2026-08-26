@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from 'react'
+import { defaultColors as P } from '../../../../lib/theme-presets'
 import { AScrim, AGrain, AMono, ARule } from './primitives'
 import { PhotoCycle } from './PhotoCycle'
 import { useTick } from './useTick'
@@ -83,9 +84,9 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
                 ))}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
-                <div style={{ width: px(56), height: px(56), borderRadius: 999, background: 'linear-gradient(180deg,#1E1E23,#0A0A0B)', border: `${px(1.5)}px solid rgba(255,255,255,0.4)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F2F0EB', fontSize: px(22), fontWeight: 700 }}>G</div>
+                <div style={{ width: px(56), height: px(56), borderRadius: 999, background: 'linear-gradient(180deg,#1E1E23,#0A0A0B)', border: `${px(1.5)}px solid rgba(255,255,255,0.4)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: P.text, fontSize: px(22), fontWeight: 700 }}>G</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: px(2) }}>
-                  <span style={{ color: '#F2F0EB', fontSize: px(20), fontWeight: 600 }}>guthpictures</span>
+                  <span style={{ color: P.text, fontSize: px(20), fontWeight: 600 }}>guthpictures</span>
                   <span style={{ color: 'rgba(242,240,235,0.7)', fontSize: px(16) }}>1h</span>
                 </div>
               </div>
@@ -100,8 +101,8 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
             zIndex: 10,
             display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: px(22),
           }}>
-            <AMono size={px(24)} tracking="0.34em" color="#F2F0EB" weight={500}>GUTH&nbsp;&nbsp;PICTURES</AMono>
-            <ARule w={px(72)} color="#C8A96E" />
+            <AMono size={px(24)} tracking="0.34em" color={P.text} weight={500}>GUTH&nbsp;&nbsp;PICTURES</AMono>
+            <ARule w={px(72)} color={P.accentSecondary} />
           </div>
 
           {/* Center flashing word — shown in normal mode only; export uses word layer */}
@@ -115,7 +116,7 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
                     style={{
                       margin: 0,
                       fontSize: px(216), fontWeight: 700, lineHeight: 0.9,
-                      letterSpacing: '-0.04em', color: '#F2F0EB',
+                      letterSpacing: '-0.04em', color: P.text,
                       textAlign: 'center', padding: `0 ${px(60)}px`,
                       animation: 'wordOut 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
                     }}
@@ -131,7 +132,7 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
                   style={{
                     margin: 0,
                     fontSize: px(216), fontWeight: 700, lineHeight: 0.9,
-                    letterSpacing: '-0.04em', color: '#F2F0EB',
+                    letterSpacing: '-0.04em', color: P.text,
                     textAlign: 'center', padding: `0 ${px(60)}px`,
                     animation: 'wordIn 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                   }}
@@ -159,8 +160,8 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
             }}>
               {subHeadline || (cs ? 'Silná atmosféra. Osobité portréty.' : 'Strong atmosphere. Distinctive portraits.')}
             </h2>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: px(12), color: '#C8A96E', fontSize: px(26), fontWeight: 600 }}>
-              <svg width={px(28)} height={px(28)} viewBox="0 0 24 24" fill="none" stroke="#C8A96E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: px(12), color: P.accentSecondary, fontSize: px(26), fontWeight: 600 }}>
+              <svg width={px(28)} height={px(28)} viewBox="0 0 24 24" fill="none" stroke={P.accentSecondary} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" />
               </svg>
               {cta || (cs ? 'Odepiš rovnou na tuhle story' : 'Reply to this story')}
@@ -183,7 +184,7 @@ export function TemplateD({ photos, duration, paused, lang, words, subHeadline, 
           <h1 style={{
             margin: 0,
             fontSize: px(216), fontWeight: 700, lineHeight: 0.9,
-            letterSpacing: '-0.04em', color: '#F2F0EB',
+            letterSpacing: '-0.04em', color: P.text,
             textAlign: 'center', padding: `0 ${px(60)}px`,
           }}>
             {words[tick % words.length] || (cs ? 'Portréty.' : 'Portraits.')}

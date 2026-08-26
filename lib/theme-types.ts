@@ -6,36 +6,39 @@ export type ColorSet = {
   text: string;
   textMuted: string;
   textGhost: string;
+  /** Fills and the primary CTA. */
   accent: string;
   accentHover: string;
+  /** Hairlines, eyebrow borders, rules, numerals — never a fill. */
+  accentSecondary: string;
+  /** Tint of the full-page film grain overlay. */
+  grain: string;
 };
 
-export type ThemeColors = {
-  dark: ColorSet;
-  light: ColorSet;
-};
+export const COLOR_KEYS: (keyof ColorSet)[] = [
+  "bg",
+  "bgElevated",
+  "bgOverlay",
+  "surface",
+  "text",
+  "textMuted",
+  "textGhost",
+  "accent",
+  "accentHover",
+  "accentSecondary",
+  "grain",
+];
 
-export const defaultColors: ThemeColors = {
-  dark: {
-    bg:          "#0A0A0B",
-    bgElevated:  "#111113",
-    bgOverlay:   "#18181C",
-    surface:     "#1E1E23",
-    text:        "#F2F0EB",
-    textMuted:   "#9B9899",
-    textGhost:   "#5C5A5E",
-    accent:      "#C8A96E",
-    accentHover: "#D4B87A",
-  },
-  light: {
-    bg:          "#C8CDD6",
-    bgElevated:  "#BFC5CF",
-    bgOverlay:   "#B6BCC8",
-    surface:     "#ADB3C1",
-    text:        "#0F172A",
-    textMuted:   "#475569",
-    textGhost:   "#94A3B8",
-    accent:      "#6B3A1F",
-    accentHover: "#5A3019",
-  },
+export const CSS_VAR_MAP: Record<keyof ColorSet, string> = {
+  bg:              "--color-bg",
+  bgElevated:      "--color-bg-elevated",
+  bgOverlay:       "--color-bg-overlay",
+  surface:         "--color-surface",
+  text:            "--color-text",
+  textMuted:       "--color-text-muted",
+  textGhost:       "--color-text-ghost",
+  accent:          "--color-accent",
+  accentHover:     "--color-accent-hover",
+  accentSecondary: "--color-accent-secondary",
+  grain:           "--color-grain",
 };

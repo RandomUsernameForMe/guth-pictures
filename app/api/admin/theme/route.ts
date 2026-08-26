@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { getThemeColors, setThemeColors, defaultColors, type ThemeColors, type ColorSet } from "@/lib/theme";
+import { getThemeColors, setThemeColors, defaultColors, type ColorSet } from "@/lib/theme";
+import { COLOR_KEYS } from "@/lib/theme-types";
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
 
 function isValidColorSet(o: unknown): o is ColorSet {
   if (!o || typeof o !== "object" || Array.isArray(o)) return false;
   const c = o as Record<string, unknown>;
-  const keys: (keyof ColorSet)[] = ["bg", "bgElevated", "bgOverlay", "surface", "text", "textMuted", "textGhost", "accent", "accentHover"];
-  return keys.every((k) => typeof c[k] === "string" && HEX.test(c[k] as string));
-}
-
-function isValidThemeColors(b: unknown): b is ThemeColors {
-  if (!b || typeof b !== "object" || Array.isArray(b)) return false;
-  const o = b as Record<string, unknown>;
-  return isValidColorSet(o.dark) && isValidColorSet(o.light);
+  return COLOR_KEYS.every((k) => typeof c[k] === "string" && HEX.test(c[k] as string));
 }
 
 export async function GET() {
@@ -30,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const body = await req.json();
-  if (!isValidThemeColors(body)) {
+  if (!isValidColorSet(body)) {
     return NextResponse.json({ error: "Invalid color data" }, { status: 400 });
   }
   await setThemeColors(body);

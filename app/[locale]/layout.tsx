@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
@@ -89,21 +88,19 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className="dark">
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
       <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
-            <Nav />
-            <div className="relative pt-16 min-h-screen flex flex-col">
-              {children}
-              <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
-            </div>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <Nav />
+          <div className="relative pt-16 min-h-screen flex flex-col">
+            {children}
+            <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
+          </div>
+        </NextIntlClientProvider>
         <Analytics />
       </body>
     </html>

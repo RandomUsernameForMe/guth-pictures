@@ -1,5 +1,6 @@
 "use client";
 import { AScrim, AGrain, AMono, ARule } from './primitives'
+import { defaultColors as P } from '../../../../lib/theme-presets'
 import { PhotoCycle } from './PhotoCycle'
 import { useTick } from './useTick'
 import type { Photo } from './types'
@@ -70,9 +71,9 @@ export function TemplateC({ photos, duration, paused, lang, headline, sub, cta, 
                 ))}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
-                <div style={{ width: px(56), height: px(56), borderRadius: 999, background: 'linear-gradient(180deg,#1E1E23,#0A0A0B)', border: `${px(1.5)}px solid rgba(255,255,255,0.4)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F2F0EB', fontSize: px(22), fontWeight: 700, letterSpacing: '-0.02em' }}>G</div>
+                <div style={{ width: px(56), height: px(56), borderRadius: 999, background: 'linear-gradient(180deg,#1E1E23,#0A0A0B)', border: `${px(1.5)}px solid rgba(255,255,255,0.4)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: P.text, fontSize: px(22), fontWeight: 700, letterSpacing: '-0.02em' }}>G</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: px(2) }}>
-                  <span style={{ color: '#F2F0EB', fontSize: px(20), fontWeight: 600 }}>guthpictures</span>
+                  <span style={{ color: P.text, fontSize: px(20), fontWeight: 600 }}>guthpictures</span>
                   <span style={{ color: 'rgba(242,240,235,0.7)', fontSize: px(16) }}>1h</span>
                 </div>
               </div>
@@ -87,8 +88,8 @@ export function TemplateC({ photos, duration, paused, lang, headline, sub, cta, 
             zIndex: 10,
             display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: px(22),
           }}>
-            <AMono size={px(24)} tracking="0.34em" color="#F2F0EB" weight={500}>GUTH&nbsp;&nbsp;PICTURES</AMono>
-            <ARule w={px(72)} color="#C8A96E" />
+            <AMono size={px(24)} tracking="0.34em" color={P.text} weight={500}>GUTH&nbsp;&nbsp;PICTURES</AMono>
+            <ARule w={px(72)} color={P.accentSecondary} />
             <AMono
               key={tick}
               size={px(20)}
@@ -110,7 +111,7 @@ export function TemplateC({ photos, duration, paused, lang, headline, sub, cta, 
             <h1 style={{
               margin: 0,
               fontSize: px(168), fontWeight: 700, lineHeight: 0.88,
-              letterSpacing: '-0.035em', color: '#F2F0EB',
+              letterSpacing: '-0.035em', color: P.text,
               whiteSpace: 'pre-line',
             }}>
               {headline || (cs ? 'Silná\natmosféra.' : 'Strong\natmosphere.')}
@@ -131,10 +132,10 @@ export function TemplateC({ photos, duration, paused, lang, headline, sub, cta, 
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: px(16),
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: px(14) }}>
-              <svg width={px(30)} height={px(30)} viewBox="0 0 24 24" fill="none" stroke="#F2F0EB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg width={px(30)} height={px(30)} viewBox="0 0 24 24" fill="none" stroke={P.text} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" />
               </svg>
-              <span style={{ fontSize: px(30), fontWeight: 500, color: '#F2F0EB' }}>
+              <span style={{ fontSize: px(30), fontWeight: 500, color: P.text }}>
                 {cta || (cs ? 'Odepiš rovnou na tuhle story' : 'Reply to this story')}
               </span>
             </div>
