@@ -1,3 +1,8 @@
+## [2026-09-17] - Úvodní triptych bez nástupního fade
+
+- První fotografie ve všech třech panelech se zobrazují bez fade; pomalý zoom a prolínání dalších fotografií zůstávají.
+- Regresní test pokrývá první zobrazení, výměnu i návrat na první fotografii.
+
 ## [2026-09-17] - perf(homepage): ISR + EU region, poloviční hero payload, lehčí fonty
 
 Naměřeno na produkci před zásahem: TTFB 350–470 ms (cold 2,3 s),
