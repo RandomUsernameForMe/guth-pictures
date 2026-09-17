@@ -1,5 +1,5 @@
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://guthpictures.eu";
-export const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "jan@guthpictures.cz";
+export const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "guth.jarkovsky.tomas@gmail.com";
 
 export const ogImage = {
   url: "/og-image.jpg",

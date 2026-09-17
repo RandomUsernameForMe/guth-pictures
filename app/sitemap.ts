@@ -3,13 +3,12 @@ import { siteUrl } from "@/lib/config";
 import { getBlogPosts } from "@/modules/blog/lib/blog";
 
 const locales = ["cs", "en"] as const;
-const pages = ["", "/portfolio", "/sluzby", "/o-mne", "/blog"] as const;
+const pages = ["", "/portfolio", "/sluzby", "/o-mne", "/blog", "/foceni-101"] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = pages.flatMap((page) =>
     locales.map((locale) => ({
       url: `${siteUrl}/${locale}${page}`,
-      lastModified: new Date(),
       alternates: {
         languages: {
           "x-default": `${siteUrl}/cs${page}`,

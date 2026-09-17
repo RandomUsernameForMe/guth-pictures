@@ -27,11 +27,11 @@ function EnVersion() {
   return (
     <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
       <h1 className="text-4xl font-bold mb-2">Terms & Collaboration Guidelines</h1>
-      <p className="text-[var(--color-text-muted)] mb-12 text-sm">Tomáš Guth Jarkovský — Guth Pictures</p>
+      <p className="text-[var(--color-text-muted)] mb-12 text-sm">Tomáš Guth Jarkovský · Guth Pictures</p>
 
       <p className="text-[var(--color-text-muted)] mb-10 leading-relaxed">
-        These guidelines cover how I work with clients — what to expect from me and what I expect from you.
-        No legal jargon, just clear terms so we&apos;re on the same page.
+        These guidelines cover how I work with clients: what to expect from me and what I expect from you.
+        Written in plain language so we&apos;re on the same page.
       </p>
 
       <Section title="1. Booking & Agreement">
@@ -44,7 +44,7 @@ function EnVersion() {
 
       <Section title="2. Pricing & Payment">
         <ul>
-          <li><strong>Pricing:</strong> Based on what we agree on. Personal and commercial use are priced differently — see the licensing section below.</li>
+          <li><strong>Pricing:</strong> Based on what we agree on. Personal and commercial use are priced differently; see the licensing section below.</li>
           <li><strong>Payment:</strong> The remaining balance is due by bank transfer after the shoot, based on the invoice I send you.</li>
           <li><strong>Travel costs:</strong> If the location requires significant travel or overnight stay (common for multi-day larps), those costs are discussed and agreed upon before the shoot.</li>
         </ul>
@@ -52,7 +52,7 @@ function EnVersion() {
 
       <Section title="3. On the Day">
         <ul>
-          <li><strong>Portrait sessions:</strong> Please be on time — if you&apos;re late, I can&apos;t extend the session to compensate.</li>
+          <li><strong>Portrait sessions:</strong> Please be on time. If you&apos;re late, I can&apos;t extend the session to compensate.</li>
           <li><strong>Events & larps:</strong> Make sure I have proper access to locations, any needed credentials, and a basic schedule. For shoots longer than 5 hours, I need access to food and water and reasonable breaks.</li>
           <li><strong>Things outside my control:</strong> I can&apos;t guarantee specific shots if participants aren&apos;t cooperative, the schedule changes, or lighting conditions are extreme. For outdoor shoots in bad weather, we&apos;ll reschedule without penalties.</li>
           <li><strong>If I get sick:</strong> I&apos;ll let you know immediately, refund any deposit in full, and do my best to recommend a suitable replacement photographer.</li>
@@ -61,7 +61,7 @@ function EnVersion() {
 
       <Section title="4. Delivery">
         <ul>
-          <li><strong>Timeline:</strong> Agreed per project — it varies depending on the size of the shoot.</li>
+          <li><strong>Timeline:</strong> Agreed per project, since it varies with the size of the shoot.</li>
           <li><strong>Format:</strong> Finished JPEGs only. I do not share RAW files under any circumstances.</li>
           <li><strong>Retouching:</strong> Standard colour grading and exposure correction are included. Extensive retouching (removing objects, significant body changes) can be arranged for an extra fee.</li>
           <li><strong>Gallery link:</strong> Photos are delivered via a secure online gallery link, valid for 3 months. Please download and back them up within that time.</li>
@@ -72,7 +72,7 @@ function EnVersion() {
       <Section title="5. Copyright & Usage">
         <ul>
           <li><strong>Ownership:</strong> All photos remain my intellectual property. You receive a license to use them.</li>
-          <li><strong>Personal use:</strong> Unless agreed otherwise, the license covers personal, non-commercial use — printing for yourself, sharing on your private social profiles.</li>
+          <li><strong>Personal use:</strong> Unless agreed otherwise, the license covers personal, non-commercial use: printing for yourself, sharing on your private social profiles.</li>
           <li><strong>Commercial use:</strong> Using photos for business promotion, advertising, or any paid/commercial purpose requires a commercial license, which is priced separately and must be stated in our agreement.</li>
           <li><strong>No editing:</strong> Please don&apos;t apply additional filters, heavy crops, or remove any watermark (if present). The photos are delivered in their finished form.</li>
         </ul>
@@ -80,7 +80,7 @@ function EnVersion() {
 
       <Section title="6. TFP (Time for Print) Shoots">
         <ul>
-          <li><strong>What it means:</strong> We both give our time — no money changes hands. The goal is building our portfolios.</li>
+          <li><strong>What it means:</strong> We both give our time and no money changes hands. The goal is building our portfolios.</li>
           <li><strong>Usage:</strong> Both of us can use the photos for personal, non-commercial self-promotion (portfolio, website, social media). Tag each other whenever you post.</li>
           <li><strong>No commercial use:</strong> TFP photos can&apos;t be used for paid advertising, brand promotion, or sold to third parties without prior written agreement.</li>
           <li><strong>Portfolio publication:</strong> Since portfolio-building is the whole point, you automatically agree that I can publish the photos in my portfolio. Revoking this after delivery may be treated as a breach of the TFP agreement.</li>
@@ -90,15 +90,15 @@ function EnVersion() {
 
       <Section title="7. Cancellations & Complaints">
         <ul>
-          <li><strong>Cancelling less than 14 days out:</strong> If you cancel a confirmed booking with less than 14 days&apos; notice (and we don&apos;t reschedule), the deposit is non-refundable — it covers my blocked time.</li>
-          <li><strong>What you can&apos;t complain about:</strong> Disliking how you look in photos (unless there&apos;s a clear technical error) or disliking my editing style — you agreed to it when booking.</li>
+          <li><strong>Cancelling less than 14 days out:</strong> If you cancel a confirmed booking with less than 14 days&apos; notice (and we don&apos;t reschedule), the deposit is non-refundable, as it covers my blocked time.</li>
+          <li><strong>What you can&apos;t complain about:</strong> Disliking how you look in photos (unless there&apos;s a clear technical error) or disliking my editing style, which you agreed to when booking.</li>
           <li><strong>Genuine technical issues:</strong> Report any real technical problems in writing within 30 days of delivery.</li>
         </ul>
       </Section>
 
       <Section title="8. Portfolio & Privacy">
         <ul>
-          <li><strong>Using your photos in my portfolio:</strong> By booking, you&apos;re okay with me using selected photos for my portfolio and social media. If you&apos;d prefer I don&apos;t, just let me know in writing — I&apos;ll respect that (this doesn&apos;t apply to TFP, see section 6).</li>
+          <li><strong>Using your photos in my portfolio:</strong> By booking, you&apos;re okay with me using selected photos for my portfolio and social media. If you&apos;d prefer I don&apos;t, just let me know in writing and I&apos;ll respect that (this doesn&apos;t apply to TFP, see section 6).</li>
           <li><strong>Your data:</strong> I only use your contact and billing details to handle your booking and communicate with you. Nothing else.</li>
         </ul>
       </Section>

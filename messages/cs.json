@@ -8,16 +8,25 @@
     "kontakt": "Kontakt",
     "vop": "Obchodní podmínky",
     "privacy": "Ochrana osobních údajů",
-    "light-tester": "Light Tester"
+    "light-tester": "Light Tester",
+    "foceni-101": "Focení 101"
   },
   "meta": {
     "home": {
-      "title": "Guth Pictures — Fotograf",
-      "description": "Profesionální fotograf. Silná atmosféra, osobité kreativní portréty."
+      "title": "Fotograf Praha — kreativní portréty, svatby a larpy",
+      "description": "Profesionální fotograf v Praze. Kreativní portréty se silnou atmosférou, svatební fotografie, eventy a larpy. Focení v ateliéru i exteriéru."
     },
     "portfolio": {
-      "title": "Portfolio — Guth Pictures",
-      "description": "Výběr fotografií: portréty, eventy a larpy."
+      "title": "Portfolio — portréty, svatby, larpy",
+      "description": "Výběr fotografií pražského fotografa: kreativní portréty, svatby, eventy a larpy."
+    },
+    "sluzby": {
+      "title": "Služby a ceník — portrétní a svatební focení",
+      "description": "Ceník focení v Praze: portrétní balíčky, svatební fotografie, eventy a larpy. Vyberte si balíček a rezervujte termín."
+    },
+    "o-mne": {
+      "title": "O mně — fotograf Tomáš Guth Jarkovský",
+      "description": "Fotograf z Prahy. Kreativní portréty se silnou atmosférou, svatby, eventy a larpy. Kdo stojí za Guth Pictures."
     }
   },
   "home": {
@@ -48,15 +57,15 @@
     "vybrat": "Mám zájem",
     "portraits": {
       "title": "Portréty",
-      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo ve vašem prostředí — důraz na přirozenost a výraz."
+      "desc": "Individuální i skupinové portréty. V ateliéru, v přírodě nebo u vás. Hlavní je pro mě přirozený výraz."
     },
     "weddings": {
       "title": "Svatby",
-      "desc": "Celý den od příprav po večer. Reportážní styl — žádné nucené pózy, jen skutečné okamžiky."
+      "desc": "Celý den od příprav po večer. Fotím reportážně, bez nucených póz."
     },
     "larp": {
       "title": "Larpy a akce",
-      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb, atmosféra — to je moje parketa."
+      "desc": "Specializuji se na fotografii z larpových akcí. Rychlé světlo, pohyb a atmosféra jsou moje parketa."
     },
     "cta": "Nezávazně napsat"
   },
@@ -66,17 +75,30 @@
     "desc": "Interaktivní 3D simulátor studiového osvětlení. Nastav si světelné schéma, prozkoumej presety a přijď připravený.",
     "cta": "Otevřít Light Tester"
   },
+  "foceni101-promo": {
+    "label": "Interaktivní průvodce",
+    "title": "Zjisti, co dělá fotku fotkou",
+    "desc": "Scrolluj 3D scénou a uvidíš, co s portrétem udělá clona, čas, ISO nebo kompozice.",
+    "cta": "Otevřít Focení 101"
+  },
   "o-mne": {
     "title": "O mně",
     "subtitle": "Jsem fotograf z Prahy.",
-    "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly — bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
+    "bio": "Fotím portréty, svatby a larpy. Baví mě zachytit věci tak, jak se opravdu staly, bez přehnaného hraní před objektivem. Cestuji po celé ČR, ale mám základnu v Praze.",
     "cta": "Pojďme se domluvit"
+  },
+  "testimonials": {
+    "title": "Reference"
+  },
+  "midCta": {
+    "title": "Máte v hlavě focení?",
+    "cta": "Ozvěte se"
   },
   "blog": {
     "title": "Blog",
     "subtitle": "Zápisky z fotografického světa",
-    "metaTitle": "Blog — Guth Pictures",
-    "metaDescription": "Zápisky o fotografii, technice a zážitcích z focení.",
+    "metaTitle": "Blog o fotografii",
+    "metaDescription": "Zápisky o fotografii, technice a zážitcích z focení. Tipy pro klienty i fotografy od pražského fotografa.",
     "empty": "Zatím žádné příspěvky.",
     "readMore": "Číst dál",
     "back": "Zpět na blog"
@@ -102,16 +124,17 @@
     "packagePreset": "Mám zájem o balíček {package} ({service}). "
   },
   "brand-shoot": {
-    "gateLabel": "Personal brand concept",
+    "gateLabel": "Návrh focení",
     "gatePrompt": "Zadejte heslo, které jste obdrželi od fotografa.",
     "passwordPlaceholder": "Heslo",
     "gateSubmit": "Zobrazit návrh",
     "wrongPassword": "Špatné heslo",
+    "tooManyAttempts": "Příliš mnoho pokusů. Zkuste to znovu za 15 minut.",
     "serverError": "Chyba serveru",
     "networkError": "Chyba sítě",
     "expiredTitle": "Návrh vypršel",
     "expiredBody": "Tento návrh již není dostupný. Kontaktujte fotografa.",
-    "heroLabel": "Personal brand concept",
+    "heroLabel": "Návrh focení",
     "researchTitle": "Kdo jste",
     "conceptsTitle": "Koncepty",
     "moodboardTitle": "Moodboard",
@@ -127,6 +150,14 @@
     "ctaTitle": "Líbí se vám návrh?",
     "ctaBody": "Ozvěte se a domluvíme termín focení.",
     "ctaButton": "Kontaktovat",
+    "ctaMailSubject": "Návrh focení — {name}",
+    "feedbackPrompt": "Který koncept vás oslovil?",
+    "feedbackLabel": "Vzkaz pro mě",
+    "feedbackPlaceholder": "Napište pár slov — co se líbí, co byste změnili…",
+    "feedbackSend": "Odeslat",
+    "feedbackSending": "Odesílám…",
+    "feedbackSuccess": "Díky! Ozvu se vám co nejdřív.",
+    "feedbackError": "Odeslání se nepovedlo. Zkuste to znovu, nebo napište e-mail.",
     "heroPreparedFor": "Připraveno pro",
     "scrollHint": "Listujte",
     "yourPalette": "Vaše paleta",
@@ -134,5 +165,123 @@
     "conceptWord": "Koncept",
     "whoYouAreKicker": "Kdo jste",
     "whoYouAreTitle": "Začneme u vás, ne u objektivu."
+  },
+  "foceni101": {
+    "meta": {
+      "title": "Focení 101 — co dělá fotku",
+      "description": "Interaktivní průvodce pro nefotografy. Posuň posuvník a uvidíš, co s fotkou udělá clona, čas závěrky, ISO nebo ohnisko."
+    },
+    "sections": {
+      "intro": {
+        "title": "Scéna",
+        "body": "Hlava, jedno hlavní světlo, pozadí. Z jedné scény vznikne pokaždé jiná fotka podle toho, jak nastavíš foťák. Scrolluj dolů a zkoušej posuvníky."
+      },
+      "expozice": {
+        "title": "Expozice",
+        "body": "Expozice je celkové množství světla, které dopadne na snímač. Málo světla → tmavá fotka, moc → přepálená. Posuvník mění expozici v EV; +1 EV znamená dvojnásobek světla."
+      },
+      "clona": {
+        "title": "Clona",
+        "body": "Clona je otvor v objektivu, udává se clonovým číslem f. Nízké číslo (f/1.8) = velký otvor a malá hloubka ostrosti: ostrý subjekt, rozostřené pozadí. Vysoké číslo (f/16) = velká hloubka ostrosti, ostré je popředí i pozadí."
+      },
+      "cas": {
+        "title": "Čas závěrky",
+        "body": "Čas závěrky je doba, po kterou na snímač dopadá světlo. Krátký čas (1/1000 s) zmrazí pohyb, dlouhý (1/15 s a delší) ho rozmaže do šmouhy. Sleduj kuličku obíhající kolem hlavy."
+      },
+      "iso": {
+        "title": "ISO",
+        "body": "ISO je citlivost snímače. Vyšší hodnota fotku zesvětlí, když je málo světla, ale přidá šum (zrno). Drží se proto co nejníž, jak to dané světlo dovolí."
+      },
+      "ohnisko": {
+        "title": "Ohnisko",
+        "body": "Ohnisková vzdálenost (v mm) určuje zorný úhel. Když měníš ohnisko a zároveň vzdálenost tak, aby byl subjekt stále stejně velký, mění se perspektiva: kratší ohnisko zblízka roztáhne bližší rysy, delší ohnisko z dálky perspektivu stlačí. Volíš tím vztah mezi obličejem a pozadím."
+      },
+      "uhel": {
+        "title": "Úhel pohledu",
+        "body": "Výška kamery vůči subjektu. Pohled zdola subjekt opticky zvětší, pohled shora ho zmenší, úroveň očí je neutrální. Je to nástroj pro vyznění záběru, ne pravidlo."
+      },
+      "wb": {
+        "title": "Vyvážení bílé",
+        "body": "Vyvážení bílé určuje, jakou teplotu světla foťák považuje za neutrální (v kelvinech). Nižší hodnota nechá fotku teplejší (oranžovou), vyšší studenější (modrou). Nastavuje se podle zdroje světla."
+      },
+      "kompozice": {
+        "title": "Kompozice",
+        "body": "Kam v záběru subjekt patří. Vyber kompozici a porovnej, jak mění vyznění."
+      },
+      "svetlo": {
+        "title": "Expoziční trojúhelník",
+        "body": "Clona, čas a ISO neovlivňují jen vzhled. Všechny tři zároveň mění množství světla. Otevři clonu a sleduj ukazatel expozice dole: fotka se přesvětlí. Čas a ISO se chovají stejně."
+      },
+      "capstone-blur": {
+        "title": "Vyrovnej expozici: rozostřené pozadí",
+        "body": "Chceš rozostřené pozadí, proto clonu držíš skoro dokořán. Zavřít ji jde jen do f/3.2, jinak by se pozadí zaostřilo. Tím ale dovnitř pustíš hodně světla a fotka je přepálená. Sniž čas a ISO (clonou jen doladíš), dokud ukazatel nesedne na nulu."
+      },
+      "capstone-freeze": {
+        "title": "Vyrovnej expozici: zmrazit pohyb",
+        "body": "Chceš zmrazit rychlý pohyb, proto čas musí zůstat nejvýš 1/250 s, jinak se pohyb rozmaže. Krátký čas ale propustí málo světla a fotka je tmavá. Otevři clonu a zvyš ISO (časem jen doladíš), dokud ukazatel nesedne na nulu."
+      },
+      "finale": {
+        "title": "Tohle všechno řeším za tebe",
+        "body": "Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe. Ty se jen díváš do objektivu. Napiš mi, co chceš nafotit."
+      }
+    },
+    "ctrl": {
+      "exposure": "Expozice",
+      "aperture": "Clona",
+      "shutter": "Čas závěrky",
+      "iso": "ISO",
+      "focal": "Ohnisko",
+      "angle": "Výška kamery",
+      "wb": "Teplota"
+    },
+    "angle": {
+      "low": "podhled",
+      "high": "nadhled",
+      "eye": "úroveň očí"
+    },
+    "comps": {
+      "thirds": {
+        "label": "Třetiny",
+        "body": "Subjekt leží na průsečíku třetinových čar, ne ve středu. Hmota v protilehlé třetině mu dělá protiváhu, takže záběr působí vyváženě, ne staticky."
+      },
+      "center": {
+        "label": "Na střed",
+        "body": "Subjekt přesně uprostřed, pozadí zrcadlově symetrické. Působí formálně a přímo. Hodí se, když chceš klid a přímý pohled."
+      },
+      "golden": {
+        "label": "Zlatý řez",
+        "body": "Poměr 1 : 1,618, známý z malířství. Subjekt sedí v nejtěsnějším závitu zlaté spirály a světla se po ní stáčejí ven. Oko sklouzne po širokém oblouku dovnitř a skončí na tváři. Proti třetinám tu nejde o polohu, ale o ten tok."
+      },
+      "leading": {
+        "label": "Vedoucí linie",
+        "body": "Linie v záběru (cesty, hrany, světlo) vedou oko diváka k subjektu. Světla se seřadila do dvou řad, které ubíhají do hloubky a sbíhají se přesně na obličeji."
+      },
+      "space": {
+        "label": "Prostor",
+        "body": "Subjekt je malý a odsunutý ke kraji, zbytek záběru zůstává prázdný. Negativní prostor dává záběru dýchat a podtrhuje měřítko."
+      },
+      "frame": {
+        "label": "Rám v rámu",
+        "body": "Rozostřené popředí obklopí subjekt a udělá kolem něj rám. Oko se do záběru nedostane jinudy než dírou uprostřed, takže pozornost jde přesně tam, kam chceš."
+      }
+    },
+    "capstones": {
+      "capstone-blur": {
+        "reason": "kvůli rozostření"
+      },
+      "capstone-freeze": {
+        "reason": "kvůli zmrazení pohybu"
+      }
+    },
+    "capstoneWin": "Vyměnil jsi jedno za druhé. To je celý ten trojúhelník.",
+    "meter": {
+      "label": "Expozice",
+      "over": "přeexpozice",
+      "under": "podexpozice",
+      "ok": "správně"
+    },
+    "orbOn": "Světlo kuličky: zap",
+    "orbOff": "Světlo kuličky: vyp",
+    "scrollHint": "scrolluj ↓"
   }
 }

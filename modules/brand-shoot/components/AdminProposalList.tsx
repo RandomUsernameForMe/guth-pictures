@@ -11,6 +11,9 @@ interface ListItem {
   approvedConcepts: number;
   conceptCount: number;
   syncedAt?: string;
+  feedbackCount: number;
+  firstOpenedAt?: string;
+  hasNewChanges: boolean;
 }
 
 export function AdminProposalList({ proposals }: { proposals: ListItem[] }) {
@@ -44,9 +47,17 @@ export function AdminProposalList({ proposals }: { proposals: ListItem[] }) {
                 <div className="text-xs text-gray-500 mt-0.5">
                   {p.approvedConcepts}/{p.conceptCount} konceptů schváleno
                   {p.syncedAt && ` · sync ${new Date(p.syncedAt).toLocaleDateString("cs-CZ")}`}
+                  {p.firstOpenedAt &&
+                    ` · klient otevřel ${new Date(p.firstOpenedAt).toLocaleDateString("cs-CZ")}`}
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs">
+                {p.hasNewChanges && (
+                  <span className="px-2 py-0.5 bg-amber-900/40 text-amber-300">nové změny</span>
+                )}
+                {p.feedbackCount > 0 && (
+                  <span className="px-2 py-0.5 bg-blue-900/40 text-blue-300">💬 {p.feedbackCount}</span>
+                )}
                 {p.hasPassword ? (
                   <span className="px-2 py-0.5 bg-white/10 text-gray-300">🔒 heslo</span>
                 ) : (

@@ -4,9 +4,8 @@ import { useEffect, useRef, type CSSProperties } from "react";
 
 // Client shell for the Editorial proposal. Renders the ambient glow + fixed chrome and installs
 // the "living palette" behaviour by reading `data-pal-*` attrs off the server-rendered sections:
-// a scroll-spy recolors `--p-*` to whichever section sits at viewport-mid, and the per-concept
-// "select" buttons lock a palette (ported from the standalone's vanilla script via DOM delegation,
-// so the sections themselves stay server components).
+// a scroll-spy recolors `--p-*` to whichever section sits at viewport-mid. Each concept carries its
+// single admin-chosen palette, so there's no client palette switching — just the auto recolor.
 export function LivingPalette({
   initial,
   resetLabel,
@@ -21,7 +20,6 @@ export function LivingPalette({
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    let locked: DOMStringMap | null = null;
 
     function setPalette(ds: DOMStringMap) {
       // Set vars on the .bsp-ed root itself — NOT documentElement. The root carries inline
@@ -53,7 +51,6 @@ export function LivingPalette({
 
     const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-pal]"));
     function pickNow() {
-      if (locked) return;
       const mid = window.innerHeight / 2;
       if (!sections.length) return;
       let pick: HTMLElement | null = null;
@@ -84,42 +81,11 @@ export function LivingPalette({
     window.addEventListener("scroll", onScroll, { passive: true });
     const iv = window.setInterval(pickNow, 220);
 
-    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-select]"));
-    const reset = root.querySelector<HTMLElement>("[data-reset-pal]");
-    function clearBtns() {
-      btns.forEach((x) => {
-        x.dataset.active = "false";
-      });
-    }
-    const onBtn = (b: HTMLButtonElement) => () => {
-      const ds = b.dataset;
-      locked = ds;
-      setPalette(ds);
-      clearBtns();
-      b.dataset.active = "true";
-      if (reset) reset.style.display = "inline";
-    };
-    const handlers = btns.map((b) => {
-      const h = onBtn(b);
-      b.addEventListener("click", h);
-      return [b, h] as const;
-    });
-    const onReset = (e: Event) => {
-      e.preventDefault();
-      locked = null;
-      clearBtns();
-      if (reset) reset.style.display = "none";
-      pickNow();
-    };
-    reset?.addEventListener("click", onReset);
-
     pickNow();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.clearInterval(iv);
-      handlers.forEach(([b, h]) => b.removeEventListener("click", h));
-      reset?.removeEventListener("click", onReset);
     };
   }, []);
 

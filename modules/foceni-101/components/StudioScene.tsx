@@ -3,18 +3,23 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { DEFAULT_PARAMS, type PhotoParams } from "./types";
+import { computeLight } from "./light";
+import { ORB_COUNT, ORB_LAYOUTS, type Orb } from "./compositions";
 
 const SUBJECT_HEIGHT = 1.55;
 const BASE_FOCAL = 50;
 const BASE_DISTANCE = 1.6;
 const SENSOR = 36; // full-frame width (mm) for FOV math
 const MAX_GHOST = 18;
+const MIN_F = 1.8; // widest aperture the UI allows; defines "fully open" for DoF math
+const REF_ASPECT = 1.6; // the aspect the orb layouts were tuned at
 
 type Quality = "high" | "low";
 
@@ -74,19 +79,26 @@ interface Props {
   target: PhotoParams;
   quality: Quality;
   orbLightOn: boolean;
+  /** Key into ORB_LAYOUTS — which arrangement the background balls tween to. */
+  orbLayout: string;
 }
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function StudioScene({ target, quality, orbLightOn }: Props) {
+export function StudioScene({ target, quality, orbLightOn, orbLayout }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<SceneState | null>(null);
   const targetRef = useRef<PhotoParams>(target);
   targetRef.current = target;
   const orbLightOnRef = useRef(orbLightOn);
   orbLightOnRef.current = orbLightOn;
+  const orbLayoutRef = useRef(orbLayout);
+  orbLayoutRef.current = orbLayout;
+  // Lives outside the scene effect so a quality-change remount keeps the
+  // tweened params instead of jumping back to defaults.
+  const currentRef = useRef<PhotoParams>({ ...DEFAULT_PARAMS });
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -97,10 +109,12 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#0A0A0B");
 
-    const renderer = new THREE.WebGLRenderer({ antialias: quality === "high" });
+    // No canvas AA: EffectComposer renders through offscreen targets, so MSAA
+    // on the canvas would cost memory without smoothing anything.
+    const renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(pixelRatio);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.domElement.style.width = "100%";
@@ -143,9 +157,15 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     scene.add(floor);
 
     // ── Bokeh balls behind subject (so shallow DoF is obvious) ───────────
+    // They double as the composition section's props: each composition rearranges
+    // them (see ORB_LAYOUTS), so the layout — not just the subject's position —
+    // is what actually demonstrates the rule.
     const ballGeo = new THREE.SphereGeometry(0.05, 16, 16);
     const ballColors = [0xc8a96e, 0xd4b87a, 0x8a93b0, 0xf2f0eb];
-    for (let i = 0; i < 14; i++) {
+    const balls: THREE.Mesh[] = [];
+    /** Live orb state, tweened toward the active layout. */
+    const ballState: Orb[] = ORB_LAYOUTS.default.map((o) => ({ ...o }));
+    for (let i = 0; i < ORB_COUNT; i++) {
       const m = new THREE.MeshStandardMaterial({
         color: ballColors[i % ballColors.length],
         emissive: new THREE.Color(ballColors[i % ballColors.length]),
@@ -153,12 +173,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
         roughness: 0.4,
       });
       const ball = new THREE.Mesh(ballGeo, m);
-      ball.position.set(
-        (Math.random() - 0.5) * 2.6,
-        SUBJECT_HEIGHT + (Math.random() - 0.5) * 1.6,
-        -0.7 - Math.random() * 0.8,
-      );
       scene.add(ball);
+      balls.push(ball);
     }
 
     // ── Head: clay placeholder, swap to head.glb when loaded ─────────────
@@ -177,7 +193,9 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     clay.receiveShadow = true;
     headGroup.add(clay);
 
-    new GLTFLoader().load(
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.setMeshoptDecoder(MeshoptDecoder); // head.glb is meshopt-compressed
+    gltfLoader.load(
       "/models/head.glb",
       (gltf) => {
         const model = gltf.scene;
@@ -254,7 +272,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
 
     composer.addPass(new OutputPass());
 
-    const current: PhotoParams = { ...DEFAULT_PARAMS };
+    const current = currentRef.current;
 
     stateRef.current = {
       renderer, composer, bokeh, grain, scene, camera, key, fill,
@@ -278,7 +296,8 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     resize();
 
     // ── Animation loop: run while visible & on-screen, pause otherwise ────
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     let visible = !document.hidden;
     let onScreen = true;
@@ -286,9 +305,11 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
     const active = () => visible && onScreen;
 
     const tick = () => {
-      const dt = Math.min(clock.getDelta(), 0.05);
+      timer.update();
+      const dt = Math.min(timer.getDelta(), 0.05);
       const t = targetRef.current;
-      const k = 1 - Math.pow(0.001, dt); // frame-rate independent damping
+      // Frame-rate independent damping; reduced motion snaps instead of tweening.
+      const k = reduceMotion ? 1 : 1 - Math.pow(0.001, dt);
 
       current.exposure = lerp(current.exposure, t.exposure, k);
       current.aperture = lerp(current.aperture, t.aperture, k);
@@ -298,25 +319,60 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       current.angle = lerp(current.angle, t.angle, k);
       current.whiteBalance = lerp(current.whiteBalance, t.whiteBalance, k);
       current.composition = lerp(current.composition, t.composition, k);
+      current.compositionY = lerp(current.compositionY, t.compositionY, k);
+      current.framing = lerp(current.framing, t.framing, k);
 
-      // Exposure (+ slight ISO brightening)
-      const isoGain = 1 + Math.log2(Math.max(current.iso, 100) / 100) * 0.12;
-      renderer.toneMappingExposure = 1.05 * current.exposure * isoGain;
-
-      // Composition → slide subject off-centre; lights follow so it stays lit
-      const compX = current.composition * 0.7;
-      headGroup.position.x = compX;
-      key.target.position.x = compX;
-      fill.target.position.x = compX;
+      // Exposure: unified light model — aperture + shutter + ISO all feed brightness.
+      renderer.toneMappingExposure = 1.05 * computeLight(current).mul;
 
       // Focal length → FOV + dolly (keeps subject size, shows compression).
       // Angle → raise/lower the camera while still looking at the subject.
-      const dist = BASE_DISTANCE * (current.focal / BASE_FOCAL);
+      const dist = BASE_DISTANCE * (current.focal / BASE_FOCAL) * current.framing;
       const camY = SUBJECT_HEIGHT + current.angle * 0.7;
       camera.position.set(0, camY, dist);
       camera.fov = focalToFov(current.focal);
       camera.updateProjectionMatrix();
       camera.lookAt(0, SUBJECT_HEIGHT, 0);
+
+      // Screen space → world, at a given distance from the camera. Composition
+      // is authored as a fraction of the frame rather than in metres, so a layout
+      // reads the same on a wide desktop and a tall phone — and the subject can't
+      // slide out of frame when the aspect ratio narrows.
+      // ponytail: assumes the camera axis is parallel to Z (angle ≈ 0, true in the
+      // composition section); a tilted camera makes this a small approximation.
+      const tanHalf = Math.tan((camera.fov * Math.PI) / 360);
+      const halfV = (d: number) => d * tanHalf;
+      const halfH = (d: number) => d * tanHalf * camera.aspect;
+
+      // Composition → place the subject in the frame; lights follow so it stays lit
+      const compX = current.composition * halfH(dist);
+      const compY = current.compositionY * halfV(dist);
+      headGroup.position.x = compX;
+      headGroup.position.y = compY;
+      key.target.position.set(compX, SUBJECT_HEIGHT + compY, 0);
+      fill.target.position.set(compX, SUBJECT_HEIGHT + compY, 0);
+
+      // Background balls tween toward the active layout (screen-space u/v, radius s).
+      // Radius is in world units, so on a tall phone the same ball covers ~3× more
+      // of the frame; scale it with the aspect so a layout keeps its proportions.
+      const layout = ORB_LAYOUTS[orbLayoutRef.current] ?? ORB_LAYOUTS.default;
+      const sizeK = Math.min(1, camera.aspect / REF_ASPECT);
+      for (let i = 0; i < ORB_COUNT; i++) {
+        const b = ballState[i];
+        const to = layout[i];
+        // Balls a layout doesn't use shrink away where they stand; tweening their
+        // position too would streak them across the frame on the way out.
+        if (to.s > 0.02) {
+          b.u = lerp(b.u, to.u, k);
+          b.v = lerp(b.v, to.v, k);
+          b.z = lerp(b.z, to.z, k);
+        }
+        b.s = lerp(b.s, to.s, k);
+        const d = Math.max(0.2, dist + b.z); // b.z = metres behind the subject
+        balls[i].position.set(b.u * halfH(d), SUBJECT_HEIGHT + b.v * halfV(d), -b.z);
+        balls[i].scale.setScalar(Math.max(b.s * sizeK, 0.0001));
+        balls[i].visible = b.s > 0.02;
+      }
 
       // White balance → warm/cool tint on the final image
       const wbT = (current.whiteBalance - 5500) / 2500; // -1 warm .. +1 cool
@@ -326,23 +382,30 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       // Aperture → depth of field. Low f = big blur. focus tracks subject.
       // `aperture` uniform = how fast things go soft off the focal plane,
       // `maxblur` caps the blur radius. Both scale with how open the f-stop is.
-      const aT = (current.aperture - 1.4) / (16 - 1.4); // 0 (open) .. 1 (closed)
+      // 0 (wide open at MIN_F) .. 1 (closed at f/16). Clamped so f/MIN_F = fully open.
+      const aT = Math.min(1, Math.max(0, (current.aperture - MIN_F) / (16 - MIN_F)));
       const open = 1 - aT;
       const bu = bokeh.uniforms as Record<string, THREE.IUniform>;
-      // Focus the face surface (camera→front of head), not the head's centre,
-      // so eyes/nose stay crisp wide open. Background balls sit far behind it.
-      bu["focus"].value = Math.max(0.1, dist - headFrontZ);
-      bu["aperture"].value = 0.0002 + open * open * 0.04;
-      bu["maxblur"].value = 0.004 + open * 0.018;
+      // Focus a touch behind the nose tip (≈ the eyes), so the face reads sharp —
+      // not just the front-most point. Background balls sit far behind, still blur.
+      // ponytail: 0.2 = how far back into the head the focal plane sits; tune visually.
+      bu["focus"].value = Math.max(0.1, dist - headFrontZ * 0.2);
+      // Gentler than before so the whole face stays crisp wide open while the
+      // distant background still goes creamy. ponytail: coefficients tuned by eye.
+      bu["aperture"].value = 0.0002 + open * open * 0.02;
+      bu["maxblur"].value = 0.003 + open * 0.01;
 
       // ISO → grain
       const isoT = (current.iso - 100) / (6400 - 100);
       const gu = grain.uniforms as Record<string, THREE.IUniform>;
-      gu["amount"].value = Math.max(0, isoT) * 0.35;
-      gu["time"].value = clock.elapsedTime;
+      // Capped so ISO 6400 reads "noisy", not broken-TV static hiding the subject.
+      gu["amount"].value = Math.max(0, isoT) * 0.22;
+      gu["time"].value = reduceMotion ? 1 : timer.getElapsed();
+      // Skip the full-screen grain pass when it would be a no-op (ISO 100, neutral WB).
+      grain.enabled = gu["amount"].value > 0.002 || Math.abs(wbT) > 0.01;
 
       // Shutter → motion blur of the orbiter (ghost trail)
-      orbitAngle += dt * 1.7;
+      if (!reduceMotion) orbitAngle += dt * 1.7;
       const R = 0.5;
       orbiter.position.set(
         Math.cos(orbitAngle) * R,
@@ -353,7 +416,11 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       hist.push(orbiter.position.clone());
       if (hist.length > MAX_GHOST + 2) hist.shift();
 
-      orbLight.visible = orbLightOnRef.current;
+      // Toggle hides the whole orbiter (glowing dot + its light + trail), so the
+      // on/off has a clear visible effect — not just the subtle cast light.
+      const orbOn = orbLightOnRef.current;
+      orbLight.visible = orbOn;
+      orbiter.visible = orbOn;
 
       const nGhost = Math.round(current.shutter * MAX_GHOST);
       // Lead orbiter dims as the trail grows (energy spread over time)
@@ -362,7 +429,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       for (let i = 0; i < MAX_GHOST; i++) {
         const g = ghosts[i];
         const idx = hist.length - 2 - i;
-        if (i < nGhost && idx >= 0) {
+        if (orbOn && i < nGhost && idx >= 0) {
           g.visible = true;
           g.position.copy(hist[idx]);
           (g.material as THREE.MeshBasicMaterial).opacity =
@@ -376,7 +443,7 @@ export function StudioScene({ target, quality, orbLightOn }: Props) {
       if (active()) raf = requestAnimationFrame(tick);
       else raf = 0;
     };
-    const start = () => { if (raf === 0 && active()) { clock.getDelta(); raf = requestAnimationFrame(tick); } };
+    const start = () => { if (raf === 0 && active()) { timer.update(); raf = requestAnimationFrame(tick); } };
     const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
 
     const onVis = () => { visible = !document.hidden; if (active()) start(); else stop(); };

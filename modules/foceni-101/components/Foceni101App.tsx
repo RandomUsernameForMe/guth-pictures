@@ -1,15 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { StudioScene } from "./StudioScene";
-import { SECTIONS } from "./sections";
-import { DEFAULT_PARAMS, type PhotoParams } from "./types";
+import { ExposureMeter } from "./ExposureMeter";
+import { buildSections } from "./sections";
+import { DEFAULT_PARAMS, type PhotoParams, type Section } from "./types";
+import { holdExposureFor, computeLight } from "./light";
+import { Capstone } from "./Capstone";
+import { CAPSTONES, capstoneExposure, type CapVals } from "./capstones";
+import { CompositionPicker } from "./CompositionPicker";
+import { CompositionOverlay } from "./CompositionOverlay";
+import { COMPOSITIONS } from "./compositions";
+import { ContactForm } from "@/components/ContactForm";
 
 type Quality = "high" | "low";
 
-function initialSliderVals(): Record<string, number> {
+function initialSliderVals(sections: Section[]): Record<string, number> {
   const out: Record<string, number> = {};
-  for (const s of SECTIONS) {
+  for (const s of sections) {
     if (s.control) {
       out[s.id] = s.target[s.control.param] ?? DEFAULT_PARAMS[s.control.param];
     }
@@ -18,11 +27,34 @@ function initialSliderVals(): Record<string, number> {
 }
 
 export function Foceni101App() {
+  const t = useTranslations("foceni101");
+  const sections = useMemo(() => buildSections(t), [t]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [sliderVals, setSliderVals] = useState<Record<string, number>>(initialSliderVals);
+  const [sliderVals, setSliderVals] = useState<Record<string, number>>(() =>
+    initialSliderVals(sections),
+  );
   const [quality, setQuality] = useState<Quality>("high");
   const [orbLightOn, setOrbLightOn] = useState(true);
+  const [capVals, setCapVals] = useState<Record<string, CapVals>>(() =>
+    Object.fromEntries(Object.entries(CAPSTONES).map(([id, m]) => [id, { ...m.init }])),
+  );
+  const [compSel, setCompSel] = useState(0);
+  const [compHover, setCompHover] = useState<number | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Scroll-story starts at the beginning: override back/reload scroll
+  // restoration, which would otherwise drop returning visitors on the CTA
+  // (everyone who finishes the story leaves the page scrolled to the end).
+  // scrollRestoration=manual stops the browser's late async restore on reload;
+  // restored on unmount so the rest of the site keeps normal back behavior.
+  useEffect(() => {
+    const prev = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    return () => {
+      window.history.scrollRestoration = prev;
+    };
+  }, []);
 
   // Lower the 3D quality on small / coarse-pointer devices (still fully usable).
   useEffect(() => {
@@ -53,41 +85,80 @@ export function Foceni101App() {
   // Params the scene tweens to: each section starts from a neutral baseline,
   // applies its own tweak, then the user's slider override (if any).
   const target = useMemo<PhotoParams>(() => {
-    const sec = SECTIONS[activeIndex];
+    const sec = sections[activeIndex];
     const base: PhotoParams = { ...DEFAULT_PARAMS, ...sec.target };
+    if (sec.capstone) {
+      // One leg held in a narrow range by the scenario's goal; the other two
+      // are free. Exposure pinned so the scenario's ref balances — the user
+      // trades the two free legs to cancel the light error.
+      const m = CAPSTONES[sec.id];
+      const v = capVals[sec.id];
+      base.aperture = v.aperture;
+      base.shutter = v.shutter;
+      base.iso = v.iso;
+      base.exposure = capstoneExposure(m);
+      return base;
+    }
+    if (sec.composition) {
+      const cmp = COMPOSITIONS[compHover ?? compSel];
+      base.composition = cmp.comp;
+      base.compositionY = cmp.compY;
+      base.framing = cmp.framing;
+      // Open aperture here purely so the rearranged background balls read as
+      // bokeh; hold the light so switching composition doesn't change brightness.
+      base.exposure = holdExposureFor(base);
+      return base;
+    }
     if (sec.control) base[sec.control.param] = sliderVals[sec.id];
+    // Isolated sections: cancel the side-effect on brightness so only the
+    // taught effect (blur / trail / grain) shows. Reveal & capstone skip this.
+    if (sec.holdLight) base.exposure = holdExposureFor(base);
     return base;
-  }, [activeIndex, sliderVals]);
+  }, [sections, activeIndex, sliderVals, capVals, compSel, compHover]);
+
+  const capSolved =
+    !!sections[activeIndex]?.capstone && Math.abs(computeLight(target).evDelta) < 0.3;
+  // The orbiter only appears where it teaches something (shutter + capstones);
+  // elsewhere it would just be a glowing ball floating over a portrait.
+  const orbAllowed = !!sections[activeIndex]?.orb;
+  const activeComp = COMPOSITIONS[compHover ?? compSel];
+  const inComposition = sections[activeIndex]?.composition === true;
 
   return (
     <div className="f101">
       <div className="f101-stage">
-        <StudioScene target={target} quality={quality} orbLightOn={orbLightOn} />
-        <button
-          type="button"
-          className="f101-toggle"
-          aria-pressed={orbLightOn}
-          onClick={() => setOrbLightOn((v) => !v)}
-        >
-          Světlo kuličky: {orbLightOn ? "zap" : "vyp"}
-        </button>
-        {SECTIONS[activeIndex]?.id === "kompozice" && (
-          <div className="f101-thirds" aria-hidden>
-            <span className="f101-thirds-v" style={{ left: "33.33%" }} />
-            <span className="f101-thirds-v" style={{ left: "66.66%" }} />
-            <span className="f101-thirds-h" style={{ top: "33.33%" }} />
-            <span className="f101-thirds-h" style={{ top: "66.66%" }} />
-          </div>
+        <StudioScene
+          target={target}
+          quality={quality}
+          orbLightOn={orbAllowed && orbLightOn}
+          orbLayout={inComposition ? activeComp.id : "default"}
+        />
+        <ExposureMeter params={target} show={!!sections[activeIndex]?.meter} />
+        {orbAllowed && (
+          <button
+            type="button"
+            className="f101-toggle"
+            aria-pressed={orbLightOn}
+            onClick={() => setOrbLightOn((v) => !v)}
+          >
+            {orbLightOn ? t("orbOn") : t("orbOff")}
+          </button>
         )}
+        <CompositionOverlay
+          kind={activeComp.overlay}
+          markX={activeComp.markX}
+          markY={activeComp.markY}
+          show={inComposition}
+        />
         <div className="f101-progress">
-          {SECTIONS.map((s, i) => (
+          {sections.map((s, i) => (
             <span key={s.id} className={`f101-dot${i === activeIndex ? " f101-dot--on" : ""}`} />
           ))}
         </div>
       </div>
 
       <div className="f101-sections">
-        {SECTIONS.map((s, i) => {
+        {sections.map((s, i) => {
           const c = s.control;
           const val = c ? sliderVals[s.id] : 0;
           const pct = c ? ((val - c.min) / (c.max - c.min)) * 100 : 0;
@@ -97,52 +168,74 @@ export function Foceni101App() {
               ref={(el) => { sectionRefs.current[i] = el; }}
               className="f101-section"
             >
-              <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
-                <div className="f101-card-num">{s.num}</div>
-                <h2 className="f101-card-title">{s.title}</h2>
-                <p className="f101-card-body">{s.body}</p>
-
-                {c && (
-                  <div className="f101-ctrl">
-                    <div className="f101-ctrl-row">
-                      <span>{c.label}</span>
-                      <span className="f101-ctrl-val">{c.fmt(val)}</span>
-                    </div>
-                    <input
-                      type="range"
-                      className="gp-slider"
-                      min={c.min}
-                      max={c.max}
-                      step={c.step}
-                      value={val}
-                      style={{ ["--p" as string]: `${pct}%` }}
-                      onChange={(e) =>
-                        setSliderVals((v) => ({ ...v, [s.id]: parseFloat(e.target.value) }))
-                      }
-                    />
+              {s.capstone ? (
+                <Capstone
+                  num={s.num}
+                  title={s.title}
+                  body={s.body}
+                  sectionId={s.id}
+                  scenario={CAPSTONES[s.id]}
+                  vals={capVals[s.id]}
+                  onChange={(v) => setCapVals((p) => ({ ...p, [s.id]: v }))}
+                  solved={i === activeIndex && capSolved}
+                  active={i === activeIndex}
+                />
+              ) : s.composition ? (
+                <CompositionPicker
+                  num={s.num}
+                  title={s.title}
+                  intro={s.body}
+                  selected={compSel}
+                  onSelect={setCompSel}
+                  onHover={setCompHover}
+                  active={i === activeIndex}
+                />
+              ) : s.cta ? (
+                <div className={`f101-card f101-card--cta${i === activeIndex ? " f101-card--active" : ""}`}>
+                  <div className="f101-card-num">{s.num}</div>
+                  <h2 className="f101-card-title">{s.title}</h2>
+                  <p className="f101-card-body">{s.body}</p>
+                  <div className="f101-cta-form">
+                    <ContactForm />
                   </div>
-                )}
+                </div>
+              ) : (
+                <div className={`f101-card${i === activeIndex ? " f101-card--active" : ""}`}>
+                  <div className="f101-card-num">{s.num}</div>
+                  <h2 className="f101-card-title">{s.title}</h2>
+                  <p className="f101-card-body">{s.body}</p>
 
-                {i === 0 && <div className="f101-scroll-hint">scrolluj ↓</div>}
-              </div>
+                  {c && (
+                    <div className="f101-ctrl">
+                      <div className="f101-ctrl-row">
+                        <span>{c.label}</span>
+                        <span className="f101-ctrl-val">{c.fmt(val)}</span>
+                      </div>
+                      <input
+                        type="range"
+                        className="gp-slider"
+                        aria-label={c.label}
+                        min={c.min}
+                        max={c.max}
+                        step={c.step}
+                        value={val}
+                        style={{
+                          ["--p" as string]: `${c.invert ? 100 - pct : pct}%`,
+                          direction: c.invert ? "rtl" : undefined,
+                        }}
+                        onChange={(e) =>
+                          setSliderVals((v) => ({ ...v, [s.id]: parseFloat(e.target.value) }))
+                        }
+                      />
+                    </div>
+                  )}
+
+                  {i === 0 && <div className="f101-scroll-hint">{t("scrollHint")}</div>}
+                </div>
+              )}
             </section>
           );
         })}
-
-        {/* Finále / CTA → formulář zájmu (placeholder, napojí se na Formspree) */}
-        <section className="f101-section f101-section--cta">
-          <div className="f101-card f101-card--active">
-            <div className="f101-card-num">→</div>
-            <h2 className="f101-card-title">Tohle všechno řeším za tebe</h2>
-            <p className="f101-card-body">
-              Teď víš, kolik rozhodnutí je za jednou dobrou fotkou. Já je dělám za tebe — ty se
-              jen díváš do objektivu. Napiš mi, co chceš nafotit.
-            </p>
-            <a className="lt-btn lt-btn-primary f101-cta-btn" href="#kontakt">
-              Mám zájem o focení
-            </a>
-          </div>
-        </section>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@
  */
 
 import { readFileSync } from "fs";
+import { defaultColors as P } from "../../../lib/theme-presets";
 
 try {
   const content = readFileSync(".env.local", "utf-8");
@@ -54,28 +55,28 @@ function buildSvg(title: string): string {
   const textLines = lines
     .map(
       (line, i) =>
-        `<text x="72" y="${startY + i * lineHeight}" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="700" fill="#F2F0EB">${escapeXml(line)}</text>`
+        `<text x="72" y="${startY + i * lineHeight}" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="700" fill="${P.text}">${escapeXml(line)}</text>`
     )
     .join("\n  ");
 
   return `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <radialGradient id="g1" cx="88%" cy="12%" r="45%">
-      <stop offset="0%" stop-color="#C8A96E" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#0A0A0B" stop-opacity="0"/>
+      <stop offset="0%" stop-color="${P.accentSecondary}" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="${P.bg}" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="g2" cx="10%" cy="90%" r="40%">
-      <stop offset="0%" stop-color="#C8A96E" stop-opacity="0.07"/>
-      <stop offset="100%" stop-color="#0A0A0B" stop-opacity="0"/>
+      <stop offset="0%" stop-color="${P.accentSecondary}" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="${P.bg}" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="1200" height="630" fill="#0A0A0B"/>
+  <rect width="1200" height="630" fill="${P.bg}"/>
   <rect width="1200" height="630" fill="url(#g1)"/>
   <rect width="1200" height="630" fill="url(#g2)"/>
-  <rect x="72" y="72" width="1056" height="486" fill="none" stroke="#C8A96E" stroke-opacity="0.14" stroke-width="1"/>
+  <rect x="72" y="72" width="1056" height="486" fill="none" stroke="${P.accentSecondary}" stroke-opacity="0.14" stroke-width="1"/>
   ${textLines}
-  <rect x="72" y="516" width="64" height="2" fill="#C8A96E"/>
-  <text x="72" y="558" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="#C8A96E" letter-spacing="4">GUTH PICTURES</text>
+  <rect x="72" y="516" width="64" height="2" fill="${P.accentSecondary}"/>
+  <text x="72" y="558" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="${P.accentSecondary}" letter-spacing="4">GUTH PICTURES</text>
 </svg>`;
 }
 

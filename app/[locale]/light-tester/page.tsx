@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LightTesterApp } from "@/modules/light-tester/components/LightTesterApp";
 
 export const metadata: Metadata = {
-  title: "Light Tester — Guth Pictures",
+  title: "Light Tester",
   description: "Interaktivní simulátor studiového osvětlení. Zkus různá světelná schémata a nastav světla pro svůj portrét.",
   robots: { index: false },
 };

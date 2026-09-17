@@ -8,16 +8,25 @@
     "kontakt": "Contact",
     "vop": "Terms & Guidelines",
     "privacy": "Privacy Policy",
-    "light-tester": "Light Tester"
+    "light-tester": "Light Tester",
+    "foceni-101": "Photography 101"
   },
   "meta": {
     "home": {
-      "title": "Guth Pictures — Photographer",
-      "description": "Professional photographer. Strong atmosphere, distinctive creative portraits."
+      "title": "Prague Photographer — Creative Portraits, Weddings & Larps",
+      "description": "Professional photographer in Prague, Czech Republic. Creative portraits with strong atmosphere, wedding photography, events and larps. Studio and outdoor shoots."
     },
     "portfolio": {
-      "title": "Portfolio — Guth Pictures",
-      "description": "A selection of photographs: portraits, events and larps."
+      "title": "Portfolio — Portraits, Weddings, Larps",
+      "description": "Selected work by a Prague-based photographer: creative portraits, weddings, events and larps."
+    },
+    "sluzby": {
+      "title": "Services & Pricing — Portrait and Wedding Photography",
+      "description": "Photography pricing in Prague: portrait packages, wedding photography, events and larps. Pick a package and book a date."
+    },
+    "o-mne": {
+      "title": "About — Photographer Tomáš Guth Jarkovský",
+      "description": "Prague-based photographer. Creative portraits with strong atmosphere, weddings, events and larps. The person behind Guth Pictures."
     }
   },
   "home": {
@@ -48,15 +57,15 @@
     "vybrat": "I'm interested",
     "portraits": {
       "title": "Portraits",
-      "desc": "Individual and group portraits. In the studio, outdoors or in your own environment — with an emphasis on naturalness and expression."
+      "desc": "Individual and group portraits. In the studio, outdoors or at your place. Natural expression comes first."
     },
     "weddings": {
       "title": "Weddings",
-      "desc": "Full day coverage from preparations to the evening. Reportage style — no forced poses, just real moments."
+      "desc": "Full day coverage from preparations to the evening. I shoot documentary style, without forced poses."
     },
     "larp": {
       "title": "Larps & events",
-      "desc": "I specialise in larp event photography. Fast light, movement, atmosphere — that's my playing field."
+      "desc": "I specialise in larp event photography. Fast light, movement and atmosphere are my home turf."
     },
     "cta": "Drop me a line"
   },
@@ -66,17 +75,30 @@
     "desc": "Interactive 3D studio lighting simulator. Set up your lighting scheme, explore presets and come prepared.",
     "cta": "Open Light Tester"
   },
+  "foceni101-promo": {
+    "label": "Interactive guide",
+    "title": "See what makes a photo",
+    "desc": "Scroll through a 3D scene and see what aperture, shutter speed, ISO or composition does to a portrait.",
+    "cta": "Open Photo 101"
+  },
   "o-mne": {
     "title": "About me",
     "subtitle": "I'm a photographer based in Prague.",
-    "bio": "I shoot portraits, weddings and larps. I like capturing things as they actually happened — no over-posing in front of the lens. I travel across the Czech Republic but my home base is Prague.",
+    "bio": "I shoot portraits, weddings and larps. I like capturing things as they actually happened, without over-posing in front of the lens. I travel across the Czech Republic but my home base is Prague.",
     "cta": "Let's talk"
+  },
+  "testimonials": {
+    "title": "References"
+  },
+  "midCta": {
+    "title": "Got a shoot in mind?",
+    "cta": "Get in touch"
   },
   "blog": {
     "title": "Blog",
     "subtitle": "Notes from the world of photography",
-    "metaTitle": "Blog — Guth Pictures",
-    "metaDescription": "Notes on photography, technique and experiences from shoots.",
+    "metaTitle": "Photography Blog",
+    "metaDescription": "Notes on photography, technique and experiences from shoots by a Prague-based photographer.",
     "empty": "No posts yet.",
     "readMore": "Read more",
     "back": "Back to blog"
@@ -107,6 +129,7 @@
     "passwordPlaceholder": "Password",
     "gateSubmit": "View proposal",
     "wrongPassword": "Wrong password",
+    "tooManyAttempts": "Too many attempts. Try again in 15 minutes.",
     "serverError": "Server error",
     "networkError": "Network error",
     "expiredTitle": "Proposal expired",
@@ -127,6 +150,14 @@
     "ctaTitle": "Like the proposal?",
     "ctaBody": "Get in touch and we'll set a shoot date.",
     "ctaButton": "Get in touch",
+    "ctaMailSubject": "Shoot proposal — {name}",
+    "feedbackPrompt": "Which concept speaks to you?",
+    "feedbackLabel": "Your message",
+    "feedbackPlaceholder": "A few words — what you like, what you'd change…",
+    "feedbackSend": "Send",
+    "feedbackSending": "Sending…",
+    "feedbackSuccess": "Thank you! I'll get back to you shortly.",
+    "feedbackError": "Sending failed. Try again, or send an email instead.",
     "heroPreparedFor": "Prepared for",
     "scrollHint": "Scroll",
     "yourPalette": "Your palette",
@@ -134,5 +165,123 @@
     "conceptWord": "Concept",
     "whoYouAreKicker": "Who you are",
     "whoYouAreTitle": "We start with you, not the lens."
+  },
+  "foceni101": {
+    "meta": {
+      "title": "Photography 101 — what makes a photo",
+      "description": "An interactive guide for non-photographers. Drag a slider and see what aperture, shutter speed, ISO or focal length does to a photo."
+    },
+    "sections": {
+      "intro": {
+        "title": "The scene",
+        "body": "A head, one key light, a backdrop. One scene turns into a different photo every time, depending on how you set the camera. Scroll down and play with the sliders."
+      },
+      "expozice": {
+        "title": "Exposure",
+        "body": "Exposure is the total amount of light that reaches the sensor. Too little → a dark photo, too much → blown out. The slider moves exposure in EV; +1 EV means twice the light."
+      },
+      "clona": {
+        "title": "Aperture",
+        "body": "The aperture is the opening in the lens, given as an f-number. A low number (f/1.8) = a wide opening and shallow depth of field: sharp subject, blurred background. A high number (f/16) = deep depth of field, foreground and background both sharp."
+      },
+      "cas": {
+        "title": "Shutter speed",
+        "body": "Shutter speed is how long light keeps falling on the sensor. A short time (1/1000 s) freezes motion, a long one (1/15 s and slower) smears it into a streak. Watch the ball orbiting the head."
+      },
+      "iso": {
+        "title": "ISO",
+        "body": "ISO is the sensor's sensitivity. A higher value brightens the photo when light is scarce, but adds noise (grain). Keep it as low as the light allows."
+      },
+      "ohnisko": {
+        "title": "Focal length",
+        "body": "Focal length (in mm) sets the angle of view. Change focal length and distance together so the subject stays the same size, and perspective changes: a short lens up close stretches the nearest features, a long lens from afar compresses perspective. It sets the relationship between the face and the background."
+      },
+      "uhel": {
+        "title": "Camera angle",
+        "body": "The camera's height relative to the subject. Shooting from below makes the subject look bigger, from above smaller; eye level is neutral. It's a tool for the mood of the shot, not a rule."
+      },
+      "wb": {
+        "title": "White balance",
+        "body": "White balance tells the camera which light temperature to treat as neutral (in kelvins). A lower value leaves the photo warmer (orange), a higher one cooler (blue). Set it to match the light source."
+      },
+      "kompozice": {
+        "title": "Composition",
+        "body": "Where the subject belongs in the frame. Pick a composition and compare how it changes the feel."
+      },
+      "svetlo": {
+        "title": "The exposure triangle",
+        "body": "Aperture, shutter speed and ISO don't just change the look. All three also change how much light gets in. Open the aperture and watch the exposure meter below: the photo blows out. Shutter speed and ISO behave the same way."
+      },
+      "capstone-blur": {
+        "title": "Balance the exposure: blurred background",
+        "body": "You want a blurred background, so the aperture stays nearly wide open. It only closes to f/3.2, or the background would sharpen up. But that lets in a lot of light and the photo is blown out. Lower the shutter speed and ISO (fine-tune with the aperture) until the meter sits at zero."
+      },
+      "capstone-freeze": {
+        "title": "Balance the exposure: freeze the motion",
+        "body": "You want to freeze fast motion, so the shutter can't go slower than 1/250 s, or the motion blurs. But a short time lets in little light and the photo is dark. Open the aperture and raise the ISO (fine-tune with the shutter) until the meter sits at zero."
+      },
+      "finale": {
+        "title": "I handle all of this for you",
+        "body": "Now you know how many decisions go into one good photo. I make them for you. You just look into the lens. Tell me what you'd like to shoot."
+      }
+    },
+    "ctrl": {
+      "exposure": "Exposure",
+      "aperture": "Aperture",
+      "shutter": "Shutter speed",
+      "iso": "ISO",
+      "focal": "Focal length",
+      "angle": "Camera height",
+      "wb": "Temperature"
+    },
+    "angle": {
+      "low": "low angle",
+      "high": "high angle",
+      "eye": "eye level"
+    },
+    "comps": {
+      "thirds": {
+        "label": "Thirds",
+        "body": "The subject sits on a thirds intersection, not dead centre. The mass in the opposite third counterweights it, so the frame feels balanced rather than static."
+      },
+      "center": {
+        "label": "Centred",
+        "body": "The subject exactly in the middle, the background mirrored around it. Formal and direct. It works when you want calm and a straight-on gaze."
+      },
+      "golden": {
+        "label": "Golden ratio",
+        "body": "The 1 : 1.618 proportion painters have used for centuries. The subject sits in the tightest coil of the golden spiral and the lights curl outward along it, so the eye rides the wide arm inward and lands on the face. Against thirds it is not about position, it is about that flow."
+      },
+      "leading": {
+        "label": "Leading lines",
+        "body": "Lines in the frame (paths, edges, light) guide the viewer's eye to the subject. The lights have lined up into two rows that recede into depth and converge right on the face."
+      },
+      "space": {
+        "label": "Negative space",
+        "body": "The subject is small and pushed to the edge; the rest of the frame stays empty. Negative space lets the shot breathe and underlines scale."
+      },
+      "frame": {
+        "label": "Frame within a frame",
+        "body": "Out-of-focus foreground wraps the subject and builds a frame around it. The eye has no way in but the hole in the middle, so attention goes exactly where you want it."
+      }
+    },
+    "capstones": {
+      "capstone-blur": {
+        "reason": "for the blur"
+      },
+      "capstone-freeze": {
+        "reason": "to freeze motion"
+      }
+    },
+    "capstoneWin": "You traded one for the other. That's the whole triangle.",
+    "meter": {
+      "label": "Exposure",
+      "over": "overexposed",
+      "under": "underexposed",
+      "ok": "correct"
+    },
+    "orbOn": "Orb light: on",
+    "orbOff": "Orb light: off",
+    "scrollHint": "scroll ↓"
   }
 }

@@ -7,9 +7,12 @@ import { HomeAurora } from "@/components/HomeAurora";
 import { getContent, getImages } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { LightTesterPromo } from "@/modules/homepage/components/LightTesterPromo";
-import { cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import { Foceni101Promo } from "@/modules/homepage/components/Foceni101Promo";
+import { cloudinaryUrl, blurUrl, PROFILE_TRANSFORM } from "@/lib/cloudinary-utils";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { Testimonials } from "@/modules/homepage/components/Testimonials";
+import { StickyContactCta } from "@/modules/homepage/components/StickyContactCta";
 
 // Static with ISR — content changes are pushed through /api/admin/revalidate,
 // so the hourly window is just a safety net.
@@ -24,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: t("description"),
     alternates: {
       canonical: `/${locale}`,
-      languages: { cs: "/cs", en: "/en" },
+      languages: { cs: "/cs", en: "/en", "x-default": "/cs" },
     },
     openGraph: {
       title: t("title"),
@@ -80,7 +83,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 />
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
-                    src={cloudinaryUrl(images.profile, "w_560,c_fill,g_face,q_auto,f_auto")}
+                    src={cloudinaryUrl(images.profile, PROFILE_TRANSFORM)}
                     alt={content["o-mne"].subtitle}
                     fill
                     placeholder="blur"
@@ -112,7 +115,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section id="sluzby" className="max-w-4xl mx-auto px-6 py-32">
           <div className="hp-eyebrow">02</div>
           <h2 className="text-4xl font-bold">{t("sluzby.title")}</h2>
-          <p className="mt-2 text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
           <ServiceCards
             selectLabel={t("sluzby.vybrat")}
             services={[
@@ -136,6 +138,29 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </AnimatedSection>
 
       <AnimatedSection>
+        <section className="gp-hatch gp-hatch-accent border-y border-[var(--color-border-sub)]">
+          <div className="max-w-4xl mx-auto px-6 py-20 flex flex-col items-center text-center gap-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text)]">{t("midCta.title")}</h2>
+            <a
+              href="#kontakt"
+              className="px-7 py-3.5 bg-[var(--color-text)] text-[var(--color-bg)] font-medium text-sm rounded-xl hover:opacity-90 transition-opacity duration-200 inline-flex items-center gap-2"
+            >
+              {t("midCta.cta")} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      <AnimatedSection>
+        <Testimonials
+          testimonials={content.testimonials}
+          locale={locale}
+          eyebrow="03"
+          title={t("testimonials.title")}
+        />
+      </AnimatedSection>
+
+      <AnimatedSection>
         <LightTesterPromo
           label={t("light-tester-promo.label")}
           title={content.lightTesterPromo.title}
@@ -146,14 +171,25 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </AnimatedSection>
 
       <AnimatedSection>
+        <Foceni101Promo
+          label={t("foceni101-promo.label")}
+          title={t("foceni101-promo.title")}
+          desc={t("foceni101-promo.desc")}
+          cta={t("foceni101-promo.cta")}
+          locale={locale}
+        />
+      </AnimatedSection>
+
+      <AnimatedSection>
         <section id="kontakt" className="max-w-xl mx-auto px-6 py-24">
-          <div className="hp-eyebrow">03</div>
+          <div className="hp-eyebrow">04</div>
           <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
           <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
           <ContactForm />
         </section>
       </AnimatedSection>
       </div>
+      <StickyContactCta label={t("home.cta")} />
     </main>
   );
 }

@@ -6,6 +6,8 @@ import type {
   ProposalSyncPayload,
   ProposalStatus,
   ProposalPublic,
+  ProposalImage,
+  ProposalConcept,
 } from "./types";
 
 export type {
@@ -59,12 +61,21 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
   const now = new Date().toISOString();
 
   const conceptStatus = new Map(existing?.concepts.map((c) => [c.id, c.status]));
+  // Admin-picked palette per concept survives re-syncs (web-managed, like status).
+  const chosenPalette = new Map(
+    existing?.concepts.map((c) => [c.id, c.chosenPaletteId]).filter(([, v]) => v) as [string, string][]
+  );
   // Palettes now live under concepts; flatten existing ones to preserve their approval state by id.
   const paletteStatus = new Map(
     existing?.concepts.flatMap((c) => (c.palettes ?? []).map((p) => [p.id, p.status] as const))
   );
-  const moodStatus = new Map(existing?.moodboard.map((i) => [i.cloudinaryId, i.status]));
-  const poseStatus = new Map(existing?.poses.map((i) => [i.cloudinaryId, i.status]));
+  // Admin-edited concept text (web-managed) wins over incoming sync text.
+  const editedConcepts = new Map(
+    (existing?.concepts ?? []).filter((c) => c.edited).map((c) => [c.id, c])
+  );
+  // Image→concept assignment, hero flag + approval status are web-managed; preserve across re-syncs.
+  const moodAssign = new Map(existing?.moodboard.map((i) => [i.cloudinaryId, i]));
+  const poseAssign = new Map(existing?.poses.map((i) => [i.cloudinaryId, i]));
 
   const record: ProposalRecord = {
     slug: payload.slug,
@@ -74,22 +85,54 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
     research: payload.research,
     summary: payload.summary,
     intro: payload.intro,
-    concepts: payload.concepts.map((c) => ({
-      ...c,
-      status: conceptStatus.get(c.id) ?? c.status,
-      palettes: (c.palettes ?? []).map((p) => ({
+    concepts: payload.concepts.map((c) => {
+      const palettes = (c.palettes ?? []).map((p) => ({
         ...p,
         status: paletteStatus.get(p.id) ?? p.status,
-      })),
-    })),
-    moodboard: payload.moodboard.map((i) => ({
-      ...i,
-      status: moodStatus.get(i.cloudinaryId) ?? i.status,
-    })),
-    poses: payload.poses.map((i) => ({
-      ...i,
-      status: poseStatus.get(i.cloudinaryId) ?? i.status,
-    })),
+      }));
+      const chosen =
+        chosenPalette.get(c.id) ??
+        c.chosenPaletteId ??
+        palettes.find((p) => p.status === "approved")?.id;
+      const prevEdit = editedConcepts.get(c.id);
+      return {
+        ...c,
+        ...(prevEdit
+          ? {
+              title: prevEdit.title,
+              pitch: prevEdit.pitch,
+              why: prevEdit.why,
+              mood: prevEdit.mood,
+              wardrobe: prevEdit.wardrobe,
+              location: prevEdit.location,
+              lighting: prevEdit.lighting,
+              poseDirection: prevEdit.poseDirection,
+              edited: true as const,
+            }
+          : {}),
+        status: conceptStatus.get(c.id) ?? c.status,
+        palettes,
+        chosenPaletteId: palettes.some((p) => p.id === chosen) ? chosen : undefined,
+      };
+    }),
+    moodboard: payload.moodboard.map((i) => {
+      const prev = moodAssign.get(i.cloudinaryId);
+      return {
+        ...i,
+        concept: prev?.concept ?? i.concept,
+        hero: prev?.hero ?? i.hero,
+        status: prev?.status ?? i.status,
+      };
+    }),
+    poses: payload.poses.map((i) => {
+      const prev = poseAssign.get(i.cloudinaryId);
+      return {
+        ...i,
+        concept: prev?.concept ?? i.concept,
+        hero: prev?.hero ?? i.hero,
+        status: prev?.status ?? i.status,
+      };
+    }),
     coverImageId: payload.coverImageId,
     finalized: existing?.finalized ?? false,
     finalizedAt: existing?.finalizedAt,
@@ -97,6 +140,10 @@ export async function upsertProposal(payload: ProposalSyncPayload): Promise<Prop
     expiresAt: existing?.expiresAt,
     createdAt: existing?.createdAt ?? now,
     syncedAt: now,
+    feedback: existing?.feedback,
+    firstOpenedAt: existing?.firstOpenedAt,
+    lastOpenedAt: existing?.lastOpenedAt,
+    reviewedAt: existing?.reviewedAt,
   };
 
   await kv.set(key(payload.slug), record);
@@ -131,6 +178,64 @@ export async function setApprovals(slug: string, patch: ApprovalPatch): Promise<
     })),
     moodboard: apply(record.moodboard, (i) => i.cloudinaryId, patch.moodboard),
     poses: apply(record.poses, (i) => i.cloudinaryId, patch.poses),
+  };
+  await kv.set(key(slug), updated);
+  return updated;
+}
+
+type ImageAssign = { concept?: string | null; hero?: boolean };
+
+export interface AssignmentPatch {
+  images?: {
+    moodboard?: Record<string, ImageAssign>; // cloudinaryId -> assignment
+    poses?: Record<string, ImageAssign>;
+  };
+  chosenPalette?: Record<string, string>; // conceptId -> paletteId
+}
+
+// Web-admin assignment writes: which concept each image belongs to (+ hero), and the one
+// palette chosen per concept. Persisted on the record (and preserved across re-syncs by upsert).
+export async function setAssignments(slug: string, patch: AssignmentPatch): Promise<ProposalRecord | null> {
+  const kv = await getKv();
+  if (!kv) return null;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return null;
+
+  const applyImages = (items: ProposalImage[], map?: Record<string, ImageAssign>): ProposalImage[] => {
+    if (!map) return items;
+    // First lay down the per-image edits.
+    let next = items.map((i) => {
+      const a = map[i.cloudinaryId];
+      if (!a) return i;
+      const concept = a.concept === null ? undefined : a.concept ?? i.concept;
+      const hero = a.hero ?? i.hero;
+      return { ...i, concept, hero };
+    });
+    // Enforce a single hero per concept for any concept touched by a hero:true edit.
+    const heroedConcepts = new Set(
+      Object.entries(map)
+        .filter(([, a]) => a.hero === true)
+        .map(([cid]) => next.find((i) => i.cloudinaryId === cid)?.concept)
+        .filter(Boolean) as string[]
+    );
+    if (heroedConcepts.size) {
+      next = next.map((i) =>
+        i.hero && i.concept && heroedConcepts.has(i.concept) && !map[i.cloudinaryId]?.hero
+          ? { ...i, hero: false }
+          : i
+      );
+    }
+    return next;
+  };
+
+  const chosen = patch.chosenPalette;
+  const updated: ProposalRecord = {
+    ...record,
+    concepts: record.concepts.map((c) =>
+      chosen && chosen[c.id] !== undefined ? { ...c, chosenPaletteId: chosen[c.id] || undefined } : c
+    ),
+    moodboard: applyImages(record.moodboard, patch.images?.moodboard),
+    poses: applyImages(record.poses, patch.images?.poses),
   };
   await kv.set(key(slug), updated);
   return updated;
@@ -187,6 +292,71 @@ export async function deleteProposal(slug: string): Promise<void> {
   await Promise.all([kv.del(key(slug)), kv.srem("proposals:index", slug)]);
 }
 
+// Client reaction from the proposal page. Capped so a stuck client can't grow the record forever.
+export async function addFeedback(
+  slug: string,
+  entry: { conceptId?: string; message: string }
+): Promise<boolean> {
+  const kv = await getKv();
+  if (!kv) return false;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return false;
+  const feedback = [
+    ...(record.feedback ?? []),
+    { ...entry, createdAt: new Date().toISOString() },
+  ].slice(-50);
+  await kv.set(key(slug), { ...record, feedback });
+  return true;
+}
+
+export async function markOpened(slug: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return;
+  const now = new Date().toISOString();
+  await kv.set(key(slug), {
+    ...record,
+    firstOpenedAt: record.firstOpenedAt ?? now,
+    lastOpenedAt: now,
+  });
+}
+
+export async function markReviewed(slug: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return;
+  await kv.set(key(slug), { ...record, reviewedAt: new Date().toISOString() });
+}
+
+export type ConceptTextFields = Partial<
+  Pick<
+    ProposalConcept,
+    "title" | "pitch" | "why" | "mood" | "wardrobe" | "location" | "lighting" | "poseDirection"
+  >
+>;
+
+// Admin inline text edit; sets `edited` so upsert preserves it across re-syncs.
+export async function editConcept(
+  slug: string,
+  conceptId: string,
+  fields: ConceptTextFields
+): Promise<ProposalRecord | null> {
+  const kv = await getKv();
+  if (!kv) return null;
+  const record = await kv.get<ProposalRecord>(key(slug));
+  if (!record) return null;
+  const updated: ProposalRecord = {
+    ...record,
+    concepts: record.concepts.map((c) =>
+      c.id === conceptId ? { ...c, ...fields, edited: true } : c
+    ),
+  };
+  await kv.set(key(slug), updated);
+  return updated;
+}
+
 // Strip to approved-only, drop internal fields — for the gated client view.
 export function toPublicProposal(record: ProposalRecord): ProposalPublic {
   const approved = <T extends { status: ProposalStatus }>(items: T[]) =>
@@ -197,11 +367,18 @@ export function toPublicProposal(record: ProposalRecord): ProposalPublic {
     locale: record.locale,
     summary: record.summary,
     intro: record.intro,
-    // Approved concepts only, each with its palettes filtered to approved.
-    concepts: approved(record.concepts).map((c) => ({
-      ...c,
-      palettes: approved(c.palettes ?? []),
-    })),
+    // Approved concepts only; ship just the one admin-chosen palette. The admin's pick IS the
+    // approval signal (there's no separate palette-approve UI), so honor chosenPaletteId
+    // regardless of palette status; fall back to first approved, then first available.
+    concepts: approved(record.concepts).map((c) => {
+      const all = c.palettes ?? [];
+      const chosen = all.find((p) => p.id === c.chosenPaletteId) ?? approved(all)[0] ?? all[0];
+      return {
+        ...c,
+        palettes: chosen ? [chosen] : [],
+        chosenPaletteId: chosen?.id,
+      };
+    }),
     moodboard: approved(record.moodboard),
     poses: approved(record.poses),
     coverImageId: record.coverImageId,

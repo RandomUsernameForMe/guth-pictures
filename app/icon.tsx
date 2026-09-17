@@ -1,4 +1,7 @@
 import { ImageResponse } from "next/og";
+import { defaultColors as P } from "@/lib/theme-presets";
+
+// Static image — renders the shipped default preset, not the KV override.
 
 export const runtime = "edge";
 export const size = { width: 32, height: 32 };
@@ -14,7 +17,7 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0A0A0B",
+          background: P.bg,
           borderRadius: 7,
         }}
       >
@@ -22,7 +25,7 @@ export default function Icon() {
           style={{
             fontSize: 21,
             fontWeight: 700,
-            color: "#C8A96E",
+            color: P.accentSecondary,
             fontFamily: "serif",
             lineHeight: 1,
             display: "flex",

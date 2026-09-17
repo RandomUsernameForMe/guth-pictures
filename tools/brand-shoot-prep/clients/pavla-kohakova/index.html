@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pavla Koháková — Brand Shoot Prep</title>
+<style>
+  :root{ --accent:#444b54; }
+  html[data-theme=dark]{ --bg:#0c0d11; --surface:#15171d; --surface2:#1c1f27; --text:#e9eaee; --muted:#9aa0ab; --line:#272b34; --herotint:rgba(12,13,17,.55); --heroink:#fff; }
+  html[data-theme=light]{ --bg:#f6f7f9; --surface:#fff; --surface2:#eef0f3; --text:#1a1d23; --muted:#5f6672; --line:#e2e5ea; --herotint:rgba(20,22,28,.42); --heroink:#fff; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent)}
+  .hero{position:relative;min-height:230px;display:flex;align-items:flex-end;background-image:linear-gradient(var(--herotint),var(--herotint)),var(--cover);background-size:cover;background-position:center}
+  .hero.nohero{background:linear-gradient(135deg,var(--surface),var(--surface2))}
+  .hero-inner{max-width:1080px;margin:0 auto;width:100%;padding:28px 24px}
+  .hero .name{margin:0;font-size:34px;letter-spacing:-.02em;color:var(--heroink);text-shadow:0 2px 18px rgba(0,0,0,.45)}
+  .hero .kick{color:#eef0f3;font-size:14px;margin-top:4px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  .hero.nohero .name,.hero.nohero .kick{color:var(--text);text-shadow:none}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px}
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  nav{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .tab{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:8px 14px;border-radius:999px;font-size:14px;cursor:pointer;transition:.15s}
+  .tab:hover{color:var(--text)} .tab.active{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  #themeBtn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px}
+  main{max-width:1080px;margin:0 auto;padding:28px 24px 80px}
+  .panel{display:none;animation:fade .2s ease} .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h1,h2,h3{line-height:1.25;letter-spacing:-.01em}
+  h1{font-size:22px;margin:.2em 0 .5em} h2{font-size:18px;margin:1.4em 0 .5em} h3{font-size:15px;margin:1.2em 0 .4em;color:var(--accent)}
+  hr{border:none;border-top:1px solid var(--line);margin:1.6em 0}
+  code{background:var(--surface2);padding:1px 6px;border-radius:6px;font-size:13px}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top} th{background:var(--surface2)}
+  ul{padding-left:20px} li{margin:.2em 0} .muted{color:var(--muted)}
+  .palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .palette .sw{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)} .palette code{background:none;color:var(--muted)}
+  .ctas{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+  .btn{display:inline-block;border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:10px;text-decoration:none;color:var(--text);font-size:14px}
+  .btn:hover{border-color:var(--accent)} .btn.primary{background:var(--accent);color:#06210f;border-color:var(--accent);font-weight:600}
+  .grid{columns:4;column-gap:14px} @media(max-width:900px){.grid{columns:3}} @media(max-width:620px){.grid{columns:2}}
+  .tile{position:relative;break-inside:avoid;margin:0 0 14px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in;transition:.15s}
+  .tile:hover{border-color:var(--accent);transform:translateY(-2px)} .tile img{width:100%;display:block}
+  figcaption{padding:8px 10px;font-size:12px;color:var(--muted)}
+  .abadge{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;z-index:2}
+  .abadge.approved{background:#1f9d57} .abadge.rejected{background:#c0392b} .abadge.pending{background:#6b7280}
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:50;align-items:center;justify-content:center;flex-direction:column;cursor:zoom-out;padding:24px}
+  #lb.open{display:flex} #lb img{max-width:92vw;max-height:84vh;border-radius:10px} #lb .cap{color:#cfd3da;margin-top:12px;font-size:14px}
+  footer{max-width:1080px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:12px}
+  @media print{
+    html[data-theme=dark]{--bg:#fff;--surface:#fff;--surface2:#f3f4f6;--text:#000;--muted:#444;--line:#ccc}
+    header,#themeBtn,#lb{display:none!important} .hero{min-height:160px}
+    .panel{display:block!important;page-break-before:always} .panel:first-of-type{page-break-before:avoid}
+    .grid{columns:3} .tile{border:1px solid #ddd} a{color:#000;text-decoration:underline}
+  }
+</style></head>
+<body>
+<div class="hero " style="--cover:url('assets/moodboard/0001.jpg')">
+      <div class="hero-inner"><h1 class="name">Pavla Koháková</h1>
+      <div class="kick">Brand Shoot Prep</div></div></div>
+<header><div class="bar"><nav><button class="tab active" data-tab="overview">Overview</button><button class="tab" data-tab="research">Research</button><button class="tab" data-tab="approaches">Approaches</button><button class="tab" data-tab="moodboard">Moodboard</button><button class="tab" data-tab="poses">Pose Board</button><button class="tab" data-tab="deliverables">Deliverables</button></nav><button id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button></div></header>
+<main>
+<section class="panel active" id="panel-overview"><h1>Brief — Pavla Koháková</h1>
+<p><strong>Slug:</strong> pavla-kohakova <strong>Date:</strong> 2026-06-19 <strong>Locale:</strong> cs</p>
+<h2>Inputs</h2>
+<ul><li><strong>Name:</strong> Pavla Koháková</li><li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/pavla-k-27b9071b0/" target="_blank" rel="noopener">https://www.linkedin.com/in/pavla-k-27b9071b0/</a></li><li><strong>Website:</strong> —</li><li><strong>Notes:</strong> Seniorní / technická projektová manažerka a majitelka; zároveň dobrovolnická</li></ul>
+<p>divadelní herečka a režisérka. Cíl = dvě polohy / dva koncepty.</p>
+<h2>Goals</h2>
+<p>Dva koncepty: 1. <strong>Seniorní projektová manažerka</strong> — kompetentní portréty pro LinkedIn / web / klienty. 2. <strong>Divadelní režisérka a členka spolku</strong> — výrazové, atmosférické divadelní portréty.</p>
+<p><strong>Summary:</strong> Zkušená projektová manažerka s režisérským okem — vede projekty se stejnou pečlivostí, citem pro strukturu i pro lidi, s jakou na jevišti staví příběh.</p></section>
+<section class="panel" id="panel-research"><h1>Research — Pavla Koháková</h1>
+<p>&gt; <strong>Locale:</strong> cs · <strong>Datum:</strong> 2026-06-19 · Interní dokument (necílí na klienta). &gt; LinkedIn profil (<code>pavla-k-27b9071b0</code>) je veřejně uzavřený (HTTP 999). Profesní identitu &gt; potvrdil fotograf; divadelní stopa dohledána z veřejných databází.</p>
+<h2>Kdo to je</h2>
+<p><strong>Pavla Koháková</strong> žije ve dvou světech, které dohromady tvoří její osobní značku:</p>
+<p><strong>1) Zkušená seniorní / technická projektová manažerka a majitelka.</strong> Vede projekty, samostatně podniká (OSVČ, Praha, IČO 07124783, od května 2018). Profil: organizovaná, klidná pod tlakem, srozumitelná, vede lidi a dotahuje věci do konce. Tohle je komerční/profesní tvář — pro LinkedIn, web, klienty.</p>
+<p><strong>2) Divadelní režisérka a herečka (amatérské / poloprofesionální divadlo).</strong> Dlouhá a aktivní dráha:</p>
+<ul><li><strong>Sdřevíček</strong> (Praha 10, soubor zal. 2013): režie <strong>Krysař</strong> (Viktor Dyk, 2014, Divadlo Miriam),</li></ul>
+<p><strong>Balladyna</strong> (Juliusz Słowacki, 2015).</p>
+<ul><li><strong>Drak</strong> (Jevgenij Švarc, 2021) — režie.</li><li><strong>Divadlo Chimaera</strong> (Praha-Hostivař, poloprofesionální soubor, zal. 2024, 9 členů):</li></ul>
+<p><strong>herečka</strong> v inscenaci <em>UCHO</em> (2023) a <strong>režie</strong> <em>Slavná Nemesis</em> (podle Ladislava Klímy, premiéra 8. 4. 2025, divadlo U22 Uhříněves).</p>
+<p>Repertoár, který si vybírá, je literární a náročný — Dyk, Słowacki, Švarc, Klíma: poetické, temně romantické, filozofické látky. To vypovídá o člověku s hloubkou, citem pro příběh a strukturu zároveň.</p>
+<p><strong>Spojující nit:</strong> vede — ať už projekt, nebo inscenaci — se stejnou pečlivostí, přehledem a citem pro lidi i celek. Režisérská a manažerská disciplína jsou dvě strany téže mince.</p>
+<h2>Cíl focení (zadání)</h2>
+<p><strong>Dva koncepty / dvě polohy:</strong></p>
+<ul><li><strong>A — seniorní projektová manažerka:</strong> kompetentní, důvěryhodné portréty pro LinkedIn / web / klienty.</li><li><strong>B — divadelní režisérka a členka spolku:</strong> výrazové, atmosférické, divadelní portréty —</li></ul>
+<p>režisérka i herečka.</p>
+<h2>Cílová skupina</h2>
+<ul><li>Profesní (A): zadavatelé projektů, firmy, klienti konzultací — chtějí důvěryhodnost a přehled.</li><li>Divadelní (B): soubor, diváci, festivaly, programy/medailonky, divadelní komunita.</li></ul>
+<h2>Brand voice</h2>
+<p>Věcná a spolehlivá v profesní rovině; výrazová, kultivovaná a literární v divadelní. Společné: hloubka, pečlivost, vedení bez křiku.</p>
+<h2>Současná vizuální identita</h2>
+<p>Bez veřejného webu/portfolia; LinkedIn uzavřený. Divadelní fotky existují jen jako produkční dokumentace souborů. → Prostor vytvořit <strong>první konzistentní portrétní identitu</strong> pro obě role.</p>
+<h2>Konkurenční vizuální krajina</h2>
+<ul><li><strong>Projektoví manažeři</strong> na LinkedIn: generické korporátní headshoty, zaměnitelné, bez osobnosti.</li><li><strong>Divadelní režiséři/herci:</strong> buď strohé produkční snímky, nebo přehnaně „umělecké&quot; klišé.</li><li><strong>Mezera:</strong> spojit obě — jedna osoba, dvě věrohodné, vizuálně kultivované polohy. Profesní</li></ul>
+<p>portrét s osobností; divadelní portrét s řemeslem, ne lacinou teatrálností.</p>
+<h2>Mezery &amp; příležitosti</h2>
+<ul><li>A: vyčnívat z moře generických PM headshotů — klid, autorita, lidskost.</li><li>B: divadelní portrét, který má kompozici a světlo jako inscenace — režisérčin pohled.</li><li>Modularita: dvě sady použitelné každá pro svůj kontext, ale rozpoznatelně tatáž osoba.</li></ul>
+<h2>Vizuální klíčová slova</h2>
+<p>1. <strong>Klidné vedení</strong> — autorita bez pózy (most mezi PM i režií). 2. <strong>Pečlivá kompozice</strong> — řád, struktura, promyšlené světlo. 3. <strong>Literární hloubka</strong> — atmosféra, příběh, temně romantický nádech (divadlo). 4. <strong>Lidskost</strong> — přímý, opravdový pohled. 5. <strong>Dualita / dvě tváře</strong> — jedna osobnost, dva světy.</p>
+<h2>Zdroje</h2>
+<ul><li>LinkedIn (cíl, neveřejný): <a href="https://www.linkedin.com/in/pavla-k-27b9071b0/" target="_blank" rel="noopener">https://www.linkedin.com/in/pavla-k-27b9071b0/</a></li><li>Soubor Sdřevíček (Praha 10): <a href="https://www.amaterskedivadlo.cz/main.php?data=soubor&amp;id=37515" target="_blank" rel="noopener">https://www.amaterskedivadlo.cz/main.php?data=soubor&amp;id=37515</a></li><li>Balladyna (2015), foto galerie: <a href="https://www.amaterskedivadlo.cz/main.php?data=album&amp;id=6578" target="_blank" rel="noopener">https://www.amaterskedivadlo.cz/main.php?data=album&amp;id=6578</a></li><li>Divadlo Chimaera (Praha-Hostivař): <a href="https://www.amaterskedivadlo.cz/index.php?data=soubor&amp;id=41939" target="_blank" rel="noopener">https://www.amaterskedivadlo.cz/index.php?data=soubor&amp;id=41939</a></li><li>Obchodní rejstřík (IČO 07124783): <a href="https://rejstriky.finance.cz/firma-ing-pavla-kohakova-07124783" target="_blank" rel="noopener">https://rejstriky.finance.cz/firma-ing-pavla-kohakova-07124783</a></li></ul></section>
+<section class="panel" id="panel-approaches"><div class="palette"><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#1c2026" title="#1c2026"></span><span class="sw" style="background:#444b54" title="#444b54"></span><span class="sw" style="background:#9aa1aa" title="#9aa1aa"></span><span class="sw" style="background:#e8eaed" title="#e8eaed"></span><span class="sw" style="background:#f4f5f7" title="#f4f5f7"></span><span class="sw" style="background:#d9dee4" title="#d9dee4"></span><span class="sw" style="background:#8a929c" title="#8a929c"></span><span class="sw" style="background:#2b3340" title="#2b3340"></span><span class="sw" style="background:#2f6df0" title="#2f6df0"></span><span class="sw" style="background:#101216" title="#101216"></span><span class="sw" style="background:#2a2e34" title="#2a2e34"></span><span class="sw" style="background:#5e646c" title="#5e646c"></span><span class="sw" style="background:#c9a16a" title="#c9a16a"></span><span class="sw" style="background:#edeef0" title="#edeef0"></span><span class="sw" style="background:#0a0809" title="#0a0809"></span><span class="sw" style="background:#231a1c" title="#231a1c"></span><span class="sw" style="background:#5a3f44" title="#5a3f44"></span><span class="sw" style="background:#9a7d6e" title="#9a7d6e"></span><span class="sw" style="background:#e7dccd" title="#e7dccd"></span><span class="sw" style="background:#120a0c" title="#120a0c"></span><span class="sw" style="background:#3a1115" title="#3a1115"></span><span class="sw" style="background:#6e1f22" title="#6e1f22"></span><span class="sw" style="background:#b08968" title="#b08968"></span><span class="sw" style="background:#ece2d4" title="#ece2d4"></span><span class="sw" style="background:#0c0d0b" title="#0c0d0b"></span><span class="sw" style="background:#23271f" title="#23271f"></span><span class="sw" style="background:#4e4a3a" title="#4e4a3a"></span><span class="sw" style="background:#8f7d55" title="#8f7d55"></span><span class="sw" style="background:#d8c9a3" title="#d8c9a3"></span><code>#0d0f12  #1c2026  #444b54  #9aa1aa  #e8eaed  #f4f5f7  #d9dee4  #8a929c  #2b3340  #2f6df0  #101216  #2a2e34  #5e646c  #c9a16a  #edeef0  #0a0809  #231a1c  #5a3f44  #9a7d6e  #e7dccd  #120a0c  #3a1115  #6e1f22  #b08968  #ece2d4  #0c0d0b  #23271f  #4e4a3a  #8f7d55  #d8c9a3</code></div><h1>Shoot Approaches — Pavla Koháková</h1>
+<p>Dvě polohy jedné osobnosti, přesně dle zadání: <strong>seniorní projektová manažerka</strong> a <strong>divadelní režisérka / herečka</strong>. Záměrně rozpoznatelně tatáž žena, ale dva světy — profesní důvěryhodnost a literární divadelní hloubka. Spojující nit (research): vede projekt i inscenaci se stejnou pečlivostí, přehledem a citem pro lidi. Každý koncept nese vlastní přepínací palety.</p>
+<hr>
+<h2>Concept A — &quot;Seniorní projekťačka&quot;</h2>
+<p><strong>Pitch:</strong> Klidné, kompetentní portréty s kontrolovaným světlem — zkušená manažerka, která má přehled. Hlavní profesní look pro LinkedIn / web / klienty.</p>
+<ul><li><strong>Why it fits:</strong> research → seniorní/technická PM a majitelka (OSVČ od 2018), klíčová slova</li></ul>
+<p>„klidné vedení&quot; a „pečlivá kompozice&quot;. Potřebuje jeden silný, důvěryhodný portrét, který ji odliší z moře generických korporátních headshotů — autorita s lidskostí, ne strnulost.</p>
+<ul><li><strong>Mood:</strong> klidná, kompetentní, přehledná, vřele autoritativní, současná.</li><li><strong>Palety:</strong></li><li><strong>Grafit:</strong> <code>#0d0f12</code> <code>#1c2026</code> <code>#444b54</code> <code>#9aa1aa</code> <code>#e8eaed</code> (čistá grafitová neutralita — řád a klid)</li><li><strong>Studiové světlo:</strong> <code>#f4f5f7</code> <code>#d9dee4</code> <code>#8a929c</code> <code>#2b3340</code> <code>#2f6df0</code> (světlá, čistá báze + modrý akcent — přehlednost)</li><li><strong>Ocel a teplo:</strong> <code>#101216</code> <code>#2a2e34</code> <code>#5e646c</code> <code>#c9a16a</code> <code>#edeef0</code> (grafit s teplým měděným akcentem — lidskost v technické paletě)</li><li><strong>Wardrobe:</strong> čisté, dobře střižené kusy — sako nebo jemný svetr/halenka, jednobarevné, bez</li></ul>
+<p>rušivých vzorů; matné kvalitní textury. Do: monochrom, kvalitní střih. Don't: lesk, výrazné logo.</p>
+<ul><li><strong>Location / setting:</strong> studio / čisté neutrální pozadí, případně světlý moderní workspace</li></ul>
+<p>(přehledný stůl, sklo, linie). Backup: čistá tmavá nebo světlá stěna.</p>
+<ul><li><strong>Lighting:</strong> měkký řízený key (softbox) + jemný fill, decentní rim pro oddělení od pozadí;</li></ul>
+<p>nízký poměr stínů = klid a důvěra. Varianta světlá (high-key) i grafitová (low-key).</p>
+<ul><li><strong>Shot list:</strong> (1) těsný headshot, oči do objektivu (LinkedIn hero); (2) ¾ postava, ruce klidně</li></ul>
+<p>spojené; (3) sedící u stolu, mírně předkloněná, „poslouchám&quot;; (4) poloprofil s jemným rim; (5) ruce + detail (gesto soustředění / poznámky); (6) decentní úsměv ke kameře (vřelá varianta).</p>
+<ul><li><strong>Pose direction:</strong> vzpřímené, usazené držení; ramena dolů; klid; přímý důvěryhodný pohled;</li></ul>
+<p>mikrovýrazy soustředění a vlídnosti, žádná póza navíc.</p>
+<ul><li><strong>Image search terms:</strong> &quot;clean professional studio portrait woman neutral&quot;, &quot;senior project manager headshot soft light&quot;, &quot;confident composed business portrait minimal background&quot;, &quot;executive woman portrait warm authority&quot;.</li></ul>
+<hr>
+<h2>Concept B — &quot;Režisérka&quot;</h2>
+<p><strong>Pitch:</strong> Výrazové, atmosférické divadelní portréty — režisérka i herečka s literární hloubkou. Šero, světlo jako reflektor, příběh.</p>
+<ul><li><strong>Why it fits:</strong> research → dlouhá divadelní dráha (Sdřevíček, Drak, Divadlo Chimaera; režie</li></ul>
+<p>Krysař, Balladyna, Slavná Nemesis; herečka v UCHO). Repertoár Dyk / Słowacki / Švarc / Klíma = poetické, temně romantické, filozofické. Portrét má mít kompozici a světlo jako inscenace — režisérčin pohled, ne lacinou teatrálnost.</p>
+<ul><li><strong>Mood:</strong> atmosférická, soustředěná, temně romantická, kultivovaná, výrazová.</li><li><strong>Palety:</strong></li><li><strong>Jevištní šero:</strong> <code>#0a0809</code> <code>#231a1c</code> <code>#5a3f44</code> <code>#9a7d6e</code> <code>#e7dccd</code> (hluboké jevištní tma + teplý kužel reflektoru)</li><li><strong>Sametová červeň:</strong> <code>#120a0c</code> <code>#3a1115</code> <code>#6e1f22</code> <code>#b08968</code> <code>#ece2d4</code> (divadelní opona, dramatický akcent)</li><li><strong>Patina:</strong> <code>#0c0d0b</code> <code>#23271f</code> <code>#4e4a3a</code> <code>#8f7d55</code> <code>#d8c9a3</code> (starozlatá patina, literární, klímovská)</li><li><strong>Wardrobe:</strong> výraznější, ale nestylizované do kostýmu — tmavé tóny, struktura, jedna silueta</li></ul>
+<p>s charakterem (dlouhý kabát, černá, samet, textura). Do: monochrom s hloubkou. Don't: doslovný divadelní kostým (pokud klientka nechce konkrétní roli).</p>
+<ul><li><strong>Location / setting:</strong> divadlo — jeviště, hlediště, zákulisí, opona, prázdné sedačky, prkna,</li></ul>
+<p>bodové světlo; reflektory a kužely. Praha (U22 Uhříněves / domovská scéna). Backup: tmavé studio s ostrým směrovým světlem.</p>
+<ul><li><strong>Lighting:</strong> dramatické směrové / bodové (spotlight, kužel), tvrdší stíny, chiaroscuro;</li></ul>
+<p>praktická divadelní světla v záběru; světlo jako kompoziční prvek.</p>
+<ul><li><strong>Shot list:</strong> (1) portrét v kuželu reflektoru, šero okolo; (2) na jevišti, environmentální —</li></ul>
+<p>malá postava ve velkém prostoru; (3) režisérský pohled z hlediště / od opony; (4) herecký výraz, detail tváře v dramatickém světle; (5) ruce + gesto režie (ukazuje, vede); (6) silueta / protisvětlo proti jevištnímu světlu.</p>
+<ul><li><strong>Pose direction:</strong> výrazová, ale opravdová; pohled buď přímo do kamery (autorita režisérky)</li></ul>
+<p>nebo mimo (vnitřní soustředění); tělo v dialogu s prostorem jeviště; gesta jako při vedení zkoušky.</p>
+<ul><li><strong>Image search terms:</strong> &quot;theatrical portrait spotlight dark stage&quot;, &quot;theatre director portrait empty auditorium dramatic light&quot;, &quot;chiaroscuro portrait woman stage curtain&quot;, &quot;actor portrait moody spotlight backstage&quot;.</li></ul></section>
+<section class="panel" id="panel-moodboard"><div class="palette"><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#1c2026" title="#1c2026"></span><span class="sw" style="background:#444b54" title="#444b54"></span><span class="sw" style="background:#9aa1aa" title="#9aa1aa"></span><span class="sw" style="background:#e8eaed" title="#e8eaed"></span><span class="sw" style="background:#f4f5f7" title="#f4f5f7"></span><span class="sw" style="background:#d9dee4" title="#d9dee4"></span><span class="sw" style="background:#8a929c" title="#8a929c"></span><span class="sw" style="background:#2b3340" title="#2b3340"></span><span class="sw" style="background:#2f6df0" title="#2f6df0"></span><span class="sw" style="background:#101216" title="#101216"></span><span class="sw" style="background:#2a2e34" title="#2a2e34"></span><span class="sw" style="background:#5e646c" title="#5e646c"></span><span class="sw" style="background:#c9a16a" title="#c9a16a"></span><span class="sw" style="background:#edeef0" title="#edeef0"></span><span class="sw" style="background:#0a0809" title="#0a0809"></span><span class="sw" style="background:#231a1c" title="#231a1c"></span><span class="sw" style="background:#5a3f44" title="#5a3f44"></span><span class="sw" style="background:#9a7d6e" title="#9a7d6e"></span><span class="sw" style="background:#e7dccd" title="#e7dccd"></span><span class="sw" style="background:#120a0c" title="#120a0c"></span><span class="sw" style="background:#3a1115" title="#3a1115"></span><span class="sw" style="background:#6e1f22" title="#6e1f22"></span><span class="sw" style="background:#b08968" title="#b08968"></span><span class="sw" style="background:#ece2d4" title="#ece2d4"></span><span class="sw" style="background:#0c0d0b" title="#0c0d0b"></span><span class="sw" style="background:#23271f" title="#23271f"></span><span class="sw" style="background:#4e4a3a" title="#4e4a3a"></span><span class="sw" style="background:#8f7d55" title="#8f7d55"></span><span class="sw" style="background:#d8c9a3" title="#d8c9a3"></span><code>#0d0f12  #1c2026  #444b54  #9aa1aa  #e8eaed  #f4f5f7  #d9dee4  #8a929c  #2b3340  #2f6df0  #101216  #2a2e34  #5e646c  #c9a16a  #edeef0  #0a0809  #231a1c  #5a3f44  #9a7d6e  #e7dccd  #120a0c  #3a1115  #6e1f22  #b08968  #ece2d4  #0c0d0b  #23271f  #4e4a3a  #8f7d55  #d8c9a3</code></div><div class="grid"><figure class="tile" data-full="assets/moodboard/0001.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0001.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0002.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0002.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0003.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0003.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0004.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0004.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0005.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0005.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0006.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0006.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0007.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0007.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0008.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0008.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0009.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0009.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0010.jpg" data-cap="A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0010.jpg" alt="A — studiový profesní portrét, měkké řízené světlo">
+      <figcaption>A — studiový profesní portrét, měkké řízené světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0011.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0011.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0012.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0012.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0013.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0013.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0014.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0014.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0015.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0015.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0016.jpg" data-cap="A — neutrální headshot, čisté pozadí · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0016.jpg" alt="A — neutrální headshot, čisté pozadí">
+      <figcaption>A — neutrální headshot, čisté pozadí · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0017.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0017.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0018.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0018.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0019.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0019.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0020.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0020.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0021.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0021.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0022.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0022.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0023.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0023.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0024.jpg" data-cap="B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0024.jpg" alt="B — jeviště / reflektor, divadelní atmosféra">
+      <figcaption>B — jeviště / reflektor, divadelní atmosféra · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0025.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0025.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0026.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0026.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0027.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0027.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0028.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0028.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0029.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0029.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/moodboard/0030.jpg" data-cap="B — chiaroscuro, dramatické směrové světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/moodboard/0030.jpg" alt="B — chiaroscuro, dramatické směrové světlo">
+      <figcaption>B — chiaroscuro, dramatické směrové světlo · images.unsplash.com</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-poses"><div class="palette"><span class="sw" style="background:#0d0f12" title="#0d0f12"></span><span class="sw" style="background:#1c2026" title="#1c2026"></span><span class="sw" style="background:#444b54" title="#444b54"></span><span class="sw" style="background:#9aa1aa" title="#9aa1aa"></span><span class="sw" style="background:#e8eaed" title="#e8eaed"></span><span class="sw" style="background:#f4f5f7" title="#f4f5f7"></span><span class="sw" style="background:#d9dee4" title="#d9dee4"></span><span class="sw" style="background:#8a929c" title="#8a929c"></span><span class="sw" style="background:#2b3340" title="#2b3340"></span><span class="sw" style="background:#2f6df0" title="#2f6df0"></span><span class="sw" style="background:#101216" title="#101216"></span><span class="sw" style="background:#2a2e34" title="#2a2e34"></span><span class="sw" style="background:#5e646c" title="#5e646c"></span><span class="sw" style="background:#c9a16a" title="#c9a16a"></span><span class="sw" style="background:#edeef0" title="#edeef0"></span><span class="sw" style="background:#0a0809" title="#0a0809"></span><span class="sw" style="background:#231a1c" title="#231a1c"></span><span class="sw" style="background:#5a3f44" title="#5a3f44"></span><span class="sw" style="background:#9a7d6e" title="#9a7d6e"></span><span class="sw" style="background:#e7dccd" title="#e7dccd"></span><span class="sw" style="background:#120a0c" title="#120a0c"></span><span class="sw" style="background:#3a1115" title="#3a1115"></span><span class="sw" style="background:#6e1f22" title="#6e1f22"></span><span class="sw" style="background:#b08968" title="#b08968"></span><span class="sw" style="background:#ece2d4" title="#ece2d4"></span><span class="sw" style="background:#0c0d0b" title="#0c0d0b"></span><span class="sw" style="background:#23271f" title="#23271f"></span><span class="sw" style="background:#4e4a3a" title="#4e4a3a"></span><span class="sw" style="background:#8f7d55" title="#8f7d55"></span><span class="sw" style="background:#d8c9a3" title="#d8c9a3"></span><code>#0d0f12  #1c2026  #444b54  #9aa1aa  #e8eaed  #f4f5f7  #d9dee4  #8a929c  #2b3340  #2f6df0  #101216  #2a2e34  #5e646c  #c9a16a  #edeef0  #0a0809  #231a1c  #5a3f44  #9a7d6e  #e7dccd  #120a0c  #3a1115  #6e1f22  #b08968  #ece2d4  #0c0d0b  #23271f  #4e4a3a  #8f7d55  #d8c9a3</code></div><div class="grid"><figure class="tile" data-full="assets/poses/0001.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0001.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0002.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0002.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0003.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0003.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0004.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0004.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0005.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0005.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0006.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0006.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0007.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0007.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0008.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0008.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0009.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0009.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0010.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0010.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0011.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0011.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0012.jpg" data-cap="A — profesní póza, vzpřímené usazené držení · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0012.jpg" alt="A — profesní póza, vzpřímené usazené držení">
+      <figcaption>A — profesní póza, vzpřímené usazené držení · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0013.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0013.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0014.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0014.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0015.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0015.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0016.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0016.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0017.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0017.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0018.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0018.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0019.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0019.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0020.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0020.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0021.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0021.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0022.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0022.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0023.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0023.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure><figure class="tile" data-full="assets/poses/0024.jpg" data-cap="B — výrazová póza, dramatické světlo · images.unsplash.com">
+      <span class="abadge pending">•</span><img loading="lazy" src="assets/poses/0024.jpg" alt="B — výrazová póza, dramatické světlo">
+      <figcaption>B — výrazová póza, dramatické světlo · images.unsplash.com</figcaption>
+    </figure></div></section>
+<section class="panel" id="panel-deliverables"><p class="muted">No deliverables yet.</p></section>
+</main>
+<footer>Reference imagery for creative direction only. · pavla-kohakova</footer>
+<div id="lb"><img alt=""><div class="cap"></div></div>
+<script>
+  const tabs=[...document.querySelectorAll('.tab')],panels=[...document.querySelectorAll('.panel')];
+  tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');history.replaceState(null,'','#'+t.dataset.tab);}));
+  const h=location.hash.slice(1);if(h){const b=document.querySelector('.tab[data-tab="'+h+'"]');if(b)b.click();}
+  const root=document.documentElement,tb=document.getElementById('themeBtn');const saved=localStorage.getItem('bsp-theme');if(saved)root.dataset.theme=saved;
+  tb.addEventListener('click',()=>{const n=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=n;localStorage.setItem('bsp-theme',n);});
+  const lb=document.getElementById('lb'),lbi=lb.querySelector('img'),lbc=lb.querySelector('.cap');
+  document.addEventListener('click',e=>{const f=e.target.closest('.tile');if(f){lbi.src=f.dataset.full;lbc.textContent=f.dataset.cap||'';lb.classList.add('open');}});
+  lb.addEventListener('click',()=>lb.classList.remove('open'));document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open');});
+</script>
+</body></html>

@@ -34,11 +34,11 @@ export async function generateMetadata({
     : `${siteUrl}/og-image.jpg`;
 
   return {
-    title: `${loc.title} — Guth Pictures`,
+    title: loc.title,
     description: loc.excerpt,
     alternates: {
       canonical: `/${locale}/blog/${slug}`,
-      languages: { cs: `/cs/blog/${slug}`, en: `/en/blog/${slug}` },
+      languages: { cs: `/cs/blog/${slug}`, en: `/en/blog/${slug}`, "x-default": `/cs/blog/${slug}` },
     },
     openGraph: {
       title: loc.title,
@@ -80,8 +80,27 @@ export default async function BlogPostPage({
   const minutes = readingMinutes(loc.content);
   const readLabel = locale === "cs" ? `${minutes} min čtení` : `${minutes} min read`;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: loc.title,
+    description: loc.excerpt,
+    ...(post.coverImage && {
+      image: cloudinaryUrl(post.coverImage, "w_1200,h_630,c_fill,q_auto,f_jpg"),
+    }),
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    inLanguage: locale,
+    author: { "@type": "Person", name: "Tomáš Guth Jarkovský" },
+    publisher: { "@id": `${siteUrl}/#business` },
+    mainEntityOfPage: `${siteUrl}/${locale}/blog/${slug}`,
+  };
+  // JSON-LD: escape "<" so post content cannot close the script tag
+  const jsonLdHtml = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+
   return (
     <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml }} />
       <Link
         href="/blog"
         className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors mb-10 inline-block"

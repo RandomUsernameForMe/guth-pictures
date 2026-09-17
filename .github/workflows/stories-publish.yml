@@ -1,0 +1,19 @@
+# Publish cron běží přes GitHub Actions místo Vercel cronu — Hobby plán
+# nepovoluje sub-denní schedule. À 30 min ≈ 1440 billed min/měsíc (free tier 2000).
+# GH Actions schedule může mít zpoždění v řádu minut — pro stories nevadí.
+name: stories-publish
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger publish endpoint
+        run: |
+          curl -fsS --max-time 290 \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://www.guthpictures.eu/api/cron/stories-publish"

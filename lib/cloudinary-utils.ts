@@ -17,6 +17,12 @@ export function cloudinaryUrl(publicId: string, transformation = ""): string {
   return transformation ? `${base}/${transformation}/${publicId}` : `${base}/${publicId}`;
 }
 
+/**
+ * Profile portrait. The original is warm and yellow, which fights the palette,
+ * so it comes down a notch in saturation. Tune the number, not the pipeline.
+ */
+export const PROFILE_TRANSFORM = "w_560,c_fill,g_face,e_saturation:-30,q_auto,f_auto";
+
 export function blurUrl(publicId: string): string {
   return cloudinaryUrl(publicId, "e_blur:1000,q_1,f_webp,w_20");
 }

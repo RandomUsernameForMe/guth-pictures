@@ -1,13 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
+import { contactEmail } from "@/lib/config";
 import { paletteToAmbient } from "@/modules/brand-shoot/lib/palette-theme";
-import type { ProposalPublic, ProposalConcept, ProposalImage, ProposalPalette } from "@/modules/brand-shoot/lib/types";
+import type { ProposalPublic, ProposalConcept, ProposalImage } from "@/modules/brand-shoot/lib/types";
 import { LivingPalette } from "./LivingPalette";
 import { ProposalGallery } from "./ProposalGallery";
+import { ProposalFeedbackForm } from "./ProposalFeedbackForm";
 
 const FALLBACK = {
-  accent: "#C8A96E", glowA: "#2A1C12", glowB: "#15110D", tint: "#0A0A0B",
-  duoShadow: "#3A2A1A", duoLight: "#E8DFCF",
+  accent: "#B87333", glowA: "#2A1218", glowB: "#150D10", tint: "#1A0A0F",
+  duoShadow: "#3A1A24", duoLight: "#E8DCD4",
 };
 
 // Build the `data-pal-*` attribute bag a section/button needs for the living-palette scroll-spy.
@@ -43,9 +45,10 @@ function ConceptSection({
   mood: ImageT[];
   labels: Record<string, string>;
 }) {
-  const primary = concept.palettes[0];
-  const pal = primary ? palData(primary.name, primary.colors) : palData(concept.title, []);
-  const no = String(index + 1).padStart(3, "0");
+  // One palette per concept (admin-chosen); falls back to the first available.
+  const chosen = concept.palettes.find((p) => p.id === concept.chosenPaletteId) ?? concept.palettes[0];
+  const pal = chosen ? palData(chosen.name, chosen.colors) : palData(concept.title, []);
+  const no = String(index + 1).padStart(2, "0");
 
   const rows = [
     [labels.mood, concept.mood],
@@ -57,72 +60,62 @@ function ConceptSection({
 
   return (
     <section className="bsp-ed-concept" {...pal}>
-      <div className="bsp-ed-stage" data-reveal>
-        {hero ? (
-          <div className="bsp-ed-stage-img-wrap" aria-hidden>
-            <img className="bsp-ed-stage-img" src={img(hero.cloudinaryId, 1600)} alt={hero.note ?? concept.title} />
-          </div>
-        ) : (
-          <div className="bsp-ed-stage-ph" aria-hidden />
-        )}
-        <div className="bsp-ed-stage-scrim" aria-hidden />
-        <header className="bsp-ed-stage-head">
-          <div className="bsp-ed-eyebrow">
+      <span className="bsp-ed-concept-num" aria-hidden>{no}</span>
+      <div className="bsp-ed-concept-inner" data-reveal>
+        <figure className="bsp-ed-portrait">
+          {hero ? (
+            <div className="bsp-ed-portrait-wrap">
+              <img
+                className="bsp-ed-portrait-img"
+                src={img(hero.cloudinaryId, 1100)}
+                alt={hero.note || concept.title}
+                width={hero.width}
+                height={hero.height}
+                loading="lazy"
+              />
+            </div>
+          ) : (
+            <div className="bsp-ed-portrait-ph" aria-hidden />
+          )}
+        </figure>
+
+        <div className="bsp-ed-concept-text">
+          <div className="bsp-ed-eyebrow bsp-ed-concept-eyebrow">
             <span>{labels.conceptWord} № {no}</span>
             <span className="bsp-ed-rule" aria-hidden />
           </div>
           <h2 className="bsp-ed-display">{concept.title}</h2>
-          {concept.pitch && <p className="bsp-ed-stage-pitch">{concept.pitch}</p>}
-        </header>
-      </div>
+          {concept.pitch && <p className="bsp-ed-concept-pitch">{concept.pitch}</p>}
+          {concept.why && <p className="bsp-ed-lead">{concept.why}</p>}
 
-      <div className="bsp-ed-concept-body" data-reveal>
-        {concept.why && <p className="bsp-ed-lead">{concept.why}</p>}
-
-        {rows.length > 0 && (
-          <dl className="bsp-ed-spec">
-            {rows.map(([label, value]) => (
-              <div key={label} className="bsp-ed-spec-row">
-                <dt className="gp-label">{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-
-        {mood.length > 0 && (
-          <div className="bsp-ed-mood">
-            {mood.map((m) => (
-              <figure key={m.cloudinaryId} className="bsp-ed-mood-fig">
-                <img src={img(m.cloudinaryId, 700)} alt={m.note ?? ""} loading="lazy" />
-              </figure>
-            ))}
-          </div>
-        )}
-
-        <div className="bsp-ed-palrow">
-          <span className="gp-label bsp-ed-palrow-label">{labels.palette}</span>
-          <div className="bsp-ed-palbtns">
-            {concept.palettes.map((p: ProposalPalette, i: number) => (
-              <button
-                key={p.id}
-                type="button"
-                className="bsp-ed-select"
-                data-select=""
-                data-active="false"
-                aria-label={`${labels.palette} ${i + 1}`}
-                {...palData(p.name, p.colors)}
-              >
-                <span className="bsp-ed-swatches" aria-hidden>
-                  {p.colors.slice(0, 5).map((c, j) => (
-                    <span key={j} style={{ background: c }} />
-                  ))}
-                </span>
-              </button>
-            ))}
-          </div>
+          {rows.length > 0 && (
+            <dl className="bsp-ed-spec">
+              {rows.map(([label, value]) => (
+                <div key={label} className="bsp-ed-spec-row">
+                  <dt className="gp-label">{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
       </div>
+
+      {mood.length > 0 && (
+        <div className="bsp-ed-mood" data-reveal>
+          {mood.map((m) => (
+            <figure key={m.cloudinaryId} className="bsp-ed-mood-fig">
+              <img
+                src={img(m.cloudinaryId, 700)}
+                alt={m.note || concept.title}
+                width={m.width}
+                height={m.height}
+                loading="lazy"
+              />
+            </figure>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -137,7 +130,6 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
     location: t("conceptLocation"),
     lighting: t("conceptLighting"),
     poses: t("conceptPoses"),
-    palette: t("paletteToggleLabel"),
     conceptWord: t("conceptWord"),
   };
 
@@ -150,7 +142,7 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
     [
       ...proposal.moodboard.filter((i) => i.concept === id && !i.hero),
       ...proposal.poses.filter((i) => i.concept === id),
-    ].slice(0, 6);
+    ].slice(0, 8);
 
   // Brand/opening palette = first concept's first palette (fallback to neutral).
   const brandPalette = concepts.find((c) => c.palettes.length > 0)?.palettes[0];
@@ -224,14 +216,14 @@ export async function ProposalView({ proposal }: { proposal: ProposalPublic }) {
         <div className="bsp-ed-close-inner" data-reveal>
           <span className="bsp-ed-eyebrow-accent">{t("ctaTitle")}</span>
           <h2 className="bsp-ed-close-h">{t("ctaBody")}</h2>
-          <div className="bsp-ed-choice">
-            <span>{t("yourPalette")}</span>
-            <span data-pal-swatches className="bsp-ed-choice-sw" aria-hidden />
-            <a href="#" data-reset-pal className="bsp-ed-reset" style={{ display: "none" }}>
-              ({t("resetPalette")})
-            </a>
-          </div>
-          <a className="bsp-ed-cta" href={`mailto:ahoj@guthpictures.eu?subject=${encodeURIComponent(`Návrh focení — ${proposal.name}`)}`}>
+          <ProposalFeedbackForm
+            slug={proposal.slug}
+            concepts={concepts.map((c) => ({ id: c.id, title: c.title }))}
+          />
+          <a
+            className="bsp-ed-cta-alt"
+            href={`mailto:${contactEmail}?subject=${encodeURIComponent(t("ctaMailSubject", { name: proposal.name }))}`}
+          >
             {t("ctaButton")} →
           </a>
         </div>

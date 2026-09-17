@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shoot library (112)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:#0e0f12; color:#e9e9ec; padding:24px; }
+  h1 { margin:0 0 4px; font-size:22px; } .sub { color:#9a9aa3; margin-bottom:16px; }
+  .filters { position:sticky; top:0; background:#0e0f12; padding:12px 0; z-index:5;
+             border-bottom:1px solid #23252c; margin-bottom:18px; }
+  .frow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:6px; }
+  .flabel { width:74px; color:#7a7a84; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .chip { border:1px solid #33363f; background:#16171c; color:#c7c7cf; border-radius:999px;
+          padding:3px 11px; font-size:12px; cursor:pointer; }
+  .chip.on { background:#3ddc97; color:#06231a; border-color:#3ddc97; font-weight:600; }
+  #clear { margin-left:8px; color:#9a9aa3; background:none; border:1px solid #33363f;
+           border-radius:6px; padding:3px 10px; cursor:pointer; }
+  #count { color:#9a9aa3; font-size:12px; margin-left:8px; }
+  .grid { column-count:4; column-gap:14px; }
+  @media (max-width:1100px){ .grid{column-count:3;} } @media (max-width:760px){ .grid{column-count:2;} }
+  .tile { break-inside:avoid; margin:0 0 14px; background:#16171c; border-radius:12px; overflow:hidden; }
+  .tile.hide { display:none; }
+  .tile img { width:100%; display:block; background:#fff; }
+  figcaption { padding:8px 10px; }
+  .id { font-size:12px; color:#cfcfd6; } .note { color:#9a9aa3; }
+  .tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+  .t { font-size:10px; padding:1px 7px; border-radius:999px; background:#23252c; color:#b9b9c2; }
+  .t.shot { background:#1f3a5f; color:#cfe2ff; } .t.emotion { background:#3a2f5f; color:#e0d3ff; }
+  .t.needs { background:#5f2f2f; color:#ffd3d3; }
+</style></head><body>
+  <h1>Shoot library</h1>
+  <div class="sub">112 items · 50 poses · 62 moodboard · click chips to filter</div>
+  <div class="filters"><div class="frow"><span class="flabel">kind</span>
+       <button class="chip" data-axis="kind" data-val="pose">pose</button>
+       <button class="chip" data-axis="kind" data-val="moodboard">moodboard</button></div>
+<div class="frow"><span class="flabel">emotion</span><button class="chip" data-axis="emotion" data-val="confident">confident</button><button class="chip" data-axis="emotion" data-val="calm">calm</button><button class="chip" data-axis="emotion" data-val="warm">warm</button><button class="chip" data-axis="emotion" data-val="sharp">sharp</button><button class="chip" data-axis="emotion" data-val="playful">playful</button><button class="chip" data-axis="emotion" data-val="authoritative">authoritative</button><button class="chip" data-axis="emotion" data-val="approachable">approachable</button><button class="chip" data-axis="emotion" data-val="focused">focused</button><button class="chip" data-axis="emotion" data-val="bold">bold</button><button class="chip" data-axis="emotion" data-val="serene">serene</button><button class="chip" data-axis="emotion" data-val="dynamic">dynamic</button><button class="chip" data-axis="emotion" data-val="thoughtful">thoughtful</button><button class="chip" data-axis="emotion" data-val="friendly">friendly</button><button class="chip" data-axis="emotion" data-val="intense">intense</button><button class="chip" data-axis="emotion" data-val="relaxed">relaxed</button><button class="chip" data-axis="emotion" data-val="grounded">grounded</button><button class="chip" data-axis="emotion" data-val="engaged">engaged</button></div>
+<div class="frow"><span class="flabel">shot</span><button class="chip" data-axis="shot" data-val="headshot">headshot</button><button class="chip" data-axis="shot" data-val="three-quarter">three-quarter</button><button class="chip" data-axis="shot" data-val="full">full</button><button class="chip" data-axis="shot" data-val="seated">seated</button><button class="chip" data-axis="shot" data-val="hands">hands</button><button class="chip" data-axis="shot" data-val="environmental">environmental</button></div>
+<div class="frow"><span class="flabel">setting</span><button class="chip" data-axis="setting" data-val="studio">studio</button><button class="chip" data-axis="setting" data-val="office">office</button><button class="chip" data-axis="setting" data-val="stage">stage</button><button class="chip" data-axis="setting" data-val="outdoor">outdoor</button><button class="chip" data-axis="setting" data-val="home">home</button><button class="chip" data-axis="setting" data-val="urban">urban</button><button class="chip" data-axis="setting" data-val="workshop">workshop</button><button class="chip" data-axis="setting" data-val="neutral-bg">neutral-bg</button></div>
+<div class="frow"><span class="flabel">lighting</span><button class="chip" data-axis="lighting" data-val="soft">soft</button><button class="chip" data-axis="lighting" data-val="hard">hard</button><button class="chip" data-axis="lighting" data-val="dark">dark</button><button class="chip" data-axis="lighting" data-val="bright">bright</button><button class="chip" data-axis="lighting" data-val="natural">natural</button><button class="chip" data-axis="lighting" data-val="mixed">mixed</button><button class="chip" data-axis="lighting" data-val="dramatic">dramatic</button><button class="chip" data-axis="lighting" data-val="high-key">high-key</button><button class="chip" data-axis="lighting" data-val="low-key">low-key</button><button class="chip" data-axis="lighting" data-val="rim">rim</button></div>
+<div class="frow"><span class="flabel">palette</span><button class="chip" data-axis="palette" data-val="neutral">neutral</button><button class="chip" data-axis="palette" data-val="warm">warm</button><button class="chip" data-axis="palette" data-val="cool">cool</button><button class="chip" data-axis="palette" data-val="dark">dark</button><button class="chip" data-axis="palette" data-val="bright">bright</button><button class="chip" data-axis="palette" data-val="earthy">earthy</button><button class="chip" data-axis="palette" data-val="monochrome">monochrome</button><button class="chip" data-axis="palette" data-val="vibrant">vibrant</button><button class="chip" data-axis="palette" data-val="muted">muted</button></div><div class="frow"><button id="clear">clear all</button><span id="count"></span></div></div>
+  <section class="grid" id="grid">
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm calm" data-setting="studio" data-lighting="soft" data-palette="warm" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0001.jpg" alt="mood-0001">
+      <figcaption>
+        <div class="id">mood-0001 · <span class="note">Tichá důvěra — warm editorial, soft side light</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">calm</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="neutral-bg studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0002.jpg" alt="mood-0002">
+      <figcaption>
+        <div class="id">mood-0002 · <span class="note">Tichá důvěra — neutral background headshot</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">calm</span><span class="t setting">neutral-bg</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm grounded" data-setting="" data-lighting="soft" data-palette="earthy" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0003.jpg" alt="mood-0003">
+      <figcaption>
+        <div class="id">mood-0003 · <span class="note">Tichá důvěra — earthy tones, calm</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t emotion">grounded</span><span class="t lighting">soft</span><span class="t palette">earthy</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm" data-setting="" data-lighting="soft" data-palette="warm earthy" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0004.jpg" alt="mood-0004">
+      <figcaption>
+        <div class="id">mood-0004 · <span class="note">Tichá důvěra — knit texture, warm grade</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t lighting">soft</span><span class="t palette">warm</span><span class="t palette">earthy</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0005.jpg" alt="mood-0005">
+      <figcaption>
+        <div class="id">mood-0005 · <span class="note">Tichá důvěra — 3/4 composed posture</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="home studio" data-lighting="soft natural" data-palette="neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0006.jpg" alt="mood-0006">
+      <figcaption>
+        <div class="id">mood-0006 · <span class="note">Tichá důvěra — window soft key</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">home</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm relaxed" data-setting="home" data-lighting="natural" data-palette="warm" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0007.jpg" alt="mood-0007">
+      <figcaption>
+        <div class="id">mood-0007 · <span class="note">Rozhovor — cozy interior daylight</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">relaxed</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm friendly engaged" data-setting="home" data-lighting="natural" data-palette="warm" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0008.jpg" alt="mood-0008">
+      <figcaption>
+        <div class="id">mood-0008 · <span class="note">Rozhovor — candid conversation warmth</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">friendly</span><span class="t emotion">engaged</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm thoughtful" data-setting="home" data-lighting="natural soft" data-palette="neutral" data-shot="seated">
+      <img loading="lazy" src="moodboard/mood-0009.jpg" alt="mood-0009">
+      <figcaption>
+        <div class="id">mood-0009 · <span class="note">Rozhovor — seated by window</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">calm</span><span class="t emotion">thoughtful</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm relaxed" data-setting="home" data-lighting="natural bright" data-palette="earthy" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0010.jpg" alt="mood-0010">
+      <figcaption>
+        <div class="id">mood-0010 · <span class="note">Rozhovor — plants, daylight, human</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">relaxed</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t lighting">bright</span><span class="t palette">earthy</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="home" data-lighting="soft" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0011.jpg" alt="mood-0011">
+      <figcaption>
+        <div class="id">mood-0011 · <span class="note">Rozhovor — soft ambient interior</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">home</span><span class="t lighting">soft</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm engaged thoughtful" data-setting="" data-lighting="soft" data-palette="warm" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0012.jpg" alt="mood-0012">
+      <figcaption>
+        <div class="id">mood-0012 · <span class="note">Rozhovor — present, empathic register</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">engaged</span><span class="t emotion">thoughtful</span><span class="t lighting">soft</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="approachable friendly" data-setting="" data-lighting="high-key bright" data-palette="bright" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0013.jpg" alt="mood-0013">
+      <figcaption>
+        <div class="id">mood-0013 · <span class="note">Otevřeno — bright high-key portrait</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">approachable</span><span class="t emotion">friendly</span><span class="t lighting">high-key</span><span class="t lighting">bright</span><span class="t palette">bright</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="studio neutral-bg" data-lighting="bright high-key" data-palette="bright monochrome" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0014.jpg" alt="mood-0014">
+      <figcaption>
+        <div class="id">mood-0014 · <span class="note">Otevřeno — clean minimal white space</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">studio</span><span class="t setting">neutral-bg</span><span class="t lighting">bright</span><span class="t lighting">high-key</span><span class="t palette">bright</span><span class="t palette">monochrome</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident approachable" data-setting="" data-lighting="bright" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0015.jpg" alt="mood-0015">
+      <figcaption>
+        <div class="id">mood-0015 · <span class="note">Otevřeno — confident open posture</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">approachable</span><span class="t lighting">bright</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="urban" data-lighting="bright natural" data-palette="neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0016.jpg" alt="mood-0016">
+      <figcaption>
+        <div class="id">mood-0016 · <span class="note">Otevřeno — architectural lines, airy</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">urban</span><span class="t lighting">bright</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="approachable engaged" data-setting="" data-lighting="natural soft bright" data-palette="neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0017.jpg" alt="mood-0017">
+      <figcaption>
+        <div class="id">mood-0017 · <span class="note">Otevřeno — daylight diffuse, forward</span></div>
+        <div class="tags"><span class="t emotion">approachable</span><span class="t emotion">engaged</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t lighting">bright</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="playful" data-setting="studio" data-lighting="bright" data-palette="vibrant bright" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0018.jpg" alt="mood-0018">
+      <figcaption>
+        <div class="id">mood-0018 · <span class="note">Otevřeno — colorful subtle accent minimal</span></div>
+        <div class="tags"><span class="t emotion">playful</span><span class="t setting">studio</span><span class="t lighting">bright</span><span class="t palette">vibrant</span><span class="t palette">bright</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident warm" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0001.jpg" alt="pose-0001">
+      <figcaption>
+        <div class="id">pose-0001 · <span class="note">tight headshot — brada lehce dolů, vřelý pohled</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">warm</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident warm" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0002.jpg" alt="pose-0002">
+      <figcaption>
+        <div class="id">pose-0002 · <span class="note">3/4 — ramena uvolněná, mírný náklon</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">warm</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="warm engaged thoughtful" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="seated">
+      <img loading="lazy" src="poses/pose-0003.jpg" alt="pose-0003">
+      <figcaption>
+        <div class="id">pose-0003 · <span class="note">vsedě — předklon, naslouchání</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">warm</span><span class="t emotion">engaged</span><span class="t emotion">thoughtful</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="hands">
+      <img loading="lazy" src="poses/pose-0004.jpg" alt="pose-0004">
+      <figcaption>
+        <div class="id">pose-0004 · <span class="note">ruce — klidné gesto, detail</span></div>
+        <div class="tags"><span class="t shot">hands</span><span class="t emotion">calm</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful calm" data-setting="home" data-lighting="natural soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0005.jpg" alt="pose-0005">
+      <figcaption>
+        <div class="id">pose-0005 · <span class="note">u okna — světlo na tváři, profil</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t emotion">calm</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed warm" data-setting="home" data-lighting="soft" data-palette="warm" data-shot="seated">
+      <img loading="lazy" src="poses/pose-0006.jpg" alt="pose-0006">
+      <figcaption>
+        <div class="id">pose-0006 · <span class="note">vsedě v křesle, otevřené držení</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">relaxed</span><span class="t emotion">warm</span><span class="t setting">home</span><span class="t lighting">soft</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="engaged dynamic" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0007.jpg" alt="pose-0007">
+      <figcaption>
+        <div class="id">pose-0007 · <span class="note">gesto při řeči — jakoby vysvětluje</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">engaged</span><span class="t emotion">dynamic</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0008.jpg" alt="pose-0008">
+      <figcaption>
+        <div class="id">pose-0008 · <span class="note">3/4 vstoje, váha na zadní noze</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident grounded" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0009.jpg" alt="pose-0009">
+      <figcaption>
+        <div class="id">pose-0009 · <span class="note">celá postava, sebevědomý postoj</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed confident" data-setting="urban" data-lighting="natural" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0010.jpg" alt="pose-0010">
+      <figcaption>
+        <div class="id">pose-0010 · <span class="note">vstoje opřená o stěnu, uvolnění</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">relaxed</span><span class="t emotion">confident</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="dynamic" data-setting="" data-lighting="natural" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0011.jpg" alt="pose-0011">
+      <figcaption>
+        <div class="id">pose-0011 · <span class="note">celá postava, krok / lehký pohyb</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">dynamic</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="approachable friendly confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0012.jpg" alt="pose-0012">
+      <figcaption>
+        <div class="id">pose-0012 · <span class="note">ruce v kapsách, otevřený úsměv</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">approachable</span><span class="t emotion">friendly</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0013.jpg" alt="pose-0013">
+      <figcaption>
+        <div class="id">pose-0013 · <span class="note">polocelek, ruce složené před tělem</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0014.jpg" alt="pose-0014">
+      <figcaption>
+        <div class="id">pose-0014 · <span class="note">vstoje, pohled stranou, zamyšlení</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">thoughtful</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="dynamic bold" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0015.jpg" alt="pose-0015">
+      <figcaption>
+        <div class="id">pose-0015 · <span class="note">dynamický postoj, energie vpřed</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">dynamic</span><span class="t emotion">bold</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm thoughtful" data-setting="home" data-lighting="low-key natural soft" data-palette="dark muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0019.jpg" alt="mood-0019">
+      <figcaption>
+        <div class="id">mood-0019 · <span class="note">prostředí, tlumené světlo od okna</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t emotion">thoughtful</span><span class="t setting">home</span><span class="t lighting">low-key</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t palette">dark</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="intense serene" data-setting="home" data-lighting="dark low-key dramatic" data-palette="dark" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0020.jpg" alt="mood-0020">
+      <figcaption>
+        <div class="id">mood-0020 · <span class="note">tmavý interiér, atmosféra</span></div>
+        <div class="tags"><span class="t emotion">intense</span><span class="t emotion">serene</span><span class="t setting">home</span><span class="t lighting">dark</span><span class="t lighting">low-key</span><span class="t lighting">dramatic</span><span class="t palette">dark</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="thoughtful intense" data-setting="" data-lighting="low-key dark" data-palette="dark muted" data-shot="environmental">
+      <img loading="lazy" src="moodboard/mood-0021.jpg" alt="mood-0021">
+      <figcaption>
+        <div class="id">mood-0021 · <span class="note">portrét v šeru, kontext prostoru</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">thoughtful</span><span class="t emotion">intense</span><span class="t lighting">low-key</span><span class="t lighting">dark</span><span class="t palette">dark</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="home" data-lighting="soft natural rim" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0022.jpg" alt="mood-0022">
+      <figcaption>
+        <div class="id">mood-0022 · <span class="note">okno + měkké směrové světlo</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">home</span><span class="t lighting">soft</span><span class="t lighting">natural</span><span class="t lighting">rim</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="grounded intense" data-setting="workshop urban" data-lighting="natural" data-palette="muted earthy" data-shot="environmental">
+      <img loading="lazy" src="moodboard/mood-0023.jpg" alt="mood-0023">
+      <figcaption>
+        <div class="id">mood-0023 · <span class="note">environmentální portrét, syrový prostor</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">grounded</span><span class="t emotion">intense</span><span class="t setting">workshop</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span><span class="t palette">earthy</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="thoughtful" data-setting="home" data-lighting="natural" data-palette="earthy muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0024.jpg" alt="mood-0024">
+      <figcaption>
+        <div class="id">mood-0024 · <span class="note">kostým + přirozené světlo</span></div>
+        <div class="tags"><span class="t emotion">thoughtful</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t palette">earthy</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="serene thoughtful" data-setting="home" data-lighting="natural soft" data-palette="muted earthy" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0025.jpg" alt="mood-0025">
+      <figcaption>
+        <div class="id">mood-0025 · <span class="note">dobový portrét u okna</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">serene</span><span class="t emotion">thoughtful</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t palette">muted</span><span class="t palette">earthy</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="intense" data-setting="" data-lighting="dramatic" data-palette="muted" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0026.jpg" alt="mood-0026">
+      <figcaption>
+        <div class="id">mood-0026 · <span class="note">výraz v kostýmu, detail</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">intense</span><span class="t lighting">dramatic</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="thoughtful intense" data-setting="" data-lighting="dramatic low-key" data-palette="dark" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0027.jpg" alt="mood-0027">
+      <figcaption>
+        <div class="id">mood-0027 · <span class="note">role vs. civil, charakter</span></div>
+        <div class="tags"><span class="t emotion">thoughtful</span><span class="t emotion">intense</span><span class="t lighting">dramatic</span><span class="t lighting">low-key</span><span class="t palette">dark</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm friendly engaged" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0028.jpg" alt="mood-0028">
+      <figcaption>
+        <div class="id">mood-0028 · <span class="note">skupina komunity, candid</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">friendly</span><span class="t emotion">engaged</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm engaged playful" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0029.jpg" alt="mood-0029">
+      <figcaption>
+        <div class="id">mood-0029 · <span class="note">interakce komunity</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">engaged</span><span class="t emotion">playful</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm grounded" data-setting="home" data-lighting="natural soft" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0030.jpg" alt="mood-0030">
+      <figcaption>
+        <div class="id">mood-0030 · <span class="note">skupinový portrét v interiéru</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">grounded</span><span class="t setting">home</span><span class="t lighting">natural</span><span class="t lighting">soft</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="warm serene" data-setting="" data-lighting="soft" data-palette="muted warm" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0031.jpg" alt="mood-0031">
+      <figcaption>
+        <div class="id">mood-0031 · <span class="note">dvojice, blízkost</span></div>
+        <div class="tags"><span class="t emotion">warm</span><span class="t emotion">serene</span><span class="t lighting">soft</span><span class="t palette">muted</span><span class="t palette">warm</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="dynamic friendly warm" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0032.jpg" alt="mood-0032">
+      <figcaption>
+        <div class="id">mood-0032 · <span class="note">skupina, společná energie</span></div>
+        <div class="tags"><span class="t emotion">dynamic</span><span class="t emotion">friendly</span><span class="t emotion">warm</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0016.jpg" alt="pose-0016">
+      <figcaption>
+        <div class="id">pose-0016 · <span class="note">polopostava, sebejisté, u zdi</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident bold" data-setting="" data-lighting="natural" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0017.jpg" alt="pose-0017">
+      <figcaption>
+        <div class="id">pose-0017 · <span class="note">přímý pohled, ruce v bok</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">bold</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0018.jpg" alt="pose-0018">
+      <figcaption>
+        <div class="id">pose-0018 · <span class="note">¾ postava, klidná jistota</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident approachable" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0019.jpg" alt="pose-0019">
+      <figcaption>
+        <div class="id">pose-0019 · <span class="note">ramena otevřená, přímý kontakt</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t emotion">approachable</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed confident" data-setting="urban" data-lighting="natural" data-palette="earthy muted" data-shot="full">
+      <img loading="lazy" src="poses/pose-0020.jpg" alt="pose-0020">
+      <figcaption>
+        <div class="id">pose-0020 · <span class="note">opřený o cihlovou zeď</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">relaxed</span><span class="t emotion">confident</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">earthy</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm confident" data-setting="" data-lighting="natural" data-palette="muted" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0021.jpg" alt="pose-0021">
+      <figcaption>
+        <div class="id">pose-0021 · <span class="note">civilní jistota, půlportrét</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="full">
+      <img loading="lazy" src="poses/pose-0022.jpg" alt="pose-0022">
+      <figcaption>
+        <div class="id">pose-0022 · <span class="note">opřený o zeď, uvolněně</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">relaxed</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident grounded" data-setting="" data-lighting="natural" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0023.jpg" alt="pose-0023">
+      <figcaption>
+        <div class="id">pose-0023 · <span class="note">stoj, váha na jedné noze</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed calm confident" data-setting="" data-lighting="natural" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0024.jpg" alt="pose-0024">
+      <figcaption>
+        <div class="id">pose-0024 · <span class="note">ruce v kapsách, klid</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">relaxed</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful" data-setting="" data-lighting="soft" data-palette="muted" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0025.jpg" alt="pose-0025">
+      <figcaption>
+        <div class="id">pose-0025 · <span class="note">pohled stranou, přemýšlivý</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t lighting">soft</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="grounded serene" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="environmental">
+      <img loading="lazy" src="poses/pose-0026.jpg" alt="pose-0026">
+      <figcaption>
+        <div class="id">pose-0026 · <span class="note">postava v prostoru, měřítko</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">grounded</span><span class="t emotion">serene</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed calm" data-setting="urban" data-lighting="natural" data-palette="muted" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0027.jpg" alt="pose-0027">
+      <figcaption>
+        <div class="id">pose-0027 · <span class="note">opřený, klidná energie</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">relaxed</span><span class="t emotion">calm</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">muted</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="dynamic confident engaged" data-setting="stage" data-lighting="mixed dramatic" data-palette="cool dark" data-shot="environmental">
+      <img loading="lazy" src="moodboard/mood-0033.jpg" alt="mood-0033">
+      <figcaption>
+        <div class="id">mood-0033 · <span class="note">speaker on stage, dynamic</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">dynamic</span><span class="t emotion">confident</span><span class="t emotion">engaged</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t lighting">dramatic</span><span class="t palette">cool</span><span class="t palette">dark</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="engaged dynamic" data-setting="stage" data-lighting="mixed" data-palette="cool" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0034.jpg" alt="mood-0034">
+      <figcaption>
+        <div class="id">mood-0034 · <span class="note">presenter gesture, engaged</span></div>
+        <div class="tags"><span class="t emotion">engaged</span><span class="t emotion">dynamic</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="dynamic bold engaged" data-setting="stage" data-lighting="mixed dramatic" data-palette="cool dark" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0035.jpg" alt="mood-0035">
+      <figcaption>
+        <div class="id">mood-0035 · <span class="note">conference talk energy</span></div>
+        <div class="tags"><span class="t emotion">dynamic</span><span class="t emotion">bold</span><span class="t emotion">engaged</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t lighting">dramatic</span><span class="t palette">cool</span><span class="t palette">dark</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="engaged focused" data-setting="stage" data-lighting="mixed" data-palette="cool" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0036.jpg" alt="mood-0036">
+      <figcaption>
+        <div class="id">mood-0036 · <span class="note">speaker mid-explanation</span></div>
+        <div class="tags"><span class="t emotion">engaged</span><span class="t emotion">focused</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="focused" data-setting="office" data-lighting="mixed" data-palette="cool" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0037.jpg" alt="mood-0037">
+      <figcaption>
+        <div class="id">mood-0037 · <span class="note">working at laptop, focused</span></div>
+        <div class="tags"><span class="t emotion">focused</span><span class="t setting">office</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="focused calm" data-setting="office" data-lighting="mixed low-key" data-palette="cool dark" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0038.jpg" alt="mood-0038">
+      <figcaption>
+        <div class="id">mood-0038 · <span class="note">man laptop cool light</span></div>
+        <div class="tags"><span class="t emotion">focused</span><span class="t emotion">calm</span><span class="t setting">office</span><span class="t lighting">mixed</span><span class="t lighting">low-key</span><span class="t palette">cool</span><span class="t palette">dark</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="focused intense" data-setting="office" data-lighting="low-key dark" data-palette="dark cool" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0039.jpg" alt="mood-0039">
+      <figcaption>
+        <div class="id">mood-0039 · <span class="note">screen glow, dark workspace</span></div>
+        <div class="tags"><span class="t emotion">focused</span><span class="t emotion">intense</span><span class="t setting">office</span><span class="t lighting">low-key</span><span class="t lighting">dark</span><span class="t palette">dark</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="focused" data-setting="office" data-lighting="soft" data-palette="cool neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0040.jpg" alt="mood-0040">
+      <figcaption>
+        <div class="id">mood-0040 · <span class="note">focused at desk, modern</span></div>
+        <div class="tags"><span class="t emotion">focused</span><span class="t setting">office</span><span class="t lighting">soft</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="focused" data-setting="office" data-lighting="soft" data-palette="neutral cool" data-shot="hands">
+      <img loading="lazy" src="moodboard/mood-0041.jpg" alt="mood-0041">
+      <figcaption>
+        <div class="id">mood-0041 · <span class="note">laptop hands detail</span></div>
+        <div class="tags"><span class="t shot">hands</span><span class="t emotion">focused</span><span class="t setting">office</span><span class="t lighting">soft</span><span class="t palette">neutral</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident engaged" data-setting="stage" data-lighting="mixed" data-palette="cool" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0042.jpg" alt="mood-0042">
+      <figcaption>
+        <div class="id">mood-0042 · <span class="note">presenter portrait stage</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t emotion">engaged</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="engaged authoritative" data-setting="stage" data-lighting="mixed" data-palette="cool" data-shot="environmental">
+      <img loading="lazy" src="moodboard/mood-0043.jpg" alt="mood-0043">
+      <figcaption>
+        <div class="id">mood-0043 · <span class="note">speaker to audience</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">engaged</span><span class="t emotion">authoritative</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="dynamic engaged" data-setting="stage" data-lighting="mixed" data-palette="cool" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0044.jpg" alt="mood-0044">
+      <figcaption>
+        <div class="id">mood-0044 · <span class="note">presenting, gestural</span></div>
+        <div class="tags"><span class="t emotion">dynamic</span><span class="t emotion">engaged</span><span class="t setting">stage</span><span class="t lighting">mixed</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="engaged warm friendly" data-setting="office" data-lighting="natural" data-palette="neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0045.jpg" alt="mood-0045">
+      <figcaption>
+        <div class="id">mood-0045 · <span class="note">teaching/explaining candid</span></div>
+        <div class="tags"><span class="t emotion">engaged</span><span class="t emotion">warm</span><span class="t emotion">friendly</span><span class="t setting">office</span><span class="t lighting">natural</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident" data-setting="studio" data-lighting="soft" data-palette="neutral cool" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0046.jpg" alt="mood-0046">
+      <figcaption>
+        <div class="id">mood-0046 · <span class="note">3/4 portrait modern</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="approachable friendly confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0047.jpg" alt="mood-0047">
+      <figcaption>
+        <div class="id">mood-0047 · <span class="note">approachable to camera</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">approachable</span><span class="t emotion">friendly</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="dynamic" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="hands">
+      <img loading="lazy" src="moodboard/mood-0048.jpg" alt="mood-0048">
+      <figcaption>
+        <div class="id">mood-0048 · <span class="note">dynamic hands in motion</span></div>
+        <div class="tags"><span class="t shot">hands</span><span class="t emotion">dynamic</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident calm" data-setting="studio neutral-bg" data-lighting="soft" data-palette="neutral monochrome" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0049.jpg" alt="mood-0049">
+      <figcaption>
+        <div class="id">mood-0049 · <span class="note">clean studio headshot, grey</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t emotion">calm</span><span class="t setting">studio</span><span class="t setting">neutral-bg</span><span class="t lighting">soft</span><span class="t palette">neutral</span><span class="t palette">monochrome</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm confident" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0050.jpg" alt="mood-0050">
+      <figcaption>
+        <div class="id">mood-0050 · <span class="note">studio portrait, soft key</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0051.jpg" alt="mood-0051">
+      <figcaption>
+        <div class="id">mood-0051 · <span class="note">confident studio headshot</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm" data-setting="studio neutral-bg" data-lighting="soft" data-palette="neutral monochrome" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0052.jpg" alt="mood-0052">
+      <figcaption>
+        <div class="id">mood-0052 · <span class="note">minimal grey backdrop</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t setting">studio</span><span class="t setting">neutral-bg</span><span class="t lighting">soft</span><span class="t palette">neutral</span><span class="t palette">monochrome</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident grounded" data-setting="urban" data-lighting="natural" data-palette="cool neutral" data-shot="environmental">
+      <img loading="lazy" src="moodboard/mood-0053.jpg" alt="mood-0053">
+      <figcaption>
+        <div class="id">mood-0053 · <span class="note">architectural environmental portrait</span></div>
+        <div class="tags"><span class="t shot">environmental</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm bold" data-setting="urban" data-lighting="bright natural" data-palette="cool neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0054.jpg" alt="mood-0054">
+      <figcaption>
+        <div class="id">mood-0054 · <span class="note">modern building negative space</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t emotion">bold</span><span class="t setting">urban</span><span class="t lighting">bright</span><span class="t lighting">natural</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident authoritative" data-setting="urban" data-lighting="natural" data-palette="cool neutral" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0055.jpg" alt="mood-0055">
+      <figcaption>
+        <div class="id">mood-0055 · <span class="note">businessman clean lines</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">authoritative</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident authoritative" data-setting="office" data-lighting="soft" data-palette="cool neutral" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0056.jpg" alt="mood-0056">
+      <figcaption>
+        <div class="id">mood-0056 · <span class="note">confident professional, modern</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">authoritative</span><span class="t setting">office</span><span class="t lighting">soft</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident grounded" data-setting="urban" data-lighting="natural" data-palette="cool neutral" data-shot="full">
+      <img loading="lazy" src="moodboard/mood-0057.jpg" alt="mood-0057">
+      <figcaption>
+        <div class="id">mood-0057 · <span class="note">full-body architectural</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm bold" data-setting="urban" data-lighting="bright" data-palette="cool neutral" data-shot="">
+      <img loading="lazy" src="moodboard/mood-0058.jpg" alt="mood-0058">
+      <figcaption>
+        <div class="id">mood-0058 · <span class="note">negative space cover frame</span></div>
+        <div class="tags"><span class="t emotion">calm</span><span class="t emotion">bold</span><span class="t setting">urban</span><span class="t lighting">bright</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident engaged" data-setting="office" data-lighting="soft" data-palette="neutral" data-shot="seated">
+      <img loading="lazy" src="moodboard/mood-0059.jpg" alt="mood-0059">
+      <figcaption>
+        <div class="id">mood-0059 · <span class="note">seated leaning in, confident</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">confident</span><span class="t emotion">engaged</span><span class="t setting">office</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="thoughtful focused" data-setting="" data-lighting="dramatic low-key" data-palette="dark cool" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0060.jpg" alt="mood-0060">
+      <figcaption>
+        <div class="id">mood-0060 · <span class="note">profile vision frame</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t emotion">focused</span><span class="t lighting">dramatic</span><span class="t lighting">low-key</span><span class="t palette">dark</span><span class="t palette">cool</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="confident authoritative" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="moodboard/mood-0061.jpg" alt="mood-0061">
+      <figcaption>
+        <div class="id">mood-0061 · <span class="note">arms-folded confident</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">authoritative</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="moodboard" data-emotion="calm confident" data-setting="studio neutral-bg" data-lighting="soft" data-palette="neutral monochrome" data-shot="headshot">
+      <img loading="lazy" src="moodboard/mood-0062.jpg" alt="mood-0062">
+      <figcaption>
+        <div class="id">mood-0062 · <span class="note">clean minimal portrait</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t setting">neutral-bg</span><span class="t lighting">soft</span><span class="t palette">neutral</span><span class="t palette">monochrome</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident bold" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0028.jpg" alt="pose-0028">
+      <figcaption>
+        <div class="id">pose-0028 · <span class="note">tight headshot, direct gaze</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t emotion">bold</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="approachable confident" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0029.jpg" alt="pose-0029">
+      <figcaption>
+        <div class="id">pose-0029 · <span class="note">headshot, slight angle</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">approachable</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident relaxed" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0030.jpg" alt="pose-0030">
+      <figcaption>
+        <div class="id">pose-0030 · <span class="note">3/4 confident, arms relaxed</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">relaxed</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="approachable friendly" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0031.jpg" alt="pose-0031">
+      <figcaption>
+        <div class="id">pose-0031 · <span class="note">3/4 approachable smile</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">approachable</span><span class="t emotion">friendly</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="engaged confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="seated">
+      <img loading="lazy" src="poses/pose-0032.jpg" alt="pose-0032">
+      <figcaption>
+        <div class="id">pose-0032 · <span class="note">seated, leaning in</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">engaged</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0033.jpg" alt="pose-0033">
+      <figcaption>
+        <div class="id">pose-0033 · <span class="note">profile / looking off</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident grounded" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0034.jpg" alt="pose-0034">
+      <figcaption>
+        <div class="id">pose-0034 · <span class="note">full body standing, weight shift</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident grounded authoritative" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0035.jpg" alt="pose-0035">
+      <figcaption>
+        <div class="id">pose-0035 · <span class="note">arms folded, grounded</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t emotion">authoritative</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed confident approachable" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0036.jpg" alt="pose-0036">
+      <figcaption>
+        <div class="id">pose-0036 · <span class="note">hands in pockets, casual confident</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">relaxed</span><span class="t emotion">confident</span><span class="t emotion">approachable</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="dynamic engaged" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0037.jpg" alt="pose-0037">
+      <figcaption>
+        <div class="id">pose-0037 · <span class="note">gesture mid-talk</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">dynamic</span><span class="t emotion">engaged</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident approachable" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0038.jpg" alt="pose-0038">
+      <figcaption>
+        <div class="id">pose-0038 · <span class="note">standing, open posture</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">approachable</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful focused" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0039.jpg" alt="pose-0039">
+      <figcaption>
+        <div class="id">pose-0039 · <span class="note">hand to chin, thoughtful</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t emotion">focused</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="dynamic engaged" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0040.jpg" alt="pose-0040">
+      <figcaption>
+        <div class="id">pose-0040 · <span class="note">three-quarter, hands expressive</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">dynamic</span><span class="t emotion">engaged</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident bold" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0041.jpg" alt="pose-0041">
+      <figcaption>
+        <div class="id">pose-0041 · <span class="note">headshot, direct gaze</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">confident</span><span class="t emotion">bold</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident authoritative" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0042.jpg" alt="pose-0042">
+      <figcaption>
+        <div class="id">pose-0042 · <span class="note">arms-folded, confident</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">confident</span><span class="t emotion">authoritative</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0043.jpg" alt="pose-0043">
+      <figcaption>
+        <div class="id">pose-0043 · <span class="note">¾ turn, composed</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="engaged focused" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="seated">
+      <img loading="lazy" src="poses/pose-0044.jpg" alt="pose-0044">
+      <figcaption>
+        <div class="id">pose-0044 · <span class="note">seated, leaning forward</span></div>
+        <div class="tags"><span class="t shot">seated</span><span class="t emotion">engaged</span><span class="t emotion">focused</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident grounded" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0045.jpg" alt="pose-0045">
+      <figcaption>
+        <div class="id">pose-0045 · <span class="note">full-body, grounded stance</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">grounded</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="thoughtful" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0046.jpg" alt="pose-0046">
+      <figcaption>
+        <div class="id">pose-0046 · <span class="note">profile, looking off</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">thoughtful</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed confident" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="three-quarter">
+      <img loading="lazy" src="poses/pose-0047.jpg" alt="pose-0047">
+      <figcaption>
+        <div class="id">pose-0047 · <span class="note">hands in pockets, relaxed-confident</span></div>
+        <div class="tags"><span class="t shot">three-quarter</span><span class="t emotion">relaxed</span><span class="t emotion">confident</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="confident approachable" data-setting="" data-lighting="soft" data-palette="neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0048.jpg" alt="pose-0048">
+      <figcaption>
+        <div class="id">pose-0048 · <span class="note">standing, shoulders open</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">confident</span><span class="t emotion">approachable</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="calm confident" data-setting="studio" data-lighting="soft" data-palette="neutral" data-shot="headshot">
+      <img loading="lazy" src="poses/pose-0049.jpg" alt="pose-0049">
+      <figcaption>
+        <div class="id">pose-0049 · <span class="note">centered headshot, calm</span></div>
+        <div class="tags"><span class="t shot">headshot</span><span class="t emotion">calm</span><span class="t emotion">confident</span><span class="t setting">studio</span><span class="t lighting">soft</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+
+    <figure class="tile" data-kind="pose" data-emotion="relaxed confident" data-setting="urban" data-lighting="natural" data-palette="cool neutral" data-shot="full">
+      <img loading="lazy" src="poses/pose-0050.jpg" alt="pose-0050">
+      <figcaption>
+        <div class="id">pose-0050 · <span class="note">leaning on wall, architectural</span></div>
+        <div class="tags"><span class="t shot">full</span><span class="t emotion">relaxed</span><span class="t emotion">confident</span><span class="t setting">urban</span><span class="t lighting">natural</span><span class="t palette">cool</span><span class="t palette">neutral</span></div>
+      </figcaption>
+    </figure>
+  </section>
+<script>
+  const active = {}; // axis -> Set of values
+  const grid = document.getElementById('grid');
+  const tiles = [...grid.querySelectorAll('.tile')];
+  function apply() {
+    let shown = 0;
+    for (const t of tiles) {
+      let ok = true;
+      for (const axis in active) {
+        if (!active[axis].size) continue;
+        const have = (t.dataset[axis] || '').split(' ').filter(Boolean);
+        if (![...active[axis]].some(v => have.includes(v))) { ok = false; break; }
+      }
+      t.classList.toggle('hide', !ok);
+      if (ok) shown++;
+    }
+    document.getElementById('count').textContent = shown + ' shown';
+  }
+  document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    const { axis, val } = c.dataset;
+    active[axis] = active[axis] || new Set();
+    if (active[axis].has(val)) { active[axis].delete(val); c.classList.remove('on'); }
+    else { active[axis].add(val); c.classList.add('on'); }
+    apply();
+  }));
+  document.getElementById('clear').addEventListener('click', () => {
+    for (const k in active) active[k].clear();
+    document.querySelectorAll('.chip.on').forEach(c => c.classList.remove('on'));
+    apply();
+  });
+  apply();
+</script>
+</body></html>
