@@ -1,3 +1,8 @@
+## [2026-09-17] - Úvodní triptych bez nástupního fade
+
+- První fotografie ve všech třech panelech se zobrazují bez fade; pomalý zoom a prolínání dalších fotografií zůstávají.
+- Regresní test pokrývá první zobrazení, výměnu i návrat na první fotografii.
+
 ## [2026-09-17] - perf(homepage): preconnect na Cloudinary, pryč s next-themes
 
 - **preconnect**: `<link rel="preconnect" href="https://res.cloudinary.com">` do

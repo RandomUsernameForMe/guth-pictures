@@ -69,7 +69,7 @@ function TriptychPanel({
       {prev !== null && (
         <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: kbAnimation }} loading="eager" aria-hidden />
       )}
-      <img key={cur} src={images[cur]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
+      <img key={cur} src={images[cur]} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ animation: prev === null ? kbAnimation : `${kbAnimation}, heroFadeIn 1.6s ease-out` }} loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
       <FilmicTint />
       {/* Accent duotone — unifies all three panels toward the brand gold. Tune via opacities. */}
       <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />
