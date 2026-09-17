@@ -1,3 +1,34 @@
+## [2026-09-17] - perf(homepage): preconnect na Cloudinary, pryč s next-themes
+
+- **preconnect**: `<link rel="preconnect" href="https://res.cloudinary.com">` do
+  `<head>`. Hero fotky čekaly na DNS + TCP + TLS k cizí doméně (naměřený TTFB
+  Cloudinary 280–470 ms, z toho ~100–150 ms je jen navázání spojení).
+  Bez `crossorigin` — `<img>` jede non-CORS, s atributem by se otevřelo spojení,
+  které by se nepoužilo.
+- **next-themes pryč**: `ThemeProvider` měl `forcedTheme="dark"`, takže
+  `<html className="dark">` natvrdo dělá totéž bez dependency a bez blokujícího
+  init skriptu v head. `suppressHydrationWarning` tím pádem taky netřeba.
+- **Smazán mrtvý kód**: `ThemeToggle.tsx` (nikde se nerenderoval),
+  `AmbientGlow.tsx` (vracel `null`), `ThemeProvider.tsx`.
+- `.light` paleta v `globals.css` zůstává — light mode jde zapnout zpátky.
+
+## [2026-09-17] - perf(homepage): ISR + EU region, poloviční hero payload, lehčí fonty
+
+Naměřeno před: TTFB 350–470 ms (cold 2,3 s), `x-vercel-cache: MISS`,
+render v `iad1` (Washington), 6 eager hero fotek (288 kB), 8 woff2 (146 kB).
+
+- **ISR**: `revalidate = 3600` na homepage + `generateStaticParams` a
+  `setRequestLocale` v `[locale]/layout.tsx`. Stránka je statická → 0 KV čtení
+  na request (dřív 5, z toho `getContent` 2×). Invalidaci už řeší
+  `/api/admin/revalidate` + `revalidatePath` v content route.
+- **Region**: nový `vercel.json` s `regions: ["fra1"]` — konec transatlantického
+  skoku Frankfurt → Washington → Frankfurt.
+- **Hero**: `TriptychPanel` renderoval `images[prev]` i `images[cur]`; při
+  `cur=0` byl `prev` poslední fotka panelu → 6 eager fotek místo 3.
+  `prev` je nově `null` do prvního crossfade; `loading="lazy"` na panelech 2–3.
+- **Fonty**: DM Mono ze 3 řezů × 2 stylů na jeden (400 normal — italic ani
+  300/500 se nikde nepoužívaly), DM Sans bez `opsz` axis. 8 souborů → 2.
+
 ## [2026-05-31] - fix(nav): Nav.tsx vrací null na homepage — HeroSection má vlastní navbar
 
 ## [2026-05-31] - fix(hero): nav linky skupinově pod CTAs, vždy těsně za buttons

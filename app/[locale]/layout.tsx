@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Nav } from "@/components/Nav";
-import { AmbientGlow } from "@/modules/homepage/components/AmbientGlow";
 import { Footer } from "@/components/Footer";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getThemeColors, buildThemeStyle } from "@/lib/theme";
@@ -17,15 +15,14 @@ import "../globals.css";
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
-  axes: ["opsz"],
   display: "swap",
 });
 
+// Mono is used only for small uppercase labels — one weight, no italic.
 const dmMono = DM_Mono({
   subsets: ["latin"],
   variable: "--font-dm-mono",
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -38,6 +35,10 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
 };
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default async function LocaleLayout({
   children,
@@ -52,8 +53,12 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // Enables static rendering — without it next-intl reads the locale from
+  // request headers and every page under [locale] becomes dynamic.
+  setRequestLocale(locale);
+
   const [messages, themeColors, content, email] = await Promise.all([
-    getMessages(),
+    getMessages({ locale }),
     getThemeColors(),
     getContent(locale),
     getContactEmail(),
@@ -72,22 +77,21 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className="dark">
       <head>
+        {/* Hero photos load from Cloudinary — warm the connection before the parser reaches them. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
       <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
-            <Nav />
-            <div className="relative pt-16 min-h-screen flex flex-col">
-              <AmbientGlow />
-              {children}
-              <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
-            </div>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <Nav />
+          <div className="relative pt-16 min-h-screen flex flex-col">
+            {children}
+            <Footer title={content.home.title} subtitle={content.home.subtitle} email={email} />
+          </div>
+        </NextIntlClientProvider>
         <Analytics />
       </body>
     </html>
