@@ -1,5 +1,5 @@
 import React from "react";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/ContactForm";
 import { HeroSection } from "@/modules/homepage/components/HeroSection";
 import { AnimatedSection } from "@/components/AnimatedSection";
@@ -13,6 +13,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Testimonials } from "@/modules/homepage/components/Testimonials";
 import { StickyContactCta } from "@/modules/homepage/components/StickyContactCta";
+
+// Static with ISR — content changes are pushed through /api/admin/revalidate,
+// so the hourly window is just a safety net.
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -45,6 +49,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const [t, content, images] = await Promise.all([
     getTranslations({ locale }),
     getContent(locale),

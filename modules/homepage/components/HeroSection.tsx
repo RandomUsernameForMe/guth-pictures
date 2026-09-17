@@ -53,15 +53,16 @@ function TriptychPanel({
   index: number;
   paused: boolean;
 }) {
-  const [cur, setCur] = useState(0);
+  // prev is null until the first crossfade — otherwise the initial paint would
+  // eagerly load the panel's last photo underneath the first one (2x the bytes
+  // for something nobody sees).
+  const [[prev, cur], setPair] = useState<[number | null, number]>([null, 0]);
 
   useEffect(() => {
     if (images.length <= 1) return;
-    const id = setInterval(() => setCur((c) => (c + 1) % images.length), interval);
+    const id = setInterval(() => setPair(([, c]) => [c, (c + 1) % images.length]), interval);
     return () => clearInterval(id);
   }, [images.length, interval]);
-
-  const prev = (cur + images.length - 1) % images.length;
 
   return (
     <div
@@ -79,8 +80,10 @@ function TriptychPanel({
         className="hero-kb absolute inset-0"
         style={{ animation: kbAnimation, animationPlayState: paused ? "paused" : "running", willChange: "transform", transform: "translateZ(0)", isolation: "isolate", contain: "paint" }}
       >
-        <img src={images[prev]?.src} srcSet={images[prev]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" aria-hidden />
-        <img key={cur} src={images[cur]?.src} srcSet={images[cur]?.srcSet} sizes="33vw" alt="" className="hero-fade absolute inset-0 w-full h-full object-cover" style={{ animation: "heroFadeIn 1.6s ease-out" }} loading="eager" fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
+        {prev !== null && (
+          <img src={images[prev]?.src} srcSet={images[prev]?.srcSet} sizes="33vw" alt="" className="absolute inset-0 w-full h-full object-cover" loading="eager" aria-hidden />
+        )}
+        <img key={cur} src={images[cur]?.src} srcSet={images[cur]?.srcSet} sizes="33vw" alt="" className="hero-fade absolute inset-0 w-full h-full object-cover" style={{ animation: "heroFadeIn 1.6s ease-out" }} loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} aria-hidden />
         <FilmicTint />
         {/* Accent duotone — unifies all three panels toward the brand gold. Tune via opacities. */}
         <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "var(--color-accent)", mixBlendMode: "color", opacity: 0.14 }} />

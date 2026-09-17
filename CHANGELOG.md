@@ -1,3 +1,24 @@
+## [2026-09-17] - perf(homepage): ISR + EU region, poloviční hero payload, lehčí fonty
+
+Naměřeno na produkci před zásahem: TTFB 350–470 ms (cold 2,3 s),
+`x-vercel-cache: MISS`, render v `iad1` (Washington), 6 eager hero fotek
+(288 kB), 8 woff2 (146 kB), žádný preconnect na Cloudinary.
+
+- **ISR**: `revalidate = 3600` na homepage + `generateStaticParams` a
+  `setRequestLocale` v `[locale]/layout.tsx`. Stránka je statická → 0 KV čtení
+  na request (dřív 5, z toho `getContent` 2×). Zestatičtěl i portfolio, blog,
+  light-tester, foceni-101, privacy a vop pro obě locale. Invalidaci už řeší
+  `/api/admin/revalidate` + `revalidatePath` v content route.
+- **Region**: `regions: ["fra1"]` do `vercel.json` (crons zůstávají beze změny)
+  — konec skoku Frankfurt → Washington → Frankfurt na každý request.
+- **Hero**: `TriptychPanel` renderoval `images[prev]` i `images[cur]`; při
+  `cur=0` byl `prev` poslední fotka panelu → 6 eager fotek místo 3. `prev` je
+  nově `null` do prvního crossfade, panely 2–3 `loading="lazy"`.
+- **Fonty**: DM Mono ze 3 řezů × 2 stylů na jeden (400 normal — italic ani
+  300/500 se nikde nepoužívaly), DM Sans bez `opsz` axis. 8 souborů → 2.
+- **preconnect** na `res.cloudinary.com`, bez `crossorigin` (`<img>` jede
+  non-CORS, s atributem by se otevřelo spojení, které se nepoužije).
+
 ## [2026-05-31] - fix(nav): Nav.tsx vrací null na homepage — HeroSection má vlastní navbar
 
 ## [2026-05-31] - fix(hero): nav linky skupinově pod CTAs, vždy těsně za buttons
