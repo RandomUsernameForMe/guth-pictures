@@ -84,6 +84,15 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
               packages: content.sluzby.weddings.packages,
               note: content.sluzby.weddings.note,
             },
+            {
+              key: "business", number: "003", category: "firemní",
+              title: content.sluzby.business.title,
+              desc: content.sluzby.business.desc,
+              packages: content.sluzby.business.packages,
+              note: content.sluzby.business.note,
+              href: `/${locale}/firemni-portrety`,
+              hrefLabel: locale === "cs" ? "Vše o firemních portrétech" : "All about business portraits",
+            },
           ] satisfies ServiceItem[]}
         />
       </section>

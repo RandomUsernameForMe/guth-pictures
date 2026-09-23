@@ -57,3 +57,29 @@ describe("isValidContentData — testimonials", () => {
     expect(isValidContentData(d)).toBe(false);
   });
 });
+
+describe("isValidContentData — business service", () => {
+  const extra = { name: "Fotka navíc", price: "350 Kč", duration: "", includes: [] };
+
+  it("accepts data without business service (legacy)", () => {
+    expect(isValidContentData(valid())).toBe(true);
+  });
+
+  it("accepts business service with extras", () => {
+    const d = valid() as { sluzby: Record<string, unknown> };
+    d.sluzby.business = { title: "t", desc: "d", packages: [], extras: [extra] };
+    expect(isValidContentData(d)).toBe(true);
+  });
+
+  it("rejects business service with malformed extras", () => {
+    const d = valid() as { sluzby: Record<string, unknown> };
+    d.sluzby.business = { title: "t", desc: "d", packages: [], extras: [{ name: 1 }] };
+    expect(isValidContentData(d)).toBe(false);
+  });
+
+  it("rejects business service that is not an object", () => {
+    const d = valid() as { sluzby: Record<string, unknown> };
+    d.sluzby.business = "nope";
+    expect(isValidContentData(d)).toBe(false);
+  });
+});

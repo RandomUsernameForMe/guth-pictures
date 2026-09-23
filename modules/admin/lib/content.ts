@@ -8,6 +8,7 @@ export type ServiceContent = {
   title: string;
   desc: string;
   packages: PricingPackage[];
+  extras?: PricingPackage[]; // příplatky — name + price, duration/includes unused
   note?: string;
 };
 
@@ -25,6 +26,7 @@ export type ContentData = {
   sluzby: {
     portraits: ServiceContent;
     weddings: ServiceContent;
+    business: ServiceContent;
   };
   lightTesterPromo: { title: string; desc: string };
   testimonials: Testimonial[];
@@ -69,6 +71,23 @@ const defaults: Record<string, ContentData> = {
         ],
         note: "Možná záloha 30 % při rezervaci termínu.",
       },
+      business: {
+        title: "Firemní portréty",
+        desc: "Headshoty pro celý tým přímo u vás ve firmě. Jednotný styl, rychlé dodání a licence pro web, sociální sítě i média.",
+        packages: [
+          { name: "Solo", price: "3 900 Kč", duration: "do 1 hod", includes: ["1–3 osoby", "2 upravené fotky na osobu", "focení u vás nebo venku", "online galerie s výběrem"] },
+          { name: "Tým", price: "950 Kč / osoba", duration: "10–15 min na osobu", includes: ["4–15 osob, minimálně 4 900 Kč", "mobilní ateliér u vás ve firmě", "2 upravené fotky na osobu", "online galerie s výběrem"] },
+          { name: "Velký tým", price: "790 Kč / osoba", duration: "10–15 min na osobu", includes: ["16 a více osob", "mobilní ateliér u vás ve firmě", "2 upravené fotky na osobu", "online galerie s výběrem"] },
+          { name: "Firma v akci", price: "od 6 500 Kč", duration: "3 hod", includes: ["lidé při práci, prostory, detaily", "cca 30 upravených fotek", "pro web, kariérní stránky a výroční zprávy"] },
+        ],
+        extras: [
+          { name: "Fotka navíc", price: "350 Kč", duration: "", includes: [] },
+          { name: "Rozšířená licence (reklama, billboardy, podlicence)", price: "+30 %, min. 2 000 Kč", duration: "", includes: [] },
+          { name: "Doprava mimo Prahu", price: "8 Kč/km", duration: "", includes: [] },
+          { name: "Dofocení chybějících jiný den", price: "1 500 Kč + cena za osobu", duration: "", includes: [] },
+        ],
+        note: "Doprava po Praze v ceně.",
+      },
     },
     testimonials: [],
   },
@@ -105,25 +124,46 @@ const defaults: Record<string, ContentData> = {
         ],
         note: "30% deposit available when booking.",
       },
+      business: {
+        title: "Business portraits",
+        desc: "Headshots for your whole team, shot on site at your office. Consistent style, fast delivery and a licence for web, social media and press.",
+        packages: [
+          { name: "Solo", price: "3 900 CZK", duration: "up to 1 hr", includes: ["1–3 people", "2 edited photos per person", "at your office or outdoors", "online gallery to pick from"] },
+          { name: "Team", price: "950 CZK / person", duration: "10–15 min per person", includes: ["4–15 people, minimum 4 900 CZK", "mobile studio at your office", "2 edited photos per person", "online gallery to pick from"] },
+          { name: "Large team", price: "790 CZK / person", duration: "10–15 min per person", includes: ["16+ people", "mobile studio at your office", "2 edited photos per person", "online gallery to pick from"] },
+          { name: "Company at work", price: "from 6 500 CZK", duration: "3 hrs", includes: ["people at work, spaces, details", "~30 edited photos", "for websites, career pages and annual reports"] },
+        ],
+        extras: [
+          { name: "Extra photo", price: "350 CZK", duration: "", includes: [] },
+          { name: "Extended licence (advertising, billboards, sublicensing)", price: "+30 %, min. 2 000 CZK", duration: "", includes: [] },
+          { name: "Travel outside Prague", price: "8 CZK/km", duration: "", includes: [] },
+          { name: "Make-up session for absentees", price: "1 500 CZK + per-person price", duration: "", includes: [] },
+        ],
+        note: "Travel within Prague included.",
+      },
     },
     testimonials: [],
   },
 };
 
-export function normalizeContent(data: ContentData): ContentData {
+const withIds = (pkgs: PricingPackage[]): PricingPackage[] =>
+  pkgs.map((pkg) => ({ ...pkg, id: pkg.id ?? crypto.randomUUID() }));
+
+export function normalizeContent(data: ContentData, locale = "cs"): ContentData {
   const normalizeService = (svc: ServiceContent): ServiceContent => ({
     ...svc,
-    packages: (svc.packages ?? []).map((pkg) => ({
-      ...pkg,
-      id: pkg.id ?? crypto.randomUUID(),
-    })),
+    packages: withIds(svc.packages ?? []),
+    ...(svc.extras && { extras: withIds(svc.extras) }),
   });
+  // KV data saved before the business page existed has no business service
+  const business = data.sluzby.business ?? (defaults[locale] ?? defaults.cs).sluzby.business;
   return {
     ...data,
     lightTesterPromo: data.lightTesterPromo ?? { title: "", desc: "" },
     sluzby: {
       portraits: normalizeService(data.sluzby.portraits),
       weddings: normalizeService(data.sluzby.weddings),
+      business: normalizeService(business),
     },
     testimonials: (data.testimonials ?? []).map((t) => ({
       ...t,
@@ -137,12 +177,12 @@ export async function getContent(locale: string): Promise<ContentData> {
   if (kv) {
     try {
       const data = await kv.get<ContentData>(`content:${locale}`);
-      if (data) return normalizeContent(data);
+      if (data) return normalizeContent(data, locale);
     } catch {
       // KV unavailable, fall through to defaults
     }
   }
-  return normalizeContent(defaults[locale] ?? defaults.cs);
+  return normalizeContent(defaults[locale] ?? defaults.cs, locale);
 }
 
 export async function setContent(locale: string, data: ContentData): Promise<void> {
