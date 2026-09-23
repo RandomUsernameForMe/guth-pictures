@@ -16,15 +16,9 @@ const MAX_PACKAGES = 10;
 const MAX_INCLUDES = 20;
 const MAX_TESTIMONIALS = 30;
 
-function isServiceContent(s: unknown): boolean {
-  if (!s || typeof s !== "object" || Array.isArray(s)) return false;
-  const o = s as Record<string, unknown>;
-  if (typeof o.title !== "string" || o.title.length > MAX_SHORT) return false;
-  if (typeof o.desc !== "string" || o.desc.length > MAX_LONG) return false;
-  // packages is optional for backward compat with KV data saved before this field existed
-  if (o.packages === undefined) return true;
-  if (!Array.isArray(o.packages) || o.packages.length > MAX_PACKAGES) return false;
-  return o.packages.every((p) => {
+function isPackages(v: unknown): boolean {
+  if (!Array.isArray(v) || v.length > MAX_PACKAGES) return false;
+  return v.every((p) => {
     if (!p || typeof p !== "object" || Array.isArray(p)) return false;
     const pkg = p as Record<string, unknown>;
     if (typeof pkg.name !== "string" || pkg.name.length > MAX_SHORT) return false;
@@ -33,6 +27,17 @@ function isServiceContent(s: unknown): boolean {
     if (!Array.isArray(pkg.includes) || pkg.includes.length > MAX_INCLUDES) return false;
     return pkg.includes.every((i) => typeof i === "string" && i.length <= MAX_SHORT);
   });
+}
+
+function isServiceContent(s: unknown): boolean {
+  if (!s || typeof s !== "object" || Array.isArray(s)) return false;
+  const o = s as Record<string, unknown>;
+  if (typeof o.title !== "string" || o.title.length > MAX_SHORT) return false;
+  if (typeof o.desc !== "string" || o.desc.length > MAX_LONG) return false;
+  if (o.note !== undefined && (typeof o.note !== "string" || o.note.length > MAX_LONG)) return false;
+  if (o.extras !== undefined && !isPackages(o.extras)) return false;
+  // packages is optional for backward compat with KV data saved before this field existed
+  return o.packages === undefined || isPackages(o.packages);
 }
 
 function isTestimonials(v: unknown): boolean {
@@ -58,7 +63,9 @@ export function isValidContentData(d: unknown): d is ContentData {
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   if (!isTestimonials(o.testimonials)) return false;
   const s = o.sluzby as Record<string, unknown>;
-  return isServiceContent(s.portraits) && isServiceContent(s.weddings);
+  // business is optional for backward compat with KV data saved before the business page existed
+  return isServiceContent(s.portraits) && isServiceContent(s.weddings)
+    && (s.business === undefined || isServiceContent(s.business));
 }
 
 export async function GET(req: NextRequest) {
@@ -90,6 +97,8 @@ export async function POST(req: NextRequest) {
   revalidatePath("/en");
   revalidatePath("/cs/sluzby");
   revalidatePath("/en/sluzby");
+  revalidatePath("/cs/firemni-portrety");
+  revalidatePath("/en/firemni-portrety");
   revalidatePath("/cs/o-mne");
   revalidatePath("/en/o-mne");
   return NextResponse.json({ ok: true });
