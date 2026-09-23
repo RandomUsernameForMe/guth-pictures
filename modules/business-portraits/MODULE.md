@@ -10,5 +10,5 @@ Landing page firemních portrétů: `/[locale]/firemni-portrety` (veřejná, v s
 
 ## Vazby
 
-- FAQ odpovídá smlouvě `smlouva-business-portrety.md` (licence, storno, dodání) — měnit obojí
+- FAQ odpovídá smlouvě `docs/smlouva-business-portrety.md` (licence, storno, dodání) — měnit obojí
 - Formulář = sdílený `ContactForm` (`?package=&service=` předvyplní zprávu), sticky CTA = `StickyContactCta` (potřebuje `#hero` a `#kontakt`)

@@ -1,5 +1,5 @@
 // Static copy for /[locale]/firemni-portrety. Prices live in admin content (sluzby.business).
-// FAQ answers mirror smlouva-business-portrety.md (licence, storno, delivery) — update both together.
+// FAQ answers mirror docs/smlouva-business-portrety.md (licence, storno, delivery) — update both together.
 
 // Cloudinary public IDs. Empty string = hatch placeholder until real photos exist.
 // [0] = hero, rest = grid (keep grid a multiple of 3)

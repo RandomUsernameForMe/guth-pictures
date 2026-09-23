@@ -1,3 +1,7 @@
+## [2026-09-23] - Smlouva o dílo a licenční smlouva pro firemní portréty
+
+- `docs/smlouva-business-portrety.md`: smlouva o dílo + licence (Základní/Rozšířená), GDPR, portfolio jen se souhlasem klienta, soud v Praze. FAQ na `/firemni-portrety` z ní vychází.
+
 ## [2026-09-23] - Landing page firemních portrétů + ceník v adminu
 
 - Nová stránka `/[locale]/firemni-portrety`: hero, využití, headshoty, Firma v akci, 4 kroky, ceník s příplatky, FAQ (JSON-LD), formulář, sticky CTA. Fotky zatím šrafované placeholdery (`modules/business-portraits/copy.ts`).
