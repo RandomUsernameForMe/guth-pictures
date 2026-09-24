@@ -14,6 +14,8 @@ export type ServiceItem = {
   desc: string;
   packages: PricingPackage[];
   note?: string;
+  href?: string; // dedicated service page
+  hrefLabel?: string;
 };
 
 type Props = {
@@ -108,6 +110,16 @@ export function ServiceCards({ services, selectLabel }: Props) {
 
                   {service.note && (
                     <p className="mt-4 text-xs text-[var(--color-text-ghost)]">{service.note}</p>
+                  )}
+
+                  {service.href && (
+                    <a
+                      href={service.href}
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-block mt-4 text-sm underline underline-offset-4 hover:text-[var(--color-text)]"
+                    >
+                      {service.hrefLabel}<span aria-hidden="true"> →</span>
+                    </a>
                   )}
 
                 </motion.div>

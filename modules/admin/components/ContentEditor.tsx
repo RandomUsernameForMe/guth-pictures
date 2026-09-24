@@ -18,6 +18,7 @@ const emptyContent = (): ContentData => ({
   sluzby: {
     portraits: { title: "", desc: "", packages: [], note: "" },
     weddings: { title: "", desc: "", packages: [], note: "" },
+    business: { title: "", desc: "", packages: [], extras: [], note: "" },
   },
   testimonials: [],
 });
@@ -316,6 +317,36 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>
 
+        <Section title="Firemní portréty">
+          <Field
+            label="Nadpis"
+            value={current.sluzby.business.title}
+            onChange={(v) => patch((d) => { d.sluzby.business.title = v; })}
+          />
+          <Field
+            label="Popis"
+            value={current.sluzby.business.desc}
+            onChange={(v) => patch((d) => { d.sluzby.business.desc = v; })}
+            textarea
+          />
+          <PackageEditor
+            packages={current.sluzby.business.packages ?? []}
+            onChange={(pkgs) => patch((d) => { d.sluzby.business.packages = pkgs; })}
+          />
+          <PackageEditor
+            label="Příplatky"
+            addLabel="+ Přidat příplatek"
+            simple
+            packages={current.sluzby.business.extras ?? []}
+            onChange={(pkgs) => patch((d) => { d.sluzby.business.extras = pkgs; })}
+          />
+          <Field
+            label="Poznámka pod ceníkem"
+            value={current.sluzby.business.note ?? ""}
+            onChange={(v) => patch((d) => { d.sluzby.business.note = v; })}
+          />
+        </Section>
+
         <Section title="Reference (testimonials)">
           <TestimonialEditor
             testimonials={current.testimonials ?? []}
@@ -390,9 +421,15 @@ function Field({
 function PackageEditor({
   packages,
   onChange,
+  label = "Balíčky ceníku",
+  addLabel = "+ Přidat balíček",
+  simple = false,
 }: {
   packages: PricingPackage[];
   onChange: (pkgs: PricingPackage[]) => void;
+  label?: string;
+  addLabel?: string;
+  simple?: boolean; // name + price only
 }) {
   function updatePkg(i: number, updater: (p: PricingPackage) => void) {
     const next = packages.map((p, idx) => {
@@ -409,11 +446,11 @@ function PackageEditor({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-gray-400">Balíčky ceníku</p>
+      <p className="text-sm text-gray-400">{label}</p>
       {packages.map((pkg, i) => (
         <div key={pkg.id ?? String(i)} className="border border-white/10 p-4 space-y-2">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-500 uppercase tracking-wider">Balíček {i + 1}</span>
+            <span className="text-xs text-gray-500 uppercase tracking-wider">{simple ? "Položka" : "Balíček"} {i + 1}</span>
             <button
               type="button"
               onClick={() => removePkg(i)}
@@ -422,7 +459,7 @@ function PackageEditor({
               Odebrat
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className={`grid gap-2 ${simple ? "grid-cols-2" : "grid-cols-3"}`}>
             <input
               type="text"
               placeholder="Název"
@@ -437,21 +474,21 @@ function PackageEditor({
               onChange={(e) => updatePkg(i, (p) => { p.price = e.target.value; })}
               className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
             />
-            <input
+            {!simple && <input
               type="text"
               placeholder="Délka"
               value={pkg.duration}
               onChange={(e) => updatePkg(i, (p) => { p.duration = e.target.value; })}
               className="bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40"
-            />
+            />}
           </div>
-          <textarea
+          {!simple && <textarea
             placeholder={"Co zahrnuje (každá položka na nový řádek)"}
             value={pkg.includes.join("\n")}
             onChange={(e) => updatePkg(i, (p) => { p.includes = e.target.value.split("\n"); })}
             rows={3}
             className="w-full bg-white/5 border border-white/10 px-2 py-1.5 text-sm text-white focus:outline-none focus:border-white/40 resize-none"
-          />
+          />}
         </div>
       ))}
       <button
@@ -459,7 +496,7 @@ function PackageEditor({
         onClick={addPkg}
         className="text-sm text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-1.5 hover:border-white/30"
       >
-        + Přidat balíček
+        {addLabel}
       </button>
     </div>
   );
