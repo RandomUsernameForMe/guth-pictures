@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { getContent } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
+import { ServiceLinks } from "@/modules/homepage/components/ServiceLinks";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -95,6 +96,7 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
             },
           ] satisfies ServiceItem[]}
         />
+        <ServiceLinks locale={locale} />
       </section>
       <section className="max-w-4xl mx-auto px-6 pb-16">
         {/* JSON-LD: static FAQ const above, "<" escaped so it cannot close the script tag */}

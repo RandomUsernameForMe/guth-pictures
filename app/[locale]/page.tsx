@@ -13,6 +13,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Testimonials } from "@/modules/homepage/components/Testimonials";
 import { StickyContactCta } from "@/modules/homepage/components/StickyContactCta";
+import { ServiceLinks } from "@/modules/homepage/components/ServiceLinks";
 
 // Static with ISR — content changes are pushed through /api/admin/revalidate,
 // so the hourly window is just a safety net.
@@ -134,6 +135,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               },
             ] satisfies ServiceItem[]}
           />
+          <ServiceLinks locale={locale} />
         </section>
       </AnimatedSection>
 

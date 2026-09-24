@@ -91,7 +91,7 @@ export default async function BlogPostPage({
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     inLanguage: locale,
-    author: { "@type": "Person", name: "Tomáš Guth Jarkovský" },
+    author: { "@type": "Person", name: "Tomáš Guth Jarkovský", url: `${siteUrl}/${locale}/o-mne` },
     publisher: { "@id": `${siteUrl}/#business` },
     mainEntityOfPage: `${siteUrl}/${locale}/blog/${slug}`,
   };
@@ -128,6 +128,9 @@ export default async function BlogPostPage({
       </div>
 
       <h1 className="text-4xl font-bold mb-6 leading-tight text-[var(--color-text)]">{loc.title}</h1>
+      <p className="mb-6 text-sm text-[var(--color-text-muted)]">
+        {locale === "cs" ? "Autor" : "Author"}: <Link href="/o-mne" className="underline">Tomáš Guth Jarkovský</Link>
+      </p>
 
       {loc.excerpt && (
         <p className="text-xl text-[var(--color-text-muted)] mb-10 leading-relaxed border-l-2 border-[var(--color-accent)] pl-5">

@@ -1,3 +1,10 @@
+## [2026-09-24] - SEO a GEO: dostupný obsah a stránky služeb
+
+- Izolované načítání URL parametrů: formulář a filtr již neblokují serverové HTML stránky.
+- Ceníky jsou v počátečním HTML a rozbalují se i bez JavaScriptu; zachován odkaz na firemní portréty.
+- České a anglické stránky portrétního a brandového focení, metadata, strukturovaná data, interní odkazy a sitemap.
+- Viditelné autorství článků a odkaz na fotografa; rozšířen přehled llms.txt.
+
 ## [2026-09-23] - Smlouva o dílo a licenční smlouva pro firemní portréty
 
 - `docs/smlouva-business-portrety.md`: smlouva o dílo + licence (Základní/Rozšířená), GDPR, portfolio jen se souhlasem klienta, soud v Praze. FAQ na `/firemni-portrety` z ní vychází.

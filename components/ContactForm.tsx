@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { contactEmail } from "@/lib/config";
@@ -8,6 +8,15 @@ import { contactEmail } from "@/lib/config";
 type Status = "idle" | "sending" | "success" | "error";
 
 export function ContactForm() {
+  const t = useTranslations("kontakt");
+  return (
+    <Suspense fallback={<p><a href={`mailto:${contactEmail}`} className="underline">{t("email")}: {contactEmail}</a></p>}>
+      <ContactFormFields />
+    </Suspense>
+  );
+}
+
+function ContactFormFields() {
   const t = useTranslations("kontakt");
   const [status, setStatus] = useState<Status>("idle");
   const searchParams = useSearchParams();

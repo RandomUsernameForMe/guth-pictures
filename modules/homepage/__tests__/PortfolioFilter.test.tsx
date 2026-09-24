@@ -4,6 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { PortfolioFilter } from "@/modules/homepage/components/PortfolioFilter";
 import type { GalleryPhoto } from "@/lib/cloudinary-utils";
 
+const query = vi.hoisted(() => ({ category: null as string | null }));
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(query.category ? { category: query.category } : {}),
+}));
+
 // Mock next-intl
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => {
@@ -47,6 +52,21 @@ const photos: GalleryPhoto[] = [
 ];
 
 describe("PortfolioFilter", () => {
+  beforeEach(() => { query.category = null; });
+
+  it("aplikuje kategorii z URL a reaguje na změnu navigace", () => {
+    query.category = "portréty";
+    const { rerender } = render(<PortfolioFilter photos={photos} locale="cs" />);
+    expect(screen.getAllByRole("img")).toHaveLength(2);
+    query.category = "svatby";
+    rerender(<PortfolioFilter photos={photos} locale="cs" />);
+    expect(screen.getAllByRole("img")).toHaveLength(1);
+    expect(screen.getByAltText("alt-s1")).toBeInTheDocument();
+    query.category = "neplatná";
+    rerender(<PortfolioFilter photos={photos} locale="cs" />);
+    expect(screen.getAllByRole("img")).toHaveLength(3);
+  });
+
   it("zobrazí všechny fotky při startu (žádný filtr)", () => {
     render(<PortfolioFilter photos={photos} locale="cs" />);
     expect(screen.getAllByRole("img")).toHaveLength(3);

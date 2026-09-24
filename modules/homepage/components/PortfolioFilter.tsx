@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -12,13 +12,18 @@ type Props = {
   locale: string;
 };
 
+function QueryCategory({ onChange }: { onChange: (category: string | null) => void }) {
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
+  useEffect(() => {
+    onChange(CATEGORIES.includes(category as typeof CATEGORIES[number]) ? category : null);
+  }, [category, onChange]);
+  return null;
+}
+
 export function PortfolioFilter({ photos, locale }: Props) {
   const t = useTranslations("portfolio");
-  const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category");
-  const [active, setActive] = useState<string | null>(
-    CATEGORIES.includes(initialCategory as typeof CATEGORIES[number]) ? initialCategory : null
-  );
+  const [active, setActive] = useState<string | null>(null);
 
   const filtered = active ? photos.filter((p) => p.category === active) : photos;
 
@@ -29,6 +34,9 @@ export function PortfolioFilter({ photos, locale }: Props) {
 
   return (
     <div>
+      <Suspense fallback={null}>
+        <QueryCategory onChange={setActive} />
+      </Suspense>
       <div className="flex gap-3 mb-10 flex-wrap">
         <button onClick={() => setActive(null)} className={btnClass(active === null)}>
           {active === null && (
