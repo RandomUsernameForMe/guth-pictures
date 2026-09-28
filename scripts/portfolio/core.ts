@@ -26,6 +26,19 @@ function shootKey(name: string): number {
   return m ? Number(m[1]) * 100 + Number(m[2]) : -1;
 }
 
+// Windows cesty jsou case-insensitive → porovnávej bez velikosti písmen, vrať název z disku
+export function matchShoot(shoots: string[], name: string): string | undefined {
+  const key = nfc(name).toLocaleLowerCase("cs");
+  return shoots.find((s) => nfc(s).toLocaleLowerCase("cs") === key);
+}
+
+// Tvar z Cloudinary Admin API (context: true)
+export type CloudinaryResource = { public_id: string; context?: { custom?: { shoot?: string } } };
+
+export function toWebPhoto(r: CloudinaryResource): WebPhoto {
+  return { publicId: r.public_id, shoot: r.context?.custom?.shoot };
+}
+
 export function sortShoots(names: string[]): string[] {
   return [...names].sort((a, b) => shootKey(b) - shootKey(a) || a.localeCompare(b, "cs"));
 }

@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import {
-  buildStatus, canAdd, CATEGORIES, isCategory, MAX_PER_SHOOT, nfc, shootFromPath, WEB_LIMIT,
+  buildStatus, canAdd, CATEGORIES, isCategory, matchShoot, MAX_PER_SHOOT, nfc, shootFromPath, WEB_LIMIT,
 } from "./portfolio/core";
-import { listImages, listShoots, makePreview, webVersion } from "./portfolio/drive";
+import { clearPreviews, listImages, listShoots, makePreview, webVersion } from "./portfolio/drive";
 import { configureCloudinary, listWebPhotos, uploadPhoto } from "./portfolio/cloud";
 
 try {
@@ -46,7 +46,7 @@ async function status(): Promise<void> {
 
 async function resolveShoot(root: string, shoot: string | undefined): Promise<string> {
   if (!shoot) throw new Error("Chybí název shootu");
-  const match = (await listShoots(root)).find((s) => nfc(s) === nfc(shoot));
+  const match = matchShoot(await listShoots(root), shoot);
   if (!match) throw new Error(`Shoot „${shoot}“ na Drive není — zkontroluj \`status\``);
   return match;
 }
@@ -55,8 +55,7 @@ async function previews(positional: string[], flags: Record<string, string | boo
   const root = await driveRoot();
   const shoot = await resolveShoot(root, positional[0]);
   const out = typeof flags.out === "string" ? flags.out : path.join(os.tmpdir(), "portfolio-previews");
-  await fs.rm(out, { recursive: true, force: true });
-  await fs.mkdir(out, { recursive: true });
+  await clearPreviews(out);
 
   const map: Record<string, string> = {};
   const images = await listImages(path.join(root, shoot));
@@ -77,8 +76,9 @@ async function upload(positional: string[], flags: Record<string, string | boole
   const root = await driveRoot();
   const file = positional[0];
   if (!file) throw new Error("Chybí cesta k fotce");
-  const shoot = shootFromPath(root, file);
-  if (!shoot) throw new Error(`Fotka není ve složce shootu pod ${root}`);
+  const fromPath = shootFromPath(root, file);
+  if (!fromPath) throw new Error(`Fotka není ve složce shootu pod ${root}`);
+  const shoot = nfc(await resolveShoot(root, fromPath));
   if (!isCategory(flags.category)) throw new Error(`--category musí být jedna z: ${CATEGORIES.join(", ")}`);
   const altCs = flags["alt-cs"];
   const altEn = flags["alt-en"];

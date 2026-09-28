@@ -15,6 +15,16 @@ export async function listImages(dir: string): Promise<string[]> {
   return files.filter((f) => IMAGE_RE.test(f)).sort().map((f) => path.join(dir, f));
 }
 
+const PREVIEW_RE = /^(\d{3}\.jpg|map\.json)$/;
+
+// Maže jen vlastní výstupy — --out může omylem ukázat na cizí složku
+export async function clearPreviews(dir: string): Promise<void> {
+  await fs.mkdir(dir, { recursive: true });
+  for (const f of await fs.readdir(dir)) {
+    if (PREVIEW_RE.test(f)) await fs.rm(path.join(dir, f));
+  }
+}
+
 export async function makePreview(src: string, out: string): Promise<void> {
   await sharp(src).rotate().resize(800, 800, { fit: "inside" }).jpeg({ quality: 80 }).toFile(out);
 }

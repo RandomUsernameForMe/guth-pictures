@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import type { Category, WebPhoto } from "./core";
+import { toWebPhoto, type Category, type CloudinaryResource, type WebPhoto } from "./core";
 
 const FOLDER = "portfolio";
 
@@ -16,16 +16,11 @@ export function configureCloudinary(): void {
   });
 }
 
-type Resource = { public_id: string; context?: { shoot?: string } };
-
 export async function listWebPhotos(): Promise<WebPhoto[]> {
+  // Admin API místo search: search index se po uploadu aktualizuje se zpožděním → obešel by limit na shoot
   // ponytail: jedna stránka (500); přidej next_cursor, kdyby portfolio někdy přerostlo
-  const res = await cloudinary.search
-    .expression(`folder:${FOLDER}`)
-    .with_field("context")
-    .max_results(500)
-    .execute();
-  return res.resources.map((r: Resource) => ({ publicId: r.public_id, shoot: r.context?.shoot }));
+  const res = await cloudinary.api.resources_by_asset_folder(FOLDER, { max_results: 500, context: true });
+  return (res.resources as CloudinaryResource[]).map(toWebPhoto);
 }
 
 export async function uploadPhoto(

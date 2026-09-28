@@ -1,7 +1,7 @@
 import path from "node:path";
 import { describe, it, expect } from "vitest";
 import {
-  shootFromPath, sortShoots, countByShoot, canAdd, buildStatus, isCategory,
+  shootFromPath, sortShoots, countByShoot, canAdd, buildStatus, isCategory, matchShoot, toWebPhoto,
 } from "../portfolio/core";
 
 const root = path.join("drive", "Guthovo fotky");
@@ -73,5 +73,25 @@ describe("isCategory", () => {
   it("přijme jen známé kategorie", () => {
     expect(isCategory("larpy")).toBe(true);
     expect(isCategory("krajina")).toBe(false);
+  });
+});
+
+describe("matchShoot", () => {
+  const shoots = ["2026 9 - Kamča", "B"];
+  it("vrátí kanonický název z disku i při jiné velikosti písmen a NFD", () => {
+    expect(matchShoot(shoots, "2026 9 - kamča")).toBe("2026 9 - Kamča");
+  });
+  it("neznámý shoot → undefined", () => {
+    expect(matchShoot(shoots, "C")).toBeUndefined();
+  });
+});
+
+describe("toWebPhoto", () => {
+  it("čte shoot z Admin API tvaru context.custom", () => {
+    expect(toWebPhoto({ public_id: "p1", context: { custom: { shoot: "A" } } }))
+      .toEqual({ publicId: "p1", shoot: "A" });
+  });
+  it("bez contextu nemá shoot", () => {
+    expect(toWebPhoto({ public_id: "p2" })).toEqual({ publicId: "p2", shoot: undefined });
   });
 });

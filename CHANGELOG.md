@@ -7,6 +7,7 @@
 - `previews`: náhledy 800 px z celého shootu (včetně podsložek) + map.json.
 - `upload`: zmenšení na 3000 px, upload do portfolio s context shoot/category/alt, odmítne 3. fotku ze shootu.
 - Skill `/portfolio` (`.claude/skills/portfolio-butler`): konverzační flow status → návrh → upload.
+- Review opravy: `previews` maže jen vlastní náhledy, limit na shoot počítá přes Admin API (search má zpoždění), shoot z cesty se mapuje na kanonický název z disku.
 
 ## [2026-09-24] - SEO a GEO: dostupný obsah a stránky služeb
 
