@@ -1,3 +1,7 @@
+## [2026-09-28] - Spec: Portfolio Butler
+
+- `docs/superpowers/specs/2026-09-28-portfolio-butler-design.md`: návrh skillu `/portfolio` (Drive → návrh fotek → Cloudinary, max 2 fotky na shoot).
+
 ## [2026-09-24] - SEO a GEO: dostupný obsah a stránky služeb
 
 - Izolované načítání URL parametrů: formulář a filtr již neblokují serverové HTML stránky.
