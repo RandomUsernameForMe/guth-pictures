@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { type GalleryPhoto, CATEGORIES, cloudinaryUrl, blurUrl } from "@/lib/cloudinary-utils";
+import type { EditorialImages } from "@/modules/admin/lib/content";
+import { EditorialImageEditor } from "./EditorialImageEditor";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE_MB = 100; // raw foťák fotky, komprese proběhne v prohlížeči
@@ -38,11 +40,12 @@ type FileItem = { file: File; preview: string; status: FileStatus };
 type Props = {
   photos: GalleryPhoto[];
   heroTriptych?: [string[], string[], string[]];
+  editorial?: EditorialImages;
 };
 
 const PANEL_LABELS = ["Panel 1 · Portréty", "Panel 2 · Eventy", "Panel 3 · Portréty"];
 
-export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych }: Props) {
+export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych, editorial }: Props) {
   const router = useRouter();
   const [photos, setPhotos] = useState(initial);
   const [fileItems, setFileItems] = useState<FileItem[]>([]);
@@ -242,6 +245,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych 
 
   return (
     <div className="space-y-12">
+      {editorial && <EditorialImageEditor editorial={editorial} photos={photos} />}
       {/* Hero Triptych */}
       <section>
         <h2 className="text-lg font-semibold mb-1">Hero triptych</h2>

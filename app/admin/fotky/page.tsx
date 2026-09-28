@@ -11,7 +11,7 @@ export default async function FotkyPage() {
   const heroTriptych = images.heroTriptych;
   return (
     <AdminShell>
-      <AdminDashboard photos={photos} heroTriptych={heroTriptych} />
+      <AdminDashboard photos={photos} heroTriptych={heroTriptych} editorial={images.editorial} />
     </AdminShell>
   );
 }

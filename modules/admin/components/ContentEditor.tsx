@@ -15,6 +15,7 @@ const emptyContent = (): ContentData => ({
   home: { title: "", subtitle: "" },
   "o-mne": { title: "", subtitle: "", bio: "" },
   lightTesterPromo: { title: "", desc: "" },
+  editorial: { eventsTitle: "" },
   sluzby: {
     portraits: { title: "", desc: "", packages: [], note: "" },
     weddings: { title: "", desc: "", packages: [], note: "" },
@@ -235,6 +236,14 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
             label="Podnadpis"
             value={current.home.subtitle}
             onChange={(v) => patch((d) => { d.home.subtitle = v; })}
+          />
+        </Section>
+
+        <Section title="Eventy a svatby">
+          <Field
+            label="Hlavní nadpis"
+            value={current.editorial?.eventsTitle ?? ""}
+            onChange={(v) => patch((d) => { d.editorial = { eventsTitle: v }; })}
           />
         </Section>
 

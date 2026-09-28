@@ -9,6 +9,7 @@
 - Kreativní portrét na stávající URL používá tmavou výstavní kompozici, spravované fotografie, zachovaný ceník a odkaz na Focení 101.
 - Business portréty používají světlý přesný grid, administrační obrazové sloty a zachovávají stávající ceník, podmínky, FAQ a poptávku.
 - Nová reportážní stránka eventů a svateb má samostatnou adresu, spravované obrazové sloty, ceník, poptávku, interní odkazy a zápis v sitemapě.
+- Administrace umožňuje u všech redesignových slotů vybrat fotku, upravit lokalizované popisy a ohnisko ořezu; zvlášť lze měnit titul eventové stránky.
 - Specifikace: `docs/superpowers/specs/2026-09-28-editorial-redesign-design.md`.
 - Implementační plán: `docs/superpowers/plans/2026-09-28-editorial-redesign.md`.
 
