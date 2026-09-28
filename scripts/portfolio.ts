@@ -2,9 +2,11 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { buildStatus, MAX_PER_SHOOT, nfc, WEB_LIMIT } from "./portfolio/core";
-import { listImages, listShoots, makePreview } from "./portfolio/drive";
-import { configureCloudinary, listWebPhotos } from "./portfolio/cloud";
+import {
+  buildStatus, canAdd, CATEGORIES, isCategory, MAX_PER_SHOOT, nfc, shootFromPath, WEB_LIMIT,
+} from "./portfolio/core";
+import { listImages, listShoots, makePreview, webVersion } from "./portfolio/drive";
+import { configureCloudinary, listWebPhotos, uploadPhoto } from "./portfolio/cloud";
 
 try {
   process.loadEnvFile(".env.local");
@@ -71,9 +73,36 @@ async function previews(positional: string[], flags: Record<string, string | boo
   console.log(`${Object.keys(map).length}/${images.length} náhledů → ${out}`);
 }
 
+async function upload(positional: string[], flags: Record<string, string | boolean | undefined>): Promise<void> {
+  const root = await driveRoot();
+  const file = positional[0];
+  if (!file) throw new Error("Chybí cesta k fotce");
+  const shoot = shootFromPath(root, file);
+  if (!shoot) throw new Error(`Fotka není ve složce shootu pod ${root}`);
+  if (!isCategory(flags.category)) throw new Error(`--category musí být jedna z: ${CATEGORIES.join(", ")}`);
+  const altCs = flags["alt-cs"];
+  const altEn = flags["alt-en"];
+  if (typeof altCs !== "string" || !altCs.trim() || typeof altEn !== "string" || !altEn.trim()) {
+    throw new Error("Chybí --alt-cs nebo --alt-en");
+  }
+
+  configureCloudinary();
+  if (!canAdd(await listWebPhotos(), shoot) && !flags.force) {
+    throw new Error(`Shoot „${shoot}“ už má ${MAX_PER_SHOOT} fotky na webu (přepiš --force)`);
+  }
+  const publicId = await uploadPhoto(await webVersion(file), {
+    shoot,
+    category: flags.category,
+    alt_cs: altCs.trim(),
+    alt_en: altEn.trim(),
+  });
+  console.log(`✔ ${publicId}  (${shoot})`);
+}
+
 const commands: Record<string, (positional: string[], flags: Record<string, string | boolean | undefined>) => Promise<void>> = {
   status: () => status(),
   previews,
+  upload,
 };
 
 async function main(): Promise<void> {

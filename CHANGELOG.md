@@ -5,6 +5,7 @@
 - `scripts/portfolio/core.ts`: čisté funkce (shoot z cesty, řazení shootů, limit 2 na shoot, status report).
 - `npm run portfolio -- status`: přehled shootů na Drive vs. fotky na webu, porušení limitu, fotky bez shootu.
 - `previews`: náhledy 800 px z celého shootu (včetně podsložek) + map.json.
+- `upload`: zmenšení na 3000 px, upload do portfolio s context shoot/category/alt, odmítne 3. fotku ze shootu.
 
 ## [2026-09-24] - SEO a GEO: dostupný obsah a stránky služeb
 
