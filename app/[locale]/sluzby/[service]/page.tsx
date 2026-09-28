@@ -5,9 +5,9 @@ import { ContactForm } from "@/components/ContactForm";
 import { Link } from "@/i18n/navigation";
 import { siteUrl, ogImage } from "@/lib/config";
 import { getGalleryPhotos } from "@/lib/cloudinary";
-import { getContent } from "@/modules/admin/lib/content";
+import { getContent, getImages } from "@/modules/admin/lib/content";
+import { PortraitEditorial } from "@/modules/editorial/components/PortraitEditorial";
 import { PhotoGrid } from "@/modules/gallery/components/PhotoGrid";
-import { ServiceCards } from "@/modules/homepage/components/ServiceCards";
 import { ServiceLinks } from "@/modules/homepage/components/ServiceLinks";
 import { isServiceSlug, servicePages, serviceSlugs } from "@/modules/homepage/lib/service-pages";
 
@@ -42,9 +42,10 @@ export default async function ServicePage({ params }: Props) {
   setRequestLocale(locale);
   const cs = locale !== "en";
   const copy = servicePages[service][cs ? "cs" : "en"];
-  const [content, photos] = await Promise.all([
+  const [content, photos, images] = await Promise.all([
     getContent(locale),
     getGalleryPhotos("portfolio").catch(() => []),
+    getImages(),
   ]);
   const portraits = photos.filter((photo) => photo.category === "portréty").slice(0, 8);
   const url = `${siteUrl}/${locale}/sluzby/${service}`;
@@ -60,6 +61,14 @@ export default async function ServicePage({ params }: Props) {
       ] },
     ],
   };
+  if (service === "portretni-foceni") {
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
+        <PortraitEditorial locale={locale} copy={copy} content={content} images={images} />
+      </>
+    );
+  }
   return (
     <main className="max-w-5xl mx-auto px-6 pt-28 pb-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
@@ -97,9 +106,7 @@ export default async function ServicePage({ params }: Props) {
       </section>
       <section className="mt-20 max-w-3xl">
         <h2 className="text-3xl font-bold">{copy.pricing}</h2>
-        {service === "portretni-foceni" ? (
-          <ServiceCards selectLabel={cs ? "Vybrat balíček" : "Choose a package"} services={[{ ...content.sluzby.portraits, key: "portraits", number: "001", category: "portréty" }]} />
-        ) : <p className="mt-5 text-[var(--color-text-muted)] leading-relaxed">{copy.questions[2].a}</p>}
+        <p className="mt-5 text-[var(--color-text-muted)] leading-relaxed">{copy.questions[2].a}</p>
       </section>
       <section className="mt-20 max-w-3xl">
         <h2 className="text-3xl font-bold">{cs ? "Časté otázky" : "Common questions"}</h2>

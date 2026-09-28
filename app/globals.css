@@ -1916,3 +1916,33 @@ body::after {
   .ed-home-hero h1 { font-size: 4rem; }
   .ed-home-hero__copy { min-height: 56svh; }
 }
+
+.ed-portrait-hero { position: relative; min-height: calc(100svh - 4.5rem); }
+.ed-portrait-hero__image { position: absolute; inset: 0; }
+.ed-portrait-hero__image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.7), transparent 60%), linear-gradient(0deg, rgba(0,0,0,.35), transparent 50%); }
+.ed-portrait-hero__copy { position: relative; z-index: 2; min-height: inherit; padding: clamp(2rem, 5vw, 5rem); display: flex; flex-direction: column; justify-content: end; align-items: start; max-width: 58rem; }
+.ed-portrait-hero h1 { margin: .5rem 0 1rem; font-family: var(--font-editorial-serif), serif; font-size: clamp(4rem, 9vw, 9rem); font-weight: 400; line-height: .82; letter-spacing: -.055em; }
+.ed-portrait-hero a, .ed-portrait-process a { color: inherit; text-underline-offset: .35rem; }
+.ed-portrait-gallery { padding: 1rem clamp(1rem, 3vw, 3rem); display: grid; grid-template-columns: .7fr 1.3fr; gap: 1rem; }
+.ed-portrait-gallery figure { position: relative; min-height: 34rem; margin: 0; }
+.ed-portrait-gallery figure:nth-child(3) { grid-column: 1 / -1; min-height: 46rem; }
+.ed-portrait-process, .ed-portrait-pricing, .ed-portrait-contact { padding: clamp(4rem, 9vw, 9rem) clamp(1.25rem, 6vw, 6rem); }
+.ed-portrait-process h2, .ed-portrait-pricing h2, .ed-portrait-contact h2 { max-width: 15ch; font-family: var(--font-editorial-serif), serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 400; line-height: .95; }
+.ed-portrait-process > p { max-width: 48rem; line-height: 1.7; }
+.ed-portrait-process ol { margin: 4rem 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; list-style: none; }
+.ed-portrait-process li { border-top: 1px solid currentColor; padding-top: 1rem; line-height: 1.6; }
+.ed-portrait-process li span { display: block; margin-bottom: .75rem; opacity: .6; }
+.ed-portrait-pricing > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.ed-portrait-pricing article { padding: 1.5rem 0; border-top: 1px solid currentColor; }
+.ed-portrait-pricing strong { font-family: var(--font-editorial-serif), serif; font-size: 2rem; }
+.ed-portrait-contact { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+
+@media (max-width: 760px) {
+  .ed-portrait-hero { min-height: auto; display: flex; flex-direction: column; }
+  .ed-portrait-hero__image { position: relative; min-height: 68svh; }
+  .ed-portrait-hero__copy { min-height: auto; padding: 2rem 1.25rem 4rem; }
+  .ed-portrait-hero h1 { font-size: clamp(4rem, 21vw, 6rem); }
+  .ed-portrait-gallery { grid-template-columns: 1fr; }
+  .ed-portrait-gallery figure, .ed-portrait-gallery figure:nth-child(3) { grid-column: auto; min-height: 32rem; }
+  .ed-portrait-process ol, .ed-portrait-pricing > div, .ed-portrait-contact { grid-template-columns: 1fr; }
+}

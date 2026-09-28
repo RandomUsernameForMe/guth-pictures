@@ -1,4 +1,4 @@
-type ServiceCopy = {
+export type ServiceCopy = {
   title: string;
   description: string;
   intro: string;
