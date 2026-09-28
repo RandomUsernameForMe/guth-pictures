@@ -1938,6 +1938,33 @@ body::after {
   .ed-home-hero__copy { min-height: 56svh; }
 }
 
+.ed-events-hero { min-height: calc(100svh - 4.5rem); display: grid; grid-template-columns: .85fr 1.15fr; }
+.ed-events-hero > div { padding: clamp(3rem, 7vw, 7rem); display: flex; flex-direction: column; justify-content: end; align-items: start; }
+.ed-events-hero figure, .ed-events-strip figure, .ed-events-wide figure { position: relative; min-height: 28rem; margin: 0; }
+.ed-events-hero h1 { margin: 0 0 1rem; font-family: var(--font-editorial-serif), serif; font-size: clamp(4rem, 8vw, 8.5rem); font-weight: 500; line-height: .82; letter-spacing: -.055em; }
+.ed-events-hero a, .ed-events-info a { margin-top: 1.5rem; color: inherit; text-underline-offset: .35rem; }
+.ed-events-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; padding: .75rem; }
+.ed-events-wide { padding: 0 .75rem; }
+.ed-events-wide figure { min-height: 70svh; }
+.ed-events-info, .ed-events-pricing, .ed-events-contact { padding: clamp(4rem, 9vw, 9rem) clamp(1.25rem, 6vw, 6rem); }
+.ed-events-info h2, .ed-events-pricing h2, .ed-events-contact h2 { max-width: 12ch; font-family: var(--font-editorial-serif), serif; font-size: clamp(3rem, 6vw, 6rem); font-weight: 500; line-height: .95; }
+.ed-events-info p { max-width: 42rem; font-size: clamp(1.2rem, 2vw, 1.7rem); }
+.ed-events-pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.ed-events-pricing h2, .ed-events-pricing > p { grid-column: 1 / -1; }
+.ed-events-pricing article { padding-top: 1rem; border-top: 1px solid currentColor; }
+.ed-events-pricing strong { font-family: var(--font-editorial-serif), serif; font-size: 2rem; }
+.ed-events-contact { max-width: 52rem; }
+
+@media (max-width: 760px) {
+  .ed-events-hero { min-height: auto; grid-template-columns: 1fr; }
+  .ed-events-hero > div { min-height: 48svh; padding: 2rem 1.25rem 3rem; }
+  .ed-events-hero figure { min-height: 62svh; }
+  .ed-events-strip { grid-template-columns: 1fr; }
+  .ed-events-strip figure { min-height: 34rem; }
+  .ed-events-wide figure { min-height: 55svh; }
+  .ed-events-pricing { grid-template-columns: 1fr; }
+}
+
 .ed-portrait-hero { position: relative; min-height: calc(100svh - 4.5rem); }
 .ed-portrait-hero__image { position: absolute; inset: 0; }
 .ed-portrait-hero__image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.7), transparent 60%), linear-gradient(0deg, rgba(0,0,0,.35), transparent 50%); }

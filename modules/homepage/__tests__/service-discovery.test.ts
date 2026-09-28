@@ -13,7 +13,7 @@ describe("service discovery", () => {
     expect(isServiceSlug("toString")).toBe(false);
   });
 
-  it("lists both languages and keeps business portraits in the sitemap", async () => {
+  it("lists both languages and keeps standalone services in the sitemap", async () => {
     const entries = await sitemap();
     for (const locale of ["cs", "en"] as const) {
       for (const slug of serviceSlugs) {
@@ -24,6 +24,9 @@ describe("service discovery", () => {
         expect(servicePages[slug][locale].description).toBeTruthy();
       }
       expect(entries.some(({ url }) => url === `${siteUrl}/${locale}/firemni-portrety`)).toBe(true);
+      const events = entries.find(({ url }) => url === `${siteUrl}/${locale}/sluzby/eventy-a-svatby`);
+      expect(events?.alternates?.languages?.cs).toBe(`${siteUrl}/cs/sluzby/eventy-a-svatby`);
+      expect(events?.alternates?.languages?.en).toBe(`${siteUrl}/en/sluzby/eventy-a-svatby`);
     }
   });
 });

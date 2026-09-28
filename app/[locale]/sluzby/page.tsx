@@ -84,6 +84,8 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
               desc: content.sluzby.weddings.desc,
               packages: content.sluzby.weddings.packages,
               note: content.sluzby.weddings.note,
+              href: `/${locale}/sluzby/eventy-a-svatby`,
+              hrefLabel: locale === "cs" ? "Vše o eventech a svatbách" : "All about events and weddings",
             },
             {
               key: "business", number: "003", category: "firemní",

@@ -4,7 +4,7 @@ import { getBlogPosts } from "@/modules/blog/lib/blog";
 import { serviceSlugs } from "@/modules/homepage/lib/service-pages";
 
 const locales = ["cs", "en"] as const;
-const pages = ["", "/portfolio", "/sluzby", "/firemni-portrety", "/o-mne", "/blog", "/foceni-101"] as const;
+const pages = ["", "/portfolio", "/sluzby", "/sluzby/eventy-a-svatby", "/firemni-portrety", "/o-mne", "/blog", "/foceni-101"] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = [...pages, ...serviceSlugs.map((slug) => `/sluzby/${slug}`)].flatMap((page) =>
