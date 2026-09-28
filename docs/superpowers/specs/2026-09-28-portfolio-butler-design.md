@@ -50,12 +50,8 @@ Příkazy:
 - `upload <soubor> --shoot <id> --category <kat> --alt-cs <text> --alt-en <text>`:
   nahraje originál do Cloudinary složky `portfolio` s `context` {shoot, category, alt_cs, alt_en}.
   Před nahráním ověří pravidlo; pokud by shoot měl > 2 fotky, odmítne upload (bez `--force`).
-- `backfill`: pro fotky v `portfolio` bez `shoot` spočítá perceptual hash (dHash)
-  z Cloudinary náhledu a porovná ho s hashi fotek na Drive. Vypíše navržené párování
-  se vzdáleností. `backfill --apply <mapping.json>` zapíše potvrzené párování do `context.shoot`.
 
-Čisté funkce (testované): `shootFromPath(root, filePath)`, `countViolations(photos, max)`,
-`dhashDistance(a, b)`.
+Čisté funkce (testované): `shootFromPath(root, filePath)`, `countViolations(photos, max)`.
 
 ### `.claude/skills/portfolio-butler/SKILL.md`
 
@@ -75,7 +71,7 @@ Drive for Desktop ──(fs + sharp)──► náhledy ──► Claude hodnotí
                                                                      │
 Cloudinary portfolio ◄──(upload s context.shoot)─────────────────────┘
         │
-        └──(search: folder:portfolio, with_field context)──► status / backfill
+        └──(search: folder:portfolio, with_field context)──► status
 ```
 
 Web se nemění: `lib/cloudinary.ts` pole `shoot` ignoruje.
@@ -90,7 +86,7 @@ Web se nemění: `lib/cloudinary.ts` pole `shoot` ignoruje.
 ## Testování
 
 Jeden vitest soubor `scripts/__tests__/portfolio.test.ts` pro čisté funkce
-(`shootFromPath` včetně podsložek a diakritiky, `countViolations`, `dhashDistance`).
+(`shootFromPath` včetně podsložek a diakritiky, `countViolations`).
 Ruční ověření: `status` a `previews` na reálné složce `2026/9 - Kamča`.
 
 ## Rizika / známé limity
@@ -98,7 +94,7 @@ Ruční ověření: `status` a `previews` na reálné složce `2026/9 - Kamča`.
 - Web zobrazuje jen 50 nejnovějších fotek, takže nové uploady tiše vytlačí staré. v1 to jen hlásí ve `status`.
 - Souhlas klienta se zveřejněním se nehlídá. U firemních portrétů smlouva vyžaduje souhlas
   (`docs/smlouva-business-portrety.md`), proto je třeba ho před uploadem ověřit ručně.
-- Backfill přes dHash nemusí spárovat fotky oříznuté nebo jinak upravené, ty je pak nutné přiřadit ručně.
+- Starší fotky se nepřiřazují: uživatel je přenahraje přes butler a staré smaže v `/admin/fotky`. Přenahráním se ztratí ★ `selected_work`, takže je potřeba ho znovu označit v adminu.
 
 ## Mimo rozsah (později)
 

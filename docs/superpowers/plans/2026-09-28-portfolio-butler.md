@@ -4,7 +4,7 @@
 
 **Goal:** CLI skript + Claude skill `/portfolio`, který porovná shooty na Google Drive s fotkami v Cloudinary `portfolio`, pomůže vybrat nejlepší fotky a nahraje je s vazbou na shoot (max 2 na shoot).
 
-**Architecture:** Čisté funkce v `scripts/portfolio/core.ts` (testované vitestem), I/O ve dvou tenkých modulech (`drive.ts` = lokální disk Drive for Desktop + sharp, `cloud.ts` = Cloudinary SDK), CLI dispatcher `scripts/portfolio.ts` s příkazy `status | previews | upload | backfill`. Skill jen popisuje konverzační flow a volá CLI. Web se nemění.
+**Architecture:** Čisté funkce v `scripts/portfolio/core.ts` (testované vitestem), I/O ve dvou tenkých modulech (`drive.ts` = lokální disk Drive for Desktop + sharp, `cloud.ts` = Cloudinary SDK), CLI dispatcher `scripts/portfolio.ts` s příkazy `status | previews | upload`. Skill jen popisuje konverzační flow a volá CLI. Web se nemění.
 
 **Tech Stack:** TypeScript, `tsx`, `node:util` `parseArgs`, `sharp` 0.34, `cloudinary` v2 SDK, vitest.
 
@@ -18,18 +18,18 @@
 - Web zobrazuje max **50** fotek (`lib/cloudinary.ts`) → `status` hlásí celkový počet vůči 50.
 - Náhledy: delší strana 800 px. Upload: delší strana max 3000 px, JPEG q90 (originály mají 8–12 MB, free Cloudinary limit je 10 MB na obrázek).
 - Skripty neimportují `lib/cloudinary.ts` (obsahuje `import "server-only"`, mimo Next hází) → Cloudinary se konfiguruje přímo ve `scripts/portfolio/cloud.ts`.
-- Ověřeno 2026-09-28: Drive for Desktop = `F:/My Drive/Guthovo fotky` (48 složek shootů + volné soubory v rootu, které se ignorují). `/` z názvu na Drive je lokálně mezera (`2026 9 - Kamča`). Náhled z nestaženého souboru trvá ~4 s (stahuje se 8–12 MB) → `previews` shootu se 100 fotkami ≈ 6 min, `backfill` přes všechny shooty řádově hodiny.
-- `tsconfig` má `target: ES2017` → **žádné BigInt literály**; hash je string 64 znaků `0/1`.
+- Ověřeno 2026-09-28: Drive for Desktop = `F:/My Drive/Guthovo fotky` (48 složek shootů + volné soubory v rootu, které se ignorují). `/` z názvu na Drive je lokálně mezera (`2026 9 - Kamča`). Náhled z nestaženého souboru trvá ~4 s (stahuje se 8–12 MB) → `previews` shootu se 100 fotkami ≈ 6 min.
+- Starší fotky na webu se k shootům **nepřiřazují** (rozhodnutí uživatele): nahrají se znovu přes butler a staré smaže uživatel v `/admin/fotky`. Opětovný upload ztratí tag `selected_work` (★ Selected Work na homepage + pool pro stories), takže ★ se po přenahrání označí znovu v adminu.
 - Každý commit: nejdřív `npx tsc --noEmit` bez chyb, `CHANGELOG.md` v `git add` (jeden záznam `## [2026-09-28] - Portfolio Butler`, každý task přidá odrážku). Stageovat jen vyjmenované soubory. V repu leží nesouvisející untracked soubory, nikdy nepoužívej `git add -A`.
 - Větev `feat/portfolio-butler`; na `main` nepushovat.
 
 ## Review Focus
 
 1. **Diakritika NFC vs NFD**: název složky z disku a hodnota v Cloudinary se musí shodovat i při jiné Unicode normalizaci (`Kamča`). Pokryto testy `shootFromPath` a `buildStatus` (Task 1).
-2. **Řazení měsíců**: `2026/10` musí být novější než `2026/9`, `2026/01` = leden. Pokryto testem `sortShoots` (Task 1).
+2. **Řazení měsíců**: `2026 10` musí být novější než `2026 9`, `2026 01` = leden. Pokryto testem `sortShoots` (Task 1).
 3. **Soubor mimo shoot**: upload souboru přímo v rootu nebo mimo root musí selhat, ne nahrát fotku bez shootu. Pokryto testem `shootFromPath` (Task 1) + kontrolou v Task 4.
 4. **Přejmenovaná složka na Drive**: fotka na webu se starým `shoot` se nesmí tiše ztratit a musí se objevit jako „neznámý shoot“. Pokryto testem `buildStatus` (Task 1).
-5. **Nečitelný / online-only soubor**: `previews` a `backfill` soubor přeskočí s varováním a nespadnou. Ručně ověřeno v Task 3.
+5. **Nečitelný / online-only soubor**: `previews` soubor přeskočí s varováním a nespadnou. Ručně ověřeno v Task 3.
 
 ---
 
@@ -42,7 +42,7 @@
 
 **Interfaces:**
 - Produces:
-  - `MAX_PER_SHOOT = 2`, `WEB_LIMIT = 50`, `MATCH_MAX_DISTANCE = 10`
+  - `MAX_PER_SHOOT = 2`, `WEB_LIMIT = 50`
   - `CATEGORIES`, `type Category = "portréty" | "svatby" | "larpy"`, `isCategory(v: unknown): v is Category`
   - `type WebPhoto = { publicId: string; shoot?: string }`
   - `nfc(s: string): string`
@@ -51,8 +51,6 @@
   - `countByShoot(photos: WebPhoto[]): Map<string, number>`
   - `canAdd(photos: WebPhoto[], shoot: string, max?: number): boolean`
   - `type StatusReport` + `buildStatus(driveShoots: string[], photos: WebPhoto[], max?: number): StatusReport`
-  - `dhash(pixels: ArrayLike<number>): string` (72 hodnot 9×8 → 64 znaků)
-  - `hamming(a: string, b: string): number`
 
 - [ ] **Step 1: Napiš failing testy**
 
@@ -62,7 +60,7 @@
 import path from "node:path";
 import { describe, it, expect } from "vitest";
 import {
-  shootFromPath, sortShoots, countByShoot, canAdd, buildStatus, dhash, hamming, isCategory,
+  shootFromPath, sortShoots, countByShoot, canAdd, buildStatus, isCategory,
 } from "../portfolio/core";
 
 const root = path.join("drive", "Guthovo fotky");
@@ -130,20 +128,6 @@ describe("buildStatus", () => {
   });
 });
 
-describe("dhash / hamming", () => {
-  it("klesající řádek dá samé jedničky", () => {
-    const px = Array.from({ length: 72 }, (_, i) => 255 - (i % 9) * 10);
-    expect(dhash(px)).toBe("1".repeat(64));
-  });
-  it("odmítne špatný počet pixelů", () => {
-    expect(() => dhash([1, 2, 3])).toThrow();
-  });
-  it("hamming počítá rozdílné bity", () => {
-    expect(hamming("0101", "0110")).toBe(2);
-    expect(() => hamming("01", "011")).toThrow();
-  });
-});
-
 describe("isCategory", () => {
   it("přijme jen známé kategorie", () => {
     expect(isCategory("larpy")).toBe(true);
@@ -166,7 +150,6 @@ import path from "node:path";
 
 export const MAX_PER_SHOOT = 2;
 export const WEB_LIMIT = 50;
-export const MATCH_MAX_DISTANCE = 10;
 
 export const CATEGORIES = ["portréty", "svatby", "larpy"] as const;
 export type Category = (typeof CATEGORIES)[number];
@@ -228,23 +211,6 @@ export function buildStatus(driveShoots: string[], photos: WebPhoto[], max = MAX
     total: photos.length,
   };
 }
-
-// Difference hash: 9×8 šedotónových pixelů po řádcích → 64 bitů jako string "0"/"1"
-export function dhash(pixels: ArrayLike<number>): string {
-  if (pixels.length !== 72) throw new Error(`dhash potřebuje 72 pixelů, dostal ${pixels.length}`);
-  let bits = "";
-  for (let y = 0; y < 8; y++) {
-    for (let x = 0; x < 8; x++) bits += pixels[y * 9 + x] > pixels[y * 9 + x + 1] ? "1" : "0";
-  }
-  return bits;
-}
-
-export function hamming(a: string, b: string): number {
-  if (a.length !== b.length) throw new Error("Hashe mají různou délku");
-  let d = 0;
-  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) d++;
-  return d;
-}
 ```
 
 - [ ] **Step 4: Spusť testy, ověř PASS**
@@ -259,7 +225,7 @@ Na začátek `CHANGELOG.md` přidej:
 ```markdown
 ## [2026-09-28] - Portfolio Butler
 
-- `scripts/portfolio/core.ts`: čisté funkce (shoot z cesty, řazení shootů, limit 2 na shoot, status report, dHash).
+- `scripts/portfolio/core.ts`: čisté funkce (shoot z cesty, řazení shootů, limit 2 na shoot, status report).
 ```
 
 ```bash
@@ -277,10 +243,10 @@ git commit -m "feat(portfolio): core functions for portfolio butler"
 - Modify: `package.json` (devDependency `sharp`, skript `portfolio`), `.env.example`, `CHANGELOG.md`
 
 **Interfaces:**
-- Consumes: `nfc`, `sortShoots`, `dhash`, `buildStatus`, `WEB_LIMIT`, `MAX_PER_SHOOT`, `Category`, `WebPhoto` (Task 1)
+- Consumes: `nfc`, `sortShoots`, `buildStatus`, `WEB_LIMIT`, `MAX_PER_SHOOT`, `Category`, `WebPhoto` (Task 1)
 - Produces:
-  - `drive.ts`: `listShoots(root): Promise<string[]>` (surové názvy složek, seřazené), `listImages(dir): Promise<string[]>` (absolutní cesty, rekurzivně), `makePreview(src, out): Promise<void>`, `webVersion(src): Promise<Buffer>`, `hashImage(input: string | Buffer): Promise<string>`
-  - `cloud.ts`: `configureCloudinary(): void`, `listWebPhotos(): Promise<WebPhoto[]>`, `uploadPhoto(buf, ctx): Promise<string>`, `setShoot(publicId, shoot): Promise<void>`, `thumbnail(publicId): Promise<Buffer>`
+  - `drive.ts`: `listShoots(root): Promise<string[]>` (surové názvy složek, seřazené), `listImages(dir): Promise<string[]>` (absolutní cesty, rekurzivně), `makePreview(src, out): Promise<void>`, `webVersion(src): Promise<Buffer>`
+  - `cloud.ts`: `configureCloudinary(): void`, `listWebPhotos(): Promise<WebPhoto[]>`, `uploadPhoto(buf, ctx): Promise<string>`
   - `scripts/portfolio.ts`: `driveRoot(): Promise<string>`, tabulka `commands`
 
 - [ ] **Step 1: Závislost a env**
@@ -304,7 +270,7 @@ PORTFOLIO_DRIVE_ROOT=
 import fs from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { dhash, sortShoots } from "./core";
+import { sortShoots } from "./core";
 
 const IMAGE_RE = /\.(jpe?g|png|tiff?|webp)$/i;
 
@@ -328,17 +294,6 @@ export async function webVersion(src: string): Promise<Buffer> {
     .resize(3000, 3000, { fit: "inside", withoutEnlargement: true })
     .jpeg({ quality: 90 })
     .toBuffer();
-}
-
-export async function hashImage(input: string | Buffer): Promise<string> {
-  const pixels = await sharp(input)
-    .rotate()
-    .greyscale()
-    .resize(9, 8, { fit: "fill" })
-    .extractChannel(0)
-    .raw()
-    .toBuffer();
-  return dhash(pixels);
 }
 ```
 
@@ -386,20 +341,6 @@ export async function uploadPhoto(
   });
   return result.public_id;
 }
-
-// Context string API: "=" a "|" se escapují zpětným lomítkem
-const escapeContext = (v: string) => v.replace(/([=|])/g, "\\$1");
-
-export async function setShoot(publicId: string, shoot: string): Promise<void> {
-  await cloudinary.uploader.add_context(`shoot=${escapeContext(shoot)}`, [publicId]);
-}
-
-export async function thumbnail(publicId: string): Promise<Buffer> {
-  const url = cloudinary.url(publicId, { width: 300, crop: "limit", format: "jpg", secure: true });
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Náhled ${publicId}: HTTP ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
-}
 ```
 
 - [ ] **Step 4: `scripts/portfolio.ts` se `status`**
@@ -443,7 +384,7 @@ async function status(): Promise<void> {
     console.log(`\n⚠ Shoot není na Drive (přejmenovaný/smazaný?): ${report.unknownShoots.join(", ")}`);
   }
   if (report.untagged.length) {
-    console.log(`\n⚠ ${report.untagged.length} fotek bez shootu — spusť \`backfill\``);
+    console.log(`\n⚠ ${report.untagged.length} fotek bez shootu (staré) — nahraď přes butler a smaž v /admin/fotky`);
   }
 }
 
@@ -459,7 +400,6 @@ async function main(): Promise<void> {
       "alt-cs": { type: "string" },
       "alt-en": { type: "string" },
       out: { type: "string" },
-      apply: { type: "string" },
       force: { type: "boolean" },
     },
   });
@@ -484,7 +424,7 @@ Do `package.json` `scripts` přidej: `"portfolio": "tsx scripts/portfolio.ts"`.
 
 Předpoklady: běží Google Drive for Desktop, existuje `.env.local` (`vercel env pull .env.local`) a v něm je doplněné `PORTFOLIO_DRIVE_ROOT`.
 
-1. `ls "<PORTFOLIO_DRIVE_ROOT>"`: **ověř, jak se lokálně jmenují složky** s `/` v názvu na Drive (`2026/9 - Kamča`). Windows `/` v názvu nepovolí, Drive ho nejspíš nahradí. ID shootu = lokální název. Zapiš skutečný tvar do SKILL.md v Task 6.
+1. `ls "<PORTFOLIO_DRIVE_ROOT>"` → složky ve tvaru `2026 9 - Kamča` (ověřeno 2026-09-28).
 2. `npm run portfolio -- status`
    Expected: řádek `Web: N/50 fotek`, seznam všech shootů od nejnovějšího, u všech `0` (zatím nikdo nemá `shoot`) a hláška `N fotek bez shootu`.
 3. `npm run portfolio -- nesmysl` → Expected: `Použití: …`, exit 1.
@@ -632,103 +572,13 @@ git commit -m "feat(portfolio): upload command with per-shoot limit"
 
 ---
 
-### Task 5: Příkaz `backfill`
-
-**Files:**
-- Modify: `scripts/portfolio.ts`, `CHANGELOG.md`
-
-**Interfaces:**
-- Consumes: `hashImage`, `listImages`, `listShoots` (Task 2), `thumbnail`, `listWebPhotos`, `setShoot` (Task 2), `hamming`, `nfc`, `MATCH_MAX_DISTANCE` (Task 1)
-- Produces:
-  - `backfill [--out mapping.json]` zapíše `{ [publicId]: { shoot: string | null, file: string | null, distance: number } }`, kde `shoot = null`, pokud nejlepší shoda má `distance > MATCH_MAX_DISTANCE`
-  - `backfill --apply mapping.json` zapíše `context.shoot` pro položky se `shoot` ≠ null
-
-- [ ] **Step 1: Implementace**
-
-```ts
-type Mapping = Record<string, { shoot: string | null; file: string | null; distance: number }>;
-
-async function backfill(_positional: string[], flags: Record<string, string | boolean | undefined>): Promise<void> {
-  configureCloudinary();
-  if (typeof flags.apply === "string") return applyBackfill(flags.apply);
-
-  const root = await driveRoot();
-  const untagged = (await listWebPhotos()).filter((p) => !p.shoot);
-  const webHashes = new Map<string, string>();
-  for (const p of untagged) webHashes.set(p.publicId, await hashImage(await thumbnail(p.publicId)));
-
-  const best: Mapping = Object.fromEntries(
-    untagged.map((p) => [p.publicId, { shoot: null, file: null, distance: 65 }]),
-  );
-  // ponytail: hashuje každou fotku na Drive (stáhne je); jednorázová akce, cache až kdyby se pouštěla opakovaně
-  for (const shoot of await listShoots(root)) {
-    console.error(`… ${shoot}`);
-    for (const file of await listImages(path.join(root, shoot))) {
-      let hash: string;
-      try {
-        hash = await hashImage(file);
-      } catch (err) {
-        console.warn(`⚠ přeskočeno ${file}: ${(err as Error).message}`);
-        continue;
-      }
-      for (const [publicId, webHash] of webHashes) {
-        const distance = hamming(hash, webHash);
-        if (distance < best[publicId].distance) best[publicId] = { shoot: nfc(shoot), file, distance };
-      }
-    }
-  }
-  for (const m of Object.values(best)) if (m.distance > MATCH_MAX_DISTANCE) m.shoot = null;
-
-  const out = typeof flags.out === "string" ? flags.out : "portfolio-backfill.json";
-  await fs.writeFile(out, JSON.stringify(best, null, 2));
-  for (const [publicId, m] of Object.entries(best)) {
-    console.log(`${m.shoot ? "✔" : "?"} ${publicId} → ${m.shoot ?? "nenalezeno"} (vzdálenost ${m.distance})`);
-  }
-  console.log(`\nZkontroluj/uprav ${out}, pak: npm run portfolio -- backfill --apply ${out}`);
-}
-
-async function applyBackfill(file: string): Promise<void> {
-  const mapping: Mapping = JSON.parse(await fs.readFile(file, "utf8"));
-  const entries = Object.entries(mapping).filter(([, m]) => m.shoot);
-  for (const [publicId, m] of entries) {
-    await setShoot(publicId, m.shoot!);
-    console.log(`✔ ${publicId} → ${m.shoot}`);
-  }
-  console.log(`${entries.length} fotek přiřazeno`);
-}
-```
-
-Doplň importy a přidej `backfill` do `commands`. Přidej `portfolio-backfill.json` do `.gitignore`.
-
-- [ ] **Step 2: Ruční ověření**
-
-1. `npm run portfolio -- backfill`: vypíše párování a vytvoří `portfolio-backfill.json`.
-2. **Ukaž výsledek uživateli**, u nejistých (`?` nebo vzdálenost 6–10) nech rozhodnout. U 2–3 párů zkontroluj vizuálně: Cloudinary náhled vs. `file`.
-3. Po schválení: `npm run portfolio -- backfill --apply portfolio-backfill.json`
-4. `npm run portfolio -- status` → počet „bez shootu“ klesl o počet přiřazených, shooty ukazují počty a případná porušení limitu jsou vidět.
-5. Web se nezměnil (`lib/cloudinary.ts` context `shoot` ignoruje) a alt texty zůstaly (`add_context` jen přidává klíč).
-
-- [ ] **Step 3: tsc + CHANGELOG + commit**
-
-Odrážka: `- \`backfill\`: jednorázové párování starších fotek na webu se shooty přes dHash, zápis po potvrzení.`
-
-```bash
-npx tsc --noEmit
-git add scripts/portfolio.ts .gitignore CHANGELOG.md
-git commit -m "feat(portfolio): backfill shoots for existing photos"
-```
-
----
-
-### Task 6: Skill `/portfolio`
+### Task 5: Skill `/portfolio`
 
 **Files:**
 - Create: `.claude/skills/portfolio-butler/SKILL.md`, `.claude/commands/portfolio.md`
 - Modify: `CHANGELOG.md`
 
 - [ ] **Step 1: `.claude/skills/portfolio-butler/SKILL.md`**
-
-Nahraď ``2026 9 - Kamča` — Drive for Desktop nahrazuje `/` z názvu na Drive mezerou` skutečným tvarem názvu složky zjištěným v Task 2, Step 5.1.
 
 ````markdown
 ---
@@ -744,13 +594,14 @@ description: >-
 
 CLI: `npm run portfolio -- <příkaz>` (čte `.env.local`: `CLOUDINARY_*`, `PORTFOLIO_DRIVE_ROOT`).
 Shoot = složka nejvyšší úrovně v `Guthovo fotky` včetně podsložek. Lokální název
-složky je ID shootu (tvar: ``2026 9 - Kamča` — Drive for Desktop nahrazuje `/` z názvu na Drive mezerou`). Na Drive jsou jen exporty 4–5★.
+složky je ID shootu (tvar `2026 9 - Kamča`; Drive for Desktop nahrazuje `/` z názvu na Drive mezerou). Na Drive jsou jen exporty 4–5★.
 
 ## Flow
 
 1. `npm run portfolio -- status` → shrň: kolik fotek na webu z 50, shooty s 0 fotkami
-   (nejnovější první), porušení limitu, fotky bez shootu. Pokud jsou fotky bez shootu,
-   nabídni `backfill`.
+   (nejnovější první), porušení limitu, fotky bez shootu. Fotky bez shootu jsou staré
+   (před butlerem): až je shoot přenahraný, připomeň smazání starých v `/admin/fotky`
+   a znovu označení ★ Selected Work.
 2. Zeptej se, který shoot. Pokud uživatel neví, doporuč nejnovější s 0 fotkami.
 3. `npm run portfolio -- previews "<shoot>" --out <scratchpad>/previews`, pak přečti
    náhledy (Read na `NNN.jpg`). U velkých shootů (>40) je projdi po dávkách.
