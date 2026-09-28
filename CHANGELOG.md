@@ -1,3 +1,9 @@
+## [2026-09-28] - Návrh editorialového redesignu
+
+- Schválen návrh nové homepage a tří samostatných vizuálních světů pro kreativní portrét, business a eventy se svatbami.
+- Stanovena nová adresa `/sluzby/eventy-a-svatby`, administrační obrazové sloty a zpětně kompatibilní práce s placeholdery.
+- Specifikace: `docs/superpowers/specs/2026-09-28-editorial-redesign-design.md`.
+
 ## [2026-09-28] - Portfolio Butler
 
 - `docs/superpowers/specs/2026-09-28-portfolio-butler-design.md`: návrh skillu `/portfolio` (Drive → návrh fotek → Cloudinary, max 2 fotky na shoot).
