@@ -83,3 +83,27 @@ describe("isValidContentData — business service", () => {
     expect(isValidContentData(d)).toBe(false);
   });
 });
+
+describe("isValidContentData — editorial copy", () => {
+  it("accepts legacy content without editorial copy", () => {
+    expect(isValidContentData(valid())).toBe(true);
+  });
+
+  it("accepts a localized events title", () => {
+    const data = valid() as Record<string, unknown>;
+    data.editorial = { eventsTitle: "Až budete u toho." };
+    expect(isValidContentData(data)).toBe(true);
+  });
+
+  it.each(["", "x".repeat(201)])("rejects an invalid events title", (eventsTitle) => {
+    const data = valid() as Record<string, unknown>;
+    data.editorial = { eventsTitle };
+    expect(isValidContentData(data)).toBe(false);
+  });
+
+  it("rejects unknown editorial keys", () => {
+    const data = valid() as Record<string, unknown>;
+    data.editorial = { eventsTitle: "Až budete u toho.", unknown: "value" };
+    expect(isValidContentData(data)).toBe(false);
+  });
+});

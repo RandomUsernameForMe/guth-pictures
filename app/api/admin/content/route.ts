@@ -55,6 +55,16 @@ function isTestimonials(v: unknown): boolean {
   });
 }
 
+function isEditorialCopy(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const editorial = value as Record<string, unknown>;
+  if (Object.keys(editorial).some((key) => key !== "eventsTitle")) return false;
+  return typeof editorial.eventsTitle === "string"
+    && editorial.eventsTitle.length > 0
+    && editorial.eventsTitle.length <= MAX_SHORT;
+}
+
 export function isValidContentData(d: unknown): d is ContentData {
   if (!d || typeof d !== "object" || Array.isArray(d)) return false;
   const o = d as Record<string, unknown>;
@@ -62,6 +72,7 @@ export function isValidContentData(d: unknown): d is ContentData {
   if (!o["o-mne"] || typeof o["o-mne"] !== "object") return false;
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   if (!isTestimonials(o.testimonials)) return false;
+  if (!isEditorialCopy(o.editorial)) return false;
   const s = o.sluzby as Record<string, unknown>;
   // business is optional for backward compat with KV data saved before the business page existed
   return isServiceContent(s.portraits) && isServiceContent(s.weddings)
@@ -99,6 +110,10 @@ export async function POST(req: NextRequest) {
   revalidatePath("/en/sluzby");
   revalidatePath("/cs/firemni-portrety");
   revalidatePath("/en/firemni-portrety");
+  revalidatePath("/cs/sluzby/portretni-foceni");
+  revalidatePath("/en/sluzby/portretni-foceni");
+  revalidatePath("/cs/sluzby/eventy-a-svatby");
+  revalidatePath("/en/sluzby/eventy-a-svatby");
   revalidatePath("/cs/o-mne");
   revalidatePath("/en/o-mne");
   return NextResponse.json({ ok: true });
