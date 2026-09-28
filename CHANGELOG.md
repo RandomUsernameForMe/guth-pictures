@@ -4,6 +4,7 @@
 - `docs/superpowers/plans/2026-09-28-portfolio-butler.md`: implementační plán (5 tasků; starší fotky se nepřiřazují, přenahrají se).
 - `scripts/portfolio/core.ts`: čisté funkce (shoot z cesty, řazení shootů, limit 2 na shoot, status report).
 - `npm run portfolio -- status`: přehled shootů na Drive vs. fotky na webu, porušení limitu, fotky bez shootu.
+- `previews`: náhledy 800 px z celého shootu (včetně podsložek) + map.json.
 
 ## [2026-09-24] - SEO a GEO: dostupný obsah a stránky služeb
 

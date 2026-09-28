@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { parseArgs } from "node:util";
-import { buildStatus, MAX_PER_SHOOT, WEB_LIMIT } from "./portfolio/core";
-import { listShoots } from "./portfolio/drive";
+import { buildStatus, MAX_PER_SHOOT, nfc, WEB_LIMIT } from "./portfolio/core";
+import { listImages, listShoots, makePreview } from "./portfolio/drive";
 import { configureCloudinary, listWebPhotos } from "./portfolio/cloud";
 
 try {
@@ -40,8 +42,38 @@ async function status(): Promise<void> {
   }
 }
 
+async function resolveShoot(root: string, shoot: string | undefined): Promise<string> {
+  if (!shoot) throw new Error("Chybí název shootu");
+  const match = (await listShoots(root)).find((s) => nfc(s) === nfc(shoot));
+  if (!match) throw new Error(`Shoot „${shoot}“ na Drive není — zkontroluj \`status\``);
+  return match;
+}
+
+async function previews(positional: string[], flags: Record<string, string | boolean | undefined>): Promise<void> {
+  const root = await driveRoot();
+  const shoot = await resolveShoot(root, positional[0]);
+  const out = typeof flags.out === "string" ? flags.out : path.join(os.tmpdir(), "portfolio-previews");
+  await fs.rm(out, { recursive: true, force: true });
+  await fs.mkdir(out, { recursive: true });
+
+  const map: Record<string, string> = {};
+  const images = await listImages(path.join(root, shoot));
+  for (const [i, src] of images.entries()) {
+    const name = `${String(i + 1).padStart(3, "0")}.jpg`;
+    try {
+      await makePreview(src, path.join(out, name));
+      map[name] = src;
+    } catch (err) {
+      console.warn(`⚠ přeskočeno ${src}: ${(err as Error).message}`);
+    }
+  }
+  await fs.writeFile(path.join(out, "map.json"), JSON.stringify(map, null, 2));
+  console.log(`${Object.keys(map).length}/${images.length} náhledů → ${out}`);
+}
+
 const commands: Record<string, (positional: string[], flags: Record<string, string | boolean | undefined>) => Promise<void>> = {
   status: () => status(),
+  previews,
 };
 
 async function main(): Promise<void> {
