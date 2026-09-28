@@ -20,6 +20,10 @@ export function Nav() {
   const isBlog = pathname.startsWith("/blog");
   const isLightTester = pathname.startsWith("/light-tester");
   const isHome = pathname === "/";
+  const isEditorialPage = isHome
+    || pathname === "/firemni-portrety"
+    || pathname === "/sluzby/portretni-foceni"
+    || pathname === "/sluzby/eventy-a-svatby";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -63,7 +67,7 @@ export function Nav() {
   };
 
   // HeroSection has its own navbar on homepage
-  if (isHome) return null;
+  if (isEditorialPage) return null;
 
   return (
     <>

@@ -4,6 +4,7 @@
 - Stanovena nová adresa `/sluzby/eventy-a-svatby`, administrační obrazové sloty a zpětně kompatibilní práce s placeholdery.
 - Datový model webu obsahuje zpětně kompatibilní editorialové obrazové sloty, jejich lokalizované popisy, ohniska ořezu a editovatelný titulek eventové stránky.
 - Admin API striktně validuje nové obrazové sloty a po uložení obnovuje všechny dotčené lokalizované stránky.
+- Přidána společná přístupná navigace, obrazová komponenta s ohniskem ořezu a izolované motivy/fonty pro editorialové stránky.
 - Specifikace: `docs/superpowers/specs/2026-09-28-editorial-redesign-design.md`.
 - Implementační plán: `docs/superpowers/plans/2026-09-28-editorial-redesign.md`.
 

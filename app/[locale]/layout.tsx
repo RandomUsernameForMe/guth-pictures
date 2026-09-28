@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Mono } from "next/font/google";
+import { Bodoni_Moda, DM_Sans, DM_Mono, Manrope, Oswald } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -23,6 +23,24 @@ const dmMono = DM_Mono({
   subsets: ["latin"],
   variable: "--font-dm-mono",
   weight: ["400"],
+  display: "swap",
+});
+
+const editorialSerif = Bodoni_Moda({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-editorial-serif",
+  display: "swap",
+});
+
+const editorialSans = Manrope({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-editorial-sans",
+  display: "swap",
+});
+
+const editorialCondensed = Oswald({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-editorial-condensed",
   display: "swap",
 });
 
@@ -102,7 +120,7 @@ export default async function LocaleLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyle }} />
       </head>
-      <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
+      <body className={`${dmSans.variable} ${dmMono.variable} ${editorialSerif.variable} ${editorialSans.variable} ${editorialCondensed.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}>
         <NextIntlClientProvider messages={messages}>
           <Nav />
           <div className="relative pt-16 min-h-screen flex flex-col">
