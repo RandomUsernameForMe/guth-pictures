@@ -20,6 +20,35 @@ export type Testimonial = {
   photo?: string;  // optional — Cloudinary public ID
 };
 
+export type FocalPoint = {
+  desktop: string;
+  mobile: string;
+};
+
+export type EditorialImage = {
+  publicId: string;
+  alt: { cs: string; en: string };
+  focal: FocalPoint;
+};
+
+export type EditorialImageSlot = EditorialImage | EditorialImage[];
+
+export type EditorialImages = {
+  home: {
+    hero: EditorialImage;
+    stories: EditorialImage[];
+    photographer: EditorialImage;
+    tools: { foceni101: EditorialImage; lightPlanner: EditorialImage };
+  };
+  portrait: { hero: EditorialImage; gallery: EditorialImage[] };
+  business: { hero: EditorialImage; headshots: EditorialImage[]; atWork: EditorialImage[] };
+  events: { hero: EditorialImage; reportage: EditorialImage[] };
+};
+
+export type EditorialCopy = {
+  eventsTitle: string;
+};
+
 export type ContentData = {
   home: { title: string; subtitle: string };
   "o-mne": { title: string; subtitle: string; bio: string };
@@ -30,12 +59,120 @@ export type ContentData = {
   };
   lightTesterPromo: { title: string; desc: string };
   testimonials: Testimonial[];
+  editorial?: EditorialCopy;
+};
+
+export type NormalizedContentData = Omit<ContentData, "editorial"> & {
+  editorial: EditorialCopy;
 };
 
 export type SiteImages = {
   profile: string; // Cloudinary public ID
   heroTriptych?: [string[], string[], string[]]; // pole publicIds pro 3 panely hero sekce
+  editorial?: EditorialImages;
 };
+
+export type NormalizedSiteImages = Omit<SiteImages, "editorial"> & {
+  editorial: EditorialImages;
+};
+
+const image = (publicId = "", cs = "", en = ""): EditorialImage => ({
+  publicId,
+  alt: { cs, en },
+  focal: { desktop: "50% 50%", mobile: "50% 50%" },
+});
+
+const emptyImages = (count: number): EditorialImage[] =>
+  Array.from({ length: count }, () => image());
+
+function defaultEditorialImages(): EditorialImages {
+  return {
+    home: {
+      hero: image(
+        "portfolio/scppmskdespdikncpzhz",
+        "Kreativní portrét s výrazným světlem",
+        "Creative portrait with expressive light",
+      ),
+      stories: [
+        image("portfolio/z1tvyvvw0kg6tga3iwef", "Portrét v červených šatech", "Portrait in a red dress"),
+        image("portfolio/p55ackdjary2vyt0dalj", "Portrét ve slunečním světle", "Portrait in sunlight"),
+        image("portfolio/scppmskdespdikncpzhz", "Detail kreativního portrétu", "Creative portrait detail"),
+      ],
+      photographer: image(
+        "site/fqny2o2ot6t7ab68muhc",
+        "Fotograf Tomáš Guth Jarkovský",
+        "Photographer Tomáš Guth Jarkovský",
+      ),
+      tools: { foceni101: image(), lightPlanner: image() },
+    },
+    portrait: {
+      hero: image(
+        "portfolio/scppmskdespdikncpzhz",
+        "Kreativní portrét s výrazným světlem",
+        "Creative portrait with expressive light",
+      ),
+      gallery: [
+        image("portfolio/z1tvyvvw0kg6tga3iwef", "Portrét v červených šatech", "Portrait in a red dress"),
+        image("portfolio/p55ackdjary2vyt0dalj", "Portrét ve slunečním světle", "Portrait in sunlight"),
+        image("portfolio/scppmskdespdikncpzhz", "Detail kreativního portrétu", "Creative portrait detail"),
+      ],
+    },
+    business: { hero: image(), headshots: emptyImages(3), atWork: emptyImages(3) },
+    events: { hero: image(), reportage: emptyImages(4) },
+  };
+}
+
+const normalizeImage = (value: EditorialImage | undefined, fallback: EditorialImage): EditorialImage => ({
+  publicId: value?.publicId ?? fallback.publicId,
+  alt: {
+    cs: value?.alt?.cs ?? fallback.alt.cs,
+    en: value?.alt?.en ?? fallback.alt.en,
+  },
+  focal: {
+    desktop: value?.focal?.desktop ?? fallback.focal.desktop,
+    mobile: value?.focal?.mobile ?? fallback.focal.mobile,
+  },
+});
+
+const normalizeImageList = (
+  value: EditorialImage[] | undefined,
+  fallback: EditorialImage[],
+): EditorialImage[] => (value ?? fallback).map((entry, index) =>
+  normalizeImage(entry, fallback[index] ?? image())
+);
+
+export function normalizeImages(data: Partial<SiteImages> = {}): NormalizedSiteImages {
+  const fallback = defaultEditorialImages();
+  const stored = data.editorial;
+  return {
+    profile: data.profile ?? "",
+    ...(data.heroTriptych && { heroTriptych: data.heroTriptych }),
+    editorial: {
+      home: {
+        hero: normalizeImage(stored?.home?.hero, fallback.home.hero),
+        stories: normalizeImageList(stored?.home?.stories, fallback.home.stories),
+        photographer: normalizeImage(stored?.home?.photographer, fallback.home.photographer),
+        tools: {
+          foceni101: normalizeImage(stored?.home?.tools?.foceni101, fallback.home.tools.foceni101),
+          lightPlanner: normalizeImage(stored?.home?.tools?.lightPlanner, fallback.home.tools.lightPlanner),
+        },
+      },
+      portrait: {
+        hero: normalizeImage(stored?.portrait?.hero, fallback.portrait.hero),
+        gallery: normalizeImageList(stored?.portrait?.gallery, fallback.portrait.gallery),
+      },
+      business: {
+        hero: normalizeImage(stored?.business?.hero, fallback.business.hero),
+        headshots: normalizeImageList(stored?.business?.headshots, fallback.business.headshots),
+        atWork: normalizeImageList(stored?.business?.atWork, fallback.business.atWork),
+      },
+      events: {
+        hero: normalizeImage(stored?.events?.hero, fallback.events.hero),
+        reportage: normalizeImageList(stored?.events?.reportage, fallback.events.reportage),
+      },
+    },
+  };
+}
 
 const defaults: Record<string, ContentData> = {
   cs: {
@@ -52,6 +189,7 @@ const defaults: Record<string, ContentData> = {
       title: "Vyzkoušej světla před focením",
       desc: "Interaktivní 3D simulátor studiového osvětlení. Nastav si světelné schéma, prozkoumej presety a přijď připravený.",
     },
+    editorial: { eventsTitle: "Až budete u toho." },
     sluzby: {
       portraits: {
         title: "Portréty",
@@ -105,6 +243,7 @@ const defaults: Record<string, ContentData> = {
       title: "Try the lights before the shoot",
       desc: "Interactive 3D studio lighting simulator. Set up your lighting scheme, explore presets and come prepared.",
     },
+    editorial: { eventsTitle: "When you are there." },
     sluzby: {
       portraits: {
         title: "Portraits",
@@ -149,7 +288,7 @@ const defaults: Record<string, ContentData> = {
 const withIds = (pkgs: PricingPackage[]): PricingPackage[] =>
   pkgs.map((pkg) => ({ ...pkg, id: pkg.id ?? crypto.randomUUID() }));
 
-export function normalizeContent(data: ContentData, locale = "cs"): ContentData {
+export function normalizeContent(data: ContentData, locale = "cs"): NormalizedContentData {
   const normalizeService = (svc: ServiceContent): ServiceContent => ({
     ...svc,
     packages: withIds(svc.packages ?? []),
@@ -159,6 +298,7 @@ export function normalizeContent(data: ContentData, locale = "cs"): ContentData 
   const business = data.sluzby.business ?? (defaults[locale] ?? defaults.cs).sluzby.business;
   return {
     ...data,
+    editorial: data.editorial ?? (defaults[locale] ?? defaults.cs).editorial ?? { eventsTitle: "Až budete u toho." },
     lightTesterPromo: data.lightTesterPromo ?? { title: "", desc: "" },
     sluzby: {
       portraits: normalizeService(data.sluzby.portraits),
@@ -172,7 +312,7 @@ export function normalizeContent(data: ContentData, locale = "cs"): ContentData 
   };
 }
 
-export async function getContent(locale: string): Promise<ContentData> {
+export async function getContent(locale: string): Promise<NormalizedContentData> {
   const kv = await getKv();
   if (kv) {
     try {
@@ -191,17 +331,17 @@ export async function setContent(locale: string, data: ContentData): Promise<voi
   await kv.set(`content:${locale}`, data);
 }
 
-export async function getImages(): Promise<SiteImages> {
+export async function getImages(): Promise<NormalizedSiteImages> {
   const kv = await getKv();
   if (kv) {
     try {
       const data = await kv.get<SiteImages>("content:images");
-      if (data) return data;
+      if (data) return normalizeImages(data);
     } catch {
       // KV unavailable, fall through to defaults
     }
   }
-  return { profile: "" };
+  return normalizeImages({ profile: "" });
 }
 
 export async function setImages(data: SiteImages): Promise<void> {

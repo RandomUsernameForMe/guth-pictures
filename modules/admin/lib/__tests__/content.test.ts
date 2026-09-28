@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeContent, type ContentData } from "@/modules/admin/lib/content";
+import { normalizeContent, normalizeImages, type ContentData } from "@/modules/admin/lib/content";
 
 function baseContent(): ContentData {
   return {
@@ -62,5 +62,41 @@ describe("normalizeContent — business service", () => {
     expect(out.sluzby.business.title).toBe("Vlastní");
     expect(out.sluzby.business.extras?.[0].price).toBe("400 Kč");
     expect(out.sluzby.business.extras?.[0].id).toMatch(/[0-9a-f-]{36}/);
+  });
+});
+
+describe("editorial data normalization", () => {
+  it("normalizes legacy images without losing profile and triptych", () => {
+    const result = normalizeImages({
+      profile: "site/me",
+      heroTriptych: [["a"], ["b"], ["c"]],
+    });
+
+    expect(result.profile).toBe("site/me");
+    expect(result.heroTriptych).toEqual([["a"], ["b"], ["c"]]);
+    expect(result.editorial.home.hero.publicId).toBe("portfolio/scppmskdespdikncpzhz");
+    expect(result.editorial.business.hero.publicId).toBe("");
+    expect(result.editorial.events.reportage).toHaveLength(4);
+  });
+
+  it("returns fresh editorial defaults for every image normalization", () => {
+    const first = normalizeImages({ profile: "" });
+    const second = normalizeImages({ profile: "" });
+
+    first.editorial.portrait.gallery[0].publicId = "changed";
+
+    expect(second.editorial.portrait.gallery[0].publicId).toBe("portfolio/z1tvyvvw0kg6tga3iwef");
+  });
+
+  it("adds localized editorial copy to legacy content", () => {
+    const input = baseContent();
+    const businessPackages = input.sluzby.business.packages;
+
+    const cs = normalizeContent(input, "cs");
+    const en = normalizeContent(baseContent(), "en");
+
+    expect(cs.editorial.eventsTitle).toBe("Až budete u toho.");
+    expect(en.editorial.eventsTitle).toBe("When you are there.");
+    expect(cs.sluzby.business.packages).toEqual(businessPackages);
   });
 });
