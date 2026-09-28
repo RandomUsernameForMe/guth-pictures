@@ -6,7 +6,7 @@
 export const HEADSHOT_IDS: string[] = ["", "", "", "", "", "", ""];
 export const AT_WORK_IDS: string[] = ["", "", ""];
 
-type Copy = {
+export type Copy = {
   eyebrow: string;
   heroTitle: string;
   heroSubtitle: string;
