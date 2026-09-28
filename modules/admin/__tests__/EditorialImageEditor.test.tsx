@@ -44,4 +44,24 @@ describe("EditorialImageEditor", () => {
       alt: { cs: "Atmosféra eventu", en: "Event atmosphere" },
     });
   });
+
+  it("umí změnit pořadí a vyprázdnit slot", async () => {
+    const value = editorial();
+    value.home.stories[0].publicId = "portfolio/first";
+    value.home.stories[1].publicId = "portfolio/second";
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    const user = userEvent.setup();
+
+    render(<EditorialImageEditor editorial={value} photos={[]} />);
+    await user.click(screen.getByRole("button", { name: "Posunout dolů: Homepage — příběh 1" }));
+    await user.click(screen.getByRole("button", { name: "Vyprázdnit slot: Homepage — příběh 1" }));
+    await user.click(screen.getByRole("button", { name: "Uložit editorialové fotky" }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.editorial.home.stories.map((image: EditorialImage) => image.publicId)).toEqual([
+      "", "portfolio/first", "",
+    ]);
+  });
 });

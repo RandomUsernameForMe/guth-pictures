@@ -10,6 +10,8 @@
 - Business portréty používají světlý přesný grid, administrační obrazové sloty a zachovávají stávající ceník, podmínky, FAQ a poptávku.
 - Nová reportážní stránka eventů a svateb má samostatnou adresu, spravované obrazové sloty, ceník, poptávku, interní odkazy a zápis v sitemapě.
 - Administrace umožňuje u všech redesignových slotů vybrat fotku, upravit lokalizované popisy a ohnisko ořezu; zvlášť lze měnit titul eventové stránky.
+- Doplněny skutečné náhledy Focení 101 a Light Planneru, změna pořadí/vyprázdnění administračních slotů a responzivní ověření pěti šířek.
+- Ověření: `docs/redesign-verification.md`.
 - Specifikace: `docs/superpowers/specs/2026-09-28-editorial-redesign-design.md`.
 - Implementační plán: `docs/superpowers/plans/2026-09-28-editorial-redesign.md`.
 

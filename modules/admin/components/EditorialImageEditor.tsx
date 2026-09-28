@@ -8,6 +8,8 @@ type Slot = {
   label: string;
   read: (data: EditorialImages) => EditorialImage;
   write: (data: EditorialImages, image: EditorialImage) => void;
+  index?: number;
+  group?: (data: EditorialImages) => EditorialImage[];
 };
 
 const single = (label: string, read: Slot["read"], write: Slot["write"]): Slot => ({ label, read, write });
@@ -15,11 +17,15 @@ const list = (
   label: string,
   data: EditorialImages,
   read: (value: EditorialImages) => EditorialImage[],
-): Slot[] => read(data).map((_, index) => single(
-  `${label} ${index + 1}`,
-  (value) => read(value)[index],
-  (value, image) => { read(value)[index] = image; },
-));
+): Slot[] => read(data).map((_, index) => ({
+  ...single(
+    `${label} ${index + 1}`,
+    (value) => read(value)[index],
+    (value, image) => { read(value)[index] = image; },
+  ),
+  index,
+  group: read,
+}));
 
 function imageSlots(data: EditorialImages): Slot[] {
   return [
@@ -52,6 +58,18 @@ export function EditorialImageEditor({ editorial, photos }: { editorial: Editori
     });
   }
 
+  function move(slot: Slot, offset: -1 | 1) {
+    if (slot.index === undefined || !slot.group) return;
+    setData((current) => {
+      const next = structuredClone(current);
+      const images = slot.group!(next);
+      const target = slot.index! + offset;
+      if (target < 0 || target >= images.length) return current;
+      [images[slot.index!], images[target]] = [images[target], images[slot.index!]];
+      return next;
+    });
+  }
+
   async function save() {
     setStatus("saving");
     try {
@@ -80,6 +98,13 @@ export function EditorialImageEditor({ editorial, photos }: { editorial: Editori
           <button type="button" onClick={() => setActive(active === slot.label ? null : slot.label)} aria-label={`Změnit fotku: ${slot.label}`} className="text-xs underline underline-offset-4">
             {image.publicId ? "Změnit fotku" : "Vybrat fotku"}
           </button>
+          <div className="flex gap-3 text-xs">
+            <button type="button" aria-label={`Vyprázdnit slot: ${slot.label}`} onClick={() => update(slot, { publicId: "", alt: { cs: "", en: "" }, focal: { desktop: "50% 50%", mobile: "50% 50%" } })} disabled={!image.publicId} className="disabled:opacity-30">Vyprázdnit</button>
+            {slot.index !== undefined && slot.group && <>
+              <button type="button" aria-label={`Posunout nahoru: ${slot.label}`} onClick={() => move(slot, -1)} disabled={slot.index === 0} className="disabled:opacity-30">↑</button>
+              <button type="button" aria-label={`Posunout dolů: ${slot.label}`} onClick={() => move(slot, 1)} disabled={slot.index === slot.group(data).length - 1} className="disabled:opacity-30">↓</button>
+            </>}
+          </div>
           {active === slot.label && <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
             {photos.map((photo) => <button key={photo.publicId} type="button" aria-label={`Vybrat ${photo.alt.cs || photo.publicId}`} onClick={() => {
               update(slot, { ...image, publicId: photo.publicId, alt: photo.alt });
@@ -99,8 +124,9 @@ export function EditorialImageEditor({ editorial, photos }: { editorial: Editori
     </div>
     <div className="mt-4 flex items-center gap-3">
       <button type="button" onClick={save} disabled={status === "saving"} className="px-4 py-2 bg-white text-black text-sm font-medium disabled:opacity-50">Uložit editorialové fotky</button>
-      {status === "ok" && <span className="text-sm text-green-400">Uloženo</span>}
-      {status === "error" && <span className="text-sm text-red-400">Uložení selhalo</span>}
+      <span aria-live="polite" className={`text-sm ${status === "error" ? "text-red-400" : "text-green-400"}`}>
+        {status === "ok" ? "Uloženo" : status === "error" ? "Uložení selhalo" : ""}
+      </span>
     </div>
   </section>;
 }
