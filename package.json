@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
+    "portfolio": "tsx scripts/portfolio.ts",
     "test:watch": "vitest",
     "post-article": "tsx scripts/post-article.ts"
   },
@@ -41,6 +42,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.7.0",
     "jsdom": "^25.0.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
