@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { getContent } from "@/modules/admin/lib/content";
 import { ServiceCards, type ServiceItem } from "@/modules/homepage/components/ServiceCards";
 import { ServiceLinks } from "@/modules/homepage/components/ServiceLinks";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -64,22 +65,25 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
   };
 
   return (
-    <main>
-      <section className="max-w-4xl mx-auto px-6 pt-32 pb-16">
-        <h1 className="text-5xl font-bold">{t("sluzby.title")}</h1>
-        <p className="mt-4 text-lg text-[var(--color-text-muted)]">{t("sluzby.subtitle")}</p>
+    <EditorialSubpage active="services" className="ed-secondary-services">
+      <section className="ed-secondary-hero">
+        <p>{locale === "cs" ? "Fotografické služby" : "Photography services"}</p>
+        <h1>{t("sluzby.title")}</h1>
+        <p>{t("sluzby.subtitle")}</p>
+      </section>
+      <section className="ed-secondary-services__list" aria-label={locale === "cs" ? "Nabídka focení" : "Photography offer"}>
         <ServiceCards
           selectLabel={t("sluzby.vybrat")}
           services={[
             {
-              key: "portraits", number: "001", category: "portréty",
+              key: "portraits", category: "portréty",
               title: content.sluzby.portraits.title,
               desc: content.sluzby.portraits.desc,
               packages: content.sluzby.portraits.packages,
               note: content.sluzby.portraits.note,
             },
             {
-              key: "weddings", number: "002", category: "svatby",
+              key: "weddings", category: "svatby",
               title: content.sluzby.weddings.title,
               desc: content.sluzby.weddings.desc,
               packages: content.sluzby.weddings.packages,
@@ -88,7 +92,7 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
               hrefLabel: locale === "cs" ? "Vše o eventech a svatbách" : "All about events and weddings",
             },
             {
-              key: "business", number: "003", category: "firemní",
+              key: "business", category: "firemní",
               title: content.sluzby.business.title,
               desc: content.sluzby.business.desc,
               packages: content.sluzby.business.packages,
@@ -100,10 +104,10 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
         />
         <ServiceLinks locale={locale} />
       </section>
-      <section className="max-w-4xl mx-auto px-6 pb-16">
+      <section className="ed-secondary-faq">
         {/* JSON-LD: static FAQ const above, "<" escaped so it cannot close the script tag */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
-        <h2 className="text-4xl font-bold mb-8">{locale === "cs" ? "Časté dotazy" : "FAQ"}</h2>
+        <h2>{locale === "cs" ? "Časté dotazy" : "FAQ"}</h2>
         <div className="divide-y divide-[var(--color-border)]">
           {faq.map(({ q, a }) => (
             <details key={q} className="py-4 group">
@@ -116,11 +120,11 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
           ))}
         </div>
       </section>
-      <section id="kontakt" className="max-w-xl mx-auto px-6 pb-24">
-        <h2 className="text-4xl font-bold">{t("kontakt.title")}</h2>
+      <section id="kontakt" className="ed-secondary-contact">
+        <h2>{t("kontakt.title")}</h2>
         <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
         <ContactForm />
       </section>
-    </main>
+    </EditorialSubpage>
   );
 }

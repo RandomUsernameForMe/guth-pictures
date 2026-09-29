@@ -3,7 +3,7 @@ import type { PricingPackage } from "@/lib/types";
 
 export type ServiceItem = {
   key: string;
-  number: string;
+  number?: string;
   category: string;
   title: string;
   desc: string;
@@ -21,7 +21,7 @@ export function ServiceCards({ services, selectLabel }: Props) {
       {services.map((service) => (
         <details key={service.key} className="group border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-8 open:border-[var(--color-border-sub)]">
           <summary className="cursor-pointer list-none rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] [&::-webkit-details-marker]:hidden">
-            <span className="block font-mono text-xs text-[var(--color-text-ghost)] tracking-widest mb-6">{service.number}</span>
+            {service.number && <span className="block font-mono text-xs text-[var(--color-text-ghost)] tracking-widest mb-6">{service.number}</span>}
             <h3 className="text-lg font-semibold text-[var(--color-text)]">{service.title}</h3>
             <p className="mt-3 text-sm text-[var(--color-text-muted)] leading-relaxed">{service.desc}</p>
             <span aria-hidden="true" className="flex justify-end mt-6 pt-4 border-t border-[var(--color-border)] text-[var(--color-text-ghost)]">
