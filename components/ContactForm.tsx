@@ -33,16 +33,21 @@ function ContactFormFields() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    const res = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}`, {
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" },
-    });
+    try {
+      const res = await fetch(`https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}`, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
 
-    if (res.ok) {
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+
       setStatus("success");
       form.reset();
-    } else {
+    } catch {
       setStatus("error");
     }
   }

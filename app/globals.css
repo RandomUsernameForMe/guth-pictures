@@ -1835,6 +1835,12 @@ body::after {
   --editorial-ink: #11100e;
   --editorial-paper: #f4f1ea;
   --editorial-accent: #c93a2b;
+  --color-bg: var(--editorial-paper);
+  --color-bg-elevated: color-mix(in srgb, var(--editorial-ink) 4%, var(--editorial-paper));
+  --color-text: var(--editorial-ink);
+  --color-text-muted: color-mix(in srgb, var(--editorial-ink) 72%, var(--editorial-paper));
+  --color-text-ghost: color-mix(in srgb, var(--editorial-ink) 64%, var(--editorial-paper));
+  --color-border: color-mix(in srgb, var(--editorial-ink) 28%, transparent);
   color: var(--editorial-ink);
   background: var(--editorial-paper);
   font-family: var(--font-editorial-sans), sans-serif;

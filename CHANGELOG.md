@@ -1,3 +1,8 @@
+## [2026-09-29] - Oprava kontaktních formulářů redesignu
+
+- Formuláře na editorialových stránkách přebírají barvy konkrétního motivu, mají čitelné popisky, placeholdery a viditelný fokus.
+- Síťová chyba při odeslání už nenechá formulář trvale ve stavu odesílání.
+
 ## [2026-09-28] - Návrh editorialového redesignu
 
 - Schválen návrh nové homepage a tří samostatných vizuálních světů pro kreativní portrét, business a eventy se svatbami.

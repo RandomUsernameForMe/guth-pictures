@@ -91,4 +91,18 @@ describe("ContactForm", () => {
     await waitFor(() => expect(screen.getByText("error")).toBeInTheDocument());
     expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
   });
+
+  it("po síťové chybě zobrazí error zprávu a formulář zůstane", async () => {
+    mockFetch.mockRejectedValueOnce(new Error("network error"));
+    const user = userEvent.setup();
+    render(<ContactForm />);
+
+    await user.type(screen.getByLabelText("name"), "Jan");
+    await user.type(screen.getByLabelText("email"), "jan@test.cz");
+    await user.type(screen.getByLabelText("message"), "Zpráva");
+    await user.click(screen.getByRole("button", { name: "send" }));
+
+    await waitFor(() => expect(screen.getByText("error")).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
+  });
 });
