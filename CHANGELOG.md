@@ -3,6 +3,7 @@
 - Přidán společný světlý obal a navigace pro služby, portfolio, profil, blog a právní stránky; mobilní navigace a patička mají větší dotykové cíle.
 - Rozcestník služeb, FAQ, kontaktní formulář a profil fotografa používají nový editorialový layout; profil zůstává funkční i bez fotografie z administrace.
 - Odstraněn prázdný horní pruh vzniklý rezervou staré navigace na všech redesignových stránkách.
+- Portfolio, výpis blogu a detail článku používají světlý editorialový layout; filtr galerie má motivové barvy a chybové/prázdné stavy vlastní čitelné řešení.
 
 ## [2026-09-29] - Oprava kontaktních formulářů redesignu
 

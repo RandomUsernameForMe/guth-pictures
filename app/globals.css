@@ -1923,6 +1923,22 @@ body::after {
 .ed-about-layout__subtitle { margin: 1.5rem 0 0; font-family: var(--font-editorial-serif), serif; font-size: clamp(1.35rem, 2.3vw, 2rem); }
 .ed-about-layout__bio { max-width: 38rem; margin: 2.5rem 0 0; color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.75; }
 .ed-about-layout__links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
+.ed-portfolio-content, .ed-blog-list { max-width: 74rem; margin: 0 auto; padding: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 5vw, 4rem); }
+.ed-secondary-empty { margin: 0; padding: clamp(4rem, 10vw, 8rem) 1.5rem; border: 1px solid var(--color-border); color: var(--color-text-muted); text-align: center; font-family: var(--font-editorial-serif), serif; font-size: clamp(1.25rem, 2vw, 1.75rem); }
+.ed-blog-list { max-width: 62rem; }
+.ed-blog-list article { border-radius: 0; background: transparent; }
+.ed-blog-list h2 { font-family: var(--font-editorial-serif), serif; font-weight: 500; letter-spacing: -.025em; }
+.ed-article { max-width: 52rem; margin: 0 auto; padding: clamp(4rem, 9vw, 8rem) clamp(1.5rem, 5vw, 4rem); }
+.ed-article__back { display: inline-flex; min-height: 2.75rem; align-items: center; margin-bottom: 3rem; color: var(--color-text-muted); text-decoration: none; }
+.ed-article__image { position: relative; height: clamp(18rem, 45vw, 30rem); margin: 0 0 3rem; }
+.ed-article__meta { display: flex; gap: .75rem; margin-bottom: 1rem; color: var(--color-text-ghost); font-size: .78rem; letter-spacing: .05em; }
+.ed-article h1 { margin: 0; font-family: var(--font-editorial-serif), serif; font-size: clamp(3.2rem, 8vw, 6rem); font-weight: 500; line-height: .9; letter-spacing: -.045em; }
+.ed-article__author { margin: 1.5rem 0; color: var(--color-text-muted); font-size: .85rem; }
+.ed-article__author a { color: inherit; text-underline-offset: .25rem; }
+.ed-article__excerpt { margin: 2.5rem 0; padding: 1.5rem 0; border-block: 1px solid var(--color-border); color: var(--color-text-muted); font-family: var(--font-editorial-serif), serif; font-size: clamp(1.25rem, 2.5vw, 1.8rem); line-height: 1.35; }
+.ed-article .blog-content { max-width: 44rem; }
+.ed-article .blog-content h1, .ed-article .blog-content h2, .ed-article .blog-content h3, .ed-article .blog-content h4 { font-family: var(--font-editorial-serif), serif; font-weight: 500; }
+.ed-article .blog-content blockquote { border-left-color: var(--editorial-accent); }
 
 @media (max-width: 760px) {
   .ed-secondary-services__list > div { grid-template-columns: 1fr; }

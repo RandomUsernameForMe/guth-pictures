@@ -74,7 +74,9 @@ describe("PortfolioFilter", () => {
 
   it("zobrazí tlačítka pro všechny kategorie + Vše", () => {
     render(<PortfolioFilter photos={photos} locale="cs" />);
-    expect(screen.getByRole("button", { name: "Vše" })).toBeInTheDocument();
+    const allButton = screen.getByRole("button", { name: "Vše" });
+    expect(allButton).toBeInTheDocument();
+    expect(allButton.innerHTML).not.toContain("white");
     expect(screen.getByRole("button", { name: "Portréty" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Svatby" })).toBeInTheDocument();
   });

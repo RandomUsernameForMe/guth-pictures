@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { PortfolioFilter } from "@/modules/homepage/components/PortfolioFilter";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -44,18 +45,21 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
   }
 
   return (
-    <main>
-      <section className="max-w-6xl mx-auto px-6 pt-32 pb-16">
-        <h1 className="text-5xl font-bold">{t("title")}</h1>
-        <p className="mt-4 text-gray-400">{t("subtitle")}</p>
+    <EditorialSubpage active="portfolio" className="ed-secondary-portfolio">
+      <section className="ed-secondary-hero">
+        <p>{locale === "cs" ? "Vybraná práce" : "Selected work"}</p>
+        <h1>{t("title")}</h1>
+        <p>{t("subtitle")}</p>
       </section>
-      <section className="max-w-6xl mx-auto px-6 pb-24">
+      <section className="ed-portfolio-content">
         {fetchError ? (
-          <p className="text-gray-500 text-center py-24">Galerii se nepodařilo načíst. Zkuste to prosím znovu.</p>
+          <p role="status" className="ed-secondary-empty">
+            {locale === "cs" ? "Galerii se nepodařilo načíst. Zkuste to prosím znovu." : "The gallery could not be loaded. Please try again."}
+          </p>
         ) : (
           <PortfolioFilter photos={photos} locale={locale} />
         )}
       </section>
-    </main>
+    </EditorialSubpage>
   );
 }

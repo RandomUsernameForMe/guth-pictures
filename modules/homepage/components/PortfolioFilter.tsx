@@ -29,7 +29,7 @@ export function PortfolioFilter({ photos, locale }: Props) {
 
   const btnClass = (isActive: boolean) =>
     `relative px-4 py-1.5 rounded-full text-sm font-medium transition-colors overflow-hidden ${
-      isActive ? "" : "border border-white/20 text-gray-400 hover:text-white hover:border-white/40"
+      isActive ? "" : "border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)]"
     }`;
 
   return (
@@ -42,11 +42,11 @@ export function PortfolioFilter({ photos, locale }: Props) {
           {active === null && (
             <motion.span
               layoutId="active-filter"
-              className="absolute inset-0 bg-white rounded-full"
+              className="absolute inset-0 bg-[var(--color-text)] rounded-full"
               transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
             />
           )}
-          <span className={`relative z-10 ${active === null ? "text-black" : ""}`}>
+          <span className={`relative z-10 ${active === null ? "text-[var(--color-bg)]" : ""}`}>
             {t("filterAll")}
           </span>
         </button>
@@ -56,11 +56,11 @@ export function PortfolioFilter({ photos, locale }: Props) {
             {active === cat && (
               <motion.span
                 layoutId="active-filter"
-                className="absolute inset-0 bg-white rounded-full"
+                className="absolute inset-0 bg-[var(--color-text)] rounded-full"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
               />
             )}
-            <span className={`relative z-10 ${active === cat ? "text-black" : ""}`}>
+            <span className={`relative z-10 ${active === cat ? "text-[var(--color-bg)]" : ""}`}>
               {t(`categories.${cat}`)}
             </span>
           </button>

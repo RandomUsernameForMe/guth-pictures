@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getBlogPosts } from "@/modules/blog/lib/blog";
 import { BlogPostCard } from "@/modules/blog/components/BlogPostCard";
 import { BlogPostHero } from "@/modules/blog/components/BlogPostHero";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export const revalidate = 60;
 
@@ -32,15 +33,16 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
   const [hero, ...rest] = posts;
 
   return (
-    <main>
-      <section className="max-w-4xl mx-auto px-6 pt-32 pb-12">
-        <h1 className="text-5xl font-bold">{t("title")}</h1>
-        <p className="mt-4 text-[var(--color-text-muted)]">{t("subtitle")}</p>
+    <EditorialSubpage active="blog" className="ed-secondary-blog">
+      <section className="ed-secondary-hero">
+        <p>{locale === "cs" ? "Poznámky a příběhy" : "Notes and stories"}</p>
+        <h1>{t("title")}</h1>
+        <p>{t("subtitle")}</p>
       </section>
 
-      <section className="max-w-4xl mx-auto px-6 pb-24">
+      <section className="ed-blog-list">
         {posts.length === 0 ? (
-          <p className="text-[var(--color-text-ghost)] py-16 text-center">{t("empty")}</p>
+          <p className="ed-secondary-empty">{t("empty")}</p>
         ) : (
           <div className="flex flex-col gap-8">
             <BlogPostHero post={hero} locale={loc} />
@@ -55,6 +57,6 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
           </div>
         )}
       </section>
-    </main>
+    </EditorialSubpage>
   );
 }

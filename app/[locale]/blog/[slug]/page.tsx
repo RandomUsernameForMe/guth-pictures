@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { getBlogPost, getBlogPosts } from "@/modules/blog/lib/blog";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 import { siteUrl } from "@/lib/config";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export const revalidate = 60;
 
@@ -99,48 +100,41 @@ export default async function BlogPostPage({
   const jsonLdHtml = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml }} />
-      <Link
-        href="/blog"
-        className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors mb-10 inline-block"
-      >
-        ← {t("back")}
-      </Link>
+    <EditorialSubpage active="blog" className="ed-secondary-article">
+      <article className="ed-article">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml }} />
+        <Link href="/blog" className="ed-article__back">← {t("back")}</Link>
 
-      {post.coverImage && (
-        <div className="relative w-full h-64 sm:h-80 overflow-hidden mb-10">
-          <Image
-            src={cloudinaryUrl(post.coverImage, "w_1200,h_630,c_fill")}
-            alt={loc.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, 768px"
-          />
+        {post.coverImage && (
+          <figure className="ed-article__image">
+            <Image
+              src={cloudinaryUrl(post.coverImage, "w_1200,h_630,c_fill")}
+              alt={loc.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          </figure>
+        )}
+
+        <div className="ed-article__meta">
+          <time>{date}</time>
+          <span aria-hidden>·</span>
+          <span>{readLabel}</span>
         </div>
-      )}
 
-      <div className="flex items-center gap-3 mb-3">
-        <time className="text-sm text-[var(--color-text-ghost)]">{date}</time>
-        <span className="border-l border-[var(--color-border)] h-3" />
-        <span className="text-sm text-[var(--color-text-ghost)]">{readLabel}</span>
-      </div>
-
-      <h1 className="text-4xl font-bold mb-6 leading-tight text-[var(--color-text)]">{loc.title}</h1>
-      <p className="mb-6 text-sm text-[var(--color-text-muted)]">
-        {locale === "cs" ? "Autor" : "Author"}: <Link href="/o-mne" className="underline">Tomáš Guth Jarkovský</Link>
-      </p>
-
-      {loc.excerpt && (
-        <p className="text-xl text-[var(--color-text-muted)] mb-10 leading-relaxed border-l-2 border-[var(--color-accent)] pl-5">
-          {loc.excerpt}
+        <h1>{loc.title}</h1>
+        <p className="ed-article__author">
+          {locale === "cs" ? "Autor" : "Author"}: <Link href="/o-mne">Tomáš Guth Jarkovský</Link>
         </p>
-      )}
 
-      <div className="blog-content">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{loc.content}</ReactMarkdown>
-      </div>
-    </main>
+        {loc.excerpt && <p className="ed-article__excerpt">{loc.excerpt}</p>}
+
+        <div className="blog-content">
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{loc.content}</ReactMarkdown>
+        </div>
+      </article>
+    </EditorialSubpage>
   );
 }
