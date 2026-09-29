@@ -16,4 +16,13 @@ describe("EditorialNav", () => {
     expect(screen.getByRole("link", { name: "Eventy a svatby" })).toHaveAttribute("href", "/sluzby/eventy-a-svatby");
     expect(screen.getByRole("link", { name: "Kontakt" })).toHaveAttribute("href", "/#kontakt");
   });
+
+  it("shows the secondary site links on content pages", () => {
+    render(<EditorialNav tone="light" active="about" />);
+
+    expect(screen.getByRole("link", { name: "Služby" })).toHaveAttribute("href", "/sluzby");
+    expect(screen.getByRole("link", { name: "Portfolio" })).toHaveAttribute("href", "/portfolio");
+    expect(screen.getByRole("link", { name: "O mně" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute("href", "/blog");
+  });
 });

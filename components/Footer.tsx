@@ -17,14 +17,14 @@ export function Footer({ title, subtitle, email }: Props) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           {/* Brand + tagline */}
           <div>
-            <Link href="/" className="text-lg font-semibold tracking-widest uppercase text-[var(--color-text)] hover:text-[var(--color-text-muted)] transition-colors">
+            <Link href="/" className="inline-flex min-h-11 items-center text-lg font-semibold tracking-widest uppercase text-[var(--color-text)] hover:text-[var(--color-text-muted)] transition-colors">
               {title}
             </Link>
             <p className="mt-1 text-sm text-[var(--color-text-muted)]">{subtitle}</p>
           </div>
 
           {/* Quick nav */}
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--color-text-muted)]">
+          <nav className="flex flex-wrap gap-x-6 text-sm text-[var(--color-text-muted)] [&_a]:inline-flex [&_a]:min-h-11 [&_a]:items-center">
             <Link href="/portfolio" className="hover:text-[var(--color-text)] transition-colors">{tNav("portfolio")}</Link>
             <Link href="/sluzby" className="hover:text-[var(--color-text)] transition-colors">{tNav("sluzby")}</Link>
             <Link href="/o-mne" className="hover:text-[var(--color-text)] transition-colors">{tNav("o-mne")}</Link>

@@ -1,3 +1,7 @@
+## [2026-09-29] - Editorialové podstránky
+
+- Přidán společný světlý obal a navigace pro služby, portfolio, profil, blog a právní stránky; mobilní navigace a patička mají větší dotykové cíle.
+
 ## [2026-09-29] - Oprava kontaktních formulářů redesignu
 
 - Formuláře na editorialových stránkách přebírají barvy konkrétního motivu, mají čitelné popisky, placeholdery a viditelný fokus.

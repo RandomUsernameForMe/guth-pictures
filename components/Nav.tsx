@@ -23,7 +23,13 @@ export function Nav() {
   const isEditorialPage = isHome
     || pathname === "/firemni-portrety"
     || pathname === "/sluzby/portretni-foceni"
-    || pathname === "/sluzby/eventy-a-svatby";
+    || pathname === "/sluzby/eventy-a-svatby"
+    || pathname === "/sluzby"
+    || pathname === "/portfolio"
+    || pathname === "/o-mne"
+    || pathname.startsWith("/blog")
+    || pathname === "/vop"
+    || pathname === "/privacy";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

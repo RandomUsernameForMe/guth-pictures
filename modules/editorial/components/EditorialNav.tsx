@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-type ActivePage = "home" | "portrait" | "business" | "events" | null;
+export type ActivePage = "home" | "portrait" | "business" | "events" | "services" | "portfolio" | "about" | "blog" | "legal" | null;
 
 type Props = {
   tone: "light" | "dark";
@@ -12,21 +12,36 @@ type Props = {
 };
 
 const hrefs = {
+  home: "/",
   portrait: "/sluzby/portretni-foceni",
   business: "/firemni-portrety",
   events: "/sluzby/eventy-a-svatby",
+  services: "/sluzby",
+  portfolio: "/portfolio",
+  about: "/o-mne",
+  blog: "/blog",
+  legal: "/vop",
 } as const;
+
+const secondaryPages = new Set<ActivePage>(["services", "portfolio", "about", "blog", "legal"]);
 
 export function EditorialNav({ tone, active }: Props) {
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const cs = locale !== "en";
-  const links = [
+  const serviceLinks = [
     { key: "portrait" as const, href: hrefs.portrait, label: cs ? "Portréty" : "Portraits" },
     { key: "business" as const, href: hrefs.business, label: "Business" },
     { key: "events" as const, href: hrefs.events, label: cs ? "Eventy a svatby" : "Events & weddings" },
   ];
+  const secondaryLinks = [
+    { key: "services" as const, href: hrefs.services, label: cs ? "Služby" : "Services" },
+    { key: "portfolio" as const, href: hrefs.portfolio, label: "Portfolio" },
+    { key: "about" as const, href: hrefs.about, label: cs ? "O mně" : "About" },
+    { key: "blog" as const, href: hrefs.blog, label: "Blog" },
+  ];
+  const links = secondaryPages.has(active) ? secondaryLinks : serviceLinks;
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -48,7 +63,7 @@ export function EditorialNav({ tone, active }: Props) {
         <Link href="/#kontakt">{cs ? "Kontakt" : "Contact"}</Link>
       </nav>
       <div className="editorial-nav__tools">
-        <Link href={active === "home" ? "/" : hrefs[active ?? "portrait"]} locale={cs ? "en" : "cs"} className="editorial-nav__locale">
+        <Link href={active ? hrefs[active] : "/"} locale={cs ? "en" : "cs"} className="editorial-nav__locale">
           {cs ? "EN" : "CS"}
         </Link>
         <button ref={triggerRef} type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="editorial-mobile-menu" className="editorial-nav__trigger">
