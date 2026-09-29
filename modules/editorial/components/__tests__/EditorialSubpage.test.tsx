@@ -5,6 +5,7 @@ import { EditorialSubpage } from "../EditorialSubpage";
 vi.mock("next-intl", () => ({ useLocale: () => "cs" }));
 vi.mock("@/i18n/navigation", () => ({
   Link: ({ children, href, ...props }: React.PropsWithChildren<{ href: string }>) => <a href={href} {...props}>{children}</a>,
+  usePathname: () => "/portfolio",
 }));
 
 describe("EditorialSubpage", () => {

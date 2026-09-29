@@ -5,6 +5,9 @@
 - Odstraněn prázdný horní pruh vzniklý rezervou staré navigace na všech redesignových stránkách.
 - Portfolio, výpis blogu a detail článku používají světlý editorialový layout; filtr galerie má motivové barvy a chybové/prázdné stavy vlastní čitelné řešení.
 - VOP a zásady ochrany osobních údajů mají společnou dokumentovou sazbu s výrazným titulkem a přehlednými sekcemi na desktopu i mobilu.
+- Jazykový přepínač zachovává aktuální podstránku i detail článku a je dostupný také v mobilním menu.
+- Mobilní menu používá nativní dialog s obsluhou Escape a focusu; stavové zprávy formuláře mají na světlém pozadí přístupný kontrast.
+- Provedena kontrola všech redesignovaných podstránek v CS/EN na desktopu i mobilu; podrobnosti jsou v `docs/redesign-verification.md`.
 
 ## [2026-09-29] - Oprava kontaktních formulářů redesignu
 

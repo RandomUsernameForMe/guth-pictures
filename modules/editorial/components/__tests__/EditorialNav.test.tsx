@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EditorialNav } from "../EditorialNav";
 
 vi.mock("next-intl", () => ({ useLocale: () => "cs" }));
 vi.mock("@/i18n/navigation", () => ({
   Link: ({ children, href, ...props }: React.PropsWithChildren<{ href: string }>) => <a href={href} {...props}>{children}</a>,
+  usePathname: () => "/blog/current-article",
 }));
 
 describe("EditorialNav", () => {
@@ -24,5 +25,16 @@ describe("EditorialNav", () => {
     expect(screen.getByRole("link", { name: "Portfolio" })).toHaveAttribute("href", "/portfolio");
     expect(screen.getByRole("link", { name: "O mně" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute("href", "/blog");
+  });
+
+  it("keeps the current page when switching language on desktop and mobile", () => {
+    render(<EditorialNav tone="light" active="blog" />);
+
+    expect(screen.getByRole("link", { name: "EN" })).toHaveAttribute("href", "/blog/current-article");
+
+    fireEvent.click(screen.getByRole("button", { name: /menu/i }));
+
+    expect(screen.getByRole("dialog", { name: "Mobilní navigace" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "English" })).toHaveAttribute("href", "/blog/current-article");
   });
 });
