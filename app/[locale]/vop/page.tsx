@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -9,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function VopPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return locale === "en" ? <EnVersion /> : <CsVersion />;
+  return <EditorialSubpage active="legal" className="ed-secondary-legal">{locale === "en" ? <EnVersion /> : <CsVersion />}</EditorialSubpage>;
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -25,7 +26,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function EnVersion() {
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <article className="ed-legal">
       <h1 className="text-4xl font-bold mb-2">Terms & Collaboration Guidelines</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">Tomáš Guth Jarkovský · Guth Pictures</p>
 
@@ -106,13 +107,13 @@ function EnVersion() {
       <p className="mt-12 text-sm text-[var(--color-text-ghost)]">
         These guidelines apply to all bookings with Guth Pictures. I&apos;m always happy to discuss specifics before we confirm anything.
       </p>
-    </main>
+    </article>
   );
 }
 
 function CsVersion() {
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <article className="ed-legal">
       <h1 className="text-4xl font-bold mb-2">Všeobecné obchodní podmínky (VOP)</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">Fotograf Tomáš Guth Jarkovský</p>
 
@@ -218,6 +219,6 @@ function CsVersion() {
       <p className="mt-12 text-sm text-[var(--color-text-ghost)]">
         Tyto Všeobecné obchodní podmínky nabývají platnosti a účinnosti dnem jejich zveřejnění na webu guthpictures.eu.
       </p>
-    </main>
+    </article>
   );
 }

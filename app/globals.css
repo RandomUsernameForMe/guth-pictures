@@ -1939,12 +1939,22 @@ body::after {
 .ed-article .blog-content { max-width: 44rem; }
 .ed-article .blog-content h1, .ed-article .blog-content h2, .ed-article .blog-content h3, .ed-article .blog-content h4 { font-family: var(--font-editorial-serif), serif; font-weight: 500; }
 .ed-article .blog-content blockquote { border-left-color: var(--editorial-accent); }
+.ed-legal { width: 100%; max-width: 74rem; margin: 0 auto; padding: clamp(4rem, 9vw, 8rem) clamp(1.5rem, 5vw, 4rem); }
+.ed-legal > h1 { max-width: 14ch; margin: 0; font-family: var(--font-editorial-serif), serif; font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 500; line-height: .9; letter-spacing: -.045em; }
+.ed-legal > h1 + p { margin: 1.5rem 0 clamp(3rem, 7vw, 6rem); color: var(--color-text-ghost); font-size: .8rem; letter-spacing: .04em; }
+.ed-legal > h1 + p + p { max-width: 48rem; margin: -2rem 0 clamp(3rem, 7vw, 6rem); color: var(--color-text-muted); font-family: var(--font-editorial-serif), serif; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.45; }
+.ed-legal section { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); margin: 0; padding: 2.5rem 0; border-top: 1px solid var(--color-border); }
+.ed-legal section h2 { margin: 0; padding: 0; border: 0; font-family: var(--font-editorial-serif), serif; font-size: clamp(1.35rem, 2.4vw, 2rem); font-weight: 500; line-height: 1.1; }
+.ed-legal section > div { font-size: .92rem; line-height: 1.75; }
+.ed-legal section li + li { margin-top: .85rem; }
+.ed-legal > p:last-child { max-width: 44rem; margin: 3rem 0 0 auto; color: var(--color-text-ghost); font-size: .8rem; line-height: 1.6; }
 
 @media (max-width: 760px) {
   .ed-secondary-services__list > div { grid-template-columns: 1fr; }
   .ed-secondary-services__list > div > details { border-left: 1px solid var(--color-border); }
   .ed-about-layout__inner { grid-template-columns: 1fr; }
   .ed-about-layout__portrait { min-height: 30rem; }
+  .ed-legal section { grid-template-columns: 1fr; gap: 1.25rem; }
 }
 
 .ed-home-hero { min-height: calc(100svh - 4.5rem); display: grid; grid-template-columns: minmax(19rem, 38%) 1fr; }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { contactEmail } from "@/lib/config";
+import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -10,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function PrivacyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return locale === "en" ? <EnVersion /> : <CsVersion />;
+  return <EditorialSubpage active="legal" className="ed-secondary-legal">{locale === "en" ? <EnVersion /> : <CsVersion />}</EditorialSubpage>;
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -26,7 +27,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function CsVersion() {
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <article className="ed-legal">
       <h1 className="text-4xl font-bold mb-2">Zásady zpracování osobních údajů</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">
         Tomáš Guth Jarkovský · Guth Pictures · Platné od 1. 1. 2025
@@ -101,13 +102,13 @@ function CsVersion() {
       <p className="mt-12 text-sm text-[var(--color-text-ghost)]">
         Tyto zásady jsou platné od 1. 1. 2025. Fotograf si vyhrazuje právo je kdykoli aktualizovat.
       </p>
-    </main>
+    </article>
   );
 }
 
 function EnVersion() {
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+    <article className="ed-legal">
       <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
       <p className="text-[var(--color-text-muted)] mb-12 text-sm">
         Tomáš Guth Jarkovský · Guth Pictures · Effective 1 January 2025
@@ -181,6 +182,6 @@ function EnVersion() {
       <p className="mt-12 text-sm text-[var(--color-text-ghost)]">
         This policy is effective from 1 January 2025. The Photographer reserves the right to update it at any time.
       </p>
-    </main>
+    </article>
   );
 }

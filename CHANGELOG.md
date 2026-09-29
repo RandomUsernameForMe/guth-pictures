@@ -4,6 +4,7 @@
 - Rozcestník služeb, FAQ, kontaktní formulář a profil fotografa používají nový editorialový layout; profil zůstává funkční i bez fotografie z administrace.
 - Odstraněn prázdný horní pruh vzniklý rezervou staré navigace na všech redesignových stránkách.
 - Portfolio, výpis blogu a detail článku používají světlý editorialový layout; filtr galerie má motivové barvy a chybové/prázdné stavy vlastní čitelné řešení.
+- VOP a zásady ochrany osobních údajů mají společnou dokumentovou sazbu s výrazným titulkem a přehlednými sekcemi na desktopu i mobilu.
 
 ## [2026-09-29] - Oprava kontaktních formulářů redesignu
 

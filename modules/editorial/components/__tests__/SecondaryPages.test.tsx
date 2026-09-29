@@ -6,6 +6,8 @@ import AboutPage from "@/app/[locale]/o-mne/page";
 import PortfolioPage from "@/app/[locale]/portfolio/page";
 import BlogPage from "@/app/[locale]/blog/page";
 import BlogPostPage from "@/app/[locale]/blog/[slug]/page";
+import TermsPage from "@/app/[locale]/vop/page";
+import PrivacyPage from "@/app/[locale]/privacy/page";
 
 const content = {
   "o-mne": { title: "Tomáš", subtitle: "Fotograf z Prahy", bio: "Fotím lidi tak, jací jsou." },
@@ -84,5 +86,16 @@ describe("secondary editorial pages", () => {
 
     expect(doc.querySelector("main.editorial-secondary.ed-secondary-article")).not.toBeNull();
     expect(doc.querySelector("article h1")?.textContent).toBe("Článek");
+  });
+
+  it("renders both legal documents in the editorial reading layout", async () => {
+    for (const page of [TermsPage, PrivacyPage]) {
+      const html = renderToStaticMarkup(await page({ params: Promise.resolve({ locale: "cs" }) }));
+      const doc = new DOMParser().parseFromString(html, "text/html");
+
+      expect(doc.querySelector("main.editorial-secondary.ed-secondary-legal")).not.toBeNull();
+      expect(doc.querySelector("article.ed-legal h1")).not.toBeNull();
+      expect(doc.querySelectorAll("article.ed-legal section").length).toBeGreaterThan(7);
+    }
   });
 });
