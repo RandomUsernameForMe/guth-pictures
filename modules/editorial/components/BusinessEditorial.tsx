@@ -7,13 +7,12 @@ import { EditorialNav } from "./EditorialNav";
 type Props = { locale: string; copy: Copy; business: ServiceContent; images: NormalizedSiteImages };
 
 export function BusinessEditorial({ locale, copy, business, images }: Props) {
-  const cs = locale !== "en";
   const schema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: copy.faq.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
   const placeholder = copy.placeholder;
   return <main className="editorial-business">
     <EditorialNav tone="light" active="business" />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-    <header className="ed-business-hero"><div><p>{copy.eyebrow}</p><h1>{cs ? "Tvoje práce. Tvoje tvář." : "Your work. Your face."}</h1><p>{copy.heroSubtitle}</p><a href="#kontakt">{copy.heroCta}</a></div><figure><EditorialImageView image={images.editorial.business.hero} locale={locale} priority sizes="(max-width:760px) 100vw, 50vw" placeholderLabel={placeholder} /></figure></header>
+    <header className="ed-business-hero"><div><p>{copy.eyebrow}</p><h1>{copy.heroTitle}</h1><p>{copy.heroSubtitle}</p><a href="#kontakt">{copy.heroCta}</a></div><figure><EditorialImageView image={images.editorial.business.hero} locale={locale} priority sizes="(max-width:760px) 100vw, 50vw" placeholderLabel={placeholder} /></figure></header>
     <section className="ed-business-headshots"><h2>{copy.headshotsTitle}</h2><p>{copy.headshotsDesc}</p><div>{images.editorial.business.headshots.map((image, i) => <figure key={i}><EditorialImageView image={image} locale={locale} sizes="33vw" placeholderLabel={placeholder} /></figure>)}</div></section>
     <section className="ed-business-use"><h2>{copy.useCasesTitle}</h2>{copy.useCases.map((item) => <article key={item.title}><h3>{item.title}</h3><p>{item.desc}</p></article>)}</section>
     <section className="ed-business-work"><div><h2>{copy.atWorkTitle}</h2><p>{copy.atWorkDesc}</p></div><div>{images.editorial.business.atWork.map((image, i) => <figure key={i}><EditorialImageView image={image} locale={locale} sizes="33vw" placeholderLabel={placeholder} /></figure>)}</div></section>

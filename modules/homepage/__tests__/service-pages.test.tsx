@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import ServicePage, { generateMetadata, generateStaticParams } from "@/app/[locale]/sluzby/[service]/page";
 
+import { defaultPageCopy } from "@/modules/admin/lib/page-copy";
 vi.mock("next/navigation", () => ({ notFound: () => { throw new Error("NOT_FOUND"); } }));
 vi.mock("next-intl/server", () => ({ setRequestLocale: vi.fn() }));
 vi.mock("@/components/ContactForm", () => ({ ContactForm: () => <form /> }));
@@ -13,7 +14,7 @@ vi.mock("@/modules/admin/lib/content", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/modules/admin/lib/content")>();
   return {
     ...actual,
-    getContent: async () => ({ sluzby: { portraits: {
+    getContent: async (locale: string) => ({ pages: defaultPageCopy(locale), sluzby: { portraits: {
       title: "Portrait package", desc: "From CMS", packages: [
         { name: "Studio", price: "3 000 Kč", duration: "1 h", includes: ["Edited images"] },
       ],

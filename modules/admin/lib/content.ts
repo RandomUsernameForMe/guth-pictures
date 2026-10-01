@@ -1,6 +1,7 @@
 import "server-only";
 import { getKv } from "@/lib/kv";
 import type { PricingPackage } from "@/lib/types";
+import { normalizePageCopy, type PageCopy } from "./page-copy";
 
 export type { PricingPackage };
 
@@ -60,10 +61,12 @@ export type ContentData = {
   lightTesterPromo: { title: string; desc: string };
   testimonials: Testimonial[];
   editorial?: EditorialCopy;
+  pages?: PageCopy;
 };
 
-export type NormalizedContentData = Omit<ContentData, "editorial"> & {
+export type NormalizedContentData = Omit<ContentData, "editorial" | "pages"> & {
   editorial: EditorialCopy;
+  pages: PageCopy;
 };
 
 export type SiteImages = {
@@ -300,6 +303,7 @@ export function normalizeContent(data: ContentData, locale = "cs"): NormalizedCo
     ...data,
     editorial: data.editorial ?? (defaults[locale] ?? defaults.cs).editorial ?? { eventsTitle: "Až budete u toho." },
     lightTesterPromo: data.lightTesterPromo ?? { title: "", desc: "" },
+    pages: normalizePageCopy(data.pages, locale),
     sluzby: {
       portraits: normalizeService(data.sluzby.portraits),
       weddings: normalizeService(data.sluzby.weddings),

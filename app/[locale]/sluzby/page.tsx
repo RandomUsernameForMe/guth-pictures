@@ -26,34 +26,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-// FAQ answers stay consistent with VOP (storno, delivery, postprodukce) — update both together
-const FAQ = {
-  cs: [
-    { q: "Jak probíhá objednávka focení?", a: "Objednávka probíhá elektronicky: přes kontaktní formulář, e-mailem nebo přes sociální sítě. Domluvíme si termín, rozsah a balíček; termín je závazně rezervován po uhrazení rezervačního poplatku." },
-    { q: "Kde focení probíhá?", a: "V Praze a okolí, v ateliéru, v exteriéru nebo u vás. Po domluvě fotím po celé České republice." },
-    { q: "Kdy a jak dostanu fotografie?", a: "Termín dodání sjednáváme individuálně podle rozsahu zakázky. Hotové fotografie předávám zabezpečeným odkazem na online galerii; odkaz platí 3 měsíce a v archivu fotky držím 6 měsíců od předání." },
-    { q: "Upravujete fotografie?", a: "Ano, všechny odevzdané fotografie procházejí autorskou postprodukcí (barevné korekce, expozice, ořez). Nadstandardní retuše jsou možné po dohodě za příplatek. Neupravené RAW soubory nepředávám." },
-    { q: "Co když potřebuji termín zrušit?", a: "Při zrušení méně než 14 dní před termínem propadá rezervační poplatek jako náhrada za blokaci termínu. Dřívější zrušení či přesun řešíme dohodou, u špatného počasí v exteriéru se bez sankcí domluvíme na náhradním termínu." },
-    { q: "Kolik focení stojí?", a: "Ceny se odvíjejí od balíčků výše na této stránce. Pro eventy, larpy a nestandardní zakázky připravím nabídku na míru." },
-  ],
-  en: [
-    { q: "How do I book a shoot?", a: "Booking is electronic: via the contact form, e-mail or social media. We agree on a date, scope and package; the date is confirmed once the booking fee is paid." },
-    { q: "Where do shoots take place?", a: "In and around Prague, in a studio, outdoors or at your place. Shoots across the Czech Republic are possible by arrangement." },
-    { q: "When and how do I get my photos?", a: "Delivery time is agreed individually based on the scope of the job. Finished photos are delivered via a secure online gallery link valid for 3 months; I keep them archived for 6 months after delivery." },
-    { q: "Do you edit the photos?", a: "Yes, all delivered photos go through my post-production (colour correction, exposure, cropping). Advanced retouching is available by agreement for an extra fee. I do not hand over unedited RAW files." },
-    { q: "What if I need to cancel?", a: "Cancelling less than 14 days before the date forfeits the booking fee as compensation for blocking the slot. Earlier cancellations or reschedules are handled by agreement; bad weather for outdoor shoots means we simply pick a new date." },
-    { q: "How much does a shoot cost?", a: "Prices follow the packages above. For events, larps and custom jobs I prepare a tailored quote." },
-  ],
-} as const;
-
 export default async function SluzbyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content] = await Promise.all([
-    getTranslations({ locale }),
-    getContent(locale),
-  ]);
-
-  const faq = FAQ[locale === "en" ? "en" : "cs"];
+  const content = await getContent(locale);
+  const copy = content.pages.services;
+  const faq = copy.faq;
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -67,13 +44,13 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
   return (
     <EditorialSubpage active="services" className="ed-secondary-services">
       <section className="ed-secondary-hero">
-        <p>{locale === "cs" ? "Fotografické služby" : "Photography services"}</p>
-        <h1>{t("sluzby.title")}</h1>
-        <p>{t("sluzby.subtitle")}</p>
+        <p>{copy.kicker}</p>
+        <h1>{copy.title}</h1>
+        <p>{copy.subtitle}</p>
       </section>
       <section className="ed-secondary-services__list" aria-label={locale === "cs" ? "Nabídka focení" : "Photography offer"}>
         <ServiceCards
-          selectLabel={t("sluzby.vybrat")}
+          selectLabel={copy.select}
           services={[
             {
               key: "portraits", category: "portréty",
@@ -102,12 +79,12 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
             },
           ] satisfies ServiceItem[]}
         />
-        <ServiceLinks locale={locale} />
+        <ServiceLinks locale={locale} pages={content.pages} />
       </section>
       <section className="ed-secondary-faq">
-        {/* JSON-LD: static FAQ const above, "<" escaped so it cannot close the script tag */}
+        {/* JSON-LD: admin-edited FAQ, "<" escaped so it cannot close the script tag */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
-        <h2>{locale === "cs" ? "Časté dotazy" : "FAQ"}</h2>
+        <h2>{copy.faqTitle}</h2>
         <div className="divide-y divide-[var(--color-border)]">
           {faq.map(({ q, a }) => (
             <details key={q} className="py-4 group">
@@ -121,8 +98,8 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
         </div>
       </section>
       <section id="kontakt" className="ed-secondary-contact">
-        <h2>{t("kontakt.title")}</h2>
-        <p className="mt-2 text-[var(--color-text-muted)] mb-10">{t("kontakt.subtitle")}</p>
+        <h2>{copy.contactTitle}</h2>
+        <p className="mt-2 text-[var(--color-text-muted)] mb-10">{copy.contactSubtitle}</p>
         <ContactForm />
       </section>
     </EditorialSubpage>

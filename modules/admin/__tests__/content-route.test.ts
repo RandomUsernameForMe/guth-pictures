@@ -134,6 +134,21 @@ describe("POST /api/admin/content — isValidContentData", () => {
     expect(res.status).toBe(200);
   });
 
+  it("povolí platné texty stránek (pages)", async () => {
+    const res = await POST(makePostRequest({
+      locale: "cs",
+      data: { ...VALID_DATA, pages: { home: { title: "Nový nadpis" }, services: { faq: [{ q: "Q", a: "A" }] } } },
+    }));
+    expect(res.status).toBe(200);
+  });
+
+  it("odmítne pages s neznámým klíčem nebo špatným typem", async () => {
+    const unknownKey = await POST(makePostRequest({ locale: "cs", data: { ...VALID_DATA, pages: { home: { foo: "x" } } } }));
+    const wrongType = await POST(makePostRequest({ locale: "cs", data: { ...VALID_DATA, pages: { home: { title: 5 } } } }));
+    expect(unknownKey.status).toBe(400);
+    expect(wrongType.status).toBe(400);
+  });
+
   it("vrátí 400 pro neplatný locale v POST", async () => {
     const res = await POST(makePostRequest({ locale: "fr", data: VALID_DATA }));
     expect(res.status).toBe(400);

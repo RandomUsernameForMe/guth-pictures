@@ -8,6 +8,7 @@ import BlogPage from "@/app/[locale]/blog/page";
 import BlogPostPage from "@/app/[locale]/blog/[slug]/page";
 import TermsPage from "@/app/[locale]/vop/page";
 import PrivacyPage from "@/app/[locale]/privacy/page";
+import { defaultPageCopy } from "@/modules/admin/lib/page-copy";
 
 const content = {
   "o-mne": { title: "Tomáš", subtitle: "Fotograf z Prahy", bio: "Fotím lidi tak, jací jsou." },
@@ -16,6 +17,7 @@ const content = {
     weddings: { title: "Svatby", desc: "Svatební reportáž", packages: [] },
     business: { title: "Business", desc: "Firemní portréty", packages: [] },
   },
+  pages: defaultPageCopy("cs"),
 };
 
 vi.mock("next-intl", () => ({ useLocale: () => "cs" }));
@@ -52,7 +54,7 @@ describe("secondary editorial pages", () => {
     const doc = new DOMParser().parseFromString(html, "text/html");
 
     expect(doc.querySelector("main.editorial-secondary.ed-secondary-services")).not.toBeNull();
-    expect(doc.querySelector(".ed-secondary-hero h1")?.textContent).toBe("sluzby.title");
+    expect(doc.querySelector(".ed-secondary-hero h1")?.textContent).toBe("Služby");
     expect(doc.querySelectorAll("details")).toHaveLength(9);
   });
 

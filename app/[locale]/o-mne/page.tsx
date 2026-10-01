@@ -28,8 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function OMnePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, content, images] = await Promise.all([
-    getTranslations({ locale }),
+  const [content, images] = await Promise.all([
     getContent(locale),
     getImages().catch((): import("@/modules/admin/lib/content").SiteImages => ({ profile: "" })),
   ]);
@@ -52,7 +51,7 @@ export default async function OMnePage({ params }: { params: Promise<{ locale: s
             </figure>
           )}
           <div className="ed-about-layout__copy">
-            <p className="ed-about-layout__eyebrow">{locale === "cs" ? "Fotograf" : "Photographer"}</p>
+            <p className="ed-about-layout__eyebrow">{content.pages.about.eyebrow}</p>
             <h1>{content["o-mne"].title}</h1>
             <p className="ed-about-layout__subtitle">{content["o-mne"].subtitle}</p>
             <p className="ed-about-layout__bio">{content["o-mne"].bio}</p>
@@ -61,13 +60,13 @@ export default async function OMnePage({ params }: { params: Promise<{ locale: s
                 href="/portfolio"
                 className="inline-block px-6 py-3 border border-[var(--color-border-sub)] text-sm hover:bg-[var(--color-bg-overlay)] transition-colors"
               >
-                {t("home.ctaPortfolio")} →
+                {content.pages.about.portfolioLink} →
               </Link>
               <Link
                 href="/sluzby"
                 className="inline-block px-6 py-3 border border-[var(--color-border-sub)] text-sm hover:bg-[var(--color-bg-overlay)] transition-colors"
               >
-                {t("nav.sluzby")} →
+                {content.pages.about.servicesLink} →
               </Link>
             </div>
           </div>

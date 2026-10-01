@@ -7,10 +7,10 @@ const path = "/sluzby/eventy-a-svatby";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const cs = locale !== "en";
+  const { pages } = await getContent(locale);
   return {
-    title: cs ? "Eventy a svatby" : "Events & weddings",
-    description: cs ? "Reportážní focení eventů a svateb v Praze a celé ČR." : "Documentary event and wedding photography in Prague and across the Czech Republic.",
+    title: pages.events.metaTitle,
+    description: pages.events.metaDescription,
     alternates: { canonical: `/${locale}${path}`, languages: { cs: `/cs${path}`, en: `/en${path}`, "x-default": `/cs${path}` } },
   };
 }
@@ -29,6 +29,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd).replace(/</g, "\\u003c") }} />
-    <EventsEditorial locale={locale} title={content.editorial.eventsTitle} weddings={content.sluzby.weddings} images={images} />
+    <EventsEditorial locale={locale} content={content} images={images} />
   </>;
 }

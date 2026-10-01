@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl, type GalleryPhoto } from "@/lib/cloudinary-utils";
 import type { ContentData, SiteImages, Testimonial } from "@/modules/admin/lib/content";
 import type { PricingPackage } from "@/lib/types";
+import { defaultPageCopy, type PageCopy } from "@/modules/admin/lib/page-copy";
+import { PageCopyEditor } from "./PageCopyEditor";
 
 type Locale = "cs" | "en";
+
+// Sekce, které web už nevykresluje (reference, nadpis Light Testeru, příplatky).
+// Jen skryté — data v KV zůstávají a ukládají se beze změny.
+const SHOW_UNUSED_SECTIONS = false;
 
 const emptyPackage = (): PricingPackage => ({ id: crypto.randomUUID(), name: "", price: "", duration: "", includes: [] });
 const emptyTestimonial = (): Testimonial => ({ id: crypto.randomUUID(), quote: "", author: "", role: "", photo: "" });
@@ -61,6 +67,20 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
   }, [router]);
 
   const current = data[locale];
+  const pageTemplate = useMemo(() => defaultPageCopy(locale), [locale]);
+
+  function pageEditor<K extends keyof PageCopy>(key: K) {
+    const pages = current.pages;
+    if (!pages) return null;
+    return (
+      <PageCopyEditor
+        name={key}
+        value={pages[key]}
+        template={pageTemplate[key]}
+        onChange={(v) => patch((d) => { d.pages = { ...(d.pages ?? pageTemplate), [key]: v }; })}
+      />
+    );
+  }
 
   function patch(updater: (d: ContentData) => void) {
     setData((prev) => {
@@ -226,7 +246,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Section title="Hero">
+        <Section title="Patička">
           <Field
             label="Nadpis"
             value={current.home.title}
@@ -245,14 +265,19 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
             value={current.editorial?.eventsTitle ?? ""}
             onChange={(v) => patch((d) => { d.editorial = { eventsTitle: v }; })}
           />
+          {pageEditor("events")}
         </Section>
 
-        <Section title="Light Tester — promo sekce">
-          <Field
+        <Section title="Homepage">
+          {pageEditor("home")}
+        </Section>
+
+        <Section title="Light planner — karta na homepage">
+          {SHOW_UNUSED_SECTIONS && <Field
             label="Nadpis"
             value={current.lightTesterPromo.title}
             onChange={(v) => patch((d) => { d.lightTesterPromo.title = v; })}
-          />
+          />}
           <Field
             label="Popis"
             value={current.lightTesterPromo.desc}
@@ -278,6 +303,23 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
             onChange={(v) => patch((d) => { d["o-mne"].bio = v; })}
             textarea
           />
+          {pageEditor("about")}
+        </Section>
+
+        <Section title="Kreativní portrét — texty stránky">
+          {pageEditor("portrait")}
+        </Section>
+
+        <Section title="Brandové focení — texty stránky">
+          {pageEditor("brand")}
+        </Section>
+
+        <Section title="Firemní portréty — texty stránky">
+          {pageEditor("business")}
+        </Section>
+
+        <Section title="Služby — texty stránky">
+          {pageEditor("services")}
         </Section>
 
         <Section title="Portréty">
@@ -342,13 +384,13 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
             packages={current.sluzby.business.packages ?? []}
             onChange={(pkgs) => patch((d) => { d.sluzby.business.packages = pkgs; })}
           />
-          <PackageEditor
+          {SHOW_UNUSED_SECTIONS && <PackageEditor
             label="Příplatky"
             addLabel="+ Přidat příplatek"
             simple
             packages={current.sluzby.business.extras ?? []}
             onChange={(pkgs) => patch((d) => { d.sluzby.business.extras = pkgs; })}
-          />
+          />}
           <Field
             label="Poznámka pod ceníkem"
             value={current.sluzby.business.note ?? ""}
@@ -356,13 +398,13 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>
 
-        <Section title="Reference (testimonials)">
+        {SHOW_UNUSED_SECTIONS && <Section title="Reference (testimonials)">
           <TestimonialEditor
             testimonials={current.testimonials ?? []}
             onChange={(items) => patch((d) => { d.testimonials = items; })}
             photos={photos}
           />
-        </Section>
+        </Section>}
 
         <div className="flex items-center gap-4">
           <button

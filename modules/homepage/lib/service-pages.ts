@@ -3,7 +3,7 @@ export type ServiceCopy = {
   description: string;
   intro: string;
   audience: string;
-  steps: [string, string, string];
+  steps: string[];
   preparation: string;
   delivery: string;
   pricing: string;

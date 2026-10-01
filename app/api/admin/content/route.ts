@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
 import { getContent, setContent, type ContentData } from "@/modules/admin/lib/content";
+import { isValidPageCopy } from "@/modules/admin/lib/page-copy";
 
 const ALLOWED_LOCALES = ["cs", "en"] as const;
 type AllowedLocale = typeof ALLOWED_LOCALES[number];
@@ -73,6 +74,7 @@ export function isValidContentData(d: unknown): d is ContentData {
   if (!o.sluzby || typeof o.sluzby !== "object" || Array.isArray(o.sluzby)) return false;
   if (!isTestimonials(o.testimonials)) return false;
   if (!isEditorialCopy(o.editorial)) return false;
+  if (o.pages !== undefined && !isValidPageCopy(o.pages)) return false;
   const s = o.sluzby as Record<string, unknown>;
   // business is optional for backward compat with KV data saved before the business page existed
   return isServiceContent(s.portraits) && isServiceContent(s.weddings)
@@ -112,6 +114,8 @@ export async function POST(req: NextRequest) {
   revalidatePath("/en/firemni-portrety");
   revalidatePath("/cs/sluzby/portretni-foceni");
   revalidatePath("/en/sluzby/portretni-foceni");
+  revalidatePath("/cs/sluzby/brandove-foceni");
+  revalidatePath("/en/sluzby/brandove-foceni");
   revalidatePath("/cs/sluzby/eventy-a-svatby");
   revalidatePath("/en/sluzby/eventy-a-svatby");
   revalidatePath("/cs/o-mne");

@@ -43,6 +43,9 @@ type Props = {
   editorial?: EditorialImages;
 };
 
+// Hero triptych web už nevykresluje — sekce je jen skrytá, data v KV zůstávají.
+const SHOW_HERO_TRIPTYCH = false;
+
 const PANEL_LABELS = ["Panel 1 · Portréty", "Panel 2 · Eventy", "Panel 3 · Portréty"];
 
 export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych, editorial }: Props) {
@@ -246,7 +249,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych,
   return (
     <div className="space-y-12">
       {editorial && <EditorialImageEditor editorial={editorial} photos={photos} />}
-      {/* Hero Triptych */}
+      {SHOW_HERO_TRIPTYCH && (
       <section>
         <h2 className="text-lg font-semibold mb-1">Hero triptych</h2>
         <p className="text-xs text-gray-500 mb-4">
@@ -334,6 +337,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych,
           )}
         </div>
       </section>
+      )}
 
       {/* Upload */}
       <section>
@@ -443,7 +447,7 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych,
           Fotky ({photos.length})
         </h2>
         <p className="text-xs text-gray-500 mb-1">
-          ★ = zobrazí se v sekci Selected Work na homepage ({photos.filter(p => p.selected).length} označeno)
+          ★ = podklad pro automatické návrhy stories ({photos.filter(p => p.selected).length} označeno)
         </p>
         {activeSlot !== null && (
           <p className="text-xs text-blue-400 mb-3">

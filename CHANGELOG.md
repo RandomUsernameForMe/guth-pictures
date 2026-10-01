@@ -1,3 +1,9 @@
+## [2026-10-01] - Editovatelné texty stránek v adminu
+
+- Admin → Obsah umí upravit texty homepage, kreativního portrétu, brandového focení, firemních portrétů, eventů, služeb a O mně (CS/EN), včetně FAQ, kroků a seznamů. Výchozí hodnoty jsou původní texty z kódu.
+- Skryty sekce, které web už nevykresluje: reference, nadpis Light Testeru, příplatky firemních portrétů a hero triptych. Data v KV zůstávají.
+- Sekce „Hero“ přejmenována na „Patička“ a opraven popisek hvězdičky u fotek (slouží pro návrhy stories).
+
 ## [2026-09-29] - Editorialové podstránky
 
 - Přidán společný světlý obal a navigace pro služby, portfolio, profil, blog a právní stránky; mobilní navigace a patička mají větší dotykové cíle.

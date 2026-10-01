@@ -9,15 +9,7 @@ type Props = { locale: string; content: NormalizedContentData; images: Normalize
 
 export function HomeEditorial({ locale, content, images }: Props) {
   const cs = locale !== "en";
-  const copy = cs ? {
-    title: "Jiný pohled.", intro: "Portréty s charakterem. Příběhy v obrazech.", work: "Vybrané příběhy",
-    about: "Zajímá mě člověk. Ne dokonalá póza.", tools: "Dva nástroje pro tvůj lepší pohled.",
-    contact: "Co spolu vytvoříme?", creative: "Kreativní portrét", business: "Business portrét", events: "Eventy a svatby",
-  } : {
-    title: "A different view.", intro: "Portraits with character. Stories in images.", work: "Selected stories",
-    about: "I care about the person. Not a perfect pose.", tools: "Two tools for a better view.",
-    contact: "What will we create?", creative: "Creative portrait", business: "Business portrait", events: "Events & weddings",
-  };
+  const copy = content.pages.home;
   const stories = images.editorial.home.stories;
 
   return (
@@ -54,18 +46,18 @@ export function HomeEditorial({ locale, content, images }: Props) {
           <EditorialImageView image={images.editorial.home.photographer} locale={locale} sizes="(max-width: 760px) 100vw, 38vw" placeholderLabel={cs ? "Portrét fotografa" : "Photographer portrait"} />
         </div>
         <div>
-          <p className="ed-kicker">{cs ? "Za fotoaparátem" : "Behind the camera"}</p>
+          <p className="ed-kicker">{copy.aboutKicker}</p>
           <h2>{copy.about}</h2>
           <p>{content["o-mne"].bio}</p>
-          <Link href="/o-mne">{cs ? "Více o mně" : "More about me"}</Link>
+          <Link href="/o-mne">{copy.aboutLink}</Link>
         </div>
       </section>
 
       <section id="foto-nastroje" className="ed-home-tools">
         <h2>{copy.tools}</h2>
         <div className="ed-home-tools__grid">
-          <ToolPreview locale={locale} image={images.editorial.home.tools.foceni101} fallback="/editorial/foceni-101-preview.webp" title="Focení 101" description={cs ? "Prozkoumej, co ve fotografii dělá světlo, expozice a kompozice." : "Explore how light, exposure and composition shape a photograph."} href="/foceni-101" cta={cs ? "Vyzkoušet" : "Try it"} />
-          <ToolPreview locale={locale} image={images.editorial.home.tools.lightPlanner} fallback="/editorial/light-planner-preview.webp" title="Light planner" description={content.lightTesterPromo.desc} href="/light-tester" cta={cs ? "Otevřít plánovač" : "Open planner"} notice={cs ? "Plánovač funguje na větší obrazovce." : "The planner requires a larger screen."} />
+          <ToolPreview locale={locale} image={images.editorial.home.tools.foceni101} fallback="/editorial/foceni-101-preview.webp" title="Focení 101" description={copy.foceni101Desc} href="/foceni-101" cta={copy.foceni101Cta} />
+          <ToolPreview locale={locale} image={images.editorial.home.tools.lightPlanner} fallback="/editorial/light-planner-preview.webp" title="Light planner" description={content.lightTesterPromo.desc} href="/light-tester" cta={copy.plannerCta} notice={copy.plannerNotice} />
         </div>
       </section>
 
