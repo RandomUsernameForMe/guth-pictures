@@ -1,3 +1,5 @@
+## [2026-10-01] - unit testy pro lib/kv.ts (getKv)
+
 ## [2026-10-01] - Editovatelné texty stránek v adminu
 
 - Admin → Obsah umí upravit texty homepage, kreativního portrétu, brandového focení, firemních portrétů, eventů, služeb a O mně (CS/EN), včetně FAQ, kroků a seznamů. Výchozí hodnoty jsou původní texty z kódu.
