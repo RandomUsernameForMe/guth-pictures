@@ -75,7 +75,7 @@ const LABELS: Record<string, string> = {
 };
 
 // Fields the site no longer renders (business extras are hidden).
-const HIDDEN = new Set(["extrasTitle"]);
+const HIDDEN = new Set(["extrasTitle", "atWorkTitle", "atWorkDesc"]);
 
 const labelFor = (parent: string, key: string) => LABELS[`${parent}.${key}`] ?? LABELS[key] ?? key;
 

@@ -38,7 +38,6 @@ function imageSlots(data: EditorialImages): Slot[] {
     ...list("Portréty — galerie", data, (v) => v.portrait.gallery),
     single("Business — hero", (v) => v.business.hero, (v, image) => { v.business.hero = image; }),
     ...list("Business — headshot", data, (v) => v.business.headshots),
-    ...list("Business — při práci", data, (v) => v.business.atWork),
     single("Eventy — hero", (v) => v.events.hero, (v, image) => { v.events.hero = image; }),
     ...list("Eventy — reportáž", data, (v) => v.events.reportage),
   ];
