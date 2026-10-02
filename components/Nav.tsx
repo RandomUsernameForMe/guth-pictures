@@ -29,7 +29,8 @@ export function Nav() {
     || pathname === "/o-mne"
     || pathname.startsWith("/blog")
     || pathname === "/vop"
-    || pathname === "/privacy";
+    || pathname === "/privacy"
+    || pathname.startsWith("/nahled/");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

@@ -45,6 +45,11 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (/^\/(cs|en)\/nahled(\/|$)/.test(pathname)) {
+    const authenticated = await verifyToken(request.cookies.get(COOKIE)?.value ?? "").catch(() => false);
+    if (!authenticated) return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
   return intlMiddleware(request);
 }
 

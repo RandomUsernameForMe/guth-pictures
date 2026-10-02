@@ -14,3 +14,6 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
   useParams: () => ({}),
 }));
+
+// jsdom has no ResizeObserver (used by the admin live preview).
+globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;

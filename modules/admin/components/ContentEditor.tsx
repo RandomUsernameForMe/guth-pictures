@@ -6,6 +6,8 @@ import { cloudinaryUrl, type GalleryPhoto } from "@/lib/cloudinary-utils";
 import type { ContentData, SiteImages, Testimonial } from "@/modules/admin/lib/content";
 import type { PricingPackage } from "@/lib/types";
 import { defaultPageCopy, type PageCopy } from "@/modules/admin/lib/page-copy";
+import { AdminPreview, SPLIT_LAYOUT, type PreviewFocus } from "@/modules/admin/preview/AdminPreview";
+import { isPreviewPage, type PreviewPage } from "@/modules/admin/preview/protocol";
 import { PageCopyEditor } from "./PageCopyEditor";
 
 type Locale = "cs" | "en";
@@ -43,6 +45,8 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
   const profileInputRef = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState("");
   const [emailStatus, setEmailStatus] = useState<"idle" | "saving" | "ok" | "error">("idle");
+  const [previewPage, setPreviewPage] = useState<PreviewPage>("home");
+  const [previewFocus, setPreviewFocus] = useState<PreviewFocus | null>(null);
 
   useEffect(() => {
     async function load(url: string) {
@@ -80,6 +84,20 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
         onChange={(v) => patch((d) => { d.pages = { ...(d.pages ?? pageTemplate), [key]: v }; })}
       />
     );
+  }
+
+  // Focusing a text field switches the preview to its page and scrolls to the field's text.
+  function focusPreview(event: React.FocusEvent<HTMLFormElement>) {
+    const field = event.target;
+    if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) return;
+    const page = field.closest<HTMLElement>("[data-preview-page]")?.dataset.previewPage;
+    if (page && isPreviewPage(page)) setPreviewPage(page);
+    if (field.value.trim()) setPreviewFocus({ text: field.value });
+  }
+
+  function switchLocale(next: Locale) {
+    setLocale(next);
+    setStatus("idle");
   }
 
   function patch(updater: (d: ContentData) => void) {
@@ -228,6 +246,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
       </div>
 
       {/* Texty webu */}
+      <div className={SPLIT_LAYOUT}>
       <div>
       <h2 className="text-xl font-semibold mb-6">Texty webu</h2>
 
@@ -235,7 +254,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
         {(["cs", "en"] as Locale[]).map((l) => (
           <button
             key={l}
-            onClick={() => { setLocale(l); setStatus("idle"); }}
+            onClick={() => switchLocale(l)}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               locale === l ? "bg-white text-black" : "border border-white/20 hover:border-white"
             }`}
@@ -245,7 +264,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} onFocus={focusPreview} className="space-y-6">
         <Section title="Patička">
           <Field
             label="Nadpis"
@@ -259,7 +278,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>
 
-        <Section title="Eventy a svatby">
+        <Section title="Eventy a svatby" page="eventy">
           <Field
             label="Hlavní nadpis"
             value={current.editorial?.eventsTitle ?? ""}
@@ -268,11 +287,11 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           {pageEditor("events")}
         </Section>
 
-        <Section title="Homepage">
+        <Section title="Homepage" page="home">
           {pageEditor("home")}
         </Section>
 
-        <Section title="Light planner — karta na homepage">
+        <Section title="Light planner — karta na homepage" page="home">
           {SHOW_UNUSED_SECTIONS && <Field
             label="Nadpis"
             value={current.lightTesterPromo.title}
@@ -306,7 +325,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           {pageEditor("about")}
         </Section>
 
-        <Section title="Kreativní portrét — texty stránky">
+        <Section title="Kreativní portrét — texty stránky" page="portrety">
           {pageEditor("portrait")}
         </Section>
 
@@ -314,7 +333,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           {pageEditor("brand")}
         </Section>
 
-        <Section title="Firemní portréty — texty stránky">
+        <Section title="Firemní portréty — texty stránky" page="business">
           {pageEditor("business")}
         </Section>
 
@@ -322,7 +341,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           {pageEditor("services")}
         </Section>
 
-        <Section title="Portréty">
+        <Section title="Portréty" page="portrety">
           <Field
             label="Nadpis"
             value={current.sluzby.portraits.title}
@@ -345,7 +364,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>
 
-        <Section title="Svatby">
+        <Section title="Svatby" page="eventy">
           <Field
             label="Nadpis"
             value={current.sluzby.weddings.title}
@@ -368,7 +387,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>
 
-        <Section title="Firemní portréty">
+        <Section title="Firemní portréty" page="business">
           <Field
             label="Nadpis"
             value={current.sluzby.business.title}
@@ -406,7 +425,7 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
           />
         </Section>}
 
-        <div className="flex items-center gap-4">
+        <div className="sticky bottom-0 z-10 flex items-center gap-4 bg-black/90 py-3 backdrop-blur">
           <button
             type="submit"
             disabled={status === "saving"}
@@ -419,14 +438,23 @@ export function ContentEditor({ photos = [] }: { photos?: GalleryPhoto[] }) {
         </div>
       </form>
       </div>
+      <AdminPreview
+        page={previewPage}
+        onPageChange={setPreviewPage}
+        locale={locale}
+        onLocaleChange={switchLocale}
+        content={current.pages ? current : undefined}
+        focus={previewFocus}
+      />
+      </div>
 
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, page, children }: { title: string; page?: PreviewPage; children: React.ReactNode }) {
   return (
-    <div className="border border-white/10 p-6">
+    <div className="border border-white/10 p-6" data-preview-page={page}>
       <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">{title}</h3>
       <div className="space-y-4">{children}</div>
     </div>

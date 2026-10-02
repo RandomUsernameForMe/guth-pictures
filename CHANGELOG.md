@@ -1,3 +1,9 @@
+## [2026-10-02] - Admin: živý náhled stránek a vizuální ořez fotek
+
+- Fotky i Obsah mají vedle editoru živý náhled stránky (Homepage, Portréty, Business, Eventy; desktop/mobil; CS/EN) s neuloženými změnami. Klik na slot / pole přepne náhled na danou stránku a odscrolluje k místu.
+- Ořez fotek: klik nebo tažení bodu zájmu na fotce, zvlášť desktop a mobil (místo psaní procent).
+- Nová route `/[locale]/nahled/[page]` jen pro přihlášeného admina, `noindex`; vkládání do iframu povoleno jen z vlastní domény.
+
 ## [2026-10-02] - Odstraněna sekce „Firma v akci“ z firemních portrétů
 
 - Sekce zmizela ze stránky i z adminu (texty a fotky). Data v KV zůstávají.
