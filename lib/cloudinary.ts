@@ -54,4 +54,11 @@ export const getGalleryPhotos = unstable_cache(
   { revalidate: 300 }
 );
 
+// Keyed by publicId, so swapping the hero photo yields a fresh palette; failures throw and aren't cached.
+export const getImageColors = unstable_cache(
+  async (publicId: string): Promise<[string, number][]> =>
+    (await cloudinary.api.resource(publicId, { colors: true })).colors ?? [],
+  ["image-colors"],
+);
+
 export { cloudinary };

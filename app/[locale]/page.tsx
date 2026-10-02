@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { HomeEditorial } from "@/modules/editorial/components/HomeEditorial";
 import { getContent, getImages } from "@/modules/admin/lib/content";
+import { getImageColors } from "@/lib/cloudinary";
+import { paletteFromColors, type HeroPalette } from "@/lib/hero-palette";
 
 export const revalidate = 3600;
 
@@ -22,9 +24,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
+async function getHeroPalette(publicId: string): Promise<HeroPalette | undefined> {
+  if (!publicId) return undefined;
+  try {
+    return paletteFromColors(await getImageColors(publicId));
+  } catch {
+    return undefined; // Cloudinary unavailable — the stylesheet defaults apply
+  }
+}
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const [content, images] = await Promise.all([getContent(locale), getImages()]);
-  return <HomeEditorial locale={locale} content={content} images={images} />;
+  const palette = await getHeroPalette(images.editorial.home.hero.publicId);
+  return <HomeEditorial locale={locale} content={content} images={images} palette={palette} />;
 }
