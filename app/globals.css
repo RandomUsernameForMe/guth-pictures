@@ -1855,9 +1855,9 @@ body::after {
 .editorial-business,
 .editorial-events,
 .editorial-secondary {
-  --editorial-ink: #11100e;
-  --editorial-paper: #f4f1ea;
-  --editorial-accent: #c93a2b;
+  --editorial-ink: #191315;
+  --editorial-paper: #f3efe7;
+  --editorial-accent: #7a1834;
   --color-bg: var(--editorial-paper);
   --color-bg-elevated: color-mix(in srgb, var(--editorial-ink) 4%, var(--editorial-paper));
   --color-text: var(--editorial-ink);
@@ -1880,7 +1880,7 @@ body::after {
 .editorial-portrait { --editorial-ink: #eeeae2; --editorial-paper: #0a0a09; --editorial-accent: #eeeae2; }
 .editorial-business { --editorial-ink: #10201f; --editorial-paper: #f3f5f4; --editorial-accent: #536460; }
 .editorial-events { --editorial-ink: #0b0b0a; --editorial-paper: #f5f2ec; --editorial-accent: #0b0b0a; }
-.editorial-secondary { --color-accent: var(--editorial-accent); --color-success-bg: #e2f2e5; --color-success-border: #397a4d; --color-success-fg: #166534; --color-error-bg: #f7e4e1; --color-error-border: #a74338; --color-error-fg: #7f1d1d; --color-border-sub: color-mix(in srgb, var(--editorial-ink) 18%, transparent); --color-bg-overlay: color-mix(in srgb, var(--editorial-ink) 7%, transparent); }
+.editorial-secondary { --editorial-ink: #11100e; --editorial-paper: #f4f1ea; --editorial-accent: #c93a2b; --color-accent: var(--editorial-accent); --color-success-bg: #e2f2e5; --color-success-border: #397a4d; --color-success-fg: #166534; --color-error-bg: #f7e4e1; --color-error-border: #a74338; --color-error-fg: #7f1d1d; --color-border-sub: color-mix(in srgb, var(--editorial-ink) 18%, transparent); --color-bg-overlay: color-mix(in srgb, var(--editorial-ink) 7%, transparent); }
 
 .editorial-nav {
   position: absolute;

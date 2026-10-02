@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import React from "react";
 
@@ -87,6 +87,18 @@ describe("AnimatedSection", () => {
 import { HeroSection } from "@/modules/homepage/components/HeroSection";
 
 describe("HeroSection", () => {
+  beforeEach(() => {
+    vi.stubGlobal("IntersectionObserver", class {
+      observe() {}
+      disconnect() {}
+    });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
   const defaultProps = {
     title: "Guth Pictures",
     subtitle: "Portréty, svatby a larpy.",
@@ -97,10 +109,6 @@ describe("HeroSection", () => {
 
   it("první fotky zobrazí bez fade, další výměny včetně návratu na začátek prolíná", () => {
     vi.useFakeTimers();
-    vi.stubGlobal("IntersectionObserver", class {
-      observe() {}
-      disconnect() {}
-    });
     const photos: [string[], string[], string[]] = [
       ["hero/a1", "hero/a2"], ["hero/b1", "hero/b2"], ["hero/c1", "hero/c2"],
     ];
@@ -120,8 +128,6 @@ describe("HeroSection", () => {
       }
     } finally {
       unmount();
-      vi.useRealTimers();
-      vi.unstubAllGlobals();
     }
   });
 
@@ -143,7 +149,7 @@ describe("HeroSection", () => {
 
   it("renderuje odkaz na kontakt", () => {
     render(<HeroSection {...defaultProps} />);
-    const link = screen.getByRole("link", { name: "Napsat mi" });
+    const link = screen.getByRole("link", { name: "Napsat mi →" });
     expect(link).toHaveAttribute("href", "#kontakt");
   });
 });
