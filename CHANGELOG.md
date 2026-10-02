@@ -1,3 +1,8 @@
+## [2026-10-02] - Vínová paleta homepage, oprava testů hero komponenty
+
+- Homepage používá kostěnou paletu s inkoustovým textem a vínovým akcentem místo rezavé; podstránky (služby, blog, o mně, právní) si nechávají původní paletu.
+- Testy staré hero komponenty sdílejí stabilní mock `IntersectionObserver` a znovu procházejí jako celá sada.
+
 ## [2026-10-02] - Admin: živý náhled stránek a vizuální ořez fotek
 
 - Fotky i Obsah mají vedle editoru živý náhled stránky (Homepage, Portréty, Business, Eventy; desktop/mobil; CS/EN) s neuloženými změnami. Klik na slot / pole přepne náhled na danou stránku a odscrolluje k místu.
