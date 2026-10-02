@@ -1,3 +1,13 @@
+## [2026-10-02] - Odstraněna sekce „Firma v akci“ z firemních portrétů
+
+- Sekce zmizela ze stránky i z adminu (texty a fotky). Data v KV zůstávají.
+
+## [2026-10-02] - Editorial stránky max. 1440 px, typografie firemních portrétů
+
+- Všechny editorial stránky mají obsah omezený na 1440 px (pozadí a navbar dál přes celou šířku), velikosti ve `vw` převedeny na `cqi`, aby se zastavily na šířce sloupce.
+- Firemní portréty: jednotná typografická škála (h2 / h3 / text), mezery pod nadpisy, ceník s tlačítky, FAQ a kontakt ve dvou sloupcích.
+- Portréty a eventy: mezery pod nadpisy, odlišené h3 v ceníku, tlumené doprovodné texty, kontakt na eventech ve dvou sloupcích, široký placeholder fotky vyplní svůj rámeček.
+
 ## [2026-10-01] - unit testy pro lib/kv.ts (getKv)
 
 ## [2026-10-01] - Editovatelné texty stránek v adminu
