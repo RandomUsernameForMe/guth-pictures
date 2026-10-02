@@ -1,3 +1,7 @@
+## [2026-10-02] - Fotky bez dvojité komprese
+
+- `next/image` používá Cloudinary loader: zmenšení i kódování dělá jednou Cloudinary (`q_auto:good`), Next optimizer už fotky znovu nekomprimuje (dřív WebP q75 přes už komprimovaný výstup).
+
 ## [2026-10-02] - Vínová paleta homepage, oprava testů hero komponenty
 
 - Homepage používá kostěnou paletu s inkoustovým textem a vínovým akcentem místo rezavé; podstránky (služby, blog, o mně, právní) si nechávají původní paletu.
