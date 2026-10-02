@@ -4,16 +4,18 @@ import type { NormalizedContentData, NormalizedSiteImages } from "@/modules/admi
 import { EditorialImageView } from "./EditorialImage";
 import { EditorialNav } from "./EditorialNav";
 import { ToolPreview } from "./ToolPreview";
+import { paletteStyle, type HeroPalette } from "@/lib/hero-palette";
 
-type Props = { locale: string; content: NormalizedContentData; images: NormalizedSiteImages };
+type Props = { locale: string; content: NormalizedContentData; images: NormalizedSiteImages; palette?: HeroPalette };
 
-export function HomeEditorial({ locale, content, images }: Props) {
+export function HomeEditorial({ locale, content, images, palette }: Props) {
   const cs = locale !== "en";
   const copy = content.pages.home;
   const stories = images.editorial.home.stories;
 
   return (
     <main className="editorial-home">
+      {palette && <style>{paletteStyle(palette)}</style>}
       <EditorialNav tone="light" active="home" />
       <section className="ed-home-hero">
         <div className="ed-home-hero__copy">

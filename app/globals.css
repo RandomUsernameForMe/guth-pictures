@@ -1850,6 +1850,8 @@ body::after {
 @media (max-width: 760px) { .ed-business-hero, .ed-business-use, .ed-business-faq, .ed-business-contact { grid-template-columns: 1fr; } .ed-business-hero figure { min-height: 32rem; } .ed-business-headshots > div, .ed-business-process ol, .ed-business-pricing > div { grid-template-columns: 1fr; } }
 
 /* Editorial redesign — scoped so admin, tools, blog and galleries keep their theme. */
+/* body:has() carries the homepage palette to the layout's footer. */
+body:has(.editorial-home),
 .editorial-home,
 .editorial-portrait,
 .editorial-business,
@@ -1864,6 +1866,19 @@ body::after {
   --color-text-muted: color-mix(in srgb, var(--editorial-ink) 72%, var(--editorial-paper));
   --color-text-ghost: color-mix(in srgb, var(--editorial-ink) 64%, var(--editorial-paper));
   --color-border: color-mix(in srgb, var(--editorial-ink) 28%, transparent);
+}
+
+body:has(.editorial-home) {
+  --color-accent: var(--editorial-accent);
+  --color-accent-secondary: var(--editorial-accent);
+  --color-grain: var(--editorial-ink);
+}
+
+.editorial-home,
+.editorial-portrait,
+.editorial-business,
+.editorial-events,
+.editorial-secondary {
   color: var(--editorial-ink);
   background: var(--editorial-paper);
   font-family: var(--font-editorial-sans), sans-serif;
@@ -2010,7 +2025,7 @@ body::after {
 .ed-home-about a, .ed-tool a { color: inherit; text-underline-offset: .35rem; }
 .ed-kicker { font-size: .72rem; letter-spacing: .14em; }
 .ed-home-tools__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2.5rem; }
-.ed-tool__image { position: relative; min-height: 24rem; background: #d9d7d1; overflow: hidden; }
+.ed-tool__image { position: relative; min-height: 24rem; background: color-mix(in srgb, var(--editorial-ink) 12%, var(--editorial-paper)); overflow: hidden; }
 .ed-tool h3 { margin: 1rem 0 .25rem; font-family: var(--font-editorial-serif), serif; font-size: 2rem; font-weight: 500; }
 .ed-tool p { max-width: 54ch; margin: .25rem 0 .65rem; }
 .ed-tool__notice { font-size: .78rem; opacity: .65; }
