@@ -4,6 +4,9 @@
 ## [2026-10-09] - Rate limit na přihlášení do klientské galerie
 
 - Přihlášení do galerie omezeno na 5 pokusů za 15 min na slug a IP (429 po překročení), stejně jako u nabídek.
+## [2026-10-08] - fix: neznámá kategorie fotky už neshodí galerii
+
+- Neznámá kategorie z Cloudinary contextu se převede na "portréty"; upload routy vrací 400 pro nepovolenou kategorii.
 
 ## [2026-10-02] - Paleta homepage z úvodní fotky
 
