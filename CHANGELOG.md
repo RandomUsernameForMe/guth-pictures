@@ -1,4 +1,7 @@
 ## [2026-10-09] - testy pro app/sitemap.ts
+## [2026-10-09] - Rate limit na přihlášení do klientské galerie
+
+- Přihlášení do galerie omezeno na 5 pokusů za 15 min na slug a IP (429 po překročení), stejně jako u nabídek.
 
 ## [2026-10-02] - Paleta homepage z úvodní fotky
 
