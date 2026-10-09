@@ -1,3 +1,5 @@
+## [2026-10-09] - testy pro app/sitemap.ts
+
 ## [2026-10-02] - Paleta homepage z úvodní fotky
 
 - Papír, inkoust a akcent homepage (včetně footeru, horní linky a grainu) se počítají z barev hero fotky přes Cloudinary `colors`; z fotky se bere jen odstín, jas je pevný kvůli kontrastu. Bez Cloudinary zůstává výchozí paleta.
