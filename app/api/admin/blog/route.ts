@@ -15,7 +15,15 @@ export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const post = (await req.json()) as BlogPost;
+  let post: BlogPost;
+  try {
+    post = (await req.json()) as BlogPost;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  if (!post || typeof post !== "object") {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
   const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   const CLOUDINARY_ID_RE = /^[a-zA-Z0-9_\-/.]+$/;
@@ -40,10 +48,20 @@ export async function POST(req: NextRequest) {
   if (post.coverImage && !CLOUDINARY_ID_RE.test(post.coverImage)) {
     return NextResponse.json({ error: "Invalid coverImage" }, { status: 400 });
   }
-  await saveBlogPost(post);
+  if (typeof post.publishedAt !== "string" || Number.isNaN(Date.parse(post.publishedAt))) {
+    return NextResponse.json({ error: "Invalid publishedAt" }, { status: 400 });
+  }
+  const result = await saveBlogPost(post);
+  if (!result.ok) {
+    return NextResponse.json({ error: "Slug already used by another post" }, { status: 409 });
+  }
   revalidatePath("/cs/blog");
   revalidatePath("/en/blog");
   revalidatePath(`/cs/blog/${post.slug}`);
   revalidatePath(`/en/blog/${post.slug}`);
+  if (result.previousSlug) {
+    revalidatePath(`/cs/blog/${result.previousSlug}`);
+    revalidatePath(`/en/blog/${result.previousSlug}`);
+  }
   return NextResponse.json({ ok: true });
 }

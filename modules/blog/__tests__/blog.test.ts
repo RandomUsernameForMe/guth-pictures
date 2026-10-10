@@ -130,6 +130,7 @@ describe("saveBlogPost", () => {
     vi.mocked(getKv).mockResolvedValue(mockKv as any);
     mockKv.set.mockResolvedValue("OK");
     mockKv.zadd.mockResolvedValue(1);
+    mockKv.get.mockResolvedValue(null);
   });
 
   it("hodí chybu pokud KV není nakonfigurováno", async () => {

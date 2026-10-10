@@ -51,16 +51,30 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
-export async function saveBlogPost(post: BlogPost): Promise<void> {
+export type SaveBlogPostResult =
+  | { ok: true; previousSlug?: string }
+  | { ok: false; error: "slug-taken" };
+
+export async function saveBlogPost(post: BlogPost): Promise<SaveBlogPostResult> {
   const kv = await getKv();
   if (!kv) throw new Error("KV not configured");
   const score = new Date(post.publishedAt).getTime();
+  const [owner, existing] = await Promise.all([
+    kv.get<string>(`blog:slug:${post.slug}`),
+    kv.get<BlogPost>(`blog:post:${post.id}`),
+  ]);
+  if (owner && owner !== post.id) return { ok: false, error: "slug-taken" };
   // blog:slug:<slug> → id index enables O(1) slug lookup
   await Promise.all([
     kv.set(`blog:post:${post.id}`, post),
     kv.set(`blog:slug:${post.slug}`, post.id),
     kv.zadd("blog:index", { score, member: post.id }),
   ]);
+  if (existing && existing.slug !== post.slug) {
+    await kv.del(`blog:slug:${existing.slug}`);
+    return { ok: true, previousSlug: existing.slug };
+  }
+  return { ok: true };
 }
 
 // Returns true if deleted, false if post not found

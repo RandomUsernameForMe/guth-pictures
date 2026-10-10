@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 vi.mock("@/lib/auth", () => ({ isAuthenticated: vi.fn(), signToken: vi.fn() }));
 vi.mock("@/modules/blog/lib/blog", () => ({
   getBlogPosts: vi.fn().mockResolvedValue([]),
-  saveBlogPost: vi.fn().mockResolvedValue(undefined),
+  saveBlogPost: vi.fn().mockResolvedValue({ ok: true }),
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
@@ -66,7 +66,7 @@ describe("POST /api/admin/blog — validace id (UUID)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(isAuthenticated).mockResolvedValue(true);
-    vi.mocked(saveBlogPost).mockResolvedValue(undefined);
+    vi.mocked(saveBlogPost).mockResolvedValue({ ok: true });
   });
 
   it("vrátí 200 pro platný post", async () => {
@@ -96,7 +96,7 @@ describe("POST /api/admin/blog — validace id (UUID)", () => {
 describe("POST /api/admin/blog — validace slug", () => {
   beforeEach(() => {
     vi.mocked(isAuthenticated).mockResolvedValue(true);
-    vi.mocked(saveBlogPost).mockResolvedValue(undefined);
+    vi.mocked(saveBlogPost).mockResolvedValue({ ok: true });
   });
 
   it("vrátí 400 pro slug s velkými písmeny", async () => {
@@ -124,7 +124,7 @@ describe("POST /api/admin/blog — validace slug", () => {
 describe("POST /api/admin/blog — validace locale titles", () => {
   beforeEach(() => {
     vi.mocked(isAuthenticated).mockResolvedValue(true);
-    vi.mocked(saveBlogPost).mockResolvedValue(undefined);
+    vi.mocked(saveBlogPost).mockResolvedValue({ ok: true });
   });
 
   it("vrátí 400 pokud cs.title chybí", async () => {
@@ -166,7 +166,7 @@ describe("POST /api/admin/blog — validace locale titles", () => {
 describe("POST /api/admin/blog — validace excerpt a content", () => {
   beforeEach(() => {
     vi.mocked(isAuthenticated).mockResolvedValue(true);
-    vi.mocked(saveBlogPost).mockResolvedValue(undefined);
+    vi.mocked(saveBlogPost).mockResolvedValue({ ok: true });
   });
 
   it("vrátí 400 pro excerpt delší než 500 znaků", async () => {
@@ -207,7 +207,7 @@ describe("POST /api/admin/blog — validace excerpt a content", () => {
 describe("POST /api/admin/blog — validace coverImage", () => {
   beforeEach(() => {
     vi.mocked(isAuthenticated).mockResolvedValue(true);
-    vi.mocked(saveBlogPost).mockResolvedValue(undefined);
+    vi.mocked(saveBlogPost).mockResolvedValue({ ok: true });
   });
 
   it("vrátí 400 pro coverImage se speciálními znaky (@)", async () => {
