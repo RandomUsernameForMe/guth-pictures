@@ -62,6 +62,13 @@ export async function POST(
     (id): id is string => typeof id === "string" && validIds.has(id)
   );
 
+  if (gallery.maxSelection !== undefined && favorites.length > gallery.maxSelection) {
+    return NextResponse.json(
+      { error: `Selection limit exceeded (max ${gallery.maxSelection})` },
+      { status: 400 }
+    );
+  }
+
   await saveGallerySelection(slug, favorites);
   return NextResponse.json({ ok: true, count: favorites.length });
 }

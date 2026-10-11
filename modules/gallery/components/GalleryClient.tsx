@@ -91,6 +91,7 @@ function PasswordGate({
 }
 
 function saveErrorMessage(status: number) {
+  if (status === 400) return "Překročen limit výběru";
   if (status === 410) return "Galerie vypršela, výběr nelze uložit";
   if (status === 401) return "Přihlášení vypršelo, načtěte stránku znovu";
   return "Výběr se nepodařilo uložit";
@@ -99,9 +100,11 @@ function saveErrorMessage(status: number) {
 function PhotoGrid({
   slug,
   photos,
+  maxSelection,
 }: {
   slug: string;
   photos: GalleryPhoto[];
+  maxSelection: number | null;
 }) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
@@ -112,6 +115,7 @@ function PhotoGrid({
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const visible = filterPhotos(photos, favorites, onlyFavorites);
+  const limitReached = maxSelection !== null && favorites.size >= maxSelection;
 
   // Load existing selection
   useEffect(() => {
@@ -129,7 +133,7 @@ function PhotoGrid({
     setFavorites((prev) => {
       const next = new Set(prev);
       if (next.has(lrId)) next.delete(lrId);
-      else next.add(lrId);
+      else if (maxSelection === null || next.size < maxSelection) next.add(lrId);
       return next;
     });
     setSaved(false);
@@ -181,7 +185,7 @@ function PhotoGrid({
         <div>
           <h1 className="text-xl font-bold">Vaše galerie</h1>
           <p className="text-sm text-gray-400 mt-1">
-            {photos.length} fotek · {favorites.size} vybráno
+            {photos.length} fotek · {maxSelection !== null ? `${favorites.size} / ${maxSelection}` : favorites.size} vybráno
           </p>
         </div>
         <div className="flex border border-zinc-700 text-sm">
@@ -248,6 +252,7 @@ function PhotoGrid({
                   toggleFavorite(photo.lrId);
                 }}
                 aria-label={isFav ? "Odebrat z výběru" : "Přidat do výběru"}
+                disabled={!isFav && limitReached}
                 className={`absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center transition-all ${
                   isFav
                     ? "text-white opacity-100"
@@ -277,7 +282,8 @@ function PhotoGrid({
       <div className="sticky bottom-4 flex justify-center">
         <div className="bg-zinc-900/90 backdrop-blur border border-white/10 px-6 py-3 flex items-center gap-4">
           <span className="text-sm text-gray-300">
-            {favorites.size} {selectionLabel(favorites.size)}
+            {maxSelection !== null ? `${favorites.size} / ${maxSelection}` : favorites.size}{" "}
+            {selectionLabel(favorites.size)}
           </span>
           {error && (
             <p role="alert" className="text-red-400 text-sm">
@@ -333,7 +339,8 @@ function PhotoGrid({
                 e.stopPropagation();
                 toggleFavorite(lightbox.lrId);
               }}
-              className={`absolute bottom-20 right-20 w-12 h-12 flex items-center justify-center bg-black/60 border transition-colors ${
+              disabled={!favorites.has(lightbox.lrId) && limitReached}
+              className={`absolute bottom-20 right-20 w-12 h-12 flex items-center justify-center bg-black/60 border transition-colors disabled:opacity-40 ${
                 favorites.has(lightbox.lrId)
                   ? "border-white text-white"
                   : "border-white/30 text-white/50 hover:border-white hover:text-white"
@@ -368,6 +375,7 @@ function PhotoGrid({
 export function GalleryClient({ slug }: { slug: string }) {
   const [authed, setAuthed] = useState(false);
   const [photos, setPhotos] = useState<GalleryPhoto[] | null>(null);
+  const [maxSelection, setMaxSelection] = useState<number | null>(null);
   const [loadError, setLoadError] = useState("");
 
   async function loadPhotos() {
@@ -375,7 +383,10 @@ export function GalleryClient({ slug }: { slug: string }) {
       const res = await fetch(`/api/gallery/${slug}/photos`);
       if (res.status === 401) return; // still need password
       const data = await res.json().catch(() => ({}));
-      if (res.ok) setPhotos(data.photos);
+      if (res.ok) {
+        setMaxSelection(data.maxSelection ?? null);
+        setPhotos(data.photos);
+      }
       else setLoadError(data.error ?? "Failed to load");
     } catch {
       setLoadError("Chyba sítě");
@@ -398,7 +409,7 @@ export function GalleryClient({ slug }: { slug: string }) {
 
   // Once we have photos, skip password gate
   if (photos !== null) {
-    return <PhotoGrid slug={slug} photos={photos} />;
+    return <PhotoGrid slug={slug} photos={photos} maxSelection={maxSelection} />;
   }
 
   if (!authed) {

@@ -15,10 +15,10 @@ const photos = [
   { lrId: "b", cloudinaryId: "b", filename: "b.jpg", width: 1, height: 1 },
 ];
 
-function mockFetch(post: () => Promise<{ ok: boolean; status: number }>) {
+function mockFetch(post: () => Promise<{ ok: boolean; status: number }>, maxSelection: number | null = null) {
   global.fetch = vi.fn((url: string, init?: RequestInit) => {
     if (init?.method === "POST") return post();
-    const body = url.endsWith("/photos") ? { photos } : { selection: null };
+    const body = url.endsWith("/photos") ? { photos, maxSelection } : { selection: null };
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
   }) as unknown as typeof fetch;
 }
@@ -86,5 +86,19 @@ describe("GalleryClient chyby načtení", () => {
     render(<GalleryClient slug="x" />);
     await submitPassword();
     expect(await screen.findByText(/Příliš mnoho pokusů/)).toBeTruthy();
+  });
+});
+
+describe("GalleryClient limit výběru", () => {
+  beforeEach(() => vi.restoreAllMocks());
+
+  it("po dosažení limitu zakáže přidání a ukáže „N / limit“", async () => {
+    mockFetch(() => Promise.resolve({ ok: true, status: 200 }), 1);
+    render(<GalleryClient slug="x" />);
+    const [first] = await screen.findAllByLabelText("Přidat do výběru");
+    await userEvent.click(first);
+    const remaining = screen.getByLabelText("Přidat do výběru") as HTMLButtonElement;
+    expect(remaining.disabled).toBe(true);
+    expect(screen.getAllByText(/1 \/ 1/).length).toBeGreaterThan(0);
   });
 });

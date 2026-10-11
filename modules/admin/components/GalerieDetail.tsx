@@ -188,7 +188,8 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-medium">
-              Výběr klienta ({selection.favorites.length} fotek)
+              Výběr klienta ({selection.favorites.length}
+              {gallery.maxSelection !== undefined ? ` / ${gallery.maxSelection}` : ""} fotek)
             </h2>
             <p className="text-xs text-gray-500">
               Naposledy upraveno {new Date(selection.lastUpdated).toLocaleString("cs-CZ")}
