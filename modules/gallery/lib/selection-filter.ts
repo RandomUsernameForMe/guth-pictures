@@ -17,3 +17,9 @@ export function stepPhoto<T extends { lrId: string }>(
   if (idx === -1) return dir === 1 ? list[0] : list[list.length - 1];
   return list[(idx + dir + list.length) % list.length];
 }
+
+export function selectionLabel(count: number): string {
+  if (count === 1) return "fotka vybrána";
+  if (count >= 2 && count <= 4) return "fotky vybrány";
+  return "fotek vybráno";
+}

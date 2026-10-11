@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { filterPhotos, stepPhoto } from "../lib/selection-filter";
+import { filterPhotos, stepPhoto, selectionLabel } from "../lib/selection-filter";
 
 interface GalleryPhoto {
   lrId: string;
@@ -86,6 +86,12 @@ function PasswordGate({
   );
 }
 
+function saveErrorMessage(status: number) {
+  if (status === 410) return "Galerie vypršela, výběr nelze uložit";
+  if (status === 401) return "Přihlášení vypršelo, načtěte stránku znovu";
+  return "Výběr se nepodařilo uložit";
+}
+
 function PhotoGrid({
   slug,
   photos,
@@ -96,6 +102,9 @@ function PhotoGrid({
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
+  const favoritesRef = useRef(favorites);
+  favoritesRef.current = favorites;
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const visible = filterPhotos(photos, favorites, onlyFavorites);
@@ -123,17 +132,26 @@ function PhotoGrid({
   }
 
   async function handleSubmit() {
+    const sent = Array.from(favorites);
     setSaving(true);
     setSaved(false);
+    setError("");
     try {
       const res = await fetch(`/api/gallery/${slug}/selection`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ favorites: Array.from(favorites) }),
+        body: JSON.stringify({ favorites: sent }),
       });
-      if (res.ok) setSaved(true);
+      if (!res.ok) {
+        setError(saveErrorMessage(res.status));
+        return;
+      }
+      const current = favoritesRef.current;
+      if (sent.length === current.size && sent.every((id) => current.has(id))) {
+        setSaved(true);
+      }
     } catch {
-      // silent — user can retry
+      setError("Chyba sítě, zkuste to znovu");
     } finally {
       setSaving(false);
     }
@@ -255,8 +273,13 @@ function PhotoGrid({
       <div className="sticky bottom-4 flex justify-center">
         <div className="bg-zinc-900/90 backdrop-blur border border-white/10 px-6 py-3 flex items-center gap-4">
           <span className="text-sm text-gray-300">
-            {favorites.size} {favorites.size === 1 ? "fotka" : favorites.size < 5 ? "fotky" : "fotek"} vybrána
+            {favorites.size} {selectionLabel(favorites.size)}
           </span>
+          {error && (
+            <p role="alert" className="text-red-400 text-sm">
+              {error}
+            </p>
+          )}
           <button
             onClick={handleSubmit}
             disabled={saving}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterPhotos, stepPhoto } from "@/modules/gallery/lib/selection-filter";
+import { filterPhotos, stepPhoto, selectionLabel } from "@/modules/gallery/lib/selection-filter";
 
 const photos = ["a", "b", "c", "d", "e"].map((lrId) => ({ lrId }));
 
@@ -40,5 +40,18 @@ describe("stepPhoto", () => {
   it("když currentId není v seznamu, vpřed první a vzad poslední", () => {
     expect(stepPhoto(list, "a", 1)?.lrId).toBe("b");
     expect(stepPhoto(list, "a", -1)?.lrId).toBe("e");
+  });
+});
+
+describe("selectionLabel", () => {
+  it.each([
+    [0, "fotek vybráno"],
+    [1, "fotka vybrána"],
+    [2, "fotky vybrány"],
+    [4, "fotky vybrány"],
+    [5, "fotek vybráno"],
+    [21, "fotek vybráno"],
+  ])("%i → %s", (count, label) => {
+    expect(selectionLabel(count)).toBe(label);
   });
 });
