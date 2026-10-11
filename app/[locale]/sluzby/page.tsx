@@ -67,6 +67,7 @@ export default async function SluzbyPage({ params }: { params: Promise<{ locale:
               note: content.sluzby.weddings.note,
               href: `/${locale}/sluzby/eventy-a-svatby`,
               hrefLabel: locale === "cs" ? "Vše o eventech a svatbách" : "All about events and weddings",
+              badge: locale === "cs" ? "Připravujeme" : "Coming soon",
             },
             {
               key: "business", category: "firemní",
