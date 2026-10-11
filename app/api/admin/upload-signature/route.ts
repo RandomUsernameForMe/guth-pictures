@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cloudinary } from "@/lib/cloudinary";
 import { isAuthenticated } from "@/lib/auth";
+import { isGalleryCategory } from "@/lib/cloudinary-utils";
 
 export async function POST(request: Request) {
   if (!(await isAuthenticated())) {
@@ -24,7 +25,10 @@ export async function POST(request: Request) {
   const sanitizeContext = (v: string) => v.replace(/[|=]/g, "");
   const altCs = sanitizeContext(typeof body.altCs === "string" ? body.altCs : "");
   const altEn = sanitizeContext(typeof body.altEn === "string" ? body.altEn : "");
-  const category = sanitizeContext(typeof body.category === "string" ? body.category : "portréty");
+  const category = body.category ?? "portréty";
+  if (!isGalleryCategory(category)) {
+    return NextResponse.json({ error: "Invalid category" }, { status: 400 });
+  }
 
   try {
     const timestamp = Math.round(Date.now() / 1000);

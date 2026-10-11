@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { cloudinaryUrl, blurUrl, CATEGORIES } from "@/lib/cloudinary-utils";
+import { cloudinaryUrl, blurUrl, CATEGORIES, toGalleryPhoto } from "@/lib/cloudinary-utils";
 
 describe("cloudinaryUrl", () => {
   beforeEach(() => {
@@ -49,5 +49,23 @@ describe("CATEGORIES", () => {
 
   it("je readonly tuple se dvěma položkami", () => {
     expect(CATEGORIES).toHaveLength(2);
+  });
+});
+
+describe("toGalleryPhoto", () => {
+  const base = { public_id: "portfolio/a", width: 100, height: 200 };
+
+  it("neznámou kategorii převede na portréty s fallback alt", () => {
+    const photo = toGalleryPhoto({ ...base, context: { category: "eventy" } });
+    expect(photo.category).toBe("portréty");
+    expect(photo.alt.cs).not.toBe("");
+    expect(photo.alt.en).not.toBe("");
+  });
+
+  it("platnou kategorii zachová a explicitní alt má přednost", () => {
+    const photo = toGalleryPhoto({ ...base, context: { category: "larpy", alt_cs: "Popis" } });
+    expect(photo.category).toBe("larpy");
+    expect(photo.alt.cs).toBe("Popis");
+    expect(photo.alt.en).not.toBe("");
   });
 });

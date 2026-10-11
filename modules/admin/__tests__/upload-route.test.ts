@@ -148,3 +148,20 @@ describe("POST /api/admin/upload — úspěšný upload", () => {
     expect(await res.json()).toEqual({ publicId: "portfolio/test123" });
   });
 });
+
+describe("POST /api/admin/upload — kategorie", () => {
+  beforeEach(() => {
+    vi.mocked(isAuthenticated).mockResolvedValue(true);
+  });
+
+  it("vrátí 400 pro neplatnou kategorii", async () => {
+    const res = await POST(makeUploadRequest([0xff, 0xd8, 0xff, 0xe0], { category: "eventy" }));
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toBe("Invalid category");
+  });
+
+  it("povolí upload bez kategorie do jiné složky", async () => {
+    const res = await POST(makeUploadRequest([0xff, 0xd8, 0xff, 0xe0], { folder: "content" }));
+    expect(res.status).toBe(200);
+  });
+});

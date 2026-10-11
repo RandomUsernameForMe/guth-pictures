@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cloudinary } from "@/lib/cloudinary";
 import { isAuthenticated } from "@/lib/auth";
+import { isGalleryCategory } from "@/lib/cloudinary-utils";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 20 * 1024 * 1024;
@@ -41,7 +42,10 @@ export async function POST(request: Request) {
   }
 
   const folder = (formData.get("folder") as string) || "portfolio";
-  const category = (formData.get("category") as string) ?? "portréty";
+  const category = formData.get("category") ?? "portréty";
+  if (!isGalleryCategory(category)) {
+    return NextResponse.json({ error: "Invalid category" }, { status: 400 });
+  }
   const altCs = (formData.get("alt_cs") as string) ?? "";
   const altEn = (formData.get("alt_en") as string) ?? "";
 
