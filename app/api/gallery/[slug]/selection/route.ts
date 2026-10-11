@@ -9,6 +9,8 @@ import { verifyGalleryToken, galleryCookieName } from "@/modules/gallery/lib/gal
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+const MAX_NOTE_LENGTH = 1000;
+
 async function verifySession(slug: string): Promise<boolean> {
   const store = await cookies();
   const token = store.get(galleryCookieName(slug))?.value;
@@ -45,7 +47,7 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: { favorites?: unknown };
+  let body: { favorites?: unknown; note?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -56,12 +58,20 @@ export async function POST(
     return NextResponse.json({ error: "favorites must be array" }, { status: 400 });
   }
 
+  if (body.note !== undefined && typeof body.note !== "string") {
+    return NextResponse.json({ error: "note must be string" }, { status: 400 });
+  }
+  const note = body.note?.trim();
+  if (note !== undefined && note.length > MAX_NOTE_LENGTH) {
+    return NextResponse.json({ error: "note too long" }, { status: 400 });
+  }
+
   const photos = await getGalleryPhotos(slug);
   const validIds = new Set(photos.map((p) => p.lrId));
   const favorites = (body.favorites as unknown[]).filter(
     (id): id is string => typeof id === "string" && validIds.has(id)
   );
 
-  await saveGallerySelection(slug, favorites);
+  await saveGallerySelection(slug, favorites, note);
   return NextResponse.json({ ok: true, count: favorites.length });
 }

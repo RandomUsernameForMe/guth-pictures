@@ -24,6 +24,7 @@ export interface GalleryPhoto {
 
 export interface GallerySelection {
   favorites: string[]; // lrIds
+  note?: string;
   submittedAt?: string;
   lastUpdated: string;
 }
@@ -133,14 +134,18 @@ export async function getGallerySelection(slug: string): Promise<GallerySelectio
 
 export async function saveGallerySelection(
   slug: string,
-  favorites: string[]
+  favorites: string[],
+  note?: string
 ): Promise<void> {
   const kv = await getKv();
   if (!kv) return;
   const existing = await kv.get<GallerySelection>(`${key(slug)}:selection`);
   const now = new Date().toISOString();
+  // undefined = keep existing note, "" = clear it
+  const nextNote = note === undefined ? existing?.note : note || undefined;
   await kv.set(`${key(slug)}:selection`, {
     favorites,
+    ...(nextNote ? { note: nextNote } : {}),
     submittedAt: existing?.submittedAt ?? now,
     lastUpdated: now,
   } satisfies GallerySelection);
