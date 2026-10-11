@@ -47,3 +47,44 @@ describe("GalleryClient ukládání výběru", () => {
     expect(screen.queryByText(/Uloženo/)).toBeNull();
   });
 });
+
+function mockLoadFlow(auth: { ok: boolean; status: number }, photosAfter: object) {
+  let authed = false;
+  global.fetch = vi.fn((url: string, init?: RequestInit) => {
+    if (init?.method === "POST") {
+      authed = auth.ok;
+      return Promise.resolve(auth);
+    }
+    const res = authed
+      ? photosAfter
+      : { ok: false, status: 401, json: () => Promise.resolve({}) };
+    return Promise.resolve(res);
+  }) as unknown as typeof fetch;
+}
+
+async function submitPassword() {
+  await userEvent.type(await screen.findByPlaceholderText("Heslo"), "x");
+  await userEvent.click(screen.getByText("Zobrazit galerii"));
+}
+
+describe("GalleryClient chyby načtení", () => {
+  beforeEach(() => vi.restoreAllMocks());
+
+  it("500 z /photos po přihlášení zobrazí chybu a ne „Načítám…“", async () => {
+    mockLoadFlow(
+      { ok: true, status: 200 },
+      { ok: false, status: 500, json: () => Promise.resolve({ error: "Chyba serveru při načtení" }) },
+    );
+    render(<GalleryClient slug="x" />);
+    await submitPassword();
+    expect(await screen.findByText("Chyba serveru při načtení")).toBeTruthy();
+    expect(screen.queryByText("Načítám…")).toBeNull();
+  });
+
+  it("429 z /auth zobrazí hlášku o příliš mnoha pokusech", async () => {
+    mockLoadFlow({ ok: false, status: 429 }, {});
+    render(<GalleryClient slug="x" />);
+    await submitPassword();
+    expect(await screen.findByText(/Příliš mnoho pokusů/)).toBeTruthy();
+  });
+});
