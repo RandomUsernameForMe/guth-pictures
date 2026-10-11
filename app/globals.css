@@ -2054,6 +2054,7 @@ body:has(.editorial-home) {
 .ed-events-hero figure, .ed-events-strip figure, .ed-events-wide figure { position: relative; min-height: 28rem; margin: 0; }
 .ed-events-hero h1 { margin: 0 0 1rem; font-family: var(--font-editorial-serif), serif; font-size: clamp(4rem, 8cqi, 8.5rem); font-weight: 500; line-height: .82; letter-spacing: -.055em; }
 .ed-events-hero a, .ed-events-info a { display: inline-block; margin-top: 1.5rem; color: inherit; text-underline-offset: .35rem; }
+.ed-events-soon { margin-bottom: 1.5rem; padding: .3rem .7rem; border: 1px solid currentColor; font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 .ed-events-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; padding: .75rem; }
 .ed-events-wide { padding: 0 .75rem; }
 .ed-events-wide figure { height: 70svh; }

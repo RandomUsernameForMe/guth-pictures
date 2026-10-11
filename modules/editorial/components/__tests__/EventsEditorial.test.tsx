@@ -34,3 +34,10 @@ it("renders an events and weddings reportage with managed placeholders", () => {
   expect(html).toContain("Larp");
   expect(html).toContain("<form");
 });
+
+it("marks the page as coming soon in both locales", () => {
+  const cs = renderToStaticMarkup(<EventsEditorial locale="cs" content={base()} images={normalizeImages()} />);
+  const en = renderToStaticMarkup(<EventsEditorial locale="en" content={base()} images={normalizeImages()} />);
+  expect(cs).toContain("Připravujeme");
+  expect(en).toContain("Coming soon");
+});
