@@ -28,6 +28,13 @@ export interface GallerySelection {
   lastUpdated: string;
 }
 
+export interface GallerySelectionSummary {
+  count: number;
+  lastUpdated: string;
+}
+
+export type GalleryListItem = GalleryRecord & { selection: GallerySelectionSummary | null };
+
 function key(slug: string) {
   return `gallery:${slug}`;
 }
@@ -150,4 +157,18 @@ export async function verifyGalleryPassword(
 
 export function isExpired(gallery: GalleryRecord): boolean {
   return new Date() > new Date(gallery.expiresAt);
+}
+
+export async function listGalleriesWithSelection(): Promise<GalleryListItem[]> {
+  const galleries = await listGalleries();
+  return Promise.all(
+    galleries.map(async (g) => {
+      const sel = await getGallerySelection(g.slug);
+      const selection =
+        sel && sel.favorites.length > 0
+          ? { count: sel.favorites.length, lastUpdated: sel.lastUpdated }
+          : null;
+      return { ...g, selection };
+    })
+  );
 }

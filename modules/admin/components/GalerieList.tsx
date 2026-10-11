@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { type GalleryRecord } from "@/modules/gallery/lib/gallery";
+import { type GalleryRecord, type GalleryListItem } from "@/modules/gallery/lib/gallery";
 import { type LightroomAlbum } from "@/modules/gallery/lib/lightroom";
 
 interface Props {
-  galleries: GalleryRecord[];
+  galleries: GalleryListItem[];
   lrConnected: boolean;
   flashConnected?: boolean;
   flashError?: string;
@@ -14,6 +14,20 @@ interface Props {
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("cs-CZ");
+}
+
+function daysUntil(iso: string) {
+  return Math.ceil((new Date(iso).getTime() - Date.now()) / 86400_000);
+}
+
+function ExpiryBadge({ gallery }: { gallery: GalleryRecord }) {
+  const days = daysUntil(gallery.expiresAt);
+  if (days < 0 || days > 7) return null;
+  return (
+    <span className="text-xs px-2 py-0.5 border border-amber-500/40 text-amber-400">
+      končí za {days} {days === 1 ? "den" : days >= 2 && days <= 4 ? "dny" : "dní"}
+    </span>
+  );
 }
 
 function StatusBadge({ gallery }: { gallery: GalleryRecord }) {
@@ -189,7 +203,7 @@ export function GalerieList({ galleries: initial, lrConnected, flashConnected, f
   const [showForm, setShowForm] = useState(false);
 
   function handleCreated(g: GalleryRecord) {
-    setGalleries((prev) => [g, ...prev]);
+    setGalleries((prev) => [{ ...g, selection: null }, ...prev]);
     setShowForm(false);
   }
 
@@ -250,8 +264,16 @@ export function GalerieList({ galleries: initial, lrConnected, flashConnected, f
                   {g.photoCount} fotek · vyprší {formatDate(g.expiresAt)}
                   {g.syncedAt && ` · sync ${formatDate(g.syncedAt)}`}
                 </p>
+                <p className="text-xs text-gray-500">
+                  {g.selection
+                    ? `${g.selection.count} vybrané · upraveno ${formatDate(g.selection.lastUpdated)}`
+                    : "bez výběru"}
+                </p>
               </div>
-              <StatusBadge gallery={g} />
+              <div className="flex items-center gap-2">
+                <ExpiryBadge gallery={g} />
+                <StatusBadge gallery={g} />
+              </div>
             </Link>
           ))}
         </div>
