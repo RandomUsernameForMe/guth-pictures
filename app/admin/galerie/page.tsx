@@ -1,6 +1,6 @@
 import { AdminShell } from "@/modules/admin/components/AdminShell";
 import { GalerieList } from "@/modules/admin/components/GalerieList";
-import { listGalleries } from "@/modules/gallery/lib/gallery";
+import { listGalleriesWithSelection } from "@/modules/gallery/lib/gallery";
 import { getTokens } from "@/modules/gallery/lib/lightroom";
 
 export default async function GaleriePage({
@@ -9,7 +9,7 @@ export default async function GaleriePage({
   searchParams: Promise<{ connected?: string; error?: string }>;
 }) {
   const [galleries, tokens, sp] = await Promise.all([
-    listGalleries(),
+    listGalleriesWithSelection(),
     getTokens(),
     searchParams,
   ]);

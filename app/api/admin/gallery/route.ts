@@ -1,5 +1,5 @@
 import { isAuthenticated } from "@/lib/auth";
-import { listGalleries, createGallery } from "@/modules/gallery/lib/gallery";
+import { listGalleriesWithSelection, createGallery } from "@/modules/gallery/lib/gallery";
 import { getTokens, getCatalogId } from "@/modules/gallery/lib/lightroom";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export async function GET(): Promise<NextResponse> {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const galleries = await listGalleries();
+  const galleries = await listGalleriesWithSelection();
   return NextResponse.json({ galleries });
 }
 
