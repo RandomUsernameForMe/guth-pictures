@@ -4,6 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type GalleryRecord, type GalleryPhoto, type GallerySelection } from "@/modules/gallery/lib/gallery";
+import {
+  selectedFilenames,
+  formatFilenamesForCopy,
+  formatFilenamesForTxt,
+} from "@/modules/gallery/lib/selection-export";
 
 interface Props {
   gallery: GalleryRecord;
@@ -23,6 +28,7 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
   const [syncResult, setSyncResult] = useState<string | null>(null);
   const [tagging, setTagging] = useState(false);
   const [tagResult, setTagResult] = useState<string | null>(null);
+  const [copyResult, setCopyResult] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [selection] = useState(initialSelection);
 
@@ -62,6 +68,27 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
     } finally {
       setTagging(false);
     }
+  }
+
+  async function handleCopyFilenames() {
+    if (!selection) return;
+    try {
+      await navigator.clipboard.writeText(formatFilenamesForCopy(photos, selection.favorites));
+      setCopyResult(`Zkopírováno ${selectedFilenames(photos, selection.favorites).length} názvů`);
+    } catch (e) {
+      setCopyResult(`Chyba: ${e instanceof Error ? e.message : "Unknown"}`);
+    }
+  }
+
+  function handleDownloadTxt() {
+    if (!selection) return;
+    const blob = new Blob([formatFilenamesForTxt(photos, selection.favorites)], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${gallery.slug}-vyber.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   async function handleDelete() {
@@ -167,6 +194,27 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
               Naposledy upraveno {new Date(selection.lastUpdated).toLocaleString("cs-CZ")}
             </p>
           </div>
+          {selection.favorites.length > 0 && (
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={handleCopyFilenames}
+                className="text-sm border border-white/20 px-4 py-2 hover:border-white/60 transition-colors"
+              >
+                Zkopírovat názvy souborů
+              </button>
+              <button
+                onClick={handleDownloadTxt}
+                className="text-sm border border-white/20 px-4 py-2 hover:border-white/60 transition-colors"
+              >
+                Stáhnout .txt
+              </button>
+              {copyResult && (
+                <p className={`text-sm ${copyResult.startsWith("Chyba") ? "text-red-400" : "text-green-400"}`}>
+                  {copyResult}
+                </p>
+              )}
+            </div>
+          )}
           {selection.favorites.length > 0 ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
               {photos
