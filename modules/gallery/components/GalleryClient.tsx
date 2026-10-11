@@ -47,6 +47,10 @@ function PasswordGate({
         setError("Galerie vypršela");
         return;
       }
+      if (res.status === 429) {
+        setError("Příliš mnoho pokusů, zkuste to později");
+        return;
+      }
       if (!res.ok) {
         setError("Chyba serveru");
         return;
@@ -370,7 +374,7 @@ export function GalleryClient({ slug }: { slug: string }) {
     try {
       const res = await fetch(`/api/gallery/${slug}/photos`);
       if (res.status === 401) return; // still need password
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok) setPhotos(data.photos);
       else setLoadError(data.error ?? "Failed to load");
     } catch {
@@ -384,15 +388,16 @@ export function GalleryClient({ slug }: { slug: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (loadError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-400 text-sm">{loadError}</p>
+      </div>
+    );
+  }
+
   // Once we have photos, skip password gate
   if (photos !== null) {
-    if (loadError) {
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-red-400 text-sm">{loadError}</p>
-        </div>
-      );
-    }
     return <PhotoGrid slug={slug} photos={photos} />;
   }
 
