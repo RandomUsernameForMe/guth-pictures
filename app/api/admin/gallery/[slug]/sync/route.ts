@@ -1,5 +1,5 @@
 import { isAuthenticated } from "@/lib/auth";
-import { getGallery, setGalleryPhotos, updateGallerySyncState, type GalleryPhoto } from "@/modules/gallery/lib/gallery";
+import { getGallery, getGalleryPhotos, setGalleryPhotos, updateGallerySyncState, type GalleryPhoto } from "@/modules/gallery/lib/gallery";
 import { getAlbumAssets, getAssetRenditionStream } from "@/modules/gallery/lib/lightroom";
 import { v2 as cloudinary } from "cloudinary";
 import { NextRequest, NextResponse } from "next/server";
@@ -62,8 +62,10 @@ export async function POST(
     return NextResponse.json({ error: `Lightroom fetch failed: ${msg}` }, { status: 500 });
   }
 
+  const previousById = new Map((await getGalleryPhotos(slug)).map((p) => [p.lrId, p]));
   const CONCURRENCY = 4;
-  const photos: GalleryPhoto[] = [];
+  const resultsById = new Map<string, GalleryPhoto>();
+  let synced = 0;
   const errors: string[] = [];
 
   for (let i = 0; i < assets.length; i += CONCURRENCY) {
@@ -83,20 +85,25 @@ export async function POST(
       })
     );
 
-    for (const result of results) {
+    results.forEach((result, j) => {
       if (result.status === "fulfilled") {
-        photos.push(result.value);
-      } else {
-        errors.push(result.reason instanceof Error ? result.reason.message : String(result.reason));
+        resultsById.set(batch[j].id, result.value);
+        synced++;
+        return;
       }
-    }
+      errors.push(result.reason instanceof Error ? result.reason.message : String(result.reason));
+      const previous = previousById.get(batch[j].id);
+      if (previous) resultsById.set(batch[j].id, previous);
+    });
   }
+
+  const photos = assets.flatMap((asset) => resultsById.get(asset.id) ?? []);
 
   await setGalleryPhotos(slug, photos);
   await updateGallerySyncState(slug, photos.length);
 
   return NextResponse.json({
-    synced: photos.length,
+    synced,
     failed: errors.length,
     errors: errors.slice(0, 10),
   });
