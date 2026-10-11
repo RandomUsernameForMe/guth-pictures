@@ -1,3 +1,5 @@
+## [2026-10-10] - Blog: změna slugu maže starý index, kolize slugu vrací 409, validace JSON a publishedAt
+
 ## [2026-10-09] - testy pro app/sitemap.ts
 
 ## [2026-10-02] - Paleta homepage z úvodní fotky
