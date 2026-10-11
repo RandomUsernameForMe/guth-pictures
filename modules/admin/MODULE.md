@@ -19,6 +19,8 @@ modules/admin/
 │   ├── AdminShell.tsx       # wrapper s autentizací (ověří cookie, jinak redirect na login)
 │   ├── AdminNav.tsx         # boční navigace admin panelu
 │   ├── AdminDashboard.tsx   # přehledový dashboard (statistiky)
+│   ├── PhotoUploadSection.tsx  # nahrávání fotek (komprese, Cloudinary)
+│   ├── HeroTriptychEditor.tsx  # skrytý editor hero triptychu
 │   ├── BlogEditor.tsx       # editor článků (Markdown + preview + upload cover)
 │   ├── ContentEditor.tsx    # editor obsahu homepage
 │   ├── ThemeEditor.tsx      # editor barev tématu

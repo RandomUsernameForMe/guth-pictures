@@ -1,3 +1,4 @@
+## [2026-10-12] - Admin: nahrávání fotek a skrytý hero triptych vyčleněny z AdminDashboard (PhotoUploadSection, HeroTriptychEditor); chyby mazání/★ se zobrazují v sekci fotek
 ## [2026-10-12] - Galerie: chyba načtení fotek se zobrazí místo věčného „Načítám…“, hláška při 429 u hesla
 ## [2026-10-11] - README: popis projektu, stack a spuštění (EN + CZ)
 ## [2026-10-11] - Eventy a svatby: štítek „Připravujeme / Coming soon“ na stránce i v /sluzby
