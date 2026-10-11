@@ -1,3 +1,4 @@
+## [2026-10-11] - README: popis projektu, stack a spuštění (EN + CZ)
 ## [2026-10-11] - Eventy a svatby: štítek „Připravujeme / Coming soon“ na stránce i v /sluzby
 ## [2026-10-11] - Sync galerie: při selhání uploadu ponechá původní záznam fotky
 ## [2026-10-11] - Galerie: chybová hláška při uložení výběru, Uloženo jen pro aktuální výběr, oprava skloňování
