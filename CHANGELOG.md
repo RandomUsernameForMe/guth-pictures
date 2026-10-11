@@ -1,4 +1,5 @@
 ## [2026-10-11] - Admin: stav výběru klienta a štítek blížící se expirace v seznamu galerií
+## [2026-10-11] - Klientská galerie: přepínač Vše / Vybrané
 ## [2026-10-10] - Blog: změna slugu maže starý index, kolize slugu vrací 409, validace JSON a publishedAt
 ## [2026-10-10] - testy middleware pro /admin a /api/admin
 

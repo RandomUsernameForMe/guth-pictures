@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { filterPhotos, stepPhoto } from "../lib/selection-filter";
 
 interface GalleryPhoto {
   lrId: string;
@@ -96,6 +97,8 @@ function PhotoGrid({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const visible = filterPhotos(photos, favorites, onlyFavorites);
 
   // Load existing selection
   useEffect(() => {
@@ -142,13 +145,12 @@ function PhotoGrid({
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") closeLightbox();
       if (!lightbox) return;
-      const idx = photos.findIndex((p) => p.lrId === lightbox.lrId);
-      if (e.key === "ArrowRight") setLightbox(photos[(idx + 1) % photos.length]);
-      if (e.key === "ArrowLeft") setLightbox(photos[(idx - 1 + photos.length) % photos.length]);
+      if (e.key === "ArrowRight") setLightbox(stepPhoto(visible, lightbox.lrId, 1));
+      if (e.key === "ArrowLeft") setLightbox(stepPhoto(visible, lightbox.lrId, -1));
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox, photos, closeLightbox]);
+  }, [lightbox, visible, closeLightbox]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">
@@ -159,6 +161,26 @@ function PhotoGrid({
           <p className="text-sm text-gray-400 mt-1">
             {photos.length} fotek · {favorites.size} vybráno
           </p>
+        </div>
+        <div className="flex border border-zinc-700 text-sm">
+          <button
+            onClick={() => setOnlyFavorites(false)}
+            aria-pressed={!onlyFavorites}
+            className={`px-4 py-2 transition-colors ${
+              !onlyFavorites ? "bg-white text-black" : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
+            }`}
+          >
+            Vše
+          </button>
+          <button
+            onClick={() => setOnlyFavorites(true)}
+            aria-pressed={onlyFavorites}
+            className={`px-4 py-2 transition-colors ${
+              onlyFavorites ? "bg-white text-black" : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
+            }`}
+          >
+            Vybrané ({favorites.size})
+          </button>
         </div>
         <button
           onClick={handleSubmit}
@@ -176,8 +198,11 @@ function PhotoGrid({
       )}
 
       {/* Grid */}
+      {onlyFavorites && visible.length === 0 && (
+        <p className="text-sm text-gray-400 text-center py-12">Zatím nemáte nic vybráno</p>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
-        {photos.map((photo) => {
+        {visible.map((photo) => {
           const isFav = favorites.has(photo.lrId);
           return (
             <div key={photo.lrId} className="relative group aspect-square bg-zinc-900 overflow-hidden">
@@ -259,8 +284,7 @@ function PhotoGrid({
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-3xl"
             onClick={(e) => {
               e.stopPropagation();
-              const idx = photos.findIndex((p) => p.lrId === lightbox.lrId);
-              setLightbox(photos[(idx - 1 + photos.length) % photos.length]);
+              setLightbox(stepPhoto(visible, lightbox.lrId, -1));
             }}
           >
             ‹
@@ -303,8 +327,7 @@ function PhotoGrid({
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-3xl"
             onClick={(e) => {
               e.stopPropagation();
-              const idx = photos.findIndex((p) => p.lrId === lightbox.lrId);
-              setLightbox(photos[(idx + 1) % photos.length]);
+              setLightbox(stepPhoto(visible, lightbox.lrId, 1));
             }}
           >
             ›
