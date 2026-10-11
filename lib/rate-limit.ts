@@ -2,7 +2,7 @@ import "server-only";
 
 // Fixed-window rate limit. KV-backed on Vercel; in-memory fallback for local dev.
 // Production without working KV fails closed (better to block than bypass).
-// Same pattern as app/api/admin/login/route.ts, parameterized for reuse.
+// Parameterized for reuse across routes.
 
 const memAttempts = new Map<string, { count: number; resetAt: number }>();
 

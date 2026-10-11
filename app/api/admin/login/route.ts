@@ -1,42 +1,7 @@
 import { compare } from "bcryptjs";
 import { NextResponse } from "next/server";
 import { signToken, authCookieConfig } from "@/lib/auth";
-
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_SEC = 15 * 60;
-
-// In-memory fallback for when KV is unavailable (local dev without KV)
-const memAttempts = new Map<string, { count: number; resetAt: number }>();
-
-function checkMemoryRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = memAttempts.get(ip);
-  if (!entry || entry.resetAt < now) {
-    memAttempts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_SEC * 1000 });
-    return true;
-  }
-  entry.count += 1;
-  return entry.count <= RATE_LIMIT_MAX;
-}
-
-async function checkRateLimit(ip: string): Promise<boolean> {
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-    // In production without KV → fail-closed (better to block than bypass rate limit)
-    if (process.env.NODE_ENV === "production") return false;
-    return checkMemoryRateLimit(ip);
-  }
-  try {
-    const { kv } = await import("@vercel/kv");
-    const key = `ratelimit:login:${ip}`;
-    const count = await kv.incr(key);
-    if (count === 1) await kv.expire(key, RATE_LIMIT_WINDOW_SEC);
-    return count <= RATE_LIMIT_MAX;
-  } catch {
-    // KV failure in production → fail-closed
-    if (process.env.NODE_ENV === "production") return false;
-    return checkMemoryRateLimit(ip);
-  }
-}
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   // x-vercel-forwarded-for is set by Vercel infrastructure and cannot be spoofed by clients
@@ -45,7 +10,7 @@ export async function POST(request: Request) {
     request.headers.get("x-real-ip") ??
     "unknown";
 
-  if (!(await checkRateLimit(ip))) {
+  if (!(await checkRateLimit(`login:${ip}`, 5, 15 * 60))) {
     return NextResponse.json(
       { error: "Too many attempts. Try again later." },
       { status: 429 }
