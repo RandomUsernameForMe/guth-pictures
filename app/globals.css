@@ -1072,9 +1072,10 @@ body::after {
 }
 .f101-meter-fill {
   position: absolute;
-  inset: 0 auto 0 0;
+  inset: 0;
   background: var(--color-accent);
-  transition: width 200ms;
+  transform-origin: left;
+  transition: transform 200ms;
 }
 .f101-meter-tick {
   position: absolute;
@@ -2008,7 +2009,6 @@ body:has(.editorial-home) {
 .ed-home-hero { min-height: calc(100svh - 4.5rem); display: grid; grid-template-columns: minmax(19rem, 38%) 1fr; }
 .ed-home-hero__copy { padding: clamp(2rem, 6cqi, 6rem); display: flex; flex-direction: column; justify-content: center; }
 .ed-home-hero h1 { margin: 0; max-width: 6ch; font-family: var(--font-editorial-serif), serif; font-size: clamp(4.5rem, 9cqi, 9rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; }
-.ed-home-hero h1::after { content: ""; display: inline-block; width: .14em; height: .14em; margin-left: .05em; border-radius: 50%; background: var(--editorial-accent); }
 .ed-home-hero__copy > p { max-width: 24ch; margin: 2rem 0; font-family: var(--font-editorial-sans), sans-serif; font-size: clamp(1.2rem, 2cqi, 1.7rem); line-height: 1.05; }
 .ed-home-hero__image { position: relative; min-height: 38rem; }
 .ed-service-index { display: grid; margin-top: auto; border-top: 1px solid currentColor; }
@@ -2038,7 +2038,7 @@ body:has(.editorial-home) {
    Photos sit in greyscale under the text; a colour copy (.ed-photo-front) fades in
    above it — on hover with a mouse, on scroll on touch screens. Must not get a
    z-index/transform on the figure itself, or the copy can't rise above the heading. */
-.ed-home-hero h1 > span, .ed-home-work > h2, .ed-home-about h2 { position: relative; z-index: 2; color: #fff; mix-blend-mode: difference; pointer-events: none; }
+.ed-home-hero h1, .ed-home-work > h2, .ed-home-about h2 { position: relative; z-index: 2; color: #fff; mix-blend-mode: difference; pointer-events: none; }
 .ed-photo-front { position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none; }
 
 @media (min-width: 761px) {
@@ -2154,6 +2154,13 @@ body:has(.editorial-home) {
   .ed-portrait-gallery figure, .ed-portrait-gallery figure:nth-child(3) { grid-column: auto; min-height: 32rem; }
   .ed-portrait-process ol, .ed-portrait-pricing > div, .ed-portrait-contact { grid-template-columns: 1fr; }
 }
+
+/* Standalone editorial CTAs share the business button look — Tailwind's preflight strips
+   link underlines, so these otherwise read as plain body text. */
+:is(.ed-home-about, .ed-tool, .ed-portrait-hero, .ed-events-hero, .ed-events-info) a { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.5rem; color: var(--editorial-paper); background: var(--editorial-ink); font-weight: 600; text-decoration: none; transition: background-color .2s ease-out; }
+:is(.ed-home-about, .ed-tool, .ed-portrait-hero, .ed-events-hero, .ed-events-info) a:hover { background: color-mix(in srgb, var(--editorial-accent) 80%, var(--editorial-paper)); }
+/* Inline link inside a sentence — stays a link, just visibly underlined. */
+.ed-portrait-process a { text-decoration: underline; }
 
 /* Syne is a wide face — on phones size display headings to the viewport so the
    longest word fits; break-word only guards against unusually long CMS words. */

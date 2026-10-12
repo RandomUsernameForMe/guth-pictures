@@ -1,3 +1,6 @@
+## [2026-10-12] - Focení 101: měřidlo expozice animuje transform (scaleX) místo width
+## [2026-10-12] - Editorial CTA odkazy (Více o mně, Vyzkoušet, Domluvit portrét, Poptat termín) jako tlačítka ve stylu business; inline odkaz podtržený; prázdný odkaz na larpy se nerenderuje
+## [2026-10-12] - Homepage: odstraněna akcentní tečka za hero nadpisem (se Syne padala na samostatný řádek)
 ## [2026-10-12] - Typografie: Syne + Epilogue místo Bodoni Moda + Manrope; homepage nadpisy přes fotky s inverzí, černobílé fotky se zbarví na hover (desktop) / při scrollu (mobil); mobilní velikosti nadpisů bez horizontálního scrollu
 ## [2026-10-12] - Admin: nahrávání fotek a skrytý hero triptych vyčleněny z AdminDashboard (PhotoUploadSection, HeroTriptychEditor); chyby mazání/★ se zobrazují v sekci fotek
 ## [2026-10-12] - ContentEditor: ServiceSection, ContactEmailForm, ProfilePhotoUploader
