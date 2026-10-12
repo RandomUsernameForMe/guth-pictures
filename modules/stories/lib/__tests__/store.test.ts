@@ -8,8 +8,8 @@ vi.mock("@vercel/kv", () => ({
   },
 }));
 
-import { getDrafts, saveDrafts, markPhotosUsed, getUsedPhotoIds } from "../store";
-import type { StoryDraft } from "../types";
+import { getDrafts, saveDrafts, markPhotosUsed, getUsedPhotoIds, mergeAiTexts } from "../store";
+import type { StoryDraft, StoryTextEntry } from "../types";
 
 const draft: StoryDraft = {
   id: "d1", template: "C", photos: [{ publicId: "portfolio/a", x: 50, y: 50 }],
@@ -48,5 +48,28 @@ describe("store", () => {
     const used = await getUsedPhotoIds(new Date("2026-07-17T00:00:00Z"));
     expect(used.has("portfolio/b")).toBe(true);
     expect(used.has("portfolio/a")).toBe(false);
+  });
+});
+
+describe("mergeAiTexts", () => {
+  const text = (id: string, source: "manual" | "ai", approved: boolean): StoryTextEntry =>
+    ({ id, template: "C", headline: id, source, approved });
+
+  it("keeps approved and manual texts, drops older pending AI texts over the limit, preserves order", () => {
+    const ai = [text("n1", "ai", false), text("n2", "ai", false)];
+    const existing = [
+      text("p1", "ai", false),
+      text("m1", "manual", false),
+      text("a1", "ai", true),
+      text("p2", "ai", false),
+      text("p3", "ai", false),
+    ];
+    const result = mergeAiTexts(ai, existing, 3);
+    expect(result.map(t => t.id)).toEqual(["n1", "n2", "p1", "m1", "a1"]);
+  });
+
+  it("defaults to 10 pending AI texts", () => {
+    const existing = Array.from({ length: 12 }, (_, i) => text(`p${i}`, "ai", false));
+    expect(mergeAiTexts([], existing)).toHaveLength(10);
   });
 });

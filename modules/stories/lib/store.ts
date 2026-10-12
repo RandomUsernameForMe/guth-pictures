@@ -32,6 +32,19 @@ export const saveDrafts = (v: StoryDraft[]) => write(KEYS.drafts, v);
 export const getQueue = () => read<QueueItem>(KEYS.queue);
 export const saveQueue = (v: QueueItem[]) => write(KEYS.queue, v);
 
+/** Nové AI texty před existující; schválené a manuální zůstanou, neschválených AI jen nejnovějších maxPending. */
+export function mergeAiTexts(
+  aiTexts: StoryTextEntry[],
+  existing: StoryTextEntry[],
+  maxPending = 10,
+): StoryTextEntry[] {
+  let pending = 0;
+  return [...aiTexts, ...existing].filter(t => {
+    if (t.approved || t.source !== "ai") return true;
+    return ++pending <= maxPending;
+  });
+}
+
 export async function markPhotosUsed(publicIds: string[], now = new Date()): Promise<void> {
   const used = await read<UsedPhoto>(KEYS.used);
   const usedAt = now.toISOString();

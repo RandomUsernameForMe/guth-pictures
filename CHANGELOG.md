@@ -1,5 +1,6 @@
 ## [2026-10-12] - README: screenshot aplikace
 ## [2026-10-12] - Docs: modules/gallery/MODULE.md odpovídá skutečným routám, cookie a struktuře
+## [2026-10-12] - Stories cron: neschválených AI textů se drží max 10 (mergeAiTexts), schválené a manuální zůstávají
 ## [2026-10-12] - Mobil: „Vybrané příběhy“ jako swipe carousel (CSS scroll-snap), barva fotky naskočí při swipu
 ## [2026-10-12] - Mobil: display nadpisy v Syne 700 a velké (hero 25vw, homepage H2 15vw, servisní stránky 12.5vw) místo zmenšeného 800
 ## [2026-10-12] - Focení 101: měřidlo expozice animuje transform (scaleX) místo width
