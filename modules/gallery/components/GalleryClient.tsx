@@ -14,6 +14,8 @@ interface GalleryPhoto {
 
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "";
 
+const NOTE_MAX_LENGTH = 1000;
+
 function watermarkedUrl(cloudinaryId: string, size = 800) {
   return `https://res.cloudinary.com/${CLOUD}/image/upload/l_text:Arial_28_bold:PREVIEW,co_white,o_40,g_center/c_fit,w_${size}/${cloudinaryId}.jpg`;
 }
@@ -112,6 +114,9 @@ function PhotoGrid({
   const [error, setError] = useState("");
   const favoritesRef = useRef(favorites);
   favoritesRef.current = favorites;
+  const [note, setNote] = useState("");
+  const noteRef = useRef(note);
+  noteRef.current = note;
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const visible = filterPhotos(photos, favorites, onlyFavorites);
@@ -124,6 +129,9 @@ function PhotoGrid({
       .then((data) => {
         if (data.selection?.favorites) {
           setFavorites(new Set(data.selection.favorites));
+        }
+        if (typeof data.selection?.note === "string") {
+          setNote(data.selection.note);
         }
       })
       .catch(() => {});
@@ -141,6 +149,7 @@ function PhotoGrid({
 
   async function handleSubmit() {
     const sent = Array.from(favorites);
+    const sentNote = note;
     setSaving(true);
     setSaved(false);
     setError("");
@@ -148,14 +157,18 @@ function PhotoGrid({
       const res = await fetch(`/api/gallery/${slug}/selection`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ favorites: sent }),
+        body: JSON.stringify({ favorites: sent, note: sentNote }),
       });
       if (!res.ok) {
         setError(saveErrorMessage(res.status));
         return;
       }
       const current = favoritesRef.current;
-      if (sent.length === current.size && sent.every((id) => current.has(id))) {
+      if (
+        sentNote === noteRef.current &&
+        sent.length === current.size &&
+        sent.every((id) => current.has(id))
+      ) {
         setSaved(true);
       }
     } catch {
@@ -276,6 +289,27 @@ function PhotoGrid({
             </div>
           );
         })}
+      </div>
+
+      <div>
+        <label htmlFor="photographer-note" className="block text-sm text-gray-300 mb-2">
+          Poznámka pro fotografa
+        </label>
+        <textarea
+          id="photographer-note"
+          value={note}
+          maxLength={NOTE_MAX_LENGTH}
+          rows={4}
+          onChange={(e) => {
+            setNote(e.target.value);
+            setSaved(false);
+          }}
+          placeholder="Např. přání k retuši nebo ořezu"
+          className="w-full bg-zinc-900 border border-zinc-700 p-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-white/60"
+        />
+        <p className="text-xs text-gray-500 text-right mt-1">
+          {note.length} / {NOTE_MAX_LENGTH}
+        </p>
       </div>
 
       {/* Sticky save bar */}

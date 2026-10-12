@@ -1,6 +1,13 @@
+## [2026-10-12] - Mobil: „Vybrané příběhy“ jako swipe carousel (CSS scroll-snap), barva fotky naskočí při swipu
+## [2026-10-12] - Mobil: display nadpisy v Syne 700 a velké (hero 25vw, homepage H2 15vw, servisní stránky 12.5vw) místo zmenšeného 800
+## [2026-10-12] - Focení 101: měřidlo expozice animuje transform (scaleX) místo width
+## [2026-10-12] - Editorial CTA odkazy (Více o mně, Vyzkoušet, Domluvit portrét, Poptat termín) jako tlačítka ve stylu business; inline odkaz podtržený; prázdný odkaz na larpy se nerenderuje
+## [2026-10-12] - Homepage: odstraněna akcentní tečka za hero nadpisem (se Syne padala na samostatný řádek)
+## [2026-10-12] - Typografie: Syne + Epilogue místo Bodoni Moda + Manrope; homepage nadpisy přes fotky s inverzí, černobílé fotky se zbarví na hover (desktop) / při scrollu (mobil); mobilní velikosti nadpisů bez horizontálního scrollu
 ## [2026-10-12] - Admin: nahrávání fotek a skrytý hero triptych vyčleněny z AdminDashboard (PhotoUploadSection, HeroTriptychEditor); chyby mazání/★ se zobrazují v sekci fotek
 ## [2026-10-12] - ContentEditor: ServiceSection, ContactEmailForm, ProfilePhotoUploader
 ## [2026-10-12] - Limit počtu vybraných fotek v klientské galerii (admin pole, validace v API, UI klienta)
+## [2026-10-12] - Klientská galerie: poznámka pro fotografa k výběru (uložení, předvyplnění, zobrazení v adminu)
 ## [2026-10-12] - Galerie: chyba načtení fotek se zobrazí místo věčného „Načítám…“, hláška při 429 u hesla
 ## [2026-10-11] - README: popis projektu, stack a spuštění (EN + CZ)
 ## [2026-10-11] - Eventy a svatby: štítek „Připravujeme / Coming soon“ na stránce i v /sluzby
