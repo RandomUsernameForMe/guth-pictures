@@ -1,5 +1,7 @@
 # Guth Pictures
 
+![Screenshot](docs/screenshot.png)
+
 Website and back office of a portrait photographer — public portfolio, client galleries, proposals, a blog and a small set of interactive photo tools, all in one Next.js app.
 
 **Live:** <https://www.guthpictures.eu>
