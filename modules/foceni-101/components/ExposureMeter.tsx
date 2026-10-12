@@ -15,7 +15,7 @@ export function ExposureMeter({ params, show }: { params: PhotoParams; show: boo
   return (
     <div className={`f101-meter${show ? " f101-meter--on" : ""}`}>
       <div className="f101-meter-track" aria-hidden>
-        <span className="f101-meter-fill" style={{ width: `${pct}%` }} />
+        <span className="f101-meter-fill" style={{ transform: `scaleX(${pct / 100})` }} />
         <span className="f101-meter-tick" />
       </div>
       <div className="f101-meter-label">
