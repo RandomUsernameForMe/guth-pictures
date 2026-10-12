@@ -1,3 +1,5 @@
+## [2026-10-12] - Mobil: „Vybrané příběhy“ jako swipe carousel (CSS scroll-snap), barva fotky naskočí při swipu
+## [2026-10-12] - Mobil: display nadpisy v Syne 700 a velké (hero 25vw, homepage H2 15vw, servisní stránky 12.5vw) místo zmenšeného 800
 ## [2026-10-12] - Focení 101: měřidlo expozice animuje transform (scaleX) místo width
 ## [2026-10-12] - Editorial CTA odkazy (Více o mně, Vyzkoušet, Domluvit portrét, Poptat termín) jako tlačítka ve stylu business; inline odkaz podtržený; prázdný odkaz na larpy se nerenderuje
 ## [2026-10-12] - Homepage: odstraněna akcentní tečka za hero nadpisem (se Syne padala na samostatný řádek)
