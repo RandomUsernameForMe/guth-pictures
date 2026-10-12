@@ -27,12 +27,14 @@ export interface GallerySelection {
   favorites: string[]; // lrIds
   note?: string;
   submittedAt?: string;
+  confirmedAt?: string;
   lastUpdated: string;
 }
 
 export interface GallerySelectionSummary {
   count: number;
   lastUpdated: string;
+  confirmedAt?: string;
 }
 
 export type GalleryListItem = GalleryRecord & { selection: GallerySelectionSummary | null };
@@ -150,8 +152,28 @@ export async function saveGallerySelection(
     favorites,
     ...(nextNote ? { note: nextNote } : {}),
     submittedAt: existing?.submittedAt ?? now,
+    ...(existing?.confirmedAt ? { confirmedAt: existing.confirmedAt } : {}),
     lastUpdated: now,
   } satisfies GallerySelection);
+}
+
+export async function confirmGallerySelection(slug: string): Promise<string | null> {
+  const kv = await getKv();
+  if (!kv) return null;
+  const existing = await kv.get<GallerySelection>(`${key(slug)}:selection`);
+  if (!existing || existing.favorites.length === 0) return null;
+  const confirmedAt = existing.confirmedAt ?? new Date().toISOString();
+  await kv.set(`${key(slug)}:selection`, { ...existing, confirmedAt } satisfies GallerySelection);
+  return confirmedAt;
+}
+
+export async function unlockGallerySelection(slug: string): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const existing = await kv.get<GallerySelection>(`${key(slug)}:selection`);
+  if (!existing?.confirmedAt) return;
+  const { confirmedAt: _confirmedAt, ...rest } = existing;
+  await kv.set(`${key(slug)}:selection`, rest satisfies GallerySelection);
 }
 
 export async function verifyGalleryPassword(
@@ -174,7 +196,11 @@ export async function listGalleriesWithSelection(): Promise<GalleryListItem[]> {
       const sel = await getGallerySelection(g.slug);
       const selection =
         sel && sel.favorites.length > 0
-          ? { count: sel.favorites.length, lastUpdated: sel.lastUpdated }
+          ? {
+              count: sel.favorites.length,
+              lastUpdated: sel.lastUpdated,
+              ...(sel.confirmedAt ? { confirmedAt: sel.confirmedAt } : {}),
+            }
           : null;
       return { ...g, selection };
     })

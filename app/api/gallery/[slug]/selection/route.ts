@@ -39,6 +39,10 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if ((await getGallerySelection(slug))?.confirmedAt) {
+    return NextResponse.json({ error: "Selection confirmed — locked" }, { status: 409 });
+  }
+
   let body: { favorites?: unknown; note?: unknown };
   try {
     body = await request.json();

@@ -292,6 +292,11 @@ export function GalerieList({ galleries: initial, lrConnected, flashConnected, f
                 </p>
               </div>
               <div className="flex items-center gap-2">
+                {g.selection?.confirmedAt && (
+                  <span className="text-xs px-2 py-0.5 border border-sky-500/40 text-sky-400">
+                    potvrzeno
+                  </span>
+                )}
                 <ExpiryBadge gallery={g} />
                 <StatusBadge gallery={g} />
               </div>

@@ -96,6 +96,28 @@ function FavoritesToggle({
   );
 }
 
+function ConfirmSelectionButton({
+  disabled,
+  confirming,
+  onClick,
+  className,
+}: {
+  disabled: boolean;
+  confirming: boolean;
+  onClick: () => void;
+  className: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${className} border border-white/40 text-white text-sm font-medium hover:bg-white/10 disabled:opacity-40 transition-colors`}
+    >
+      {confirming ? "Potvrzuji…" : "Potvrdit výběr"}
+    </button>
+  );
+}
+
 function ClientPhotoGrid({
   slug,
   photos,
@@ -105,11 +127,18 @@ function ClientPhotoGrid({
   photos: GalleryPhoto[];
   maxSelection: number | null;
 }) {
-  const { favorites, note, setNote, toggle, save, saving, saved, error } = useGallerySelection(slug, maxSelection);
+  const { favorites, note, setNote, toggle, save, saving, saved, error, confirmedAt, confirming, confirmSelection } =
+    useGallerySelection(slug, maxSelection);
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const visible = filterPhotos(photos, favorites, onlyFavorites);
-  const limitReached = maxSelection !== null && favorites.size >= maxSelection;
+  const locked = confirmedAt !== null;
+  const limitReached = locked || (maxSelection !== null && favorites.size >= maxSelection);
+
+  function handleConfirm() {
+    if (!confirm("Potvrdit finální výběr? Poté ho už nepůjde změnit.")) return;
+    confirmSelection();
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">
@@ -122,14 +151,30 @@ function ClientPhotoGrid({
           </p>
         </div>
         <FavoritesToggle onlyFavorites={onlyFavorites} count={favorites.size} onChange={setOnlyFavorites} />
-        <SaveSelectionButton
-          saving={saving}
-          saved={saved}
-          onClick={save}
-          savingLabel="Ukládám…"
-          className="px-6 py-2"
-        />
+        {!locked && (
+          <>
+            <SaveSelectionButton
+              saving={saving}
+              saved={saved}
+              onClick={save}
+              savingLabel="Ukládám…"
+              className="px-6 py-2"
+            />
+            <ConfirmSelectionButton
+              disabled={confirming || saving || favorites.size === 0}
+              confirming={confirming}
+              onClick={handleConfirm}
+              className="px-6 py-2"
+            />
+          </>
+        )}
       </div>
+
+      {confirmedAt && (
+        <p role="status" className="text-sm text-green-400 border border-green-500/30 px-4 py-2">
+          Výběr potvrzen dne {new Date(confirmedAt).toLocaleDateString("cs-CZ")}
+        </p>
+      )}
 
       {favorites.size > 0 && (
         <p className="text-xs text-gray-500">
@@ -163,6 +208,7 @@ function ClientPhotoGrid({
           value={note}
           maxLength={NOTE_MAX_LENGTH}
           rows={4}
+          disabled={locked}
           onChange={(e) => setNote(e.target.value)}
           placeholder="Např. přání k retuši nebo ořezu"
           className="w-full bg-zinc-900 border border-zinc-700 p-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-white/60"
@@ -184,13 +230,23 @@ function ClientPhotoGrid({
               {error}
             </p>
           )}
-          <SaveSelectionButton
-            saving={saving}
-            saved={saved}
-            onClick={save}
-            savingLabel="…"
-            className="px-4 py-1.5"
-          />
+          {!locked && (
+            <>
+              <SaveSelectionButton
+                saving={saving}
+                saved={saved}
+                onClick={save}
+                savingLabel="…"
+                className="px-4 py-1.5"
+              />
+              <ConfirmSelectionButton
+                disabled={confirming || saving || favorites.size === 0}
+                confirming={confirming}
+                onClick={handleConfirm}
+                className="px-4 py-1.5"
+              />
+            </>
+          )}
         </div>
       </div>
 
