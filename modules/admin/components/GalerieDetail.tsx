@@ -194,6 +194,12 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
               Naposledy upraveno {new Date(selection.lastUpdated).toLocaleString("cs-CZ")}
             </p>
           </div>
+          {selection.note && (
+            <div className="border border-white/10 p-4">
+              <p className="text-xs text-gray-500 mb-1">Poznámka klienta</p>
+              <p className="text-sm text-gray-200 whitespace-pre-wrap">{selection.note}</p>
+            </div>
+          )}
           {selection.favorites.length > 0 && (
             <div className="flex flex-wrap items-center gap-3">
               <button
