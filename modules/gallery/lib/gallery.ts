@@ -13,6 +13,7 @@ export interface GalleryRecord {
   syncedAt?: string; // ISO
   photoCount: number;
   maxSelection?: number;
+  delivered?: boolean;
 }
 
 export interface GalleryPhoto {
@@ -104,6 +105,14 @@ export async function updateGallerySyncState(
     photoCount,
     syncedAt: new Date().toISOString(),
   });
+}
+
+export async function setGalleryDelivered(slug: string, delivered: boolean): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const record = await kv.get<GalleryRecord>(key(slug));
+  if (!record) return;
+  await kv.set(key(slug), { ...record, delivered });
 }
 
 export async function deleteGallery(slug: string): Promise<void> {
