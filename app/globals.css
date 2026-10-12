@@ -2154,6 +2154,13 @@ body:has(.editorial-home) {
   .ed-portrait-process ol, .ed-portrait-pricing > div, .ed-portrait-contact { grid-template-columns: 1fr; }
 }
 
+/* Standalone editorial CTAs share the business button look — Tailwind's preflight strips
+   link underlines, so these otherwise read as plain body text. */
+:is(.ed-home-about, .ed-tool, .ed-portrait-hero, .ed-events-hero, .ed-events-info) a { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 1.5rem; color: var(--editorial-paper); background: var(--editorial-ink); font-weight: 600; text-decoration: none; transition: background-color .2s ease-out; }
+:is(.ed-home-about, .ed-tool, .ed-portrait-hero, .ed-events-hero, .ed-events-info) a:hover { background: color-mix(in srgb, var(--editorial-accent) 80%, var(--editorial-paper)); }
+/* Inline link inside a sentence — stays a link, just visibly underlined. */
+.ed-portrait-process a { text-decoration: underline; }
+
 /* Syne is a wide face — on phones size display headings to the viewport so the
    longest word fits; break-word only guards against unusually long CMS words. */
 @media (max-width: 760px) {
