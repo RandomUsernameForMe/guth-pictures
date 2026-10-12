@@ -19,7 +19,8 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
       <EditorialNav tone="light" active="home" />
       <section className="ed-home-hero">
         <div className="ed-home-hero__copy">
-          <h1>{copy.title}</h1>
+          {/* Span carries the inverting blend so the accent dot (h1::after) keeps its colour. */}
+          <h1><span>{copy.title}</span></h1>
           <p>{copy.intro}</p>
           <nav aria-label={cs ? "Fotografické služby" : "Photography services"} className="ed-service-index">
             <Link href="/sluzby/portretni-foceni"><span>01</span>{copy.creative}</Link>
@@ -38,6 +39,9 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
           {stories.map((image, index) => (
             <figure key={`${image.publicId}-${index}`} className={`ed-home-story ed-home-story--${index + 1}`}>
               <EditorialImageView image={image} locale={locale} sizes="(max-width: 760px) 100vw, 45vw" placeholderLabel={cs ? "Fotografie bude doplněna" : "Photo coming soon"} />
+              <div className="ed-photo-front" aria-hidden="true">
+                <EditorialImageView image={image} locale={locale} sizes="(max-width: 760px) 100vw, 45vw" />
+              </div>
             </figure>
           ))}
         </div>
@@ -46,6 +50,9 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
       <section id="o-mne" className="ed-home-about">
         <div className="ed-home-about__image">
           <EditorialImageView image={images.editorial.home.photographer} locale={locale} sizes="(max-width: 760px) 100vw, 38vw" placeholderLabel={cs ? "Portrét fotografa" : "Photographer portrait"} />
+          <div className="ed-photo-front" aria-hidden="true">
+            <EditorialImageView image={images.editorial.home.photographer} locale={locale} sizes="(max-width: 760px) 100vw, 38vw" />
+          </div>
         </div>
         <div>
           <p className="ed-kicker">{copy.aboutKicker}</p>
