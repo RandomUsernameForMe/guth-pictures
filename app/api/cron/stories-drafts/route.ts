@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getGalleryPhotos } from "@/lib/cloudinary";
 import { composeDrafts } from "@/modules/stories/lib/compose";
 import { suggestTexts } from "@/modules/stories/lib/claude";
-import { getTexts, saveTexts, getDrafts, saveDrafts, getUsedPhotoIds, markPhotosUsed } from "@/modules/stories/lib/store";
+import { getTexts, saveTexts, mergeAiTexts, getDrafts, saveDrafts, getUsedPhotoIds, markPhotosUsed } from "@/modules/stories/lib/store";
 import type { StoryDraft } from "@/modules/stories/lib/types";
 import { siteUrl } from "@/lib/config";
 
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   try {
     const categories = [...new Set(pool.map(p => p.category))];
     const aiTexts = await suggestTexts(categories);
-    texts = [...aiTexts, ...texts];
+    texts = mergeAiTexts(aiTexts, texts);
     await saveTexts(texts);
   } catch (err) {
     console.error("[stories-drafts] AI texts failed:", err);
