@@ -21,6 +21,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     albumId?: unknown;
     password?: unknown;
     expiryDays?: unknown;
+    maxSelection?: unknown;
   };
   try {
     body = await request.json();
@@ -39,7 +40,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  const slugClean = slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
+  const { maxSelection } = body;
+  if (
+    maxSelection !== undefined &&
+    maxSelection !== null &&
+    (typeof maxSelection !== "number" || !Number.isInteger(maxSelection) || maxSelection < 1)
+  ) {
+    return NextResponse.json({ error: "Invalid maxSelection" }, { status: 400 });
+  }
+
+  const slugClean =slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
   if (!slugClean) {
     return NextResponse.json({ error: "Invalid slug" }, { status: 400 });
   }
@@ -67,6 +77,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       catalogId,
       password,
       expiryDays: Math.max(1, Math.min(365, expiryDays)),
+      maxSelection: maxSelection ?? undefined,
     });
     return NextResponse.json({ gallery }, { status: 201 });
   } catch (e) {

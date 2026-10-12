@@ -57,6 +57,7 @@ function NewGalleryForm({
   const [albumId, setAlbumId] = useState("");
   const [password, setPassword] = useState("");
   const [expiryDays, setExpiryDays] = useState(30);
+  const [maxSelection, setMaxSelection] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -83,7 +84,13 @@ function NewGalleryForm({
       const res = await fetch("/api/admin/gallery", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, albumId, password, expiryDays }),
+        body: JSON.stringify({
+          slug,
+          albumId,
+          password,
+          expiryDays,
+          ...(maxSelection !== "" && { maxSelection: Number(maxSelection) }),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed");
@@ -91,6 +98,7 @@ function NewGalleryForm({
       setSlug("");
       setAlbumId("");
       setPassword("");
+      setMaxSelection("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
@@ -183,6 +191,19 @@ function NewGalleryForm({
             className="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm focus:outline-none focus:border-white"
           />
         </div>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs text-gray-400">Max. vybraných fotek</label>
+        <input
+          type="number"
+          value={maxSelection}
+          onChange={(e) => setMaxSelection(e.target.value)}
+          min={1}
+          step={1}
+          placeholder="bez limitu"
+          className="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm focus:outline-none focus:border-white"
+        />
       </div>
 
       {error && <p className="text-red-400 text-sm">{error}</p>}

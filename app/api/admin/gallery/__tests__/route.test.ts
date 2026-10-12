@@ -8,6 +8,8 @@ vi.mock("@/lib/kv", () => ({
   getKv: async () => ({
     smembers: async (k: string) => (store.get(k) as string[]) ?? [],
     get: async (k: string) => store.get(k) ?? null,
+    set: async (k: string, v: unknown) => void store.set(k, v),
+    sadd: async () => 1,
   }),
 }));
 vi.mock("@/lib/auth", () => ({ isAuthenticated: async () => auth.ok }));
@@ -16,7 +18,9 @@ vi.mock("@/modules/gallery/lib/lightroom", () => ({
   getCatalogId: vi.fn(),
 }));
 
-import { GET } from "../route";
+import { NextRequest } from "next/server";
+import { getTokens, getCatalogId } from "@/modules/gallery/lib/lightroom";
+import { GET, POST } from "../route";
 
 const record = (slug: string) => ({
   slug,
@@ -53,5 +57,37 @@ describe("GET /api/admin/gallery", () => {
   it("bez přihlášení vrací 401", async () => {
     auth.ok = false;
     expect((await GET()).status).toBe(401);
+  });
+});
+
+describe("POST /api/admin/gallery maxSelection", () => {
+  const post = (extra: Record<string, unknown>) =>
+    POST(
+      new NextRequest("http://localhost/api/admin/gallery", {
+        method: "POST",
+        body: JSON.stringify({ slug: "s", albumId: "al", password: "pass", expiryDays: 30, ...extra }),
+      })
+    );
+
+  beforeEach(() => {
+    auth.ok = true;
+    store.clear();
+    vi.mocked(getTokens).mockResolvedValue({} as Awaited<ReturnType<typeof getTokens>>);
+    vi.mocked(getCatalogId).mockResolvedValue("cat");
+  });
+
+  it.each(["abc", -3, 0, 1.5])("odmítne neplatný limit %s", async (v) => {
+    expect((await post({ maxSelection: v })).status).toBe(400);
+    expect(store.has("gallery:s")).toBe(false);
+  });
+
+  it("platný limit uloží do záznamu", async () => {
+    expect((await post({ maxSelection: 10 })).status).toBe(201);
+    expect((store.get("gallery:s") as { maxSelection?: number }).maxSelection).toBe(10);
+  });
+
+  it("bez limitu ho do záznamu neukládá", async () => {
+    expect((await post({})).status).toBe(201);
+    expect(store.get("gallery:s")).not.toHaveProperty("maxSelection");
   });
 });
