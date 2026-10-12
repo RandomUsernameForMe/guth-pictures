@@ -14,8 +14,8 @@ vi.mock("@/lib/kv", () => ({
 }));
 vi.mock("@/modules/gallery/lib/gallery", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/modules/gallery/lib/gallery")>()),
-  getGallery: vi.fn(async () => ({ slug: "test" })),
-  getGalleryPhotos: vi.fn(async () => [{ lrId: "a" }, { lrId: "b" }]),
+  getGallery: vi.fn(async (): Promise<{ slug: string; maxSelection?: number }> => ({ slug: "test" })),
+  getGalleryPhotos: vi.fn(async () => [{ lrId: "a" }, { lrId: "b" }, { lrId: "c" }]),
   isExpired: vi.fn(() => false),
 }));
 vi.mock("@/modules/gallery/lib/gallery-auth", () => ({
@@ -26,6 +26,7 @@ vi.mock("next/headers", () => ({
   cookies: async () => ({ get: () => ({ value: "token" }) }),
 }));
 
+import { getGallery, type GalleryRecord } from "@/modules/gallery/lib/gallery";
 import { GET, POST } from "../route";
 
 const params = { params: Promise.resolve({ slug: "test" }) };
@@ -81,5 +82,27 @@ describe("/api/gallery/[slug]/selection note", () => {
     expect(await getSelection()).toMatchObject({ favorites: ["a", "b"], note: "Ořez" });
     await post({ favorites: ["a", "b"], note: "   " });
     expect((await getSelection()).note).toBeUndefined();
+  });
+});
+
+describe("/api/gallery/[slug]/selection limit", () => {
+  beforeEach(() => store.clear());
+
+  it("rejects a selection over the limit and does not save it", async () => {
+    vi.mocked(getGallery).mockResolvedValueOnce({ slug: "test", maxSelection: 2 } as GalleryRecord);
+    const res = await post({ favorites: ["a", "b", "c"] });
+    expect(res.status).toBe(400);
+    expect(await getSelection()).toBeFalsy();
+  });
+
+  it("accepts a selection within the limit", async () => {
+    vi.mocked(getGallery).mockResolvedValueOnce({ slug: "test", maxSelection: 2 } as GalleryRecord);
+    const res = await post({ favorites: ["a", "b"] });
+    expect(res.status).toBe(200);
+  });
+
+  it("has no limit when maxSelection is unset", async () => {
+    const res = await post({ favorites: ["a", "b", "c"] });
+    expect(res.status).toBe(200);
   });
 });

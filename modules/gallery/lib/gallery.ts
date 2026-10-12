@@ -12,6 +12,7 @@ export interface GalleryRecord {
   createdAt: string; // ISO
   syncedAt?: string; // ISO
   photoCount: number;
+  maxSelection?: number;
 }
 
 export interface GalleryPhoto {
@@ -61,6 +62,7 @@ export async function createGallery(params: {
   catalogId: string;
   password: string;
   expiryDays: number;
+  maxSelection?: number;
 }): Promise<GalleryRecord> {
   const kv = await getKv();
   if (!kv) throw new Error("KV unavailable");
@@ -81,6 +83,7 @@ export async function createGallery(params: {
     expiresAt,
     createdAt: now.toISOString(),
     photoCount: 0,
+    ...(params.maxSelection !== undefined && { maxSelection: params.maxSelection }),
   };
 
   await kv.set(key(params.slug), record);
