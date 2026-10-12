@@ -5,25 +5,17 @@ import {
   saveGallerySelection,
   isExpired,
 } from "@/modules/gallery/lib/gallery";
-import { verifyGalleryToken, galleryCookieName } from "@/modules/gallery/lib/gallery-auth";
+import { hasGallerySession } from "@/modules/gallery/lib/gallery-session";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-
 const MAX_NOTE_LENGTH = 1000;
 
-async function verifySession(slug: string): Promise<boolean> {
-  const store = await cookies();
-  const token = store.get(galleryCookieName(slug))?.value;
-  if (!token) return false;
-  return verifyGalleryToken(token, slug);
-}
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
   const { slug } = await params;
-  if (!(await verifySession(slug))) {
+  if (!(await hasGallerySession(slug))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const selection = await getGallerySelection(slug);
@@ -43,7 +35,7 @@ export async function POST(
     return NextResponse.json({ error: "Gallery expired — selection locked" }, { status: 410 });
   }
 
-  if (!(await verifySession(slug))) {
+  if (!(await hasGallerySession(slug))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

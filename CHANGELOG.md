@@ -6,6 +6,7 @@
 ## [2026-10-12] - Typografie: Syne + Epilogue místo Bodoni Moda + Manrope; homepage nadpisy přes fotky s inverzí, černobílé fotky se zbarví na hover (desktop) / při scrollu (mobil); mobilní velikosti nadpisů bez horizontálního scrollu
 ## [2026-10-12] - Admin: nahrávání fotek a skrytý hero triptych vyčleněny z AdminDashboard (PhotoUploadSection, HeroTriptychEditor); chyby mazání/★ se zobrazují v sekci fotek
 ## [2026-10-12] - ContentEditor: ServiceSection, ContactEmailForm, ProfilePhotoUploader
+## [2026-10-12] - Sdílený HMAC helper hmac-token.ts pro admin a galerijní tokeny, hasGallerySession
 ## [2026-10-12] - Galerie: GalleryClient rozdělen na useGallerySelection, ClientLightbox, PasswordGate, HeartIcon, SaveSelectionButton (beze změny chování)
 ## [2026-10-12] - Limit počtu vybraných fotek v klientské galerii (admin pole, validace v API, UI klienta)
 ## [2026-10-12] - Klientská galerie: poznámka pro fotografa k výběru (uložení, předvyplnění, zobrazení v adminu)
