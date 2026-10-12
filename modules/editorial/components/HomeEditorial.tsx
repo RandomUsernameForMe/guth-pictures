@@ -19,8 +19,7 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
       <EditorialNav tone="light" active="home" />
       <section className="ed-home-hero">
         <div className="ed-home-hero__copy">
-          {/* Span carries the inverting blend so the accent dot (h1::after) keeps its colour. */}
-          <h1><span>{copy.title}</span></h1>
+          <h1>{copy.title}</h1>
           <p>{copy.intro}</p>
           <nav aria-label={cs ? "Fotografické služby" : "Photography services"} className="ed-service-index">
             <Link href="/sluzby/portretni-foceni"><span>01</span>{copy.creative}</Link>
