@@ -14,7 +14,7 @@ vi.mock("@/lib/kv", () => ({
 }));
 vi.mock("@/modules/gallery/lib/gallery", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/modules/gallery/lib/gallery")>()),
-  getGallery: vi.fn(async (): Promise<{ slug: string; maxSelection?: number }> => ({ slug: "test" })),
+  getGallery: vi.fn(async (): Promise<{ slug: string; createdAt: string; maxSelection?: number }> => ({ slug: "test", createdAt: "2026-01-01T00:00:00.000Z" })),
   getGalleryPhotos: vi.fn(async () => [{ lrId: "a" }, { lrId: "b" }, { lrId: "c" }]),
   isExpired: vi.fn(() => false),
 }));
