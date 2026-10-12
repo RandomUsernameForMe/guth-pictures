@@ -14,26 +14,36 @@ Klientská galerie — sdílení fotek s klienty, výběr fotek, synchronizace s
 ```
 modules/gallery/
 ├── components/
-│   ├── GalleryClient.tsx    # hlavní klientský UI (autentizace, zobrazení, výběr)
-│   ├── PhotoGrid.tsx        # grid fotek s lazy loadingem
-│   └── Lightbox.tsx         # fullscreen náhled fotky
-├── lib/
-│   ├── gallery.ts           # CRUD galerií v Vercel KV (listGalleries, getGallery, setGalleryPhotos…)
-│   ├── gallery-auth.ts      # JWT tokeny pro přístup ke galerii (signGalleryToken, verifyGalleryToken)
-│   └── lightroom.ts         # Adobe Lightroom API (OAuth2, listAlbums, getAlbumAssets, streaming)
-└── __tests__/
+│   ├── GalleryClient.tsx        # hlavní klientský UI (zobrazení, výběr)
+│   ├── PasswordGate.tsx         # formulář hesla
+│   ├── PhotoGrid.tsx            # grid fotek s lazy loadingem
+│   ├── Lightbox.tsx             # fullscreen náhled fotky
+│   ├── ClientLightbox.tsx       # lightbox klientské galerie s výběrem
+│   ├── HeartIcon.tsx
+│   ├── SaveSelectionButton.tsx
+│   └── __tests__/GalleryClient.test.tsx
+├── hooks/
+│   └── useGallerySelection.ts   # stav výběru fotek
+└── lib/
+    ├── gallery.ts               # CRUD galerií v Vercel KV (listGalleries, getGallery, setGalleryPhotos…)
+    ├── gallery-auth.ts          # HMAC tokeny pro přístup ke galerii (signGalleryToken, verifyGalleryToken, galleryCookieName)
+    ├── gallery-session.ts       # hasGallerySession
+    ├── lightroom.ts             # Adobe Lightroom API (OAuth2, listAlbums, getAlbumAssets, streaming)
+    ├── selection-filter.ts      # filtrování výběru
+    ├── selection-export.ts      # export názvů souborů z výběru
+    ├── watermarked-url.ts       # URL fotek s vodoznakem
+    └── __tests__/               # selection-filter.test.ts, selection-export.test.ts
 ```
 
 ## API Routes
 
 | Route | Účel |
 |-------|------|
-| `GET /api/gallery/[slug]` | Info o galerii (veřejné) |
-| `POST /api/gallery/[slug]/auth` | Ověření hesla, vydání JWT cookie |
-| `GET /api/gallery/[slug]/photos` | Seznam fotek (vyžaduje JWT) |
-| `POST/DELETE /api/gallery/[slug]/selection` | Správa výběru klienta |
+| `POST /api/gallery/[slug]/auth` | Ověření hesla, vydání cookie `gallery-session-{slug}` (410 při vypršení) |
+| `GET /api/gallery/[slug]/photos` | Seznam fotek a `maxSelection` (vyžaduje cookie, 401 / 404 / 410 při vypršení) |
+| `GET/POST /api/gallery/[slug]/selection` | Načtení/uložení výběru klienta (POST vrací 410 po vypršení) |
 | `GET/POST /api/admin/gallery` | CRUD galerií (admin) |
-| `GET/PUT /api/admin/gallery/[slug]` | Detail/update galerie |
+| `GET/DELETE /api/admin/gallery/[slug]` | Detail/smazání galerie |
 | `POST /api/admin/gallery/[slug]/sync` | Sync z Lightroomu |
 | `POST /api/admin/gallery/[slug]/tag` | Přidání tagu k fotce |
 | `GET /api/admin/lightroom/status` | Stav Lightroom spojení |
@@ -66,4 +76,4 @@ modules/gallery/
 
 ## Autentizace galerií
 
-Každá galerie má heslo (bcrypt hash v KV). Klient pošle heslo → API vydá JWT cookie (`gallery-token`) → cookie ověřuje každý request na fotky/selection. Token vyprší s galerií (`expiresAt`).
+Každá galerie má heslo (bcrypt hash v KV). Klient pošle heslo → API vydá cookie `gallery-session-{slug}` (`galleryCookieName`) → cookie ověřuje každý request na fotky/selection. Není to JWT, ale HMAC token z `gallery-auth.ts` (`signGalleryToken` / `verifyGalleryToken`, payload `slug:timestamp:uuid`), `maxAge` 30 dní. Token s galerií nevyprší — vypršení (`expiresAt`) hlídají routy přes `isExpired` a vrací 410.
