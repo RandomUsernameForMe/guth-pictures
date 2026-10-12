@@ -38,6 +38,9 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
           {stories.map((image, index) => (
             <figure key={`${image.publicId}-${index}`} className={`ed-home-story ed-home-story--${index + 1}`}>
               <EditorialImageView image={image} locale={locale} sizes="(max-width: 760px) 100vw, 45vw" placeholderLabel={cs ? "Fotografie bude doplněna" : "Photo coming soon"} />
+              <div className="ed-photo-front" aria-hidden="true">
+                <EditorialImageView image={image} locale={locale} sizes="(max-width: 760px) 100vw, 45vw" />
+              </div>
             </figure>
           ))}
         </div>
@@ -46,6 +49,9 @@ export function HomeEditorial({ locale, content, images, palette }: Props) {
       <section id="o-mne" className="ed-home-about">
         <div className="ed-home-about__image">
           <EditorialImageView image={images.editorial.home.photographer} locale={locale} sizes="(max-width: 760px) 100vw, 38vw" placeholderLabel={cs ? "Portrét fotografa" : "Photographer portrait"} />
+          <div className="ed-photo-front" aria-hidden="true">
+            <EditorialImageView image={images.editorial.home.photographer} locale={locale} sizes="(max-width: 760px) 100vw, 38vw" />
+          </div>
         </div>
         <div>
           <p className="ed-kicker">{copy.aboutKicker}</p>

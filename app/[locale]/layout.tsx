@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, DM_Sans, DM_Mono, Manrope, Oswald } from "next/font/google";
+import { DM_Sans, DM_Mono, Epilogue, Oswald, Syne } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -26,13 +26,14 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-const editorialSerif = Bodoni_Moda({
+// Display face for editorial headings — the "serif" variable name predates the switch to Syne.
+const editorialSerif = Syne({
   subsets: ["latin", "latin-ext"],
   variable: "--font-editorial-serif",
   display: "swap",
 });
 
-const editorialSans = Manrope({
+const editorialSans = Epilogue({
   subsets: ["latin", "latin-ext"],
   variable: "--font-editorial-sans",
   display: "swap",

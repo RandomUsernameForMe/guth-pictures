@@ -12,6 +12,7 @@ export interface GalleryRecord {
   createdAt: string; // ISO
   syncedAt?: string; // ISO
   photoCount: number;
+  maxSelection?: number;
 }
 
 export interface GalleryPhoto {
@@ -24,6 +25,7 @@ export interface GalleryPhoto {
 
 export interface GallerySelection {
   favorites: string[]; // lrIds
+  note?: string;
   submittedAt?: string;
   lastUpdated: string;
 }
@@ -60,6 +62,7 @@ export async function createGallery(params: {
   catalogId: string;
   password: string;
   expiryDays: number;
+  maxSelection?: number;
 }): Promise<GalleryRecord> {
   const kv = await getKv();
   if (!kv) throw new Error("KV unavailable");
@@ -80,6 +83,7 @@ export async function createGallery(params: {
     expiresAt,
     createdAt: now.toISOString(),
     photoCount: 0,
+    ...(params.maxSelection !== undefined && { maxSelection: params.maxSelection }),
   };
 
   await kv.set(key(params.slug), record);
@@ -133,14 +137,18 @@ export async function getGallerySelection(slug: string): Promise<GallerySelectio
 
 export async function saveGallerySelection(
   slug: string,
-  favorites: string[]
+  favorites: string[],
+  note?: string
 ): Promise<void> {
   const kv = await getKv();
   if (!kv) return;
   const existing = await kv.get<GallerySelection>(`${key(slug)}:selection`);
   const now = new Date().toISOString();
+  // undefined = keep existing note, "" = clear it
+  const nextNote = note === undefined ? existing?.note : note || undefined;
   await kv.set(`${key(slug)}:selection`, {
     favorites,
+    ...(nextNote ? { note: nextNote } : {}),
     submittedAt: existing?.submittedAt ?? now,
     lastUpdated: now,
   } satisfies GallerySelection);

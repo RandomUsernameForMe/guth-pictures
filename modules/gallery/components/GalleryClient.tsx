@@ -11,14 +11,18 @@ import { HeartIcon } from "./HeartIcon";
 import { SaveSelectionButton } from "./SaveSelectionButton";
 import { ClientLightbox } from "./ClientLightbox";
 
+const NOTE_MAX_LENGTH = 1000;
+
 function PhotoTile({
   photo,
   isFav,
+  disabled,
   onOpen,
   onToggle,
 }: {
   photo: GalleryPhoto;
   isFav: boolean;
+  disabled: boolean;
   onOpen: (photo: GalleryPhoto) => void;
   onToggle: (lrId: string) => void;
 }) {
@@ -44,6 +48,7 @@ function PhotoTile({
           onToggle(photo.lrId);
         }}
         aria-label={isFav ? "Odebrat z výběru" : "Přidat do výběru"}
+        disabled={disabled}
         className={`absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center transition-all ${
           isFav
             ? "text-white opacity-100"
@@ -94,14 +99,17 @@ function FavoritesToggle({
 function ClientPhotoGrid({
   slug,
   photos,
+  maxSelection,
 }: {
   slug: string;
   photos: GalleryPhoto[];
+  maxSelection: number | null;
 }) {
-  const { favorites, toggle, save, saving, saved, error } = useGallerySelection(slug);
+  const { favorites, note, setNote, toggle, save, saving, saved, error } = useGallerySelection(slug, maxSelection);
   const [lightbox, setLightbox] = useState<GalleryPhoto | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const visible = filterPhotos(photos, favorites, onlyFavorites);
+  const limitReached = maxSelection !== null && favorites.size >= maxSelection;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">
@@ -110,7 +118,7 @@ function ClientPhotoGrid({
         <div>
           <h1 className="text-xl font-bold">Vaše galerie</h1>
           <p className="text-sm text-gray-400 mt-1">
-            {photos.length} fotek · {favorites.size} vybráno
+            {photos.length} fotek · {maxSelection !== null ? `${favorites.size} / ${maxSelection}` : favorites.size} vybráno
           </p>
         </div>
         <FavoritesToggle onlyFavorites={onlyFavorites} count={favorites.size} onChange={setOnlyFavorites} />
@@ -139,17 +147,37 @@ function ClientPhotoGrid({
             key={photo.lrId}
             photo={photo}
             isFav={favorites.has(photo.lrId)}
+            disabled={!favorites.has(photo.lrId) && limitReached}
             onOpen={setLightbox}
             onToggle={toggle}
           />
         ))}
       </div>
 
+      <div>
+        <label htmlFor="photographer-note" className="block text-sm text-gray-300 mb-2">
+          Poznámka pro fotografa
+        </label>
+        <textarea
+          id="photographer-note"
+          value={note}
+          maxLength={NOTE_MAX_LENGTH}
+          rows={4}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Např. přání k retuši nebo ořezu"
+          className="w-full bg-zinc-900 border border-zinc-700 p-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-white/60"
+        />
+        <p className="text-xs text-gray-500 text-right mt-1">
+          {note.length} / {NOTE_MAX_LENGTH}
+        </p>
+      </div>
+
       {/* Sticky save bar */}
       <div className="sticky bottom-4 flex justify-center">
         <div className="bg-zinc-900/90 backdrop-blur border border-white/10 px-6 py-3 flex items-center gap-4">
           <span className="text-sm text-gray-300">
-            {favorites.size} {selectionLabel(favorites.size)}
+            {maxSelection !== null ? `${favorites.size} / ${maxSelection}` : favorites.size}{" "}
+            {selectionLabel(favorites.size)}
           </span>
           {error && (
             <p role="alert" className="text-red-400 text-sm">
@@ -171,6 +199,7 @@ function ClientPhotoGrid({
           photo={lightbox}
           photos={visible}
           isFav={favorites.has(lightbox.lrId)}
+          disabled={!favorites.has(lightbox.lrId) && limitReached}
           onToggle={toggle}
           onChange={setLightbox}
           onClose={() => setLightbox(null)}
@@ -183,6 +212,7 @@ function ClientPhotoGrid({
 export function GalleryClient({ slug }: { slug: string }) {
   const [authed, setAuthed] = useState(false);
   const [photos, setPhotos] = useState<GalleryPhoto[] | null>(null);
+  const [maxSelection, setMaxSelection] = useState<number | null>(null);
   const [loadError, setLoadError] = useState("");
 
   async function loadPhotos() {
@@ -190,7 +220,10 @@ export function GalleryClient({ slug }: { slug: string }) {
       const res = await fetch(`/api/gallery/${slug}/photos`);
       if (res.status === 401) return; // still need password
       const data = await res.json().catch(() => ({}));
-      if (res.ok) setPhotos(data.photos);
+      if (res.ok) {
+        setMaxSelection(data.maxSelection ?? null);
+        setPhotos(data.photos);
+      }
       else setLoadError(data.error ?? "Failed to load");
     } catch {
       setLoadError("Chyba sítě");
@@ -213,7 +246,7 @@ export function GalleryClient({ slug }: { slug: string }) {
 
   // Once we have photos, skip password gate
   if (photos !== null) {
-    return <ClientPhotoGrid slug={slug} photos={photos} />;
+    return <ClientPhotoGrid slug={slug} photos={photos} maxSelection={maxSelection} />;
   }
 
   if (!authed) {

@@ -11,12 +11,13 @@ interface Props {
   photo: GalleryPhoto;
   photos: GalleryPhoto[];
   isFav: boolean;
+  disabled?: boolean;
   onToggle: (lrId: string) => void;
   onChange: (photo: GalleryPhoto | null) => void;
   onClose: () => void;
 }
 
-export function ClientLightbox({ photo, photos, isFav, onToggle, onChange, onClose }: Props) {
+export function ClientLightbox({ photo, photos, isFav, disabled, onToggle, onChange, onClose }: Props) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -65,7 +66,8 @@ export function ClientLightbox({ photo, photos, isFav, onToggle, onChange, onClo
             e.stopPropagation();
             onToggle(photo.lrId);
           }}
-          className={`absolute bottom-20 right-20 w-12 h-12 flex items-center justify-center bg-black/60 border transition-colors ${
+          disabled={disabled}
+          className={`absolute bottom-20 right-20 w-12 h-12 flex items-center justify-center bg-black/60 border transition-colors disabled:opacity-40 ${
             isFav
               ? "border-white text-white"
               : "border-white/30 text-white/50 hover:border-white hover:text-white"
