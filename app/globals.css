@@ -2064,6 +2064,11 @@ body:has(.editorial-home) {
     /* Stays under the heading here — colour arrives on its own, so it must not hide the text. */
     .ed-photo-front { z-index: 1; animation: ed-photo-reveal linear both; animation-timeline: view(); animation-range: cover 25% cover 50%; }
   }
+  /* Phone carousel scrolls sideways, so colour follows the swipe instead. */
+  @media (max-width: 760px) {
+    /* Earlier range than vertical — the last slide can't scroll past ~45% cover. */
+    .ed-home-story > .ed-photo-front { animation-timeline: view(inline); animation-range: cover 18% cover 40%; }
+  }
 }
 @keyframes ed-photo-reveal { to { opacity: 1; } }
 
@@ -2075,8 +2080,10 @@ body:has(.editorial-home) {
   .ed-home-hero__image { min-height: 52svh; }
   .ed-home-work__grid, .ed-home-tools__grid, .ed-home-contact, .ed-home-about { grid-template-columns: 1fr; }
   .ed-home-work > h2 { margin-bottom: -.45em; }
-  .ed-home-work__grid { margin-top: 0; }
-  .ed-home-story, .ed-home-story--1, .ed-home-story--2, .ed-home-story--3 { min-height: 30rem; grid-row: auto; }
+  /* Swipeable row bleeding to the screen edges; the next photo peeks in as a hint. */
+  .ed-home-work__grid { --bleed: clamp(1.25rem, 5cqi, 5rem); display: flex; gap: .75rem; margin: 0 calc(-1 * var(--bleed)); padding: 0 var(--bleed); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--bleed); scrollbar-width: none; }
+  .ed-home-work__grid::-webkit-scrollbar { display: none; }
+  .ed-home-story, .ed-home-story--1, .ed-home-story--2, .ed-home-story--3 { flex: 0 0 82%; min-height: 30rem; scroll-snap-align: start; }
   .ed-home-about__image { min-height: 29rem; }
   .ed-tool__image { min-height: 16rem; }
 }
@@ -2162,10 +2169,17 @@ body:has(.editorial-home) {
 /* Inline link inside a sentence — stays a link, just visibly underlined. */
 .ed-portrait-process a { text-decoration: underline; }
 
-/* Syne is a wide face — on phones size display headings to the viewport so the
-   longest word fits; break-word only guards against unusually long CMS words. */
+/* Syne 800 is so wide that phones forced tiny headings. Weight 700 is ~1/3 narrower,
+   so headings stack big instead — sized in vw so the longest word still fits.
+   Short fixed copy (home, page titles) gets the big tier; service-page copy has
+   words up to ~6.6em ("Profesionální", "celebrations"), so it gets 12.5vw.
+   break-word only guards against unusually long CMS words. */
 @media (max-width: 760px) {
-  .ed-home-hero h1 { font-size: 13vw; }
-  :is(.ed-secondary-hero, .ed-about-layout, .ed-article, .ed-events-hero, .ed-portrait-hero, .ed-business-hero) h1, .ed-legal > h1 { font-size: min(10.5vw, 4rem); overflow-wrap: break-word; }
-  :is(.ed-home-work, .ed-home-about, .ed-home-tools, .ed-home-contact, .ed-secondary-faq, .ed-secondary-contact, .ed-events-info, .ed-events-pricing, .ed-events-contact, .ed-portrait-process, .ed-portrait-pricing, .ed-portrait-contact) h2 { font-size: min(8.5vw, 3rem); overflow-wrap: break-word; }
+  .ed-home-hero h1 { max-width: none; font-size: 25vw; font-weight: 700; line-height: .82; }
+  .ed-home-hero h1:lang(en) { font-size: 19vw; } /* "different" is ~1.3× wider than "příběh" */
+  :is(.ed-secondary-hero, .ed-about-layout) h1 { font-size: 16vw; font-weight: 700; line-height: .85; overflow-wrap: break-word; }
+  :is(.ed-home-work, .ed-home-about, .ed-home-tools, .ed-home-contact, .ed-secondary-faq, .ed-secondary-contact) h2 { max-width: none; font-size: 15vw; font-weight: 700; line-height: .85; overflow-wrap: break-word; }
+  :is(.ed-events-hero, .ed-portrait-hero) h1, :is(.ed-events-info, .ed-events-pricing, .ed-events-contact, .ed-portrait-process, .ed-portrait-pricing, .ed-portrait-contact) h2 { font-size: 12.5vw; font-weight: 700; line-height: .88; overflow-wrap: break-word; }
+  .ed-business-hero h1 { font-size: 12.5vw; overflow-wrap: break-word; }
+  .ed-article h1, .ed-legal > h1 { font-size: 12vw; font-weight: 700; line-height: .9; overflow-wrap: break-word; }
 }
