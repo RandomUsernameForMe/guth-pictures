@@ -7,203 +7,15 @@ import { StudioFloor } from "./StudioFloor";
 import { Inspector } from "./Inspector";
 import type { Light, LightType, Tweaks, SavedSetup } from "./types";
 import { PRESETS } from "./types";
-
-const FORMSPREE_URL = `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_LT_FORM_ID}`;
-
-type FeedbackType = "bug" | "navrh" | "jine";
-
-function FeedbackModal({ onClose }: { onClose: () => void }) {
-  const [visible, setVisible] = useState(false);
-  const [type, setType] = useState<FeedbackType>("navrh");
-  const [text, setText] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 20);
-    return () => clearTimeout(t);
-  }, []);
-
-  const close = () => {
-    setVisible(false);
-    setTimeout(onClose, 220);
-  };
-
-  const submit = async () => {
-    if (!text.trim()) return;
-    setStatus("sending");
-    const typeLabels: Record<FeedbackType, string> = { bug: "Bug", navrh: "Návrh", jine: "Jiné" };
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ type: typeLabels[type], message: text }),
-      });
-      setStatus(res.ok ? "sent" : "error");
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  return (
-    <div className={`lt-feedback-overlay${visible ? " lt-feedback-overlay--in" : ""}`} onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
-      <div className="lt-feedback-modal" role="dialog" aria-modal="true" aria-label="Feedback">
-        <div className="lt-feedback-header">
-          <span className="lt-feedback-title">Feedback</span>
-          <button className="lt-feedback-close" onClick={close} aria-label="Zavřít">×</button>
-        </div>
-
-        {status === "sent" ? (
-          <>
-            <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.5, margin: "0 0 20px" }}>
-              Díky za feedback, pomůže mi Light Tester zlepšovat.
-            </p>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button className="lt-btn lt-btn-primary" onClick={close}>Zavřít</button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="lt-feedback-types">
-              {([["navrh", "💡 Návrh"], ["bug", "🐛 Bug"], ["jine", "💬 Jiné"]] as [FeedbackType, string][]).map(([id, label]) => (
-                <button
-                  key={id}
-                  className={`lt-feedback-type${type === id ? " lt-feedback-type--active" : ""}`}
-                  onClick={() => setType(id)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <textarea
-              className="lt-feedback-textarea"
-              placeholder={type === "bug" ? "Co se stalo? Jak to reprodukovat?" : type === "navrh" ? "Co by šlo zlepšit nebo přidat?" : "Napiš cokoliv…"}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              autoFocus
-            />
-            <div className="lt-feedback-footer">
-              <span className="lt-feedback-status">
-                {status === "error" && "Odeslání selhalo, zkus to znovu."}
-              </span>
-              <button className="lt-btn lt-btn-ghost" onClick={close}>Zrušit</button>
-              <button
-                className="lt-btn lt-btn-primary"
-                disabled={!text.trim() || status === "sending"}
-                onClick={submit}
-              >
-                {status === "sending" ? "Odesílám…" : "Odeslat"}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
-const LS_KEY = "guth-lt-saved";
-const SNOOZE_MS = 24 * 60 * 60 * 1000;
-
-function shouldShowSupport() {
-  if (typeof window === "undefined") return false;
-  if (localStorage.getItem("lt_supported")) return false;
-  const snoozed = localStorage.getItem("lt_snoozed");
-  if (snoozed && Date.now() - Number(snoozed) < SNOOZE_MS) return false;
-  return true;
-}
-
-function SupportToast({ onDismiss }: { onDismiss: () => void }) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 30);
-    return () => clearTimeout(t);
-  }, []);
-
-  const hide = (cb: () => void) => {
-    setVisible(false);
-    setTimeout(cb, 320);
-  };
-
-  const openBMC = () => {
-    window.open("https://buymeacoffee.com/guth", "bmc", "width=500,height=650,scrollbars=yes");
-    localStorage.setItem("lt_supported", "1");
-    hide(onDismiss);
-  };
-
-  const snooze = () => {
-    localStorage.setItem("lt_snoozed", String(Date.now()));
-    hide(onDismiss);
-  };
-
-  return (
-    <div className={`lt-support-toast${visible ? " lt-support-toast--in" : ""}`}>
-      <p className="lt-support-text">
-        Light Tester je zdarma a vždy bude. Stál ale dost času a zkušeností.
-        Pokud ti pomohl, budu rád za příspěvek.
-      </p>
-      <div className="lt-support-actions">
-        <button className="lt-btn lt-btn-primary" onClick={openBMC}>☕ Přispět</button>
-        <button className="lt-btn lt-btn-ghost" onClick={snooze}>Příště</button>
-      </div>
-    </div>
-  );
-}
-
-function loadSaved(): SavedSetup[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(LS_KEY) ?? "[]"); } catch { return []; }
-}
-
-function persistSaved(setups: SavedSetup[]) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(setups)); } catch {}
-}
+import { FeedbackModal } from "./FeedbackModal";
+import { SupportToast, shouldShowSupport } from "./SupportToast";
+import { encodeState, decodeState, newId, clonePreset, remapLightIds } from "./share-state";
+import { loadSaved, persistSaved } from "./saved-setups";
 
 const CameraScene = dynamic(
   () => import("./CameraScene").then((m) => ({ default: m.CameraScene })),
   { ssr: false }
 );
-
-let _id = 0;
-const newId = () => `L${++_id}_${Math.random().toString(36).slice(2, 6)}`;
-
-function clonePreset(preset: typeof PRESETS[0]): Light[] {
-  return preset.lights.map((L) => ({ ...L, id: newId() }));
-}
-
-function encodeState(lights: Light[], tweaks: Tweaks, presetId: string | null): string {
-  const compact = {
-    v: 1,
-    p: presetId,
-    l: lights.map((L) => [
-      L.type,
-      L.type === "sun" ? +(L.azimuth ?? 45).toFixed(1) : +L.x.toFixed(2),
-      L.type === "sun" ? +(L.elevation ?? 45).toFixed(1) : +L.z.toFixed(2),
-      L.type === "sun" ? 0 : +L.height.toFixed(2),
-      Math.round(L.power), L.kelvin, L.gel, Math.round(L.size || 50),
-      L.on ? 1 : 0,
-      L.aim ? [+L.aim.x.toFixed(2), +L.aim.z.toFixed(2)] : 0,
-    ]),
-    t: [tweaks.headStyle, tweaks.focal, tweaks.backdrop],
-  };
-  try { return btoa(JSON.stringify(compact)); } catch { return ""; }
-}
-
-function decodeState(hash: string): { lights: Light[]; tweaks: Tweaks; presetId: string | null } | null {
-  try {
-    const j = JSON.parse(atob(hash));
-    if (j.v !== 1) return null;
-    const lights: Light[] = j.l.map(
-      ([type, x, z, height, power, kelvin, gel, size, on, aim]: [string, number, number, number, number, number, string, number, number, number[] | 0]) => {
-        const base = { id: newId(), type, power, kelvin, gel, size, on: !!on, aim: Array.isArray(aim) ? { x: aim[0], z: aim[1], y: 1.55 } : null };
-        if (type === "sun") return { ...base, x: 0, z: 0, height: 0, azimuth: x, elevation: z };
-        return { ...base, x, z, height };
-      }
-    );
-    const tweaks: Tweaks = { headStyle: j.t[0], focal: j.t[1], backdrop: j.t[2] };
-    return { lights, tweaks, presetId: j.p ?? null };
-  } catch { return null; }
-}
 
 export function LightTesterApp() {
   const [lights, setLights] = useState<Light[]>(() => clonePreset(PRESETS[0]));
@@ -346,9 +158,7 @@ export function LightTesterApp() {
   }, []);
 
   const loadSavedSetup = useCallback((setup: SavedSetup) => {
-    let _id2 = 0;
-    const remap = (L: Light): Light => ({ ...L, id: `L${++_id2}_${Math.random().toString(36).slice(2, 6)}` });
-    const ls = setup.lights.map(remap);
+    const ls = remapLightIds(setup.lights);
     setLights(ls);
     setTweaks(setup.tweaks);
     setCameraPos(setup.cameraPos);
