@@ -9,6 +9,8 @@ import { Link } from "@/i18n/navigation";
 import { getBlogPost, getBlogPosts } from "@/modules/blog/lib/blog";
 import { cloudinaryUrl } from "@/lib/cloudinary-utils";
 import { siteUrl } from "@/lib/config";
+import { BlogPostCard } from "@/modules/blog/components/BlogPostCard";
+import { pickRelatedPosts } from "@/modules/blog/lib/related-posts";
 import { EditorialSubpage } from "@/modules/editorial/components/EditorialSubpage";
 
 export const revalidate = 60;
@@ -73,6 +75,8 @@ export default async function BlogPostPage({
   const post = await getBlogPost(slug);
   if (!post || !post.published) notFound();
 
+  const related = pickRelatedPosts(await getBlogPosts(), post.id);
+  const cardLocale = locale === "en" ? "en" : "cs";
   const loc = post[locale as "cs" | "en"] ?? post.cs;
   const date = new Date(post.publishedAt).toLocaleDateString(
     locale === "cs" ? "cs-CZ" : "en-GB",
@@ -135,6 +139,15 @@ export default async function BlogPostPage({
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{loc.content}</ReactMarkdown>
         </div>
       </article>
+
+      {related.length > 0 && (
+        <section className="ed-article">
+          <h2>{t("moreArticles")}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {related.map((p) => (<BlogPostCard key={p.id} post={p} locale={cardLocale} />))}
+          </div>
+        </section>
+      )}
     </EditorialSubpage>
   );
 }
