@@ -30,6 +30,7 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
   const [tagResult, setTagResult] = useState<string | null>(null);
   const [copyResult, setCopyResult] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [togglingDelivered, setTogglingDelivered] = useState(false);
   const [selection] = useState(initialSelection);
 
   const expired = new Date() > new Date(gallery.expiresAt);
@@ -67,6 +68,21 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
       setTagResult(`Chyba: ${e instanceof Error ? e.message : "Unknown"}`);
     } finally {
       setTagging(false);
+    }
+  }
+
+  async function handleToggleDelivered() {
+    setTogglingDelivered(true);
+    try {
+      const res = await fetch(`/api/admin/gallery/${gallery.slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ delivered: !gallery.delivered }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      router.refresh();
+    } finally {
+      setTogglingDelivered(false);
     }
   }
 
@@ -149,7 +165,16 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={gallery.delivered ?? false}
+              disabled={togglingDelivered}
+              onChange={handleToggleDelivered}
+            />
+            Doručeno klientovi
+          </label>
           <button
             onClick={handleSync}
             disabled={syncing}
