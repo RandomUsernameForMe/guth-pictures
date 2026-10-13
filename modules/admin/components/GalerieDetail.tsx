@@ -30,8 +30,9 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
   const [tagResult, setTagResult] = useState<string | null>(null);
   const [copyResult, setCopyResult] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const selection = initialSelection;
+  const [unlocking, setUnlocking] = useState(false);
   const [togglingDelivered, setTogglingDelivered] = useState(false);
-  const [selection] = useState(initialSelection);
 
   const expired = new Date() > new Date(gallery.expiresAt);
   const galleryUrl = `/gallery/${gallery.slug}`;
@@ -105,6 +106,19 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
     a.download = `${gallery.slug}-vyber.txt`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function handleUnlock() {
+    setUnlocking(true);
+    try {
+      const res = await fetch(`/api/admin/gallery/${gallery.slug}/unlock`, { method: "POST" });
+      if (!res.ok) throw new Error("Unlock failed");
+      router.refresh();
+    } catch (e) {
+      setCopyResult(`Chyba: ${e instanceof Error ? e.message : "Unknown"}`);
+    } finally {
+      setUnlocking(false);
+    }
   }
 
   async function handleDelete() {
@@ -220,6 +234,20 @@ export function GalerieDetail({ gallery, photos, selection: initialSelection }: 
               Naposledy upraveno {new Date(selection.lastUpdated).toLocaleString("cs-CZ")}
             </p>
           </div>
+          {selection.confirmedAt && (
+            <div className="flex items-center justify-between border border-sky-500/30 px-4 py-2">
+              <p className="text-sm text-sky-400">
+                Potvrzeno klientem · {new Date(selection.confirmedAt).toLocaleString("cs-CZ")}
+              </p>
+              <button
+                onClick={handleUnlock}
+                disabled={unlocking}
+                className="text-xs border border-white/20 px-3 py-1.5 hover:border-white/60 disabled:opacity-40 transition-colors"
+              >
+                {unlocking ? "Odemykám…" : "Odemknout"}
+              </button>
+            </div>
+          )}
           {selection.note && (
             <div className="border border-white/10 p-4">
               <p className="text-xs text-gray-500 mb-1">Poznámka klienta</p>
