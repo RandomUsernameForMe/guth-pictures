@@ -73,7 +73,7 @@ export function Nav() {
     boxShadow: "var(--nav-shadow)",
   };
 
-  // HeroSection has its own navbar on homepage
+  // Editorial homepage has its own header
   if (isEditorialPage) return null;
 
   return (

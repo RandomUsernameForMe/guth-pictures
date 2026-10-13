@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 
 // --- Mocks ---
@@ -60,98 +60,6 @@ const mockPhotos: GalleryPhoto[] = [
 
 beforeEach(() => {
   process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "testcloud";
-});
-
-// =============================================================================
-// AnimatedSection
-// =============================================================================
-import { AnimatedSection } from "@/components/AnimatedSection";
-
-describe("AnimatedSection", () => {
-  it("renderuje children", () => {
-    render(<AnimatedSection><p>Obsah sekce</p></AnimatedSection>);
-    expect(screen.getByText("Obsah sekce")).toBeInTheDocument();
-  });
-
-  it("předá className na wrapper", () => {
-    const { container } = render(
-      <AnimatedSection className="test-class"><span>x</span></AnimatedSection>
-    );
-    expect(container.firstChild).toHaveClass("test-class");
-  });
-});
-
-// =============================================================================
-// HeroSection
-// =============================================================================
-import { HeroSection } from "@/modules/homepage/components/HeroSection";
-
-describe("HeroSection", () => {
-  beforeEach(() => {
-    vi.stubGlobal("IntersectionObserver", class {
-      observe() {}
-      disconnect() {}
-    });
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-    vi.unstubAllGlobals();
-  });
-
-  const defaultProps = {
-    title: "Guth Pictures",
-    subtitle: "Portréty, svatby a larpy.",
-    ctaPortfolio: "Prohlédnout portfolio",
-    ctaContact: "Napsat mi",
-    locale: "cs",
-  };
-
-  it("první fotky zobrazí bez fade, další výměny včetně návratu na začátek prolíná", () => {
-    vi.useFakeTimers();
-    const photos: [string[], string[], string[]] = [
-      ["hero/a1", "hero/a2"], ["hero/b1", "hero/b2"], ["hero/c1", "hero/c2"],
-    ];
-    const { container, unmount } = render(<HeroSection {...defaultProps} photos={photos} />);
-    try {
-      const images = () => Array.from(container.querySelectorAll<HTMLImageElement>("#hero img"));
-      expect(images()).toHaveLength(3);
-      for (const image of images()) {
-        expect(image.style.animation).not.toContain("heroFadeIn");
-      }
-      act(() => vi.advanceTimersByTime(6000));
-      expect(images()).toHaveLength(6);
-      expect(images().filter(image => image.style.animation.includes("heroFadeIn"))).toHaveLength(3);
-      act(() => vi.advanceTimersByTime(6000));
-      for (const first of ["hero/a1", "hero/b1", "hero/c1"]) {
-        expect(images().find(image => image.src.endsWith(first))?.style.animation).toContain("heroFadeIn");
-      }
-    } finally {
-      unmount();
-    }
-  });
-
-  it("renderuje titulek", () => {
-    render(<HeroSection {...defaultProps} />);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Guth Pictures");
-  });
-
-  it("renderuje podtitulek", () => {
-    render(<HeroSection {...defaultProps} />);
-    expect(screen.getByText("Portréty, svatby a larpy.")).toBeInTheDocument();
-  });
-
-  it("renderuje odkaz na portfolio", () => {
-    render(<HeroSection {...defaultProps} />);
-    const link = screen.getByRole("link", { name: "Prohlédnout portfolio" });
-    expect(link).toHaveAttribute("href", "/portfolio");
-  });
-
-  it("renderuje odkaz na kontakt", () => {
-    render(<HeroSection {...defaultProps} />);
-    const link = screen.getByRole("link", { name: "Napsat mi →" });
-    expect(link).toHaveAttribute("href", "#kontakt");
-  });
 });
 
 // =============================================================================
