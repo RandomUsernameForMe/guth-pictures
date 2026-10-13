@@ -1,4 +1,4 @@
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import {
   getProposal,
   setApprovals,
@@ -17,9 +17,8 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { slug } = await params;
   const proposal = await getProposal(slug);
   if (!proposal) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -30,12 +29,11 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { slug } = await params;
 
-  let body: {
+  const body = await readJson<{
     action?: unknown;
     patch?: ApprovalPatch & AssignmentPatch;
     finalized?: unknown;
@@ -43,12 +41,8 @@ export async function PATCH(
     expiryDays?: unknown;
     conceptId?: unknown;
     fields?: unknown;
-  };
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  }>(request);
+  if (body instanceof NextResponse) return body;
 
   switch (body.action) {
     case "approvals": {
@@ -102,9 +96,8 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const { slug } = await params;
   await deleteProposal(slug);
   return NextResponse.json({ ok: true });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { getThemeColors, setThemeColors, defaultColors, type ColorSet } from "@/lib/theme";
 import { COLOR_KEYS } from "@/lib/theme-types";
 
@@ -12,17 +12,15 @@ function isValidColorSet(o: unknown): o is ColorSet {
 }
 
 export async function GET() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const colors = await getThemeColors();
   return NextResponse.json(colors);
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   if (!isValidColorSet(body)) {
     return NextResponse.json({ error: "Invalid color data" }, { status: 400 });
@@ -32,9 +30,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   await setThemeColors(defaultColors);
   return NextResponse.json({ ok: true });
 }

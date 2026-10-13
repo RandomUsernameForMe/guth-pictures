@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { getImages, setImages, type EditorialImage, type EditorialImages } from "@/modules/admin/lib/content";
 
 const CLOUDINARY_ID_RE = /^[a-zA-Z0-9_\-.\/]{1,200}$/;
@@ -78,17 +78,15 @@ export function isValidImagesPayload(value: unknown): boolean {
 }
 
 export async function GET() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const data = await getImages();
   return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   if (!isValidImagesPayload(body)) return NextResponse.json({ error: "Invalid images payload" }, { status: 400 });
   const { profile, heroTriptych, editorial } = body;

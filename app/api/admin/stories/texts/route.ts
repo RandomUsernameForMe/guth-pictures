@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { getTexts, saveTexts } from "@/modules/stories/lib/store";
 import type { StoryTextEntry } from "@/modules/stories/lib/types";
 
 export async function GET() {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await requireAdmin();
+  if (denied) return denied;
   return NextResponse.json({ texts: await getTexts() });
 }
 
 // přidání nového textu (schválený manual)
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  let body: Partial<StoryTextEntry>;
-  try {
-    body = (await req.json()) as Partial<StoryTextEntry>;
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const body = await readJson<Partial<StoryTextEntry>>(req);
+  if (body instanceof NextResponse) return body;
   if (body.template !== "C" && body.template !== "D") {
     return NextResponse.json({ error: "Invalid template" }, { status: 400 });
   }
@@ -33,13 +31,10 @@ export async function POST(req: NextRequest) {
 
 // úprava/schválení (full replace podle id)
 export async function PUT(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  let body;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const body = await readJson(req);
+  if (body instanceof NextResponse) return body;
   const { text } = body as { text?: StoryTextEntry };
   if (!text?.id) return NextResponse.json({ error: "Invalid text" }, { status: 400 });
   const texts = await getTexts();
@@ -49,7 +44,8 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   await saveTexts((await getTexts()).filter(t => t.id !== id));

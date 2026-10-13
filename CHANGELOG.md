@@ -1,5 +1,6 @@
 ## [2026-10-13] - Blog: pod článkem sekce „Další články“ (pickRelatedPosts, až 3 nejnovější)
 ## [2026-10-13] - Smazány mrtvé komponenty homepage po editorial redesignu
+## [2026-10-13] - sdílený requireAdmin/readJson pro admin API
 ## [2026-10-12] - README: screenshot aplikace
 ## [2026-10-12] - Docs: modules/gallery/MODULE.md odpovídá skutečným routám, cookie a struktuře
 ## [2026-10-12] - Stories cron: neschválených AI textů se drží max 10 (mergeAiTexts), schválené a manuální zůstávají

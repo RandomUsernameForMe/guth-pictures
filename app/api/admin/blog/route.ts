@@ -1,26 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { getBlogPosts, saveBlogPost, type BlogPost } from "@/modules/blog/lib/blog";
 
 export async function GET() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const posts = await getBlogPosts();
   return NextResponse.json(posts);
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  let post: BlogPost;
-  try {
-    post = (await req.json()) as BlogPost;
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const post = await readJson<BlogPost>(req);
+  if (post instanceof NextResponse) return post;
   if (!post || typeof post !== "object") {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }

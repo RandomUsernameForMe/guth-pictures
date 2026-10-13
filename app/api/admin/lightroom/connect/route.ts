@@ -1,12 +1,11 @@
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { NextResponse } from "next/server";
 
 const SCOPES = "openid,AdobeID,offline_access,lr_partner_apis";
 
 export async function GET(): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   const clientId = process.env.ADOBE_CLIENT_ID;
   const redirectUri = process.env.ADOBE_REDIRECT_URI;

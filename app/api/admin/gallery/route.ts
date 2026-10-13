@@ -1,33 +1,27 @@
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { listGalleriesWithSelection, createGallery } from "@/modules/gallery/lib/gallery";
 import { getTokens, getCatalogId } from "@/modules/gallery/lib/lightroom";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const galleries = await listGalleriesWithSelection();
   return NextResponse.json({ galleries });
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
-  let body: {
+  const body = await readJson<{
     slug?: unknown;
     albumId?: unknown;
     password?: unknown;
     expiryDays?: unknown;
     maxSelection?: unknown;
-  };
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  }>(request);
+  if (body instanceof NextResponse) return body;
 
   const { slug, albumId, password, expiryDays } = body;
 

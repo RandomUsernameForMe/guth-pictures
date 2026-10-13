@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { getDrafts, saveDrafts } from "@/modules/stories/lib/store";
 import type { StoryDraft } from "@/modules/stories/lib/types";
 
 export async function GET() {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await requireAdmin();
+  if (denied) return denied;
   return NextResponse.json({ drafts: await getDrafts() });
 }
 
 // vytvoření ručního návrhu
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  let body;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const body = await readJson<{ template?: unknown }>(req);
+  if (body instanceof NextResponse) return body;
   const draft: StoryDraft = {
     id: `d-${Date.now()}`,
     template: body.template === "D" ? "D" : "C",
@@ -31,13 +29,10 @@ export async function POST(req: NextRequest) {
 
 // úprava návrhu (full replace podle id)
 export async function PUT(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  let body;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const body = await readJson(req);
+  if (body instanceof NextResponse) return body;
   const { draft } = body as { draft?: StoryDraft };
   if (!draft?.id) return NextResponse.json({ error: "Invalid draft" }, { status: 400 });
   const drafts = await getDrafts();
@@ -47,7 +42,8 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const id = req.nextUrl.searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const drafts = await getDrafts();

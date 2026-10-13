@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { cloudinary } from "@/lib/cloudinary";
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { isGalleryCategory } from "@/lib/cloudinary-utils";
 
 export async function POST(request: Request) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   const secret = process.env.CLOUDINARY_API_SECRET;
   if (!secret) {
@@ -14,12 +13,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
-  let body: { altCs?: unknown; altEn?: unknown; category?: unknown };
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const body = await readJson<{ altCs?: unknown; altEn?: unknown; category?: unknown }>(request);
+  if (body instanceof NextResponse) return body;
 
   // Strip Cloudinary context delimiter characters (| and =) to prevent context injection
   const sanitizeContext = (v: string) => v.replace(/[|=]/g, "");

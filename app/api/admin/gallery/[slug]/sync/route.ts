@@ -1,4 +1,4 @@
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { getGallery, getGalleryPhotos, setGalleryPhotos, updateGallerySyncState, type GalleryPhoto } from "@/modules/gallery/lib/gallery";
 import { getAlbumAssets, getAssetRenditionStream } from "@/modules/gallery/lib/lightroom";
 import { v2 as cloudinary } from "cloudinary";
@@ -46,9 +46,8 @@ export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<NextResponse> {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   const { slug } = await params;
   const gallery = await getGallery(slug);
