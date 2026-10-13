@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { GalleryPhoto } from "../lib/gallery";
 import { stepPhoto } from "../lib/selection-filter";
 import { watermarkedUrl } from "../lib/watermarked-url";
+import { cleanUrl, downloadUrl } from "../lib/download-url";
 import { HeartIcon } from "./HeartIcon";
 
 interface Props {
@@ -12,12 +13,13 @@ interface Props {
   photos: GalleryPhoto[];
   isFav: boolean;
   disabled?: boolean;
+  delivered?: boolean;
   onToggle: (lrId: string) => void;
   onChange: (photo: GalleryPhoto | null) => void;
   onClose: () => void;
 }
 
-export function ClientLightbox({ photo, photos, isFav, disabled, onToggle, onChange, onClose }: Props) {
+export function ClientLightbox({ photo, photos, isFav, disabled, delivered, onToggle, onChange, onClose }: Props) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -54,13 +56,21 @@ export function ClientLightbox({ photo, photos, isFav, disabled, onToggle, onCha
         onClick={(e) => e.stopPropagation()}
       >
         <Image
-          src={watermarkedUrl(photo.cloudinaryId, 2048)}
+          src={delivered ? cleanUrl(photo.cloudinaryId, 2048) : watermarkedUrl(photo.cloudinaryId, 2048)}
           alt={photo.filename}
           fill
           className="object-contain"
           sizes="100vw"
           priority
         />
+        {delivered && (
+          <a
+            href={downloadUrl(photo.cloudinaryId, photo.filename)}
+            className="absolute bottom-20 right-36 h-12 px-4 flex items-center bg-black/60 border border-white/30 text-sm text-white hover:border-white"
+          >
+            Stáhnout
+          </a>
+        )}
         <button
           onClick={(e) => {
             e.stopPropagation();

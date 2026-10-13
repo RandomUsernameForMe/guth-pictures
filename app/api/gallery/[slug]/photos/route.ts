@@ -20,5 +20,7 @@ export async function GET(
   }
 
   const photos = await getGalleryPhotos(slug);
-  return NextResponse.json({ photos, maxSelection: gallery.maxSelection ?? null });
+  return NextResponse.json({ photos, maxSelection: gallery.maxSelection ?? null,
+    delivered: gallery.delivered ?? false,
+  });
 }

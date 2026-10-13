@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { GalleryPhoto } from "../lib/gallery";
 import { filterPhotos, selectionLabel } from "../lib/selection-filter";
 import { watermarkedUrl } from "../lib/watermarked-url";
+import { cleanUrl, downloadUrl } from "../lib/download-url";
 import { useGallerySelection } from "../hooks/useGallerySelection";
 import { PasswordGate } from "./PasswordGate";
 import { HeartIcon } from "./HeartIcon";
@@ -17,12 +18,14 @@ function PhotoTile({
   photo,
   isFav,
   disabled,
+  delivered,
   onOpen,
   onToggle,
 }: {
   photo: GalleryPhoto;
   isFav: boolean;
   disabled: boolean;
+  delivered: boolean;
   onOpen: (photo: GalleryPhoto) => void;
   onToggle: (lrId: string) => void;
 }) {
@@ -34,13 +37,22 @@ function PhotoTile({
         aria-label={`Zobrazit ${photo.filename}`}
       >
         <Image
-          src={watermarkedUrl(photo.cloudinaryId, 600)}
+          src={delivered ? cleanUrl(photo.cloudinaryId, 600) : watermarkedUrl(photo.cloudinaryId, 600)}
           alt={photo.filename}
           fill
           className="object-cover transition-opacity group-hover:opacity-90"
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
         />
       </button>
+      {delivered && (
+        <a
+          href={downloadUrl(photo.cloudinaryId, photo.filename)}
+          onClick={(e) => e.stopPropagation()}
+          className="absolute bottom-2 left-2 bg-black/60 px-2 py-1 text-xs text-white hover:bg-black/80"
+        >
+          Stáhnout
+        </a>
+      )}
       {/* Favorite toggle */}
       <button
         onClick={(e) => {
@@ -122,10 +134,12 @@ function ClientPhotoGrid({
   slug,
   photos,
   maxSelection,
+  delivered,
 }: {
   slug: string;
   photos: GalleryPhoto[];
   maxSelection: number | null;
+  delivered: boolean;
 }) {
   const { favorites, note, setNote, toggle, save, saving, saved, error, confirmedAt, confirming, confirmSelection } =
     useGallerySelection(slug, maxSelection);
@@ -193,6 +207,7 @@ function ClientPhotoGrid({
             photo={photo}
             isFav={favorites.has(photo.lrId)}
             disabled={!favorites.has(photo.lrId) && limitReached}
+            delivered={delivered}
             onOpen={setLightbox}
             onToggle={toggle}
           />
@@ -256,6 +271,7 @@ function ClientPhotoGrid({
           photos={visible}
           isFav={favorites.has(lightbox.lrId)}
           disabled={!favorites.has(lightbox.lrId) && limitReached}
+          delivered={delivered}
           onToggle={toggle}
           onChange={setLightbox}
           onClose={() => setLightbox(null)}
@@ -269,6 +285,7 @@ export function GalleryClient({ slug }: { slug: string }) {
   const [authed, setAuthed] = useState(false);
   const [photos, setPhotos] = useState<GalleryPhoto[] | null>(null);
   const [maxSelection, setMaxSelection] = useState<number | null>(null);
+  const [delivered, setDelivered] = useState(false);
   const [loadError, setLoadError] = useState("");
 
   async function loadPhotos() {
@@ -278,6 +295,7 @@ export function GalleryClient({ slug }: { slug: string }) {
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setMaxSelection(data.maxSelection ?? null);
+        setDelivered(data.delivered ?? false);
         setPhotos(data.photos);
       }
       else setLoadError(data.error ?? "Failed to load");
@@ -302,7 +320,7 @@ export function GalleryClient({ slug }: { slug: string }) {
 
   // Once we have photos, skip password gate
   if (photos !== null) {
-    return <ClientPhotoGrid slug={slug} photos={photos} maxSelection={maxSelection} />;
+    return <ClientPhotoGrid slug={slug} photos={photos} maxSelection={maxSelection} delivered={delivered} />;
   }
 
   if (!authed) {
