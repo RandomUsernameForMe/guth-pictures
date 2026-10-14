@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { getContent, setContent, type ContentData } from "@/modules/admin/lib/content";
 import { isValidPageCopy } from "@/modules/admin/lib/page-copy";
 
@@ -82,9 +82,8 @@ export function isValidContentData(d: unknown): d is ContentData {
 }
 
 export async function GET(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const locale = req.nextUrl.searchParams.get("locale") ?? "cs";
   if (!isAllowedLocale(locale)) {
     return NextResponse.json({ error: "Invalid locale" }, { status: 400 });
@@ -94,9 +93,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const body = await req.json();
   const { locale, data } = body as { locale: string; data: unknown };
   if (!isAllowedLocale(locale)) {

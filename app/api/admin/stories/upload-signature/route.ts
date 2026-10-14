@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { cloudinary } from "@/lib/cloudinary";
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 
 export async function POST() {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await requireAdmin();
+  if (denied) return denied;
   const secret = process.env.CLOUDINARY_API_SECRET;
   if (!secret) {
     console.error("[stories/upload-signature] CLOUDINARY_API_SECRET not configured");

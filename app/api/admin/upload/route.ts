@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cloudinary } from "@/lib/cloudinary";
-import { isAuthenticated } from "@/lib/auth";
+import { requireAdmin } from "@/lib/admin-route";
 import { isGalleryCategory } from "@/lib/cloudinary-utils";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -18,9 +18,8 @@ function detectMimeType(buf: Buffer): string | null {
 }
 
 export async function POST(request: Request) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
 
   const formData = await request.formData();
   const file = formData.get("file");

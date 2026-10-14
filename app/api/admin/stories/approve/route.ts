@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAuthenticated } from "@/lib/auth";
+import { readJson, requireAdmin } from "@/lib/admin-route";
 import { getDrafts, saveDrafts, getQueue, saveQueue } from "@/modules/stories/lib/store";
 import { validateApproveBody, type ApproveBody } from "./validation";
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  let body;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const denied = await requireAdmin();
+  if (denied) return denied;
+  const body = await readJson<Record<string, unknown>>(req);
+  if (body instanceof NextResponse) return body;
   const error = validateApproveBody(body);
   if (error) return NextResponse.json({ error }, { status: 400 });
   const { draftId, videoPublicId, publishAt } = body as ApproveBody;
