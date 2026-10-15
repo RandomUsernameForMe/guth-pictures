@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { type GalleryRecord, type GalleryListItem } from "@/modules/gallery/lib/gallery";
 import { type LightroomAlbum } from "@/modules/gallery/lib/lightroom";
+import { formatGalleryInvite } from "@/modules/gallery/lib/gallery-invite";
+import { siteUrl } from "@/lib/config";
 
 interface Props {
   galleries: GalleryListItem[];
@@ -48,7 +50,7 @@ function StatusBadge({ gallery }: { gallery: GalleryRecord }) {
 function NewGalleryForm({
   onCreated,
 }: {
-  onCreated: (gallery: GalleryRecord) => void;
+  onCreated: (gallery: GalleryRecord, password: string) => void;
 }) {
   const [albums, setAlbums] = useState<LightroomAlbum[] | null>(null);
   const [loadingAlbums, setLoadingAlbums] = useState(false);
@@ -94,7 +96,7 @@ function NewGalleryForm({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed");
-      onCreated(data.gallery);
+      onCreated(data.gallery, password);
       setSlug("");
       setAlbumId("");
       setPassword("");
@@ -219,11 +221,57 @@ function NewGalleryForm({
   );
 }
 
+function InviteBox({ message, onClose }: { message: string; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    await navigator.clipboard.writeText(message);
+    setCopied(true);
+  }
+
+  return (
+    <div className="border border-green-500/30 p-6 space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-medium">Zpráva pro klienta</h2>
+        <button onClick={onClose} className="text-xs text-gray-400 hover:text-white underline">
+          Zavřít
+        </button>
+      </div>
+      <p className="text-xs text-gray-500">Heslo se ukládá jen jako hash, takže ho uvidíš jen teď.</p>
+      <textarea
+        readOnly
+        value={message}
+        rows={10}
+        className="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm"
+      />
+      <div className="flex items-center gap-3">
+        <button
+          onClick={copy}
+          className="px-4 py-1.5 bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors"
+        >
+          Kopírovat zprávu
+        </button>
+        {copied && <span className="text-xs text-green-400">Zkopírováno</span>}
+      </div>
+    </div>
+  );
+}
+
 export function GalerieList({ galleries: initial, lrConnected, flashConnected, flashError }: Props) {
   const [galleries, setGalleries] = useState(initial);
   const [showForm, setShowForm] = useState(false);
 
-  function handleCreated(g: GalleryRecord) {
+  const [invite, setInvite] = useState<string | null>(null);
+
+  function handleCreated(g: GalleryRecord, password: string) {
+    setInvite(
+      formatGalleryInvite({
+        url: `${siteUrl}/gallery/${g.slug}`,
+        password,
+        expiresAt: g.expiresAt,
+        maxSelection: g.maxSelection,
+      }),
+    );
     setGalleries((prev) => [{ ...g, selection: null }, ...prev]);
     setShowForm(false);
   }
@@ -266,6 +314,8 @@ export function GalerieList({ galleries: initial, lrConnected, flashConnected, f
           Chyba: {flashError}
         </p>
       )}
+
+      {invite && <InviteBox key={invite} message={invite} onClose={() => setInvite(null)} />}
 
       {showForm && <NewGalleryForm onCreated={handleCreated} />}
 
