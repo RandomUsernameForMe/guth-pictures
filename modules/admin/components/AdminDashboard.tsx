@@ -28,7 +28,11 @@ export function AdminDashboard({ photos: initial, heroTriptych: initialTriptych,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ publicId }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setPhotoError(data?.error ?? "Smazání se nezdařilo.");
+        return;
+      }
       setPhotos((prev) => prev.filter((p) => p.publicId !== publicId));
     } catch {
       setPhotoError("Smazání se nezdařilo.");
