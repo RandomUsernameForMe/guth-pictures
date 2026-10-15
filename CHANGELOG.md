@@ -1,4 +1,5 @@
 ## [2026-10-15] - Sdílený helper signedUploadRequest pro podepsaný upload do Cloudinary (DraftCard, PhotoUploadSection)
+## [2026-10-15] - Admin: po vytvoření galerie hotová zpráva pro klienta (odkaz, heslo, platnost, limit výběru) s tlačítkem Kopírovat zprávu
 ## [2026-10-15] - isPreviewPage už nepropouští zděděné klíče (toString, constructor, __proto__), /nahled/toString vrací 404
 ## [2026-10-13] - Blog: pod článkem sekce „Další články“ (pickRelatedPosts, až 3 nejnovější)
 ## [2026-10-13] - Smazány mrtvé komponenty homepage po editorial redesignu
