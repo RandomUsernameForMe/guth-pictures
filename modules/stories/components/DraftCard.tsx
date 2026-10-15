@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import { flushSync } from "react-dom";
 import { cloudinaryUrl, type GalleryPhoto } from "@/lib/cloudinary-utils";
+import { signedUploadRequest } from "@/lib/cloudinary-signed-upload";
 import type { StoryDraft } from "../lib/types";
 import { TemplateC } from "./story/TemplateC";
 import { TemplateD } from "./story/TemplateD";
@@ -129,16 +130,8 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
       const sig = await fetch("/api/admin/stories/upload-signature", { method: "POST" }).then(r => r.json());
       const uploadedIds: string[] = [];
       for (const file of Array.from(files).slice(0, MAX_PHOTOS - d.photos.length)) {
-        const form = new FormData();
-        form.append("file", file);
-        form.append("api_key", sig.apiKey);
-        form.append("timestamp", String(sig.timestamp));
-        form.append("signature", sig.signature);
-        form.append("folder", sig.folder);
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
-          { method: "POST", body: form },
-        ).then(r => r.json());
+        const { url, body } = signedUploadRequest(file, sig, { resourceType: "image" });
+        const res = await fetch(url, { method: "POST", body }).then(r => r.json());
         if (!res.public_id) throw new Error(res.error?.message ?? "Upload failed");
         uploadedIds.push(res.public_id);
       }
@@ -160,16 +153,8 @@ export function DraftCard({ draft, galleryPhotos, onChanged }: {
 
       // 2. signed direct upload do Cloudinary (video)
       const sig = await fetch("/api/admin/stories/upload-signature", { method: "POST" }).then(r => r.json());
-      const form = new FormData();
-      form.append("file", blob, `story-${d.id}.mp4`);
-      form.append("api_key", sig.apiKey);
-      form.append("timestamp", String(sig.timestamp));
-      form.append("signature", sig.signature);
-      form.append("folder", sig.folder);
-      const uploaded = await fetch(
-        `https://api.cloudinary.com/v1_1/${sig.cloudName}/video/upload`,
-        { method: "POST", body: form },
-      ).then(r => r.json());
+      const { url, body } = signedUploadRequest(blob, sig, { resourceType: "video", filename: `story-${d.id}.mp4` });
+      const uploaded = await fetch(url, { method: "POST", body }).then(r => r.json());
       if (!uploaded.public_id) throw new Error(uploaded.error?.message ?? "Upload failed");
 
       // 3. přesun do fronty
