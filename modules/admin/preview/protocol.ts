@@ -9,7 +9,7 @@ export const PREVIEW_PAGES = {
 
 export type PreviewPage = keyof typeof PREVIEW_PAGES;
 
-export const isPreviewPage = (value: string): value is PreviewPage => value in PREVIEW_PAGES;
+export const isPreviewPage = (value: string): value is PreviewPage => Object.hasOwn(PREVIEW_PAGES, value);
 
 export type PreviewMessage =
   | { type: "preview:ready" }
