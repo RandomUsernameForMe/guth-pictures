@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/lib/cloudinary-utils";
+import { signedUploadRequest } from "@/lib/cloudinary-signed-upload";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE_MB = 100; // raw foťák fotky, komprese proběhne v prohlížeči
@@ -120,19 +121,14 @@ export function PhotoUploadSection() {
         prev.map((it, idx) => (idx === i ? { ...it, status: "uploading" } : it))
       );
 
-      const data = new FormData();
-      data.append("file", item.file);
-      data.append("api_key", apiKey);
-      data.append("timestamp", String(timestamp));
-      data.append("signature", signature);
-      data.append("folder", folder);
-      data.append("context", context);
+      const { url, body } = signedUploadRequest(
+        item.file,
+        { signature, timestamp, apiKey, cloudName, folder },
+        { resourceType: "image", context },
+      );
 
       try {
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          { method: "POST", body: data }
-        );
+        const res = await fetch(url, { method: "POST", body });
         setFileItems((prev) =>
           prev.map((it, idx) => (idx === i ? { ...it, status: res.ok ? "done" : "error" } : it))
         );
