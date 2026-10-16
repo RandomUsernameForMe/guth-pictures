@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/admin-route";
+import { cloudinary } from "@/lib/cloudinary";
 import {
   getGallery,
   getGalleryPhotos,
@@ -47,6 +48,14 @@ export async function PATCH(
   return NextResponse.json({ ok: true });
 }
 
+async function deleteCloudinaryPrefix(prefix: string): Promise<void> {
+  let partial = true;
+  while (partial) {
+    const result = await cloudinary.api.delete_resources_by_prefix(prefix);
+    partial = Boolean(result?.partial);
+  }
+}
+
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
@@ -57,6 +66,13 @@ export async function DELETE(
   const { slug } = await params;
   const gallery = await getGallery(slug);
   if (!gallery) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  try {
+    await deleteCloudinaryPrefix(`client-galleries/${slug}/`);
+  } catch (err) {
+    console.error("Cloudinary delete failed", err);
+    return NextResponse.json({ error: "Cloudinary delete failed" }, { status: 502 });
+  }
 
   await deleteGallery(slug);
   return NextResponse.json({ ok: true });
