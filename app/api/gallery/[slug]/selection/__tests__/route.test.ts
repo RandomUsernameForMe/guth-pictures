@@ -101,6 +101,14 @@ describe("/api/gallery/[slug]/selection limit", () => {
     expect(res.status).toBe(200);
   });
 
+  it("counts duplicate ids once", async () => {
+    vi.mocked(getGallery).mockResolvedValueOnce({ slug: "test", maxSelection: 2 } as GalleryRecord);
+    const res = await post({ favorites: ["a", "a", "b", "b"] });
+    expect(res.status).toBe(200);
+    expect((await res.json()).count).toBe(2);
+    expect((await getSelection()).favorites).toEqual(["a", "b"]);
+  });
+
   it("has no limit when maxSelection is unset", async () => {
     const res = await post({ favorites: ["a", "b", "c"] });
     expect(res.status).toBe(200);

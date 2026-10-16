@@ -166,6 +166,16 @@ export async function saveGallerySelection(
   } satisfies GallerySelection);
 }
 
+export async function pruneGallerySelection(slug: string, validIds: Set<string>): Promise<void> {
+  const kv = await getKv();
+  if (!kv) return;
+  const existing = await kv.get<GallerySelection>(`${key(slug)}:selection`);
+  if (!existing) return;
+  const favorites = existing.favorites.filter((id) => validIds.has(id));
+  if (favorites.length === existing.favorites.length) return;
+  await kv.set(`${key(slug)}:selection`, { ...existing, favorites } satisfies GallerySelection);
+}
+
 export async function confirmGallerySelection(slug: string): Promise<string | null> {
   const kv = await getKv();
   if (!kv) return null;

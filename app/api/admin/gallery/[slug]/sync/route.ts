@@ -1,5 +1,5 @@
 import { requireAdmin } from "@/lib/admin-route";
-import { getGallery, getGalleryPhotos, setGalleryPhotos, updateGallerySyncState, type GalleryPhoto } from "@/modules/gallery/lib/gallery";
+import { getGallery, getGalleryPhotos, pruneGallerySelection, setGalleryPhotos, updateGallerySyncState, type GalleryPhoto } from "@/modules/gallery/lib/gallery";
 import { getAlbumAssets, getAssetRenditionStream } from "@/modules/gallery/lib/lightroom";
 import { v2 as cloudinary } from "cloudinary";
 import { NextRequest, NextResponse } from "next/server";
@@ -99,6 +99,7 @@ export async function POST(
   const photos = assets.flatMap((asset) => resultsById.get(asset.id) ?? []);
 
   await setGalleryPhotos(slug, photos);
+  await pruneGallerySelection(slug, new Set(photos.map((p) => p.lrId)));
   await updateGallerySyncState(slug, photos.length);
 
   return NextResponse.json({

@@ -11,6 +11,7 @@ vi.mock("@/modules/gallery/lib/gallery", () => ({
   ]),
   setGalleryPhotos: vi.fn(),
   updateGallerySyncState: vi.fn(),
+  pruneGallerySelection: vi.fn(),
 }));
 vi.mock("@/modules/gallery/lib/lightroom", () => ({
   getAlbumAssets: vi.fn(async () => [
