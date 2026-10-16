@@ -64,7 +64,7 @@ export async function POST(
 
   const photos = await getGalleryPhotos(slug);
   const validIds = new Set(photos.map((p) => p.lrId));
-  const favorites = (body.favorites as unknown[]).filter(
+  const favorites = [...new Set(body.favorites as unknown[])].filter(
     (id): id is string => typeof id === "string" && validIds.has(id)
   );
 
